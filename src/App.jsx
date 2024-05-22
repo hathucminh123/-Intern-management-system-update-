@@ -19,7 +19,7 @@ const routes = [
 
 function App() {
   return (
-    <div>
+    <div className='App' >
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/sign-in" replace />} />

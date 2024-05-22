@@ -5,45 +5,72 @@ import {
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  HomeOutlined,
-  AppstoreOutlined,
-  AreaChartOutlined,
-  ContactsOutlined,
-  ProjectOutlined,
-  WechatWorkOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import { useNavigate, Outlet } from "react-router-dom";
-import Logo from "../../components/Logo/Logo";
+  HomeOutlined, AppstoreOutlined, AreaChartOutlined, ContactsOutlined, ProjectOutlined, WechatWorkOutlined,
+  MailOutlined,
+  BellFilled
+} from '@ant-design/icons';
+import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme } from 'antd';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
+import Logo from '../../components/Logo/Logo';
+import Dashboard from '../../components/MentorComponent/Dashboard';
+import "./MentorPage.css"
+import { getComment } from '../../api';
+
+import Schedule from '../../components/MentorComponent/Schedule';
+import TaskCompleted from '../../components/MentorComponent/TaskCompleted';
+import Chat from '../../components/MentorComponent/Chat';
+import Sidebar from '../../components/MentorComponent/ChatRoom/SideBar';
+import ChatWindow from '../../components/MentorComponent/ChatRoom/ChatWindow';
+import TaskPerformance from '../../components/MentorComponent/TaskPerformance';
 
 const { Header, Sider, Content } = Layout;
 
 const MentorPage = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const location =useLocation()
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [selectedKey, setSelectedKey] = useState(" ");
+  const [selectedKey, setSelectedKey] = useState(' ');
+  const [commentsopen,setCommentopen]=useState(false)
+  const [notificationopen,setNotificationopen]=useState(false)
+
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
   };
+  
+const [comments,setComment]=useState([])
+useEffect(()=>{
+  getComment().then((res)=>{
+   setComment(res.comments)
+  })
+},[])
+   
 
-  const renderPage = (key) => {
+
+useEffect(()=>{
+        const pathname=location.pathname
+        setSelectedKey(pathname)
+   },[location.pathname])
+  
+const renderPage = (key) => {
     switch (key) {
-      case "home":
-        return <>home</>;
-      case "task-1":
-        return <>Tạo task</>;
-      case "task-2":
-        return <>task hoàn thành</>;
-      case "chat":
-        return <>chat </>;
-
-      case "schedule":
-        return <div>lịch trình</div>;
-      case "setting":
+      case 'home':
+        return <Dashboard/>;
+     
+      case 'task':
+            return <TaskPerformance/>;
+      case 'chat':
+        return <>
+        <Sidebar/>
+        <ChatWindow/>
+        </>
+        
+      case 'schedule':
+        return <Schedule/>;
+      case 'setting':
         return <div>cai dat</div>;
       default:
         return <></>;
@@ -59,17 +86,8 @@ const MentorPage = () => {
     {
       key: "task",
       icon: <AppstoreOutlined />,
-      label: "Task",
-      children: [
-        {
-          key: "task-1",
-          label: " Tạo Task ",
-        },
-        {
-          key: "task-2",
-          label: "Task hoàn thành",
-        },
-      ],
+      label: 'Quản lý Task',
+    
     },
     {
       key: "chat",
@@ -100,7 +118,7 @@ const MentorPage = () => {
   //   }
   // };
   return (
-    <Layout>
+    <Layout className='Header'>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <Logo />
         <div className="demo-logo-vertical" />
@@ -128,6 +146,8 @@ const MentorPage = () => {
             background: colorBgContainer,
           }}
         >
+          <Row>
+            <Col md={21} >
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -138,14 +158,48 @@ const MentorPage = () => {
               height: 64,
             }}
           />
+          </Col>
+
+            <Col md={3}>
+             <Space size={15}> 
+                 <Avatar size="default" icon={<UserOutlined/>}></Avatar>Ha Thuc Minh
+                 <Badge count={comments.length} dot>
+                 <MailOutlined style={{fontSize:24}} onClick={()=>{setCommentopen(true)}}/>
+                 </Badge>
+                 <Badge count={comments.length}>
+                 <BellFilled style={{fontSize:24}} onClick={()=>{setNotificationopen(true)}}/>
+                 </Badge>
+                 <Drawer title="Thông báo" onClick={()=>{setNotificationopen(false)}} open={notificationopen} maskClosable>
+                 <List dataSource={comments} renderItem={(item)=>(
+                  <List.Item> {item.body}</List.Item>
+                 )}>
+                  
+                 </List>
+
+                 </Drawer>
+                 <Drawer title="Tin nhắn" onClick={()=>{setCommentopen(false)}} open={commentsopen} maskClosable>
+                 <List dataSource={comments} renderItem={(item)=>(
+                  <List.Item> <Typography.Text strong > {item.body}</Typography.Text>asdasd</List.Item>
+                 )}></List>
+                 </Drawer>
+
+             </Space>
+            
+            </Col>
+          </Row>
         </Header>
         <Content
           style={{
-            margin: "24px 16px",
+            display:'flex',
+            height:'100vh',
+            margin: '24px 16px',
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            // backgroundColor:'rgba(0,0,0,0.015)'
+       
+          
           }}
         >
           {renderPage(selectedKey)}
