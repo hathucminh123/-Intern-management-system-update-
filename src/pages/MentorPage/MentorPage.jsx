@@ -1,15 +1,20 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
-  HomeOutlined, AppstoreOutlined, AreaChartOutlined, ContactsOutlined, ProjectOutlined, WechatWorkOutlined
-} from '@ant-design/icons';
-import { Button, Layout, Menu, theme } from 'antd';
-import { useNavigate, Outlet } from 'react-router-dom';
-import Logo from '../../components/Logo/Logo';
+  HomeOutlined,
+  AppstoreOutlined,
+  AreaChartOutlined,
+  ContactsOutlined,
+  ProjectOutlined,
+  WechatWorkOutlined,
+} from "@ant-design/icons";
+import { Button, Layout, Menu, theme } from "antd";
+import { useNavigate, Outlet } from "react-router-dom";
+import Logo from "../../components/Logo/Logo";
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,7 +24,7 @@ const MentorPage = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [selectedKey, setSelectedKey] = useState(' ');
+  const [selectedKey, setSelectedKey] = useState(" ");
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -27,18 +32,18 @@ const MentorPage = () => {
 
   const renderPage = (key) => {
     switch (key) {
-      case 'home':
+      case "home":
         return <>home</>;
-      case 'task-1':
+      case "task-1":
         return <>Tạo task</>;
-      case 'task-2':
-            return <>task hoàn thành</>;
-      case 'chat':
-        return <>chat </>
-        
-      case 'schedule':
+      case "task-2":
+        return <>task hoàn thành</>;
+      case "chat":
+        return <>chat </>;
+
+      case "schedule":
         return <div>lịch trình</div>;
-      case 'setting':
+      case "setting":
         return <div>cai dat</div>;
       default:
         return <></>;
@@ -47,36 +52,35 @@ const MentorPage = () => {
 
   const items = [
     {
-      key: 'home',
+      key: "home",
       icon: <HomeOutlined />,
-      label: 'Trang chủ',
-    
+      label: "Trang chủ",
     },
     {
-      key: 'task',
+      key: "task",
       icon: <AppstoreOutlined />,
-      label: 'Task',
-      children:[
+      label: "Task",
+      children: [
         {
-            key: 'task-1',
-            label: ' Tạo Task ',
-          },
+          key: "task-1",
+          label: " Tạo Task ",
+        },
         {
-            key: 'task-2',
-            label: 'Task hoàn thành',
-          },
+          key: "task-2",
+          label: "Task hoàn thành",
+        },
       ],
     },
     {
-      key: 'chat',
+      key: "chat",
       icon: <WechatWorkOutlined />,
-      label: 'chat',
+      label: "chat",
     },
     {
-        key: 'schedule',
-        icon: <AreaChartOutlined />,
-        label: 'Lịch trình',
-      },
+      key: "schedule",
+      icon: <AreaChartOutlined />,
+      label: "Lịch trình",
+    },
   ];
   // useEffect(() => {
   //   handleGetDetailsUser();
@@ -103,15 +107,15 @@ const MentorPage = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['sub1']} // Chỉ định mục được chọn mặc định
+          defaultSelectedKeys={["sub1"]} // Chỉ định mục được chọn mặc định
           style={{
-            height: '100vh',
-            marginTop: '2rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '15px',
-            fontSize: '1rem',
-            position: 'relative',
+            height: "100vh",
+            marginTop: "2rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            fontSize: "1rem",
+            position: "relative",
           }}
           items={items}
           onClick={handleMenuClick} // Sử dụng sự kiện onClick thay vì handleMenuClick
@@ -129,7 +133,7 @@ const MentorPage = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
             style={{
-              fontSize: '16px',
+              fontSize: "16px",
               width: 64,
               height: 64,
             }}
@@ -137,14 +141,14 @@ const MentorPage = () => {
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
+            margin: "24px 16px",
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
-         { renderPage(selectedKey) }     
+          {renderPage(selectedKey)}
         </Content>
       </Layout>
     </Layout>
