@@ -15,7 +15,8 @@ import {
 import { Button, Layout, Menu, theme } from "antd";
 import { useNavigate, Outlet } from "react-router-dom";
 import Logo from "../../components/Logo/Logo";
-import Campaings from "../../components/CampaignsComponent/Campaings";
+import Campaings from "../../components/HR/CampaignsComponent/Campaings";
+import HRCampaignsDetails from "../../components/HR/CampaignsComponent/HRCampaignsDetails";
 
 const { Header, Sider, Content } = Layout;
 
@@ -35,22 +36,16 @@ const HRPage = () => {
     switch (key) {
       case "home":
         return <>home</>;
-      case "Campaigns-1":
+      case "campaigns":
         return (
           <div className="w-full flex items-center">
             <Campaings />
           </div>
         );
 
-      case "Campaigns-2":
-        return <>task hoàn thành</>;
-      case "chat":
-        return <>chat </>;
+      case "Detail":
+        return <HRCampaignsDetails />;
 
-      case "schedule":
-        return <div>lịch trình</div>;
-      case "setting":
-        return <div>cai dat</div>;
       default:
         return <></>;
     }
@@ -66,26 +61,11 @@ const HRPage = () => {
       key: "campaigns",
       icon: <AppstoreOutlined />,
       label: "Campaigns",
-      children: [
-        {
-          key: "Campaigns-1",
-          label: " Tạo Task ",
-        },
-        {
-          key: "Campaigns-2",
-          label: "Task hoàn thành",
-        },
-      ],
     },
     {
-      key: "chat",
-      icon: <WechatWorkOutlined />,
-      label: "chat",
-    },
-    {
-      key: "schedule",
-      icon: <AreaChartOutlined />,
-      label: "Lịch trình",
+      key: "Detail",
+
+      label: "detail",
     },
   ];
   // useEffect(() => {

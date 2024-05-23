@@ -3,8 +3,8 @@ import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
 import { Button } from "antd";
 const { Search } = Input;
-import FilterDropDown from "../CampaignsComponent/FilterDropDown";
-import ButtonComponent from "../ButtonComponent/ButtonComponent";
+import FilterDropDown from "./FilterDropDown";
+import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 const suffix = (
   <AudioOutlined
     style={{

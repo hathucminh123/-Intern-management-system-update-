@@ -2,6 +2,7 @@
 import MentorPage from "../pages/MentorPage/MentorPage"
 import SigninPage from "../pages/LoginPage/SigninPage"
 import HRPage from "../pages/HRPage/HRPage"
+import HRPageCampaignsDetails from "../pages/HRPageCampaignsDetails/HRPageCampaignsDetails"
 export const routes = [
 
 
@@ -28,6 +29,11 @@ export const routes = [
         path: '/hr',
         page: HRPage,
 
+
+    },
+    {
+        path: '/hrdetails',
+        page: HRPageCampaignsDetails,
 
     },
 ]

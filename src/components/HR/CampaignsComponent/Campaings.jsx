@@ -1,10 +1,10 @@
 import React from "react";
 import { Card, Space } from "antd";
-import SearchBarCampaigns from "../../components/CampaignsComponent/SearchBarCampaigns";
+import SearchBarCampaigns from "./SearchBarCampaigns";
 import { Image } from "antd";
-import reactImage from "../../assets/react_image.jpeg";
-import nodeJs from "../../assets/node-js.jpg";
-import javaImage from "../../assets/javaImage.jpg";
+import reactImage from "../../../assets/react_image.jpeg";
+import nodeJs from "../../../assets/node-js.jpg";
+import javaImage from "../../../assets/javaImage.jpg";
 import { Pagination } from "antd";
 const data = [
   {
