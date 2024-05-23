@@ -22,54 +22,62 @@ import Chat from '../../components/MentorComponent/Chat';
 import Sidebar from '../../components/MentorComponent/ChatRoom/SideBar';
 import ChatWindow from '../../components/MentorComponent/ChatRoom/ChatWindow';
 import TaskPerformance from '../../components/MentorComponent/TaskPerformance';
+import { useDispatch } from 'react-redux';
+import { getListClass } from "../../redux/roomSlice";
 
 const { Header, Sider, Content } = Layout;
 
 const MentorPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const location =useLocation()
+  const location = useLocation()
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const [selectedKey, setSelectedKey] = useState(' ');
-  const [commentsopen,setCommentopen]=useState(false)
-  const [notificationopen,setNotificationopen]=useState(false)
+  const [commentsopen, setCommentopen] = useState(false)
+  const [notificationopen, setNotificationopen] = useState(false)
 
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
   };
-  
-const [comments,setComment]=useState([])
-useEffect(()=>{
-  getComment().then((res)=>{
-   setComment(res.comments)
-  })
-},[])
-   
+
+  const [comments, setComment] = useState([])
+  useEffect(() => {
+    getComment().then((res) => {
+      setComment(res.comments)
+    })
+  }, [])
+
+  const dispatch = useDispatch()
+
+  const getData = async () => {
+     await dispatch(getListClass())
+  }
 
 
-useEffect(()=>{
-        const pathname=location.pathname
-        setSelectedKey(pathname)
-   },[location.pathname])
-  
-const renderPage = (key) => {
+  useEffect(() => {
+    const pathname = location.pathname
+    setSelectedKey(pathname)
+    getData();
+  }, [location.pathname])
+
+  const renderPage = (key) => {
     switch (key) {
       case 'home':
-        return <Dashboard/>;
-     
+        return <Dashboard />;
+
       case 'task':
-            return <TaskPerformance/>;
+        return <TaskPerformance />;
       case 'chat':
         return <>
-        <Sidebar/>
-        <ChatWindow/>
+          <Sidebar />
+          <ChatWindow />
         </>
-        
+
       case 'schedule':
-        return <Schedule/>;
+        return <Schedule />;
       case 'setting':
         return <div>cai dat</div>;
       default:
@@ -77,27 +85,32 @@ const renderPage = (key) => {
     }
   };
 
+
+  const userRole = 'mentor'
   const items = [
     {
       key: "home",
       icon: <HomeOutlined />,
       label: "Trang chủ",
+      role: ['mentor', 'admin']
     },
     {
       key: "task",
       icon: <AppstoreOutlined />,
       label: 'Quản lý Task',
-    
+      role: ['mentor', 'admin']
     },
     {
       key: "chat",
       icon: <WechatWorkOutlined />,
       label: "chat",
+      role: ['mentor', 'admin']
     },
     {
       key: "schedule",
       icon: <AreaChartOutlined />,
       label: "Lịch trình",
+      role: ['mentor', 'admin']
     },
   ];
   // useEffect(() => {
@@ -135,9 +148,19 @@ const renderPage = (key) => {
             fontSize: "1rem",
             position: "relative",
           }}
-          items={items}
+          // items={items}
           onClick={handleMenuClick} // Sử dụng sự kiện onClick thay vì handleMenuClick
-        />
+        >
+          {
+            items.map((item) => {
+              if (item.role.includes(userRole))
+                return (
+                  <Menu.Item icon={item.icon} key={item.key}> {item.label}</Menu.Item>
+                )
+              else return null
+            })
+          }
+        </Menu >
       </Sider>
       <Layout>
         <Header
@@ -148,58 +171,58 @@ const renderPage = (key) => {
         >
           <Row>
             <Col md={21} >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
-          </Col>
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{
+                  fontSize: "16px",
+                  width: 64,
+                  height: 64,
+                }}
+              />
+            </Col>
 
             <Col md={3}>
-             <Space size={15}> 
-                 <Avatar size="default" icon={<UserOutlined/>}></Avatar>Ha Thuc Minh
-                 <Badge count={comments.length} dot>
-                 <MailOutlined style={{fontSize:24}} onClick={()=>{setCommentopen(true)}}/>
-                 </Badge>
-                 <Badge count={comments.length}>
-                 <BellFilled style={{fontSize:24}} onClick={()=>{setNotificationopen(true)}}/>
-                 </Badge>
-                 <Drawer title="Thông báo" onClick={()=>{setNotificationopen(false)}} open={notificationopen} maskClosable>
-                 <List dataSource={comments} renderItem={(item)=>(
-                  <List.Item> {item.body}</List.Item>
-                 )}>
-                  
-                 </List>
+              <Space size={15}>
+                <Avatar size="default" icon={<UserOutlined />}></Avatar>Ha Thuc Minh
+                <Badge count={comments.length} dot>
+                  <MailOutlined style={{ fontSize: 24 }} onClick={() => { setCommentopen(true) }} />
+                </Badge>
+                <Badge count={comments.length}>
+                  <BellFilled style={{ fontSize: 24 }} onClick={() => { setNotificationopen(true) }} />
+                </Badge>
+                <Drawer title="Thông báo" onClick={() => { setNotificationopen(false) }} open={notificationopen} maskClosable>
+                  <List dataSource={comments} renderItem={(item) => (
+                    <List.Item> {item.body}</List.Item>
+                  )}>
 
-                 </Drawer>
-                 <Drawer title="Tin nhắn" onClick={()=>{setCommentopen(false)}} open={commentsopen} maskClosable>
-                 <List dataSource={comments} renderItem={(item)=>(
-                  <List.Item> <Typography.Text strong > {item.body}</Typography.Text>asdasd</List.Item>
-                 )}></List>
-                 </Drawer>
+                  </List>
 
-             </Space>
-            
+                </Drawer>
+                <Drawer title="Tin nhắn" onClick={() => { setCommentopen(false) }} open={commentsopen} maskClosable>
+                  <List dataSource={comments} renderItem={(item) => (
+                    <List.Item> <Typography.Text strong > {item.body}</Typography.Text>asdasd</List.Item>
+                  )}></List>
+                </Drawer>
+
+              </Space>
+
             </Col>
           </Row>
         </Header>
         <Content
           style={{
-            display:'flex',
-            height:'100vh',
+            display: 'flex',
+            height: '100vh',
             margin: '24px 16px',
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
             // backgroundColor:'rgba(0,0,0,0.015)'
-       
-          
+
+
           }}
         >
           {renderPage(selectedKey)}
