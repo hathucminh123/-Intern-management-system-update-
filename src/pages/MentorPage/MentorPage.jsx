@@ -22,6 +22,8 @@ import Chat from '../../components/MentorComponent/Chat';
 import Sidebar from '../../components/MentorComponent/ChatRoom/SideBar';
 import ChatWindow from '../../components/MentorComponent/ChatRoom/ChatWindow';
 import TaskPerformance from '../../components/MentorComponent/TaskPerformance';
+import { useDispatch } from 'react-redux';
+import { getListClass } from "../../redux/roomSlice";
 
 const { Header, Sider, Content } = Layout;
 
@@ -48,11 +50,17 @@ const MentorPage = () => {
     })
   }, [])
 
+  const dispatch = useDispatch()
+
+  const getData = async () => {
+     await dispatch(getListClass())
+  }
 
 
   useEffect(() => {
     const pathname = location.pathname
     setSelectedKey(pathname)
+    getData();
   }, [location.pathname])
 
   const renderPage = (key) => {
@@ -96,7 +104,7 @@ const MentorPage = () => {
       key: "chat",
       icon: <WechatWorkOutlined />,
       label: "chat",
-      role: ['mentor','admin']
+      role: ['mentor', 'admin']
     },
     {
       key: "schedule",
