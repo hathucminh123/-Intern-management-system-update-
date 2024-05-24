@@ -44,7 +44,7 @@ const ButtonGroupStyled = styled.div`
 
 const WrapperStyled = styled.div`
   height: 100vh;
-  width: 90vw;
+  width: 70vw;
 `;
 
 const ContentStyled = styled.div`
