@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,9 +10,9 @@ import {
   AreaChartOutlined,
   WechatWorkOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme ,Popover} from 'antd';
+import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme, Popover } from 'antd';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import './CustomMenu.css'
+import './CustomMenu.css';
 import { getComment } from '../api/index';
 import Logo from '../components/Logo/Logo';
 
@@ -28,7 +28,8 @@ const CustomMenu = ({ userRole }) => {
   const [selectedKey, setSelectedKey] = useState(location.pathname);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [isOpenPopup, setIsOpenPopup] = useState(false)
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const popoverRef = useRef(null);
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -75,29 +76,23 @@ const CustomMenu = ({ userRole }) => {
         icon: <HomeOutlined />,
         label: 'Trang chủ',
       },
-     
     ],
   };
 
   const userItems = items[userRole] || [];
 
-const handleClickNavigate =(type)=>{
-   if(type ==='logout'){
-    navigate('/sign-in')
-   }
-}
+  const handleClickNavigate = (type) => {
+    if (type === 'logout') {
+      navigate('/sign-in');
+    }
+  };
 
-  const content =(
+  const content = (
     <div>
-         <div className='WrapperContentPopup' onClick={() => handleClickNavigate('profile')}>Thông tin người dùng</div>
-         <div className='WrapperContentPopup' onClick={() => handleClickNavigate('logout')}>Đăng xuất</div>
-           
-
+      <div className='WrapperContentPopup' onClick={() => handleClickNavigate('profile')}>Thông tin người dùng</div>
+      <div className='WrapperContentPopup' onClick={() => handleClickNavigate('logout')}>Đăng xuất</div>
     </div>
-  )
-
-
-
+  );
 
   return (
     <Layout className='Header'>
@@ -118,13 +113,8 @@ const handleClickNavigate =(type)=>{
             position: 'relative',
           }}
           onClick={handleMenuClick}
-        >
-          {userItems.map((item) => (
-            <Menu.Item icon={item.icon} key={item.key} >
-              {item.label}
-            </Menu.Item>
-          ))}
-        </Menu>
+          items={userItems} // Use items instead of children
+        />
       </Sider>
       <Layout>
         <Header
@@ -148,9 +138,17 @@ const handleClickNavigate =(type)=>{
             </Col>
             <Col md={3}>
               <Space size={10}>
-                <Avatar size="default" icon={<UserOutlined />} /> 
-                <Popover content={content} trigger="click" open={isOpenPopup}>
-                <div className='nameaccount' onClick={()=>{setIsOpenPopup(true)}}>Hà Thúc Minh </div>
+                <Avatar size="default" icon={<UserOutlined />} />
+                <Popover
+                  content={content}
+                  trigger="click"
+                  open={isOpenPopup}
+                  onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                  getPopupContainer={() => popoverRef.current}
+                  
+              
+                >
+                  <div ref={popoverRef} className='nameaccount' onClick={() => setIsOpenPopup(!isOpenPopup)}>Hà Thúc Minh</div>
                 </Popover>
                 <Badge count={comments.length} dot>
                   <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />

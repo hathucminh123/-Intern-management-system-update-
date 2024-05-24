@@ -17,6 +17,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+          
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
           <Route element={<ProtectedRoute />}>
