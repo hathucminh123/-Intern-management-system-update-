@@ -10,8 +10,9 @@ import {
   AreaChartOutlined,
   WechatWorkOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme } from 'antd';
+import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme ,Popover} from 'antd';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
+import './CustomMenu.css'
 import { getComment } from '../api/index';
 import Logo from '../components/Logo/Logo';
 
@@ -27,6 +28,7 @@ const CustomMenu = ({ userRole }) => {
   const [selectedKey, setSelectedKey] = useState(location.pathname);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [isOpenPopup, setIsOpenPopup] = useState(false)
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -73,15 +75,29 @@ const CustomMenu = ({ userRole }) => {
         icon: <HomeOutlined />,
         label: 'Trang chủ',
       },
-      {
-        key: '/hr/schedule',
-        icon: <AreaChartOutlined />,
-        label: 'Lịch trình',
-      },
+     
     ],
   };
 
   const userItems = items[userRole] || [];
+
+const handleClickNavigate =(type)=>{
+   if(type ==='logout'){
+    navigate('/sign-in')
+   }
+}
+
+  const content =(
+    <div>
+         <div className='WrapperContentPopup' onClick={() => handleClickNavigate('profile')}>Thông tin người dùng</div>
+         <div className='WrapperContentPopup' onClick={() => handleClickNavigate('logout')}>Đăng xuất</div>
+           
+
+    </div>
+  )
+
+
+
 
   return (
     <Layout className='Header'>
@@ -104,7 +120,7 @@ const CustomMenu = ({ userRole }) => {
           onClick={handleMenuClick}
         >
           {userItems.map((item) => (
-            <Menu.Item icon={item.icon} key={item.key}>
+            <Menu.Item icon={item.icon} key={item.key} >
               {item.label}
             </Menu.Item>
           ))}
@@ -131,8 +147,11 @@ const CustomMenu = ({ userRole }) => {
               />
             </Col>
             <Col md={3}>
-              <Space size={15}>
-                <Avatar size="default" icon={<UserOutlined />} /> Ha Thuc Minh
+              <Space size={10}>
+                <Avatar size="default" icon={<UserOutlined />} /> 
+                <Popover content={content} trigger="click" open={isOpenPopup}>
+                <div className='nameaccount' onClick={()=>{setIsOpenPopup(true)}}>Hà Thúc Minh </div>
+                </Popover>
                 <Badge count={comments.length} dot>
                   <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                 </Badge>
