@@ -42,7 +42,7 @@ const Dashboard = () => {
         <Space size={20} direction='vertical' >
             <Typography.Title level={4}>Trang chủ</Typography.Title>
             <Space size={100} direction='horizontal' >
-                <DashboardCard icon={<FaNewspaper style={iconStyle('blue', "rgba(0,0,255,0.25)")} />} title={"Tổng số Task"} value={total} />
+                <DashboardCard icon={<FaNewspaper style={iconStyle('blue', "rgba(0,0,255,0.25)")} />} title={"Tổng số Task"} value={todos} />
                 <DashboardCard icon={<MdAdminPanelSettings style={iconStyle('green', "rgba(0,255,0,0.25)")} />} title={"TASK hoàn thành"} value={10} />
                 <DashboardCard icon={<LuClipboardEdit style={iconStyle('red', "rgba(255,0,0,0.25)")} />} title={"TASK đang thực hiện"} value={10} />
                 <DashboardCard icon={<FaArrowsToDot style={iconStyle('purple', "rgba(0,255,255,0.25)")} />} title={"TODOS"} value={10} />

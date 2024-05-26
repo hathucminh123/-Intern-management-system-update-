@@ -7,23 +7,23 @@ import ChatWindow from '../../components/MentorComponent/ChatRoom/ChatWindow';
 import { useLocation } from 'react-router-dom';
 import CustomMenu from '../../components/CustomMenu';
 
-const MentorPage = () => {
+const InternPage = () => {
   const location = useLocation();
 
   const renderPage = (key) => {
     switch (key) {
-      case '/mentor/home':
+      case '/intern/home':
         return <Dashboard />;
-      case '/mentor/task':
+      case '/intern/task':
         return <TaskPerformance />;
-      case '/mentor/chat':
+      case '/intern/chat':
         return (
           <>
             <Sidebar />
             <ChatWindow />
           </>
         );
-      case '/mentor/schedule':
+      case '/intern/schedule':
         return <Schedule />;
       default:
         return <div>Không tìm thấy trang</div>;
@@ -37,4 +37,4 @@ const MentorPage = () => {
   );
 };
 
-export default MentorPage;
+export default InternPage;
