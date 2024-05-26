@@ -47,13 +47,13 @@ const CustomMenu = ({ userRole }) => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
-  const userRole1 = localStorage.getItem('role'); // Giả sử bạn lưu thông tin đăng nhập trong localStorage
+   // Giả sử bạn lưu thông tin đăng nhập trong localStorage
 
 
   const items = {
     mentor: [
       {
-        key: `/${userRole1}/home`,
+        key: `/mentor/home`,
         icon: <HomeOutlined />,
         label: 'Trang chủ',
       },
@@ -78,6 +78,11 @@ const CustomMenu = ({ userRole }) => {
         key: '/hr/home',
         icon: <HomeOutlined />,
         label: 'Trang chủ',
+      },
+      {
+        key: '/hr/campaigns',
+        icon: <HomeOutlined />,
+        label: 'campaigns',
       },
     ],
   };

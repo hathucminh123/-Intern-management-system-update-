@@ -9,10 +9,11 @@ import Chat from './components/MentorComponent/Chat';
 import CustomMenu from './components/CustomMenu/CustomMenu';
 import './App.css';
 import HRCampaignsDetails from './components/HR/CampaignsComponent/HRCampaignsDetails';
+import Campaings from './components/HR/CampaignsComponent/Campaings';
 
 function App() {
 
-  const userRole = 'mentor'; 
+  const userRole = localStorage.getItem('role');
 
   return (
     <div className="App">
@@ -31,7 +32,8 @@ function App() {
             <Route path="/hr" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Schedule />} />
-              <Route path="Detail" element={<HRCampaignsDetails />} />
+              <Route path="campaigns" element={<Campaings />} />
+              <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
           </Route>
         </Routes>

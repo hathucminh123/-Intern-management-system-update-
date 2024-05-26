@@ -4,7 +4,7 @@ import "tailwindcss/tailwind.css"; // đảm bảo Tailwind CSS được import
 import { Image, Tag } from "antd";
 const { Title, Paragraph, Text } = Typography;
 import reactImage from "../../../assets/react_image.jpeg";
-
+import { useParams } from 'react-router-dom';
 const jobDescription = [
   "Được đào tạo chuyên sâu về kỹ năng phát triển ứng dụng web với React trong chương trình Fresher kéo dài 3-6 tháng.",
   "Được hướng dẫn bởi các chuyên gia trong lĩnh vực, và tham gia vào các dự án thực tế để nâng cao kỹ năng lập trình.",
@@ -28,7 +28,12 @@ const benefits = [
   "Sử dụng các dịch vụ của công ty như sân bóng đá, bóng chuyền, sân tennis, phòng gym, xe đưa đón nhân viên,...",
 ];
 
-const HRCampaignsDetails = () => (
+
+
+const HRCampaignsDetails = () => {
+  let { id } = useParams();
+  console.log(id);
+  return (
   <div className="flex justify-center items-center min-h-scree">
     <div className="max-w-fit w-full bg-white p-8 shadow-lg rounded-lg">
       <div className="flex mb-8">
@@ -130,6 +135,6 @@ const HRCampaignsDetails = () => (
       </Button>
     </div>
   </div>
-);
+)};
 
 export default HRCampaignsDetails;

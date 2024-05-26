@@ -14,7 +14,7 @@ const MentorPage = () => {
 
   return (
     <CustomMenu>
-      {renderPage(location.pathname)}
+     
     </CustomMenu>
   );
 };
