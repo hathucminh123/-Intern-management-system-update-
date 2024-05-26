@@ -17,7 +17,7 @@ import { useNavigate, Outlet } from "react-router-dom";
 import Logo from "../../components/Logo/Logo";
 import Campaings from "../../components/HR/CampaignsComponent/Campaings";
 import HRCampaignsDetails from "../../components/HR/CampaignsComponent/HRCampaignsDetails";
-
+import HRCampaings from "../../components/HR/CampaignsComponent/HRCampaings";
 const { Header, Sider, Content } = Layout;
 
 const HRPage = () => {
@@ -45,7 +45,8 @@ const HRPage = () => {
 
       case "Detail":
         return <HRCampaignsDetails />;
-
+      case "HRCampaings":
+        return <HRCampaings />;
       default:
         return <></>;
     }
@@ -66,6 +67,11 @@ const HRPage = () => {
       key: "Detail",
 
       label: "detail",
+    },
+    {
+      key: "HRCampaings",
+
+      label: "HRCampaings",
     },
   ];
   // useEffect(() => {
