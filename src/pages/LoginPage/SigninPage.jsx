@@ -27,7 +27,7 @@ const SigninPage = () => {
   const handleSignIn = () => {
     console.log('logingloin');
     localStorage.setItem("Auth", 'true');
-    localStorage.setItem("role", 'mentor');
+    localStorage.setItem("role", 'hr');
  
   }
 

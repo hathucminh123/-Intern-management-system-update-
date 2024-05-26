@@ -5,30 +5,12 @@ import TaskPerformance from '../../components/MentorComponent/TaskPerformance';
 import Sidebar from '../../components/MentorComponent/ChatRoom/SideBar';
 import ChatWindow from '../../components/MentorComponent/ChatRoom/ChatWindow';
 import { useLocation } from 'react-router-dom';
-import CustomMenu from '../../components/CustomMenu';
+import CustomMenu from '../../components/CustomMenu/CustomMenu';
 
 const MentorPage = () => {
   const location = useLocation();
 
-  const renderPage = (key) => {
-    switch (key) {
-      case '/mentor/home':
-        return <Dashboard />;
-      case '/mentor/task':
-        return <TaskPerformance />;
-      case '/mentor/chat':
-        return (
-          <>
-            <Sidebar />
-            <ChatWindow />
-          </>
-        );
-      case '/mentor/schedule':
-        return <Schedule />;
-      default:
-        return <div>Không tìm thấy trang</div>;
-    }
-  };
+  
 
   return (
     <CustomMenu>

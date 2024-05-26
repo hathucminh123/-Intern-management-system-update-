@@ -6,8 +6,9 @@ import Dashboard from './components/MentorComponent/Dashboard';
 import Schedule from './components/MentorComponent/Schedule';
 import TaskPerformance from './components/MentorComponent/TaskPerformance';
 import Chat from './components/MentorComponent/Chat';
-import CustomMenu from './components/CustomMenu';
+import CustomMenu from './components/CustomMenu/CustomMenu';
 import './App.css';
+import HRCampaignsDetails from './components/HR/CampaignsComponent/HRCampaignsDetails';
 
 function App() {
 
@@ -17,7 +18,6 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
           <Route element={<ProtectedRoute />}>
@@ -31,6 +31,7 @@ function App() {
             <Route path="/hr" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Schedule />} />
+              <Route path="Detail" element={<HRCampaignsDetails />} />
             </Route>
           </Route>
         </Routes>

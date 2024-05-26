@@ -13,8 +13,8 @@ import {
 import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme, Popover } from 'antd';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import './CustomMenu.css';
-import { getComment } from '../api/index';
-import Logo from '../components/Logo/Logo';
+import { getComment } from '../../api/index';
+import Logo from '../Logo/Logo';
 
 const { Header, Sider, Content } = Layout;
 
@@ -47,10 +47,13 @@ const CustomMenu = ({ userRole }) => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
+  const userRole1 = localStorage.getItem('role'); // Giả sử bạn lưu thông tin đăng nhập trong localStorage
+
+
   const items = {
     mentor: [
       {
-        key: '/mentor/home',
+        key: `/${userRole1}/home`,
         icon: <HomeOutlined />,
         label: 'Trang chủ',
       },
