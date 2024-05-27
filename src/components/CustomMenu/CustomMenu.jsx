@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -9,12 +9,26 @@ import {
   AppstoreOutlined,
   AreaChartOutlined,
   WechatWorkOutlined,
-} from '@ant-design/icons';
-import { Avatar, Badge, Button, Col, Drawer, Layout, List, Menu, Row, Space, Typography, theme, Popover } from 'antd';
-import { useNavigate, useLocation, Outlet } from 'react-router-dom';
-import './CustomMenu.css';
-import { getComment } from '../../api/index';
-import Logo from '../Logo/Logo';
+} from "@ant-design/icons";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Col,
+  Drawer,
+  Layout,
+  List,
+  Menu,
+  Row,
+  Space,
+  Typography,
+  theme,
+  Popover,
+} from "antd";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import "./CustomMenu.css";
+import { getComment } from "../../api/index";
+import Logo from "../Logo/Logo";
 
 const { Header, Sider, Content } = Layout;
 
@@ -47,42 +61,41 @@ const CustomMenu = ({ userRole }) => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
-   // Giả sử bạn lưu thông tin đăng nhập trong localStorage
-
+  // Giả sử bạn lưu thông tin đăng nhập trong localStorage
 
   const items = {
     mentor: [
       {
         key: `/mentor/home`,
         icon: <HomeOutlined />,
-        label: 'Trang chủ',
+        label: "Trang chủ",
       },
       {
-        key: '/mentor/task',
+        key: "/mentor/task",
         icon: <AppstoreOutlined />,
-        label: 'Quản lý Task',
+        label: "Quản lý Task",
       },
       {
-        key: '/mentor/chat',
+        key: "/mentor/chat",
         icon: <WechatWorkOutlined />,
-        label: 'Chat',
+        label: "Chat",
       },
       {
-        key: '/mentor/schedule',
+        key: "/mentor/schedule",
         icon: <AreaChartOutlined />,
-        label: 'Lịch trình',
+        label: "Lịch trình",
       },
     ],
     hr: [
       {
-        key: '/hr/home',
+        key: "/hr/home",
         icon: <HomeOutlined />,
-        label: 'Trang chủ',
+        label: "Trang chủ",
       },
       {
-        key: '/hr/campaigns',
+        key: "/hr/campaigns",
         icon: <HomeOutlined />,
-        label: 'campaigns',
+        label: "campaigns",
       },
     ],
   };
@@ -90,20 +103,30 @@ const CustomMenu = ({ userRole }) => {
   const userItems = items[userRole] || [];
 
   const handleClickNavigate = (type) => {
-    if (type === 'logout') {
-      navigate('/sign-in');
+    if (type === "logout") {
+      navigate("/sign-in");
     }
   };
 
   const content = (
     <div>
-      <div className='WrapperContentPopup' onClick={() => handleClickNavigate('profile')}>Thông tin người dùng</div>
-      <div className='WrapperContentPopup' onClick={() => handleClickNavigate('logout')}>Đăng xuất</div>
+      <div
+        className="WrapperContentPopup"
+        onClick={() => handleClickNavigate("profile")}
+      >
+        Thông tin người dùng
+      </div>
+      <div
+        className="WrapperContentPopup"
+        onClick={() => handleClickNavigate("logout")}
+      >
+        Đăng xuất
+      </div>
     </div>
   );
 
   return (
-    <Layout className='Header'>
+    <Layout className="Header">
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <Logo />
         <div className="demo-logo-vertical" />
@@ -112,13 +135,13 @@ const CustomMenu = ({ userRole }) => {
           mode="inline"
           selectedKeys={[selectedKey]}
           style={{
-            height: '100vh',
-            marginTop: '2rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '15px',
-            fontSize: '1rem',
-            position: 'relative',
+            height: "100vh",
+            marginTop: "2rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+            fontSize: "1rem",
+            position: "relative",
           }}
           onClick={handleMenuClick}
           items={userItems} // Use items instead of children
@@ -138,7 +161,7 @@ const CustomMenu = ({ userRole }) => {
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => setCollapsed(!collapsed)}
                 style={{
-                  fontSize: '16px',
+                  fontSize: "16px",
                   width: 64,
                   height: 64,
                 }}
@@ -153,30 +176,50 @@ const CustomMenu = ({ userRole }) => {
                   open={isOpenPopup}
                   onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
                   getPopupContainer={() => popoverRef.current}
-                  
-              
                 >
-                  <div ref={popoverRef} className='nameaccount' onClick={() => setIsOpenPopup(!isOpenPopup)}>Hà Thúc Minh</div>
+                  <div
+                    ref={popoverRef}
+                    className="nameaccount"
+                    onClick={() => setIsOpenPopup(!isOpenPopup)}
+                  >
+                    Hà Thúc Minh
+                  </div>
                 </Popover>
                 <Badge count={comments.length} dot>
-                  <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
+                  <MailOutlined
+                    style={{ fontSize: 24 }}
+                    onClick={() => setCommentsOpen(true)}
+                  />
                 </Badge>
                 <Badge count={comments.length}>
-                  <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
+                  <BellFilled
+                    style={{ fontSize: 24 }}
+                    onClick={() => setNotificationOpen(true)}
+                  />
                 </Badge>
-                <Drawer title="Thông báo" onClose={() => setNotificationOpen(false)} open={notificationOpen} maskClosable>
+                <Drawer
+                  title="Thông báo"
+                  onClose={() => setNotificationOpen(false)}
+                  open={notificationOpen}
+                  maskClosable
+                >
                   <List
                     dataSource={comments}
-                    renderItem={(item) => (
-                      <List.Item>{item.body}</List.Item>
-                    )}
+                    renderItem={(item) => <List.Item>{item.body}</List.Item>}
                   />
                 </Drawer>
-                <Drawer title="Tin nhắn" onClose={() => setCommentsOpen(false)} open={commentsOpen} maskClosable>
+                <Drawer
+                  title="Tin nhắn"
+                  onClose={() => setCommentsOpen(false)}
+                  open={commentsOpen}
+                  maskClosable
+                >
                   <List
                     dataSource={comments}
                     renderItem={(item) => (
-                      <List.Item><Typography.Text strong>{item.body}</Typography.Text></List.Item>
+                      <List.Item>
+                        <Typography.Text strong>{item.body}</Typography.Text>
+                      </List.Item>
                     )}
                   />
                 </Drawer>
@@ -186,10 +229,10 @@ const CustomMenu = ({ userRole }) => {
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
+            margin: "24px 16px",
             padding: 24,
-            minHeight: 'auto',
-            minWidth: 'auto',
+            minHeight: "auto",
+            minWidth: "auto",
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}

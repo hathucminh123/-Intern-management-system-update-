@@ -1,19 +1,25 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import SigninPage from './pages/LoginPage/SigninPage';
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
-import Dashboard from './components/MentorComponent/Dashboard';
-import Schedule from './components/MentorComponent/Schedule';
-import TaskPerformance from './components/MentorComponent/TaskPerformance';
-import Chat from './components/MentorComponent/Chat';
-import CustomMenu from './components/CustomMenu/CustomMenu';
-import './App.css';
-import HRCampaignsDetails from './components/HR/CampaignsComponent/HRCampaignsDetails';
-import Campaings from './components/HR/CampaignsComponent/Campaings';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import SigninPage from "./pages/LoginPage/SigninPage";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import Dashboard from "./components/MentorComponent/Dashboard";
+import Schedule from "./components/MentorComponent/Schedule";
+import TaskPerformance from "./components/MentorComponent/TaskPerformance";
+import Chat from "./components/MentorComponent/Chat";
+import CustomMenu from "./components/CustomMenu/CustomMenu";
+import "./App.css";
+import HRCampaignsDetails from "./components/HR/CampaignsComponent/HRCampaignsDetails";
+import Campaings from "./components/HR/CampaignsComponent/Campaings";
+import GuestPage from "./pages/GuessPage/GuessPage";
+import GuestInfo from "./pages/GuestInfo/GuestInfo";
 
 function App() {
-
-  const userRole = localStorage.getItem('role');
+  const userRole = localStorage.getItem("role");
 
   return (
     <div className="App">
@@ -34,6 +40,11 @@ function App() {
               <Route path="home" element={<Schedule />} />
               <Route path="campaigns" element={<Campaings />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+            </Route>
+            <Route path="/guest" element={<GuestPage />}>
+              <Route index element={<Navigate to="info" replace />} />
+              <Route path="info" element={<GuestInfo />} />
+              {/* <Route path="about" element={<GuestAbout />} /> */}
             </Route>
           </Route>
         </Routes>

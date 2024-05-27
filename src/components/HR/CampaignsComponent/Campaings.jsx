@@ -1,13 +1,13 @@
 import React from "react";
-import { Card, Space } from "antd";
+import { Card, Space, Image, Pagination } from "antd";
 import SearchBarCampaigns from "./SearchBarCampaigns";
-import { Image } from "antd";
 import reactImage from "../../../assets/react_image.jpeg";
 import nodeJs from "../../../assets/node-js.jpg";
 import javaImage from "../../../assets/javaImage.jpg";
-import { Pagination } from "antd";
+
 const data = [
   {
+    id: 1,
     title: "Thực Tập React",
     extra: "Chỉnh sửa",
     image: reactImage,
@@ -18,6 +18,7 @@ const data = [
     ],
   },
   {
+    id: 2,
     title: "Thực Tập Node.js",
     extra: "Chỉnh sửa",
     image: nodeJs,
@@ -28,6 +29,7 @@ const data = [
     ],
   },
   {
+    id: 3,
     title: "Thực Tập Java",
     extra: "Chỉnh sửa",
     image: javaImage,
@@ -47,9 +49,9 @@ const Campaings = () => (
       direction="vertical"
       size="large"
     >
-      {data.map((item, index) => (
+      {data.map((item) => (
         <Card
-          key={index}
+          key={item.id}
           hoverable
           bordered
           className="items-center"
