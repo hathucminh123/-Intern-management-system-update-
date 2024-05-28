@@ -42,7 +42,7 @@ const HRCampaignsDetails = () => {
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-            {jobDetails.jobDescription.map((item, index) => (
+            {jobsDetailData.jobDescription.map((item, index) => (
               <li key={index} className="mb-2">
                 {item}
               </li>
@@ -55,7 +55,7 @@ const HRCampaignsDetails = () => {
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-            {jobDetails.jobRequirements.map((item, index) => (
+            {jobsDetailData.jobRequirements.map((item, index) => (
               <li key={index} className="mb-2">
                 {item}
               </li>
@@ -68,7 +68,7 @@ const HRCampaignsDetails = () => {
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-            {jobDetails.benefits.map((item, index) => (
+            {jobsDetailData.benefits.map((item, index) => (
               <li key={index} className="mb-2">
                 {item}
               </li>

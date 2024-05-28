@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { Form, Modal, Select, Spin, Avatar } from 'antd';
+import React, { useContext, useState } from "react";
+import { Form, Modal, Select, Spin, Avatar } from "antd";
 // import { AppContext } from '../../Context/AppProvider';
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 // import { db } from '../../firebase/config';
 
 function DebounceSelect({
@@ -41,13 +41,13 @@ function DebounceSelect({
       labelInValue
       filterOption={false}
       onSearch={debounceFetcher}
-      notFoundContent={fetching ? <Spin size='small' /> : null}
+      notFoundContent={fetching ? <Spin size="small" /> : null}
       {...props}
     >
       {options.map((opt) => (
         <Select.Option key={opt.value} value={opt.value} title={opt.label}>
-          <Avatar size='small' src={opt.photoURL}>
-            {opt.photoURL ? '' : opt.label?.charAt(0)?.toUpperCase()}
+          <Avatar size="small" src={opt.photoURL}>
+            {opt.photoURL ? "" : opt.label?.charAt(0)?.toUpperCase()}
           </Avatar>
           {` ${opt.label}`}
         </Select.Option>
@@ -75,12 +75,12 @@ function DebounceSelect({
 // }
 
 export default function InviteMemberModal({ isVisible, onClose }) {
-//   const {
-//     isInviteMemberVisible,
-//     setIsInviteMemberVisible,
-//     selectedRoomId,
-//     selectedRoom,
-//   } = useContext(AppContext);
+  //   const {
+  //     isInviteMemberVisible,
+  //     setIsInviteMemberVisible,
+  //     selectedRoomId,
+  //     selectedRoom,
+  //   } = useContext(AppContext);
   const [value, setValue] = useState([]);
   const [form] = Form.useForm();
 
@@ -115,22 +115,22 @@ export default function InviteMemberModal({ isVisible, onClose }) {
   return (
     <div>
       <Modal
-        title='Mời thêm thành viên'
+        title="Mời thêm thành viên"
         open={isVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose={true}
       >
-        <Form form={form} layout='vertical'>
+        <Form form={form} layout="vertical">
           <DebounceSelect
-            mode='multiple'
-            name='search-user'
-            label='Tên các thành viên'
+            mode="multiple"
+            name="search-user"
+            label="Tên các thành viên"
             value={value}
-            placeholder='Nhập tên thành viên'
+            placeholder="Nhập tên thành viên"
             // fetchOptions={fetchUserList}
             onChange={(newValue) => setValue(newValue)}
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
             // curMembers={selectedRoom.members}
           />
         </Form>

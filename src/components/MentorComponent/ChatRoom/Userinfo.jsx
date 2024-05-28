@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button, Avatar, Typography } from 'antd';
-import styled from 'styled-components';
+import React from "react";
+import { Button, Avatar, Typography } from "antd";
+import styled from "styled-components";
 // import img1 from '../../../assets/minhwap.jpg'
 
 // import { auth } from '../../firebase/config';
@@ -20,10 +20,10 @@ const WrapperStyled = styled.div`
 `;
 
 export default function Userinfo() {
-//   const {
-//     user: { displayName, photoURL },
-//   } = React.useContext(AuthContext);
-//   const { clearState } = React.useContext(AppContext);
+  //   const {
+  //     user: { displayName, photoURL },
+  //   } = React.useContext(AuthContext);
+  //   const { clearState } = React.useContext(AppContext);
 
   return (
     <WrapperStyled>
@@ -33,7 +33,7 @@ export default function Userinfo() {
           {/* {img1} */}
         </Avatar>
         {/* <Typography.Text className='username'>{displayName}</Typography.Text> */}
-        <Typography.Text className='username'>Thuc Minh</Typography.Text>
+        <Typography.Text className="username">Thuc Minh</Typography.Text>
       </div>
       {/* <Button
         ghost
