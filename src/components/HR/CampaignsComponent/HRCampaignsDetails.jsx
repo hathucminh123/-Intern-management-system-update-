@@ -1,38 +1,41 @@
 import React from "react";
-import { Typography, Button } from "antd";
+import { Typography, Button, Image, Tag } from "antd";
 import "tailwindcss/tailwind.css"; // đảm bảo Tailwind CSS được import
-import { Image, Tag } from "antd";
+import { useLocation, useParams } from "react-router-dom";
+
 const { Title, Paragraph, Text } = Typography;
-import reactImage from "../../../assets/react_image.jpeg";
-import jobsDetailData from "../../../const/jobsDetailData.js";
-import { useParams } from "react-router-dom";
 
 const HRCampaignsDetails = () => {
   let { id } = useParams();
-  console.log(id);
+  const { state } = useLocation();
+  const jobDetail = state?.item;
+
+  if (!jobDetail) {
+    return <div>Job detail not found</div>;
+  }
   return (
-    <div className="flex justify-center items-center min-h-scree">
+    <div className="flex justify-center items-center ">
       <div className="max-w-fit w-full bg-white p-8 shadow-lg rounded-lg">
         <div className="flex mb-8">
           <Image
             width={250}
             preview={false}
-            src={reactImage}
+            src={jobDetail.image}
             className="border-4 border-gray-300 shadow-xl rounded-lg"
           />
           <div className="ml-8">
             <Title className="" level={2}>
-              <div>Thực Tập ReactJs</div>
+              <div>{jobDetail.title}</div>
             </Title>
             <div className="flex mt-3">
               <div>Thời gian :</div>
               <Tag className="ml-3" color="#87d068">
-                FullTime
+                {jobDetail.workTime}
               </Tag>
             </div>
             <div className="flex mt-3">
               <div>Hết hạn :</div>
-              <div className="ml-3 text-red-500">10/10/2024</div>
+              <div className="ml-3 text-red-500">{jobDetail.deadline}</div>
             </div>
           </div>
         </div>
@@ -42,7 +45,7 @@ const HRCampaignsDetails = () => {
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-            {jobsDetailData.jobDescription.map((item, index) => (
+            {jobDetail.jobDescription.map((item, index) => (
               <li key={index} className="mb-2">
                 {item}
               </li>
@@ -55,7 +58,7 @@ const HRCampaignsDetails = () => {
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-            {jobsDetailData.jobRequirements.map((item, index) => (
+            {jobDetail.jobRequirements.map((item, index) => (
               <li key={index} className="mb-2">
                 {item}
               </li>
@@ -68,7 +71,7 @@ const HRCampaignsDetails = () => {
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-            {jobsDetailData.benefits.map((item, index) => (
+            {jobDetail.benefits.map((item, index) => (
               <li key={index} className="mb-2">
                 {item}
               </li>
