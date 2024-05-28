@@ -186,10 +186,7 @@ const CustomMenu = ({ userRole }) => {
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
             padding: 24,
-            minHeight: 'auto',
-            minWidth: 'auto',
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}

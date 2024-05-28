@@ -87,41 +87,42 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   ];
 
   return (
-    <Space direction='vertical' size={100} style={{ padding: '20px' }}>
-      <Space direction='horizontal' size={1000}>
-        <Typography.Title level={1}>Create New Task</Typography.Title>
-        <Button type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
-      </Space>
-      <AddModal
-        isVisible={openAddModal}
-        onClose={() => setOpenAddModal(false)}
-        onAddTask={onAddTask}
-      />
-      {selectedTask && (
-        <DetailModal
-          isVisible={openDetailModal}
-          onClose={() => setOpenDetailModal(false)}
-          task={selectedTask}
-          onUpdateTask={onUpdateTask}
-        />
-      )}
-      {taskToReview && (
-        <ReviewModal
-          isVisible={openReviewModal}
-          onClose={() => setOpenReviewModal(false)}
-          task={taskToReview}
-          onReviewTask={handleReviewTask}
-        />
-      )}
-      <Input.Search
-        placeholder="Search by task name"
-        value={searchText}
-        onChange={handleSearch}
-        style={{ margin: '20px 0', width: '300px' }}
-      />
-      <Typography.Text style={{ fontSize: '2rem' }}>Tasks</Typography.Text>
-      <Table dataSource={filteredTasks} columns={columns} />
-    </Space>
+    // <Space direction='vertical' size={100} style={{ padding: '20px' }}>
+    //   <Space direction='horizontal' size={1000}>
+    //     <Typography.Title level={1}>Create New Task</Typography.Title>
+    //     <Button type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
+    //   </Space>
+    //   <AddModal
+    //     isVisible={openAddModal}
+    //     onClose={() => setOpenAddModal(false)}
+    //     onAddTask={onAddTask}
+    //   />
+    //   {selectedTask && (
+    //     <DetailModal
+    //       isVisible={openDetailModal}
+    //       onClose={() => setOpenDetailModal(false)}
+    //       task={selectedTask}
+    //       onUpdateTask={onUpdateTask}
+    //     />
+    //   )}
+    //   {taskToReview && (
+    //     <ReviewModal
+    //       isVisible={openReviewModal}
+    //       onClose={() => setOpenReviewModal(false)}
+    //       task={taskToReview}
+    //       onReviewTask={handleReviewTask}
+    //     />
+    //   )}
+    //   <Input.Search
+    //     placeholder="Search by task name"
+    //     value={searchText}
+    //     onChange={handleSearch}
+    //     style={{ margin: '20px 0', width: '300px' }}
+    //   />
+    //   <Typography.Text style={{ fontSize: '2rem' }}>Tasks</Typography.Text>
+    //   <Table dataSource={filteredTasks} columns={columns} />
+    // </Space>
+    <Table dataSource={filteredTasks} columns={columns} />
   );
 };
 
