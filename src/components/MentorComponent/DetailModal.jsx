@@ -9,7 +9,7 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const updatedTask = { ...task, ...values, dateRange: values.dateRange ? [values.dateRange[0].startOf('day'), values.dateRange[1].endOf('day')] : task.dateRange };
+      const updatedTask = { ...task, ...values, endDate: values.endDate };
       onUpdateTask(updatedTask);
       form.resetFields();
       onClose();
@@ -38,7 +38,7 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
           taskName: task.taskName,
           description: task.description,
           assignedTo: task.assignedTo,
-          dateRange: task.dateRange ? [moment(task.dateRange[0]), moment(task.dateRange[1])] : [],
+          endDate: task.endDate,
           status: task.status,
         }}
       >
@@ -67,11 +67,11 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
         </Form.Item>
 
         <Form.Item
-          label="RangePicker"
-          name="dateRange"
+          label="endDate"
+          name="endDate"
           rules={[{ required: true, message: 'Please input!' }]}
         >
-          <RangePicker />
+          <DatePicker />
         </Form.Item>
 
         <Form.Item

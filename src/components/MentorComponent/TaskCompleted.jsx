@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { Button, Space, Table, Typography, Input, Modal, Form, Rate } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, Space, Table, Typography, Input, Modal, Form, Rate, Popover, DatePicker,Select } from 'antd';
+import {
+  FilterOutlined
+} from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
+import { getIntern } from '../../api';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { gettest1 } from '../../redux/userSlice';
 const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -11,13 +17,27 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [searchText, setSearchText] = useState('');
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [taskToReview, setTaskToReview] = useState(null);
-
+  const [user, setUser] = useState([]);
+  const test = useSelector((state) => state.user.test);
+  console.log('hiep',test);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(gettest1())
+    getIntern()
+      .then(res => {
+        setUser(res.users.splice(0, 20));
+      })
+      .catch(err => {
+        setError(err);
+      });
+  }, []);
   const handleDeleteTask = (key) => {
     onUpdateTask(tasks.filter((task) => task.key !== key));
   };
 
   const handleOpenDetailModal = (task) => {
-    console.log('task',task)
+    console.log('task', task)
     setSelectedTask(task);
     setOpenDetailModal(true);
   };
@@ -47,32 +67,32 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       dataIndex: 'taskName',
       key: 'taskName',
     },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'description',
+    //   key: 'description',
+    // },
     {
       title: 'Assigned To',
       dataIndex: 'assignedTo',
       key: 'assignedTo',
     },
     {
-      title: 'Date Range',
-      dataIndex: 'dateRange',
-      key: 'dateRange',
-      render: (range) => range && range.map(date => date.format('YYYY-MM-DD')).join(' To '),
+      title: 'End Date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (date) => date.format('YYYY-MM-DD'),
     },
     {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
     },
-    {
-      title: 'Feedback',
-      dataIndex: 'feedback',
-      key: 'feedback',
-    },
+    // {
+    //   title: 'Feedback',
+    //   dataIndex: 'feedback',
+    //   key: 'feedback',
+    // },
     {
       title: 'Actions',
       key: 'actions',
@@ -86,43 +106,63 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     },
   ];
 
+
+  const content = (
+    <div>
+      End Date   : <DatePicker />
+
+      Assigned To<Select
+        placeholder="chọn người dùng"
+        allowClear
+
+      >
+        items={user.map((item) => (
+          <Select.Option key={item.id} value={item.firstName}>{item.firstName}</Select.Option>
+        ))}
+
+
+      </Select>
+    </div>
+  );
+
   return (
-    // <Space direction='vertical' size={100} style={{ padding: '20px' }}>
-    //   <Space direction='horizontal' size={1000}>
-    //     <Typography.Title level={1}>Create New Task</Typography.Title>
-    //     <Button type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
-    //   </Space>
-    //   <AddModal
-    //     isVisible={openAddModal}
-    //     onClose={() => setOpenAddModal(false)}
-    //     onAddTask={onAddTask}
-    //   />
-    //   {selectedTask && (
-    //     <DetailModal
-    //       isVisible={openDetailModal}
-    //       onClose={() => setOpenDetailModal(false)}
-    //       task={selectedTask}
-    //       onUpdateTask={onUpdateTask}
-    //     />
-    //   )}
-    //   {taskToReview && (
-    //     <ReviewModal
-    //       isVisible={openReviewModal}
-    //       onClose={() => setOpenReviewModal(false)}
-    //       task={taskToReview}
-    //       onReviewTask={handleReviewTask}
-    //     />
-    //   )}
-    //   <Input.Search
-    //     placeholder="Search by task name"
-    //     value={searchText}
-    //     onChange={handleSearch}
-    //     style={{ margin: '20px 0', width: '300px' }}
-    //   />
-    //   <Typography.Text style={{ fontSize: '2rem' }}>Tasks</Typography.Text>
-    //   <Table dataSource={filteredTasks} columns={columns} />
-    // </Space>
-    <Table dataSource={filteredTasks} columns={columns} />
+    <>
+      <AddModal
+        isVisible={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        onAddTask={onAddTask}
+      />
+      {selectedTask && (
+        <DetailModal
+          isVisible={openDetailModal}
+          onClose={() => setOpenDetailModal(false)}
+          task={selectedTask}
+          onUpdateTask={onUpdateTask}
+        />
+      )}
+      {taskToReview && (
+        <ReviewModal
+          isVisible={openReviewModal}
+          onClose={() => setOpenReviewModal(false)}
+          task={taskToReview}
+          onReviewTask={handleReviewTask}
+        />
+      )}
+      <div style={{ marginBottom: '20px' }}>
+        <Input.Search
+          placeholder="Search by task name"
+          value={searchText}
+          onChange={handleSearch}
+          style={{ width: '300px', marginRight: '30px' }}
+        />
+        <Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
+        <Popover content={content}>
+          <Button style={{ marginRight: '30px' }} icon={<FilterOutlined />} />
+        </Popover>
+      </div>
+
+      <Table dataSource={filteredTasks} columns={columns} />
+    </>
   );
 };
 
