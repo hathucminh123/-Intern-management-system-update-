@@ -1,0 +1,29 @@
+.Container{
+    background-image: url(https://geekadventure.vn/backgrounds/tl-internship-list-page.jpg);
+    background-size: 2304px  1554px;
+    background-size: no-repeat;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.title{
+    --tw-text-opacity: 1;
+    color: rgb(0 164 153 / var(--tw-text-opacity));
+}
+
+.logo{
+    width: 100%;
+    display: flex;
+    z-index: 10;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+}
+.logoedit{
+    position: relative;
+    width: 48px;
+    height: 48px;
+}

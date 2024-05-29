@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Badge, Button, Calendar, Space, Typography } from 'antd';
+import { Badge, Button, Calendar, Space, Typography} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { addEvent, removeEvent, setIsAddEventVisible } from '../../redux/calendarSlice';
 import AddScheduleModal from './AddScheduleModal';
@@ -17,7 +17,7 @@ const Schedule = () => {
 
   const handleRemoveEvent = (eventId) => {
     dispatch(removeEvent(eventId));
-    dispatch(setIsAddEventVisible(false));
+    dispatch(setIsAddEventVisible(true));
   };
 
   const handleModalClose = () => {
@@ -39,11 +39,16 @@ const Schedule = () => {
     return (
       <ul className="events">
         {listData.map(item => (
-          <li key={item.id}>
-            <Badge status={item.type} text={item.events} />
+          <div key={item.id}>
+            <Badge status={item.types} text={item.events} />
+            <Space direction='vertical'>
+            {item.types}
+            {item.events}
             <Button onClick={() => handleRemoveEvent(item.id)}>Remove</Button>
-            {item.type}
-          </li>
+            </Space>
+          
+            
+          </div>
         ))}
       </ul>
     );
