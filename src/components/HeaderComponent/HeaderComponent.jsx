@@ -20,7 +20,7 @@ const HeaderComponent = () => {
       </div>
     
       <div className=" hidden md:flex">
-        <a href="/guest">
+        <a href="/">
         <ButtonComponent
             size={40}
           
