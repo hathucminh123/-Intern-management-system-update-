@@ -3,6 +3,8 @@ import { Typography, Button } from "antd";
 import GuestCampainsComponent from "../../components/GuestCampainsComponent/GuestCampainsComponent";
 import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
+import MentorTaskDetail from "../../components/MentorComponent/MentorTask/MentorTaskDetail";
+
 const { Search } = Input;
 const { Title } = Typography;
 const suffix = (
@@ -67,6 +69,7 @@ const GuestInfo = () => {
         />
       </div>
       <div className="mt-8 w-full px-4">{renderContent()}</div>
+      <MentorTaskDetail />
     </div>
   );
 };
