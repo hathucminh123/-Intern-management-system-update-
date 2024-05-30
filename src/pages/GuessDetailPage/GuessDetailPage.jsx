@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import GuessDetailsComponent from '../../components/GuessDetailsComponent/GuessDetailsComponent';
+import GuessDetailsComponent from '../../components/GuessComponent/GuessDetailsComponent/GuessDetailsComponent';
 import './GuessDetailPage.css';
 
 const GuessDetailPage = () => {

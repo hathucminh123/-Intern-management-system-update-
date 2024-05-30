@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Button,Image } from "antd";
-import GuestCampainsComponent from "../../components/GuestCampainsComponent/GuestCampainsComponent";
+import GuestCampainsComponent from "../../components/GuessComponent/GuestCampainsComponent/GuestCampainsComponent";
 import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
 import './GuestInfo.css'

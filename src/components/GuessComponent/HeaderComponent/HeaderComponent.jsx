@@ -3,7 +3,7 @@ import { Menu, Dropdown, Button } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import './HeaderComponent.css'
 
-import ButtonComponent from '../ButtonComponent/ButtonComponent'
+import ButtonComponent from '../../ButtonComponent/ButtonComponent'
 
 
 const HeaderComponent = () => {
@@ -20,7 +20,7 @@ const HeaderComponent = () => {
       </div>
     
       <div className=" hidden md:flex">
-        <a href="/">
+        <a href="/guest">
         <ButtonComponent
             size={40}
           

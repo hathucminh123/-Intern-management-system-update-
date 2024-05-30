@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Card, Space, Statistic, Table, Tag, Typography } from 'antd'
-import { MdAdminPanelSettings,MdKeyboardArrowDown,MdKeyboardArrowUp,MdKeyboardDoubleArrowUp } from 'react-icons/md'
-import { LuClipboardEdit } from 'react-icons/lu'
-import { FaArrowsToDot } from 'react-icons/fa6'
-import { FaNewspaper,FaUsers } from 'react-icons/fa'
-import { getIntern, getTodos } from '../../api'
+import React, { useEffect, useState } from 'react'; // Import React, useEffect, useState
+import { Card, Space, Statistic, Table, Tag, Typography ,Layout} from 'antd';
+import { MdAdminPanelSettings, MdKeyboardArrowDown, MdKeyboardArrowUp, MdKeyboardDoubleArrowUp } from 'react-icons/md';
+import { LuClipboardEdit } from 'react-icons/lu';
+import { FaArrowsToDot } from 'react-icons/fa6';
+import { FaNewspaper, FaUsers } from 'react-icons/fa';
+import { getIntern, getTodos } from '../../api';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -15,8 +15,8 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-
-ChartJS.register(   
+const { Header, Content, Footer } = Layout;
+ChartJS.register(
     CategoryScale,
     LinearScale,
     BarElement,
@@ -26,22 +26,25 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-    const [todos,SetTodos]=useState(0)
-    const [total,SetTotal]=useState(0)
-    const [progress,SetProgress]=useState(0)
-    const [completed,SetCompleted]=useState(0)
+    const [todos, SetTodos] = useState(0);
+    const [total, SetTotal] = useState(0);
+    const [progress, SetProgress] = useState(0);
+    const [completed, SetCompleted] = useState(0);
 
-    useEffect(()=>{
-        getTodos().then((res)=>{
-            SetTodos(res.total)
-        })
+    useEffect(() => {
+        getTodos().then((res) => {
+            SetTodos(res.total);
+        });
 
-    },[])
+    }, []);
 
     return (
-        <Space size={20} direction='vertical' >
+        <Layout>
+        <Header style={{ color: 'white' }}>Trang chủ</Header>
+        <Content style={{ padding: '24px', minHeight: '80vh' }}>
+        <Space size={20} direction='vertical'>
             <Typography.Title level={4}>Trang chủ</Typography.Title>
-            <Space size={100} direction='horizontal' >
+            <Space size={100} direction='horizontal'>
                 <DashboardCard icon={<FaNewspaper style={iconStyle('blue', "rgba(0,0,255,0.25)")} />} title={"Tổng số Task"} value={todos} />
                 <DashboardCard icon={<MdAdminPanelSettings style={iconStyle('green', "rgba(0,255,0,0.25)")} />} title={"TASK hoàn thành"} value={10} />
                 <DashboardCard icon={<LuClipboardEdit style={iconStyle('red', "rgba(255,0,0,0.25)")} />} title={"TASK đang thực hiện"} value={10} />
@@ -50,12 +53,14 @@ const Dashboard = () => {
             <Typography.Title level={4}>Recent Task</Typography.Title>
             <Space size={200} direction='horizontal'>
                 <RecentTodos />
-                
+
                 <AllIntern />
                 {/* <DashboardChart /> */}
             </Space>
-            
+
         </Space>
+        </Content>
+        </Layout>
     );
 };
 
@@ -111,7 +116,7 @@ function RecentTodos() {
                     title: 'Trạng thái',
                     dataIndex: 'completed',
                     render: (text, record) => {
-                        console.log('record',record)
+                        console.log('record', record)
                         let color = 'volcano';
                         let status = 'Chưa hoàn thành';
 
@@ -147,7 +152,7 @@ function AllIntern() {
         setLoading(true);
         getIntern()
             .then(res => {
-                setDataSource(res.users.splice(0, 10));
+                setDataSource(res.users.splice(0, 5));
                 setLoading(false);
             })
             .catch(err => {
@@ -162,8 +167,8 @@ function AllIntern() {
 
     return (
         <div>
-        <Typography.Title level={4}>Danh sách Intern</Typography.Title>
-            <Table 
+            <Typography.Title level={4}>Danh sách Intern</Typography.Title>
+            <Table
                 columns={[
                     {
                         title: 'Hình ảnh',
@@ -187,41 +192,8 @@ function AllIntern() {
                 loading={loading}
                 rowKey="id" // Add rowKey for better table performance and handling
             />
-  </div>
+        </div>
     );
 }
-
-// function DashboardChart() {
-//     const labels = ['Todos', 'Task đang thực hiện', 'Task hoàn thành'];
-//     const data = {
-//         labels,
-//         datasets: [
-//             {
-//                 label: 'Dataset 1',
-//                 data: labels.map(() => Math.random() * 20),
-//                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
-//             },
-//             {
-//                 label: 'Dataset 2',
-//                 data: labels.map(() => Math.random() * 20),
-//                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
-//             },
-//         ],
-//     };
-//     const options = {
-//         responsive: true,
-//         plugins: {
-//             legend: {
-//                 position: 'bottom',
-//             },
-//             title: {
-//                 display: true,
-//                 text: 'Task Progress',
-//             },
-//         },
-//     };
-
-//     return <Bar options={options} data={data} />;
-// }
 
 export default Dashboard;

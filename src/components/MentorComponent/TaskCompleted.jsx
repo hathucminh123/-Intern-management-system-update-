@@ -87,7 +87,8 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   ];
 
   return (
-    <Space direction='vertical' size={100} style={{ padding: '20px' }}>
+    <div style={{ padding: '20px'}}>
+    
       <Space direction='horizontal' size={1000}>
         <Typography.Title level={1}>Create New Task</Typography.Title>
         <Button type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
@@ -113,15 +114,21 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
           onReviewTask={handleReviewTask}
         />
       )}
+   <div>
       <Input.Search
         placeholder="Search by task name"
         value={searchText}
         onChange={handleSearch}
         style={{ margin: '20px 0', width: '300px' }}
       />
-      <Typography.Text style={{ fontSize: '2rem' }}>Tasks</Typography.Text>
+     
+     
       <Table dataSource={filteredTasks} columns={columns} />
-    </Space>
+   
+      
+  
+      </div>
+    </div>
   );
 };
 

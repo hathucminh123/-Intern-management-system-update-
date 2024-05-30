@@ -76,9 +76,11 @@
 
 import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Layout } from 'antd';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import AddScheduleModal from './AddScheduleModal';
+const { Header, Content, Footer } = Layout;
 
 const localizer = momentLocalizer(moment);
 
@@ -101,7 +103,10 @@ const Schedule = () => {
   };
 
   return (
-    <div style={{ height: '500px' }}>
+    <Layout>
+    <Header style={{ color: 'white' }}>Lịch trình   </Header>
+    <Content style={{ padding: '24px', minHeight: '80vh' }}>
+      <div style={{height:"500px"}}>
       <Calendar
         localizer={localizer}
         events={events}
@@ -122,7 +127,10 @@ const Schedule = () => {
         eventToEdit={eventToEdit}
         setEventToEdit={setEventToEdit}
       />
-    </div>
+      </div>
+    </Content>
+  
+  </Layout>
   );
 };
 

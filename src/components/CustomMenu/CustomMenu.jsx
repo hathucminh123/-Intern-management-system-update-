@@ -85,6 +85,19 @@ const CustomMenu = ({ userRole }) => {
         label: 'campaigns',
       },
     ],
+
+    IC:[
+      {
+        key: '/IC/home',
+        icon: <HomeOutlined />,
+        label: 'Trang chủ',
+      },
+      {
+        key: '/IC/schedule',
+        icon: <AreaChartOutlined />,
+        label: 'Lịch trình',
+      },
+    ]
   };
 
   const userItems = items[userRole] || [];
@@ -186,6 +199,7 @@ const CustomMenu = ({ userRole }) => {
         </Header>
         <Content
           style={{
+            
             padding: 24,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,

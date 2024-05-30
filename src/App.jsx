@@ -14,6 +14,7 @@ import Campaings from './components/HR/CampaignsComponent/Campaings';
 import GuestPage from './pages/GuessPage/GuessPage';
 import GuestInfo from './pages/GuestInfo/GuestInfo';
 import GuessDetailPage from './pages/GuessDetailPage/GuessDetailPage';
+import HRPage from './pages/HRPage/HRPage';
 
 function App() {
 
@@ -36,9 +37,15 @@ function App() {
             </Route>
             <Route path="/hr" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<Schedule />} />
+              <Route path="home" element={<HRPage />} />
               <Route path="campaigns" element={<Campaings />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+            </Route>
+            <Route path="/IC" element={<CustomMenu userRole={userRole} />}>
+              <Route index element={<Navigate to="home" replace />} />
+              <Route path="home" element={<HRPage />} />
+              <Route path="schedule" element={<Schedule />} />
+              
             </Route>
             <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
