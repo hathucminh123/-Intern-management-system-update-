@@ -4,7 +4,7 @@ import SearchBarCampaigns from "./SearchBarCampaigns";
 import { useNavigate } from "react-router-dom";
 import data from "../../../const/jobsDetailData";
 
-const Campaings = () => {
+const Jobs = () => {
   const navigate = useNavigate();
 
   const handleDetails = (item) => {
@@ -65,4 +65,4 @@ const Campaings = () => {
   );
 };
 
-export default Campaings;
+export default Jobs;

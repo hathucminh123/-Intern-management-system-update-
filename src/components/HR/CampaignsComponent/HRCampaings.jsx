@@ -1,75 +1,103 @@
 import React from "react";
-import { Typography } from "antd";
 import { Card } from "antd";
-import ButtonComponent from "../../ButtonComponent/ButtonComponent";
-import BenefitCampains from "../../HR/CampaignsComponent/BenefitCampains";
+import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
+import { Typography, Button } from "antd";
+import { useNavigate } from "react-router-dom";
+
 const { Title } = Typography;
 
-const HRCampaings = () => {
-  const campaigns = [
-    {
-      cardTitle: "Chương trình thực tập Summer",
-      duration: "8 tuần",
-      positions: ["FontEnd Developer", "BackEnd Developer", "Business Analyst"],
-      startDate: "12/7/2024",
-    },
-    {
-      cardTitle: "Chương trình thực tập Spring",
-      duration: "10 tuần",
-      positions: ["Full Stack Developer", "Data Scientist", "UI/UX Designer"],
-      startDate: "01/12/2024",
-    },
-  ];
+const internships = [
+  {
+    id: 1,
+    title: "Internship Team Summer 2024",
+    positions: [
+      "Frontend Developer",
+      "Backend Developer",
+      "Product Mindset",
+      "Software Development",
+      "Communication",
+    ],
+    duration: "10 weeks",
+    startDate: "03/06/2024",
+  },
+  {
+    id: 2,
+    title: "Internship Program Summer 2024",
+    positions: [
+      "Frontend Developer",
+      "Backend Developer",
+      "UX/UI Designer",
+      "Data Analyst",
+      "Marketing Intern",
+    ],
+    duration: "12 weeks",
+    startDate: "06/07/2024",
+  },
+];
+
+const HRCampaigns = () => {
+  const navigate = useNavigate();
+
+  const handleJobs = (item) => {
+    navigate(`/hr/Jobs/${item.id}`, { state: { item } });
+  };
+
+  const handleAddNewCampaign = () => {
+    navigate("/hr/NewCampaigns");
+  };
+
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex flex-col justify-center">
-        <Title>Khám phá chương trình thực tập</Title>
-        <div className="mt-3">
-          {campaigns.map((campaign, index) => (
-            <Card
-              key={index}
-              hoverable
-              title={<Title level={3}>{campaign.cardTitle}</Title>}
-              bordered={true}
-              style={{
-                width: 800,
-                marginBottom: 20,
-              }}
-            >
-              <div className="flex">
-                <div>Thời gian thực tập: </div>
-                <div className="ml-3">{campaign.duration}</div>
-              </div>
-              <div className="flex mt-4 items-center">
-                <div>Các vị trí tuyển dụng: </div>
-                <div className="ml-3 flex flex-row">
-                  {campaign.positions.map((position, posIndex) => (
-                    <div
-                      key={posIndex}
-                      className="bg-gray-300 p-2 rounded-xl ml-3"
-                    >
-                      {position}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex mt-3">
-                <div>Thời gian bắt đầu: </div>
-                <div className="ml-3">{campaign.startDate}</div>
-              </div>
-              <ButtonComponent
-                className="mt-5"
-                styleButton={{ background: "#06701c", border: "none" }}
-                styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                size="middle"
-                textbutton={<div>Tìm hiểu thêm</div>}
-              />
-            </Card>
-          ))}
-        </div>
+    <div className="flex flex-col items-center">
+      <div className="flex m-4">
+        <Button type="primary" onClick={handleAddNewCampaign}>
+          Thêm
+        </Button>
       </div>
+
+      {internships.map((internship) => (
+        <Card
+          key={internship.id}
+          hoverable={true}
+          style={{
+            width: 600,
+            borderWidth: 3,
+            marginBottom: 20,
+          }}
+          onClick={() => handleJobs(internship)}
+        >
+          <div>
+            <Title className="text-center" level={3}>
+              {internship.title}
+            </Title>
+
+            <div
+              style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}
+            >
+              {internship.positions.map((position, index) => (
+                <Button
+                  key={index}
+                  className="rounded-full me-2 mb-6"
+                  style={{ whiteSpace: "normal" }}
+                >
+                  {position}
+                </Button>
+              ))}
+            </div>
+            <div className="flex mt-4">
+              <ClockCircleOutlined />
+              <div className="ml-3">Kỳ thực tập:</div>
+              <div className="ml-3 font-bold">{internship.duration}</div>
+            </div>
+            <div className="flex mt-4">
+              <ScheduleOutlined />
+              <div className="ml-3">Ngày bắt đầu dự kiến:</div>
+              <div className="ml-3 font-bold">{internship.startDate}</div>
+            </div>
+          </div>
+        </Card>
+      ))}
     </div>
   );
 };
 
-export default HRCampaings;
+export default HRCampaigns;

@@ -14,9 +14,11 @@ import Chat from "./components/MentorComponent/Chat";
 import CustomMenu from "./components/CustomMenu/CustomMenu";
 import "./App.css";
 import HRCampaignsDetails from "./components/HR/CampaignsComponent/HRCampaignsDetails";
-import Campaings from "./components/HR/CampaignsComponent/Campaings";
 import GuestPage from "./pages/GuessPage/GuessPage";
 import GuestInfo from "./pages/GuestInfo/GuestInfo";
+import HRCampaings from "./components/HR/CampaignsComponent/HRCampaings";
+import Jobs from "./components/HR/CampaignsComponent/Jobs";
+import CreateCampainsHrComponent from "./components/HR/CampaignsComponent/CreateCampainsHrComponent";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -38,7 +40,12 @@ function App() {
             <Route path="/hr" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Schedule />} />
-              <Route path="campaigns" element={<Campaings />} />
+              <Route path="campaigns" element={<HRCampaings />} />
+              <Route
+                path="NewCampaigns"
+                element={<CreateCampainsHrComponent />}
+              />
+              <Route path="Jobs/:id" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
             <Route path="/guest" element={<GuestPage />}>
