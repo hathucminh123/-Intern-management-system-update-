@@ -10,10 +10,16 @@ const Jobs = () => {
   const handleDetails = (item) => {
     navigate(`/hr/Detail/${item.id}`, { state: { item } });
   };
-
+  const handleNewJobs = () => {
+    navigate("/hr/NewJobs");
+  };
+  const handleSearch = (value) => {
+    console.log("Search value:", value);
+    // Perform search logic here
+  };
   return (
     <div className="flex flex-col items-center w-full">
-      <SearchBarCampaigns />
+      <SearchBarCampaigns onSearch={handleSearch} onCreateNew={handleNewJobs} />
       <Space
         className="mt-10 flex-col items-center"
         direction="vertical"

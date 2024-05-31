@@ -3,9 +3,18 @@ import { Card } from "antd";
 import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
 import { Typography, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-
+import { AudioOutlined } from "@ant-design/icons";
+import { Input, Space } from "antd";
+import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 const { Title } = Typography;
-
+const suffix = (
+  <AudioOutlined
+    style={{
+      fontSize: 16,
+      color: "#1677ff",
+    }}
+  />
+);
 const internships = [
   {
     id: 1,
@@ -48,10 +57,26 @@ const HRCampaigns = () => {
 
   return (
     <div className="flex flex-col items-center">
+      <Title className="text-center" level={1}>
+        List Campaigns
+      </Title>
       <div className="flex m-4">
-        <Button type="primary" onClick={handleAddNewCampaign}>
-          Thêm
-        </Button>
+        <Space direction="vertical" className="flex flex-row items-center ">
+          <Input placeholder="Tìm kiếm" />
+          <ButtonComponent
+            size="middle"
+            styleButton={{ background: "#063970", border: "none" }}
+            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+            textbutton="Tìm kiếm"
+          />
+          <ButtonComponent
+            styleButton={{ background: "#06701c", border: "none" }}
+            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+            size="middle"
+            textbutton="Tạo mới"
+            onClick={handleAddNewCampaign}
+          />
+        </Space>
       </div>
 
       {internships.map((internship) => (

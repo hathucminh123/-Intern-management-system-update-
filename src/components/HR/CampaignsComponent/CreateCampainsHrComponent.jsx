@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, DatePicker, Select, Typography } from "antd";
-
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
+import { Upload } from "antd";
 const { Title } = Typography;
 const { Option } = Select;
 
 const CreateCampaignsHrComponent = () => {
   const [form] = Form.useForm();
+  const [scopeOfWork, setScopeOfWork] = useState("");
+  const [requirement, seRequirement] = useState("");
 
   const onFinish = (values) => {
+    values.scopeOfWork = scopeOfWork;
     console.log("Form values:", values);
+  };
+
+  const handleScopeOfWorkChange = (value) => {
+    setScopeOfWork(value);
+  };
+  const handleRequirement = (value) => {
+    seRequirement(value);
+  };
+  const normFile = (e) => {
+    console.log("Upload event:", e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
   };
 
   return (
@@ -32,7 +52,17 @@ const CreateCampaignsHrComponent = () => {
           >
             <Input placeholder="Enter the campaign title" />
           </Form.Item>
-
+          <Form.Item
+            name="upload"
+            label="Campain Image"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+            extra=""
+          >
+            <Upload name="logo" action="/upload.do" listType="picture">
+              <Button icon={<UploadOutlined />}>Click to upload</Button>
+            </Upload>
+          </Form.Item>
           <Form.Item
             name="positions"
             label="Positions"
@@ -70,6 +100,39 @@ const CreateCampaignsHrComponent = () => {
             ]}
           >
             <DatePicker style={{ width: "100%" }} />
+          </Form.Item>
+
+          <Form.Item
+            name="scopeOfWork"
+            label="Scope of Work"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the scope of work",
+              },
+            ]}
+          >
+            <ReactQuill
+              value={scopeOfWork}
+              onChange={handleScopeOfWorkChange}
+              placeholder="Enter the scope of work"
+            />
+          </Form.Item>
+          <Form.Item
+            name="requirement"
+            label="Requirement"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the requirement",
+              },
+            ]}
+          >
+            <ReactQuill
+              value={requirement}
+              onChange={handleRequirement}
+              placeholder="Enter the scope of work"
+            />
           </Form.Item>
 
           <Form.Item>

@@ -19,6 +19,8 @@ import GuestInfo from "./pages/GuestInfo/GuestInfo";
 import HRCampaings from "./components/HR/CampaignsComponent/HRCampaings";
 import Jobs from "./components/HR/CampaignsComponent/Jobs";
 import CreateCampainsHrComponent from "./components/HR/CampaignsComponent/CreateCampainsHrComponent";
+import CreateNewJobs from "./components/HR/CampaignsComponent/CreateNewJobs";
+import CvListComponent from "./components/HR/CampaignsComponent/CvListComponent";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -45,6 +47,8 @@ function App() {
                 path="NewCampaigns"
                 element={<CreateCampainsHrComponent />}
               />
+              <Route path="cvlist" element={<CvListComponent />} />
+              <Route path="NewJobs" element={<CreateNewJobs />} />
               <Route path="Jobs/:id" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>

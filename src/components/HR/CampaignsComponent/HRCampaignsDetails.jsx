@@ -110,9 +110,6 @@ const HRCampaignsDetails = () => {
             https://fsoft-academy.edu.vn/
           </a>
         </Paragraph>
-        <Button type="primary" href="mailto:FA.HCM@fpt.com">
-          Ứng tuyển
-        </Button>
       </div>
     </div>
   );
