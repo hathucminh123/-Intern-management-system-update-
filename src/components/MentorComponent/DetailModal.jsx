@@ -4,12 +4,16 @@ import moment from 'moment';
 
 const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
   const [form] = Form.useForm();
-  const { RangePicker } = DatePicker;
   const { Option } = Select;
 
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const updatedTask = { ...task, ...values, dateRange: values.dateRange ? [values.dateRange[0].startOf('day'), values.dateRange[1].endOf('day')] : task.dateRange };
+      const updatedTask = { 
+        ...task, 
+        ...values, 
+        startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : task.startDate,
+        endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : task.endDate 
+      };
       onUpdateTask(updatedTask);
       form.resetFields();
       onClose();
@@ -38,7 +42,8 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
           taskName: task.taskName,
           description: task.description,
           assignedTo: task.assignedTo,
-          dateRange: task.dateRange ? [moment(task.dateRange[0]), moment(task.dateRange[1])] : [],
+          startDate: task.startDate ? moment(task.startDate) : null,
+          endDate: task.endDate ? moment(task.endDate) : null,
           status: task.status,
         }}
       >
@@ -67,22 +72,30 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
         </Form.Item>
 
         <Form.Item
-          label="RangePicker"
-          name="dateRange"
-          rules={[{ required: true, message: 'Please input!' }]}
+          label="Start Date"
+          name="startDate"
+          rules={[{ required: true, message: 'Please select the start date!' }]}
         >
-          <RangePicker />
+          <DatePicker format="YYYY-MM-DD" />
+        </Form.Item>
+
+        <Form.Item
+          label="End Date"
+          name="endDate"
+          rules={[{ required: true, message: 'Please select the end date!' }]}
+        >
+          <DatePicker format="YYYY-MM-DD" />
         </Form.Item>
 
         <Form.Item
           label="Status"
           name="status"
-          rules={[{ required: true, message: 'Please input!' }]}
+          rules={[{ required: true, message: 'Please select the status!' }]}
         >
           <Select placeholder="Chọn trạng thái" allowClear>
-            <Option value="done">done</Option>
-            <Option value="in progress">in progress</Option>
-            <Option value="todos">todos</Option>
+            <Option value="done">Done</Option>
+            <Option value="in progress">In Progress</Option>
+            <Option value="todos">To Do</Option>
           </Select>
         </Form.Item>
       </Form>

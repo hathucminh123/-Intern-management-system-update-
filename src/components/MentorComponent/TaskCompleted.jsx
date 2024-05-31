@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Space, Table, Typography, Input, Modal, Form, Rate } from 'antd';
+import { Button, Space, Table, Typography, Input, Tag } from 'antd';
+import moment from 'moment';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
@@ -17,7 +18,6 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   };
 
   const handleOpenDetailModal = (task) => {
-    console.log('task',task)
     setSelectedTask(task);
     setOpenDetailModal(true);
   };
@@ -41,6 +41,11 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     task.taskName.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  let value
+  {tasks.map((task)=>(
+    value=task
+  ))}
+
   const columns = [
     {
       title: 'Task Name',
@@ -58,22 +63,24 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       key: 'assignedTo',
     },
     {
-      title: 'Date Range',
-      dataIndex: 'dateRange',
-      key: 'dateRange',
-      render: (range) => range && range.map(date => date.format('YYYY-MM-DD')).join(' To '),
+      title: 'Start Date',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     },
     {
-      title: 'Trạng thái',
+      title: 'End Date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    },
+    {
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
     },
-    {
-      title: 'Feedback',
-      dataIndex: 'feedback',
-      key: 'feedback',
-    },
-    {
+   
+ {
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
@@ -86,10 +93,44 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     },
   ];
 
+  if (value?.feedback){
+  const endDateColumnIndex = columns.findIndex(column => column.key === 'endDate');
+  if (endDateColumnIndex !== -1) {
+    columns.splice(endDateColumnIndex + 1, 0, {
+      title: 'Feedback',
+      dataIndex: 'feedback',
+      key: 'feedback',
+    });
+
+  }
+}
+
+if (value?.files) {
+  const feedbackColumnIndex = columns.findIndex(column => column.key === 'feedback');
+  if (feedbackColumnIndex !== -1) {
+    const filesColumn = {
+      title: 'Files',
+      dataIndex: 'files',
+      key: 'files',
+      render: (files) => (
+        <Space>
+          {files.map(file => (
+            <Tag color="blue" key={file.name}>
+              {file.name}
+            </Tag>
+          ))}
+        </Space>
+      ),
+    };
+    columns.splice(feedbackColumnIndex + 1, 0, filesColumn);
+  }
+}
+
+
+  
   return (
-    <div style={{ padding: '20px'}}>
-    
-      <Space direction='horizontal' size={1000}>
+    <div style={{ padding: '20px' }}>
+      <Space direction="horizontal" size={1000}>
         <Typography.Title level={1}>Create New Task</Typography.Title>
         <Button type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
       </Space>
@@ -114,19 +155,14 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
           onReviewTask={handleReviewTask}
         />
       )}
-   <div>
-      <Input.Search
-        placeholder="Search by task name"
-        value={searchText}
-        onChange={handleSearch}
-        style={{ margin: '20px 0', width: '300px' }}
-      />
-     
-     
-      <Table dataSource={filteredTasks} columns={columns} />
-   
-      
-  
+      <div>
+        <Input.Search
+          placeholder="Search by task name"
+          value={searchText}
+          onChange={handleSearch}
+          style={{ margin: '20px 0', width: '300px' }}
+        />
+        <Table dataSource={filteredTasks} columns={columns} rowKey="id" />
       </div>
     </div>
   );

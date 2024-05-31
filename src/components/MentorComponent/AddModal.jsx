@@ -1,32 +1,36 @@
-  import React, { useEffect, useState } from 'react';
-import { Form, Modal, Input, DatePicker,Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form, Modal, Input, DatePicker, Select } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 import { getIntern } from '../../api';
 
 const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const [form] = Form.useForm();
-  const [user,setUser]=useState([]);
+  const [user, setUser] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-
     getIntern()
-        .then(res => {
-            setUser(res.users.splice(0, 20));
-            
-        })
-        .catch(err => {
-            setError(err);
-            
-        });
-}, []);
-console.log('user',user)
-console.log('setUser',setUser)
+      .then(res => {
+        setUser(res.users.splice(0, 20));
+      })
+      .catch(err => {
+        setError(err);
+      });
+  }, []);
+
   const { RangePicker } = DatePicker;
-const {Option}=Select;
+  const { Option } = Select;
+
   const handleOk = () => {
     form.validateFields().then((values) => {
-      const newTask = { id: uuidv4(), ...values };
-      onAddTask(newTask); // Call the function to add the task
+      const newTask = { 
+        id: uuidv4(), 
+        ...values, 
+        startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : null,
+        endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null
+      };
+      onAddTask(newTask);
       form.resetFields();
       onClose();
     }).catch((info) => {
@@ -73,49 +77,46 @@ const {Option}=Select;
           name="assignedTo"
           rules={[{ required: true, message: 'Please select the person to assign the task to!' }]}
         >
-         
-      <Select
-      placeholder="chọn người dùng"
-      allowClear
-      
-      >
-      items={user.map((item) => (
-      <Select.Option key={item.id} value={item.firstName}>{item.firstName}</Select.Option>
-    ))}
-
-
-      </Select>
+          <Select
+            placeholder="Select user"
+            allowClear
+          >
+            {user.map((item) => (
+              <Option key={item.id} value={item.firstName}>{item.firstName}</Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item
-            label="RangePicker"
-            name="dateRange"
-           rules={[{required: true,message: 'Please input!',
-        },
-      ]}
-    >
-      <RangePicker />
-    </Form.Item>
-    <Form.Item
-            label="Status"
-            name="status"
-           rules={[{required: true,message: 'Please input!',
-        },
-      ]}
-    >
+          label="Start Date"
+          name="startDate"
+          rules={[{ required: true, message: 'Please select the start date!' }]}
+        >
+          <DatePicker />
+        </Form.Item>
 
-      <Select
-      placeholder="chon trang thai"
-      allowClear
-      
-      >
-        <Option value="done">done</Option>
-        <Option value="in progress">in progress</Option>
-        <Option value="todos">todos</Option>
+        <Form.Item
+          label="End Date"
+          name="endDate"
+          rules={[{ required: true, message: 'Please select the end date!' }]}
+        >
+          <DatePicker />
+        </Form.Item>
 
-      </Select>
- 
-    </Form.Item>
+        <Form.Item
+          label="Status"
+          name="status"
+          rules={[{ required: true, message: 'Please select the status!' }]}
+        >
+          <Select
+            placeholder="Select status"
+            allowClear
+          >
+         
+            <Option value="Pending">Pending</Option>
+          
+          </Select>
+        </Form.Item>
       </Form>
     </Modal>
   );
