@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SigninPage from './pages/LoginPage/SigninPage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
@@ -18,8 +18,6 @@ import HRPage from './pages/HRPage/HRPage';
 
 function App() {
 
-  const userRole = localStorage.getItem('role');
-
   return (
     <div className="App">
       <Router>
@@ -27,20 +25,20 @@ function App() {
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/mentor" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/mentor" element={<CustomMenu userRole={'mentor'} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Dashboard />} />
               <Route path="task" element={<TaskPerformance />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="chat" element={<Chat />} />
             </Route>
-            <Route path="/hr" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/hr" element={<CustomMenu userRole={'hr'} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<HRPage />} />
               <Route path="campaigns" element={<Campaings />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
-            <Route path="/IC" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/IC" element={<CustomMenu userRole={'IC'} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<HRPage />} />
               <Route path="schedule" element={<Schedule />} />

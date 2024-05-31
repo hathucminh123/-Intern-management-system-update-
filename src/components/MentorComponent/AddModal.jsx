@@ -19,13 +19,12 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
             
         });
 }, []);
-console.log('user',user)
-console.log('setUser',setUser)
   const { RangePicker } = DatePicker;
 const {Option}=Select;
   const handleOk = () => {
     form.validateFields().then((values) => {
       const newTask = { id: uuidv4(), ...values };
+      console.log(newTask);
       onAddTask(newTask); // Call the function to add the task
       form.resetFields();
       onClose();
@@ -42,7 +41,7 @@ const {Option}=Select;
   return (
     <Modal
       title="Add New Task"
-      visible={isVisible}
+      visible={isVisible} 
       onOk={handleOk}
       onCancel={handleCancel}
       destroyOnClose={true}
@@ -88,13 +87,13 @@ const {Option}=Select;
         </Form.Item>
 
         <Form.Item
-            label="RangePicker"
-            name="dateRange"
+            label="endDate"
+            name="endDate"
            rules={[{required: true,message: 'Please input!',
         },
       ]}
     >
-      <RangePicker />
+      <DatePicker />
     </Form.Item>
     <Form.Item
             label="Status"
