@@ -1,54 +1,17 @@
-import React, { useState, useEffect } from "react";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  HomeOutlined,
-  AppstoreOutlined,
-  AreaChartOutlined,
-  ContactsOutlined,
-  ProjectOutlined,
-  WechatWorkOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import { useNavigate, Outlet } from "react-router-dom";
-import Logo from "../../components/Logo/Logo";
-import Campaings from "../../components/HR/CampaignsComponent/Campaings";
-import HRCampaignsDetails from "../../components/HR/CampaignsComponent/HRCampaignsDetails";
+import React from 'react';
+import { Layout } from 'antd';
+import ViewGuestInfoCv from '../../components/HR/CampaignsComponent/ViewGuestInfoCv'; // Adjust the path as needed
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content, Footer } = Layout;
 
-const HRPage = () => {
-
-
- 
-
+const HRPage = () => (
+  <Layout>
+    <Header style={{ color: 'white' }}>Trang chủ    </Header>
+    <Content style={{ padding: '24px', minHeight: '80vh' }}>
+      <ViewGuestInfoCv />
+    </Content>
   
-
-  // useEffect(() => {
-  //   handleGetDetailsUser();
-  // }, []);
-
-  // const handleGetDetailsUser = () => {
-  //   try {
-  //     const isLoggined = localStorage.getItem("Auth");
-  //     if (!isLoggined) {
-  //       navigate('/sign-in')
-  //     } else {
-  //       setIsLoading(false);
-  //       navigate('/mentor')
-  //     }
-  //   } catch {
-  //     navigate("/sign-in");
-  //   }
-  // };
-  return (
-    <CustomMenu>
-      {renderPage(location.pathname)}
-    </CustomMenu>
-  );
-};
+  </Layout>
+);
 
 export default HRPage;

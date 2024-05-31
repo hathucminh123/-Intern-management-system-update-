@@ -86,7 +86,8 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
   ];
 
   return (
-    <Space direction='vertical' size={100} style={{ padding: '20px' }}>
+    <div>
+    <div direction='vertical' size={100} style={{ padding: '20px' }}>
       <Typography.Text style={{ fontSize: '2rem' }}>Intern Tasks</Typography.Text>
       <Table dataSource={tasks} columns={columns} />
       <Modal
@@ -105,7 +106,8 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
           </Form.Item>
         </Form>
       </Modal>
-    </Space>
+    </div>
+    </div>
   );
 };
 
