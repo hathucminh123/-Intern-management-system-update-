@@ -1,21 +1,37 @@
 import React from 'react';
-import { Modal, Form, Input, Rate } from 'antd';
+import { Modal, Form, Input, Rate, List, Button } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 
 const ReviewModal = ({ isVisible, onClose, task, onReviewTask }) => {
   const [form] = Form.useForm();
 
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      onReviewTask(values);
-      form.resetFields();
-    }).catch((info) => {
-      console.log('Validate Failed:', info);
-    });
+    form.validateFields()
+      .then((values) => {
+        onReviewTask(values);
+        form.resetFields();
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
   };
 
   const handleCancel = () => {
     form.resetFields();
     onClose();
+  };
+
+  const downloadFile = (fileUrl) => {
+    if (fileUrl) {
+      const link = document.createElement('a');
+      link.href = fileUrl;
+      link.download = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.error('File URL is not valid.');
+    }
   };
 
   return (
@@ -49,6 +65,26 @@ const ReviewModal = ({ isVisible, onClose, task, onReviewTask }) => {
           <Rate />
         </Form.Item>
       </Form>
+
+      {task.files && task.files.length > 0 && (
+        <div>
+          <h3>Attached Files</h3>
+          <List
+            dataSource={task.files}
+            renderItem={(file) => (
+              <List.Item>
+                <Button
+                  type="link"
+                  icon={<DownloadOutlined />}
+                  onClick={() => downloadFile(file.url)}
+                >
+                  {file.name}
+                </Button>
+              </List.Item>  
+            )}
+          />
+        </div>
+      )}
     </Modal>
   );
 };

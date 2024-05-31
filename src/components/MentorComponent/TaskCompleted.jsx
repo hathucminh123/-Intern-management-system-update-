@@ -61,6 +61,11 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     task.taskName.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  let value
+  {tasks.map((task)=>(
+    value=task
+  ))}
+
   const columns = [
     {
       title: 'Task Name',
@@ -84,7 +89,13 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       render: (date) => date.format('YYYY-MM-DD'),
     },
     {
-      title: 'Trạng thái',
+      title: 'End Date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    },
+    {
+      title: 'Status',
       dataIndex: 'status',
       key: 'status',
     },
