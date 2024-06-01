@@ -1,11 +1,44 @@
 import React, { useState } from "react";
-import { Table, Button, Modal, Typography } from "antd";
+import { Table, Button, Modal, Typography, Select } from "antd";
 
 const { Title } = Typography;
 
 const CvListComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCvImage, setSelectedCvImage] = useState("");
+  const [data, setData] = useState([
+    {
+      key: "1",
+      name: "Nguyễn Văn A",
+      email: "nguyenvana@example.com",
+      phone: "0123456789",
+      otherLinks: "https://linkedin.com",
+      status: "Received",
+      cvImage:
+        "https://marketplace.canva.com/EAFqT5-53BA/1/0/1131w/canva-white-and-green-simple-student-cv-resume-KZWMremeNF8.jpg",
+    },
+    {
+      key: "2",
+      name: "Trần Thị B",
+      email: "tranthib@example.com",
+      phone: "0987654321",
+      otherLinks: "",
+      status: "Under Review",
+      cvImage:
+        "https://marketplace.canva.com/EAFqT5-53BA/1/0/1131w/canva-white-and-green-simple-student-cv-resume-KZWMremeNF8.jpg",
+    },
+    {
+      key: "3",
+      name: "Trần Thị C",
+      email: "tranthib@example.com",
+      phone: "0987654321",
+      otherLinks: "",
+      status: "Interview Scheduled",
+      cvImage:
+        "https://marketplace.canva.com/EAFqT5-53BA/1/0/1131w/canva-white-and-green-simple-student-cv-resume-KZWMremeNF8.jpg",
+    },
+    // Thêm nhiều dữ liệu hơn nếu cần
+  ]);
 
   const showModal = (image) => {
     setSelectedCvImage(image);
@@ -14,6 +47,15 @@ const CvListComponent = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const handleChange = (key, value) => {
+    setData((prevData) =>
+      prevData.map((item) => 
+        item.key === key ? { ...item, status: value } : item
+      )
+    );
+    console.log(data);
   };
 
   const columns = [
@@ -43,10 +85,22 @@ const CvListComponent = () => {
       width: 250,
     },
     {
-      title: "Khác",
-      dataIndex: "order",
-      key: "order",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       width: 150,
+      render: (text, record) => (
+        <Select
+          defaultValue={text}
+          style={{ width: 120 }}
+          onChange={(value) => handleChange(record.key, value)}
+          options={[
+            { value: 'UnderReview', label: 'Under Review' },
+            { value: 'Received', label: 'Received' },
+            { value: 'InterviewScheduled', label: 'Interview Scheduled' },
+          ]}
+        />
+      ),
     },
     {
       title: "CV Image",
@@ -58,30 +112,6 @@ const CvListComponent = () => {
       ),
       width: 100,
     },
-  ];
-
-  const data = [
-    {
-      key: "1",
-      name: "Nguyễn Văn A",
-      email: "nguyenvana@example.com",
-      phone: "0123456789",
-      otherLinks: "https://linkedin.com",
-      order: "abc",
-      cvImage:
-        "https://marketplace.canva.com/EAFqT5-53BA/1/0/1131w/canva-white-and-green-simple-student-cv-resume-KZWMremeNF8.jpg",
-    },
-    {
-      key: "2",
-      name: "Trần Thị B",
-      email: "tranthib@example.com",
-      phone: "0987654321",
-      otherLinks: "",
-      order: "abc",
-      cvImage:
-        "https://marketplace.canva.com/EAFqT5-53BA/1/0/1131w/canva-white-and-green-simple-student-cv-resume-KZWMremeNF8.jpg",
-    },
-    // Thêm nhiều dữ liệu hơn nếu cần
   ];
 
   return (
