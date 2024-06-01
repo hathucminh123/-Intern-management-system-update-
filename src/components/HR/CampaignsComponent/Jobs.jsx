@@ -8,10 +8,10 @@ const Jobs = () => {
   const navigate = useNavigate();
 
   const handleDetails = (item) => {
-    navigate(`/hr/Detail/${item.id}`, { state: { item } });
+    navigate(`/hrmanager/Detail/${item.id}`, { state: { item } });
   };
   const handleNewJobs = () => {
-    navigate("/hr/NewJobs");
+    navigate("/hrmanager/NewJobs");
   };
   const handleSearch = (value) => {
     console.log("Search value:", value);

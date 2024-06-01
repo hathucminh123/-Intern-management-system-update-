@@ -32,14 +32,14 @@ function App() {
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/mentor" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/mentor" element={<CustomMenu userRole={'mentor'} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Dashboard />} />
               <Route path="task" element={<TaskPerformance />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="chat" element={<Chat />} />
             </Route>
-            <Route path="/hr" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/hrmanager" element={<CustomMenu userRole={'hrmanager'} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />

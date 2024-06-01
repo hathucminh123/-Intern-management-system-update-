@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Table, Button, Space, Typography, Modal, Form, Input, Rate } from 'antd';
+import { Table, Button, Space, Typography, Modal, Form, Input, Rate, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const InternTaskView = ({ tasks, onCompleteTask }) => {
   const [selectedTask, setSelectedTask] = useState(null);
@@ -13,7 +15,13 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
 
   const handleOk = () => {
     form.validateFields().then(values => {
-      const updatedTask = { ...selectedTask, completed: true, feedback: values.feedback, status: 'complete' };
+      const updatedTask = {
+        ...selectedTask,
+        completed: true,
+        feedback: values.feedback,
+        status: 'complete',
+        files: values.upload ? values.upload.fileList : []
+      };
       onCompleteTask(updatedTask);
       setIsModalVisible(false);
       form.resetFields();
@@ -42,10 +50,16 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
       key: 'assignedTo',
     },
     {
-      title: 'Date Range',
-      dataIndex: 'dateRange',
-      key: 'dateRange',
-      render: (range) => range && range.map(date => date.format('YYYY-MM-DD')).join(' To '),
+      title: 'Start Date',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    },
+    {
+      title: 'End Date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     },
     {
       title: 'Trạng thái',
@@ -56,23 +70,16 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
       title: 'feedback',
       dataIndex: 'feedback',
       key: 'feedback',
-    },  
-  
+    },
     {
       title: 'rate',
       dataIndex: 'grade',
       key: 'grade',
       render: (text, record) => (
-      
-
         <Space size="middle">
-         {console.log('record',record)}
-          {record?.grade && <Rate value={record.grade}/>}
-          
+          {record?.grade && <Rate value={record.grade} />}
         </Space>
-       
       ),
-     
     },
     {
       title: 'Actions',
@@ -86,9 +93,9 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
   ];
 
   return (
-    <Space direction='vertical' size={100} style={{ padding: '20px' }}>
-      <Typography.Text style={{ fontSize: '2rem' }}>Intern Tasks</Typography.Text>
-      <Table dataSource={tasks} columns={columns} />
+    <div style={{ padding: '20px' }}>
+      <Typography.Title level={2}>Intern Tasks</Typography.Title>
+      <Table dataSource={tasks} columns={columns} rowKey="id" />
       <Modal
         title="Complete Task"
         visible={isModalVisible}
@@ -103,9 +110,21 @@ const InternTaskView = ({ tasks, onCompleteTask }) => {
           >
             <Input.TextArea />
           </Form.Item>
+          <Form.Item
+            name="upload"
+            label="Upload File"
+          >
+            <Upload
+              beforeUpload={() => false}
+              multiple={true}
+              listType="text"
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
         </Form>
       </Modal>
-    </Space>
+    </div>
   );
 };
 

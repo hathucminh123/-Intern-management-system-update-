@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Tabs } from 'antd';
+import { Tabs,Layout } from 'antd';
 import TaskCompleted from './TaskCompleted';
 import InternTaskView from './MentorTaskView';
+ 
+const { Header, Content, Footer } = Layout;
 
 const TaskPerformance = () => {
   const [tasks, setTasks] = useState([]);
@@ -36,7 +38,15 @@ const TaskPerformance = () => {
     },
   ];
 
-  return <Tabs defaultActiveKey="1" items={items} />;
+  return (
+  <Layout>
+  <Header style={{ color: 'white' }}>Task</Header>
+  <Content style={{ padding: '24px', minHeight: '80vh' }}>
+  <Tabs defaultActiveKey="1" items={items} />;
+  </Content>
+
+</Layout>
+  )
 };
 
 export default TaskPerformance;

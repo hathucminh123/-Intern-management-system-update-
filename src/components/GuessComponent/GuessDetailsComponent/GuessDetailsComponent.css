@@ -1,0 +1,145 @@
+.customTitle {
+  font-size: 2.5rem;
+
+  margin-bottom: 1rem;
+  }
+  
+  .container {
+    padding: 16px;
+    background: #fff;
+    border-radius: 4px;
+    height: 100%;
+  }
+  
+  .sectionSubtitle {
+    color: rgb(0, 164, 153);
+    font-weight: bolder;
+    text-align: center;
+    font-size: 30px;
+  }
+  
+  .textCenter {
+    text-align: center;
+  }
+  
+  .sectionTitle {
+    font-weight: bolder;
+    text-align: center;
+    font-size: 30px;
+  }
+  
+  .customImage {
+    text-align: center;
+  }
+  
+
+  .title-hero-banner {
+    font-size: 24px;
+    line-height: 1.5;
+    color: rgb(36, 36, 36);
+    font-weight: bold;
+  }
+  
+  .text-tertiary-5 {
+    color: #00A499;
+  }
+  
+  .shadow-level-1 {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .bg-neutral-1 {
+    background-color: #ffffff;
+  }
+  
+  .text-neutral-7 {
+    color: #7D7D7D;
+  }
+  
+  .text-neutral-10 {
+    color: #242424;
+  }
+  
+  .rounded-32 {
+    border-radius: 32px;
+  }
+  
+  .rounded-16 {
+    border-radius: 16px;
+  }
+  
+  .p-6 {
+    padding: 24px;
+  }
+  
+  .tablet\:p-4 {
+    padding: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .tablet\:hidden {
+      display: none;
+    }
+    .tablet\:block {
+      display: block;
+    }
+    .tablet\:mt-10 {
+      margin-top: 40px;
+    }
+    .tablet\:gap-x-4 {
+      gap: 16px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .mobile\:hidden {
+      display: none;
+    }
+    .mobile\:block {
+      display: block;
+    }
+    .mobile\:col-span-24 {
+      grid-column: span 24 / span 24;
+    }
+    .mobile\:gap-y-4 {
+      gap: 16px;
+    }
+    .mobile\:mt-6 {
+      margin-top: 24px;
+    }
+    .mobile\:h-10 {
+      height: 40px;
+    }
+    .mobile\:w-10 {
+      width: 40px;
+    }
+    .mobile\:pl-2 {
+      padding-left: 8px;
+    }
+    .mobile\:flex {
+      display: flex;
+    }
+    .mobile\:items-center {
+      align-items: center;
+    }
+  }
+
+  .custom-button {
+    background: rgb(255 184 28 / var(--tw-bg-opacity));
+   
+      
+        display: flex;
+        height: 40px;
+        width: 20rem;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        border-radius: 40px;
+    --tw-bg-opacity: 1;
+  }
+
+.Recruitment{
+  background-image: url(https://geekadventure.vn/backgrounds/internship-opportunities.jpg);
+  width: 100%;
+  height: 100%;
+  }

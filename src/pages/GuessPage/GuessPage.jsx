@@ -1,10 +1,12 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import HeaderComponent from "../../components/GuessComponent/HeaderComponent/HeaderComponent";
+import './GuessPage.css'
 
 const GuestPage = () => {
   return (
-    <div>
-      <h1>Welcome Guest infor</h1>
+    <div className="minh" >
+     <HeaderComponent />
       <Outlet />
     </div>
   );

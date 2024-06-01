@@ -1,20 +1,11 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Typography, Button,Space,Image } from "antd";
 import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
-import { Typography, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import { AudioOutlined } from "@ant-design/icons";
-import { Input, Space } from "antd";
-import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+
 const { Title } = Typography;
-const suffix = (
-  <AudioOutlined
-    style={{
-      fontSize: 16,
-      color: "#1677ff",
-    }}
-  />
-);
+import CategoryListComponent from "../CategoryListComponent/CategoryListComponent";
+
 const internships = [
   {
     id: 1,
@@ -28,6 +19,7 @@ const internships = [
     ],
     duration: "10 weeks",
     startDate: "03/06/2024",
+    imgurl:'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
   },
   {
     id: 2,
@@ -41,63 +33,24 @@ const internships = [
     ],
     duration: "12 weeks",
     startDate: "06/07/2024",
+    imgurl:'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
   },
+  
 ];
 
-const HRCampaigns = () => {
+
+
+const GuestCampainsComponent = () => {
   const navigate = useNavigate();
-
-  const handleJobs = (item) => {
-    navigate(`/hrmanager/Jobs/${item.id}`, { state: { item } });
-  };
-
-  const handleAddNewCampaign = () => {
-    navigate("/hrmanager/NewCampaigns");
-  };
-
+  
   return (
-    <div className="flex flex-col items-center">
-      <Title className="text-center" level={1}>
-        List Campaigns
-      </Title>
-      <div className="flex m-4">
-        <Space direction="vertical" className="flex flex-row items-center ">
-          <Input placeholder="Tìm kiếm" />
-          <ButtonComponent
-            size="middle"
-            styleButton={{ background: "#063970", border: "none" }}
-            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-            textbutton="Tìm kiếm"
-          />
-          <ButtonComponent
-            styleButton={{ background: "#06701c", border: "none" }}
-            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-            size="middle"
-            textbutton="Tạo mới"
-            onClick={handleAddNewCampaign}
-          />
-        </Space>
-      </div>
-
-      {internships.map((internship) => (
-        <Card
-          key={internship.id}
-          hoverable={true}
-          style={{
-            width: 600,
-            borderWidth: 3,
-            marginBottom: 20,
-          }}
-          onClick={() => handleJobs(internship)}
-        >
-          <div>
-            <Title className="text-center" level={3}>
-              {internship.title}
-            </Title>
-
-            <div
-              style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}
-            >
+    <Space>
+          <CategoryListComponent   />
+       
+       <div>   
+   {internships.map((internship) => (
+    
+           <div style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}>
               {internship.positions.map((position, index) => (
                 <Button
                   key={index}
@@ -106,6 +59,39 @@ const HRCampaigns = () => {
                 >
                   {position}
                 </Button>
+              ))}
+            </div>
+          ))}
+    
+      {internships.map((internship) => (
+   
+         
+        <Card
+          key={internship.id}
+          hoverable={true}
+          style={{
+            width: 900,
+            borderWidth: 3,
+            marginBottom: 20,
+          }}
+          onClick={() => navigate(`/guest/detail/${internship.id}`)}
+        >
+          <Space direction='horizontal'>
+          <div>
+            <Title className="text-center" level={3}>
+              {internship.title}
+            </Title>
+            <div style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}>
+              {internship.positions.map((position, index) => (
+                <Button
+                  key={index}
+                  className="rounded-full me-2 mb-6"
+                  style={{ whiteSpace: "normal" }}
+                >
+                  {position}
+               
+                </Button>
+                
               ))}
             </div>
             <div className="flex mt-4">
@@ -119,10 +105,15 @@ const HRCampaigns = () => {
               <div className="ml-3 font-bold">{internship.startDate}</div>
             </div>
           </div>
+
+            <Image  preview={false} src={internship.imgurl} width={300} />
+          </Space>
         </Card>
+    
       ))}
-    </div>
-  );
+</div>  
+    </Space>
+  );  
 };
 
-export default HRCampaigns;
+export default GuestCampainsComponent;

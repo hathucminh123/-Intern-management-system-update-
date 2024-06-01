@@ -86,23 +86,36 @@ const CustomMenu = ({ userRole }) => {
         label: "Lịch trình",
       },
     ],
-    hr: [
+    hrmanager: [
       {
-        key: "/hr/home",
+        key: '/hrmanager/home',
         icon: <HomeOutlined />,
-        label: "Trang chủ",
+        label: 'Trang chủ',
       },
       {
-        key: "/hr/campaigns",
+        key: '/hrmanager/campaigns',
         icon: <HomeOutlined />,
-        label: "campaigns",
+        label: 'campaigns',
       },
       {
-        key: "/hr/cvlist",
+        key: "/hrmanager/cvlist",
         icon: <HomeOutlined />,
         label: "Cv list",
       },
     ],
+
+    IC:[
+      {
+        key: '/IC/home',
+        icon: <HomeOutlined />,
+        label: 'Trang chủ',
+      },
+      {
+        key: '/IC/schedule',
+        icon: <AreaChartOutlined />,
+        label: 'Lịch trình',
+      },
+    ]
   };
 
   const userItems = items[userRole] || [];
@@ -234,10 +247,7 @@ const CustomMenu = ({ userRole }) => {
         </Header>
         <Content
           style={{
-            margin: "24px 16px",
             padding: 24,
-            minHeight: "auto",
-            minWidth: "auto",
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
