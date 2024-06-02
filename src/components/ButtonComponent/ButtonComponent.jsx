@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React from 'react'
 
-const ButtonComponent = ({ size, styleButton, styleTextButton, textbutton, disabled, ...rests }) => {
+const ButtonComponent = ({ size, styleButton, styleTextButton, textbutton,onClick, disabled, ...rests }) => {
   return (
     <div style={{display:'flex',textAlign:'center',justifyContent:'center'}}>
     <Button
@@ -10,6 +10,7 @@ const ButtonComponent = ({ size, styleButton, styleTextButton, textbutton, disab
         background: disabled ? '#ccc' : styleButton.background
       }}
       size={size}
+      onClick={onClick}
       {...rests}
     >
       <span style={styleTextButton}>{textbutton}</span>

@@ -5,12 +5,12 @@ import { useLocation, useParams } from "react-router-dom";
 
 const { Title, Paragraph, Text } = Typography;
 
-const HRCampaignsDetails = () => {
-  let { id } = useParams(); 
+const HRCampaignsDetailss = () => {
+  let { id } = useParams();
   const { state } = useLocation();
-  const jobDetail = state?.item;
-console.log('asdasd',jobDetail)
-  if (!jobDetail) {
+  const CampaignDetail = state?.item;
+
+  if (!CampaignDetail) {
     return <div>Job detail not found</div>;
   }
   return (
@@ -20,23 +20,27 @@ console.log('asdasd',jobDetail)
           <Image
             width={250}
             preview={false}
-            src={jobDetail.imagePath}
+            src={CampaignDetail.imagePath}
             className="border-4 border-gray-300 shadow-xl rounded-lg"
           />
           <div className="ml-8">
             <Title className="" level={2}>
-              <div>{jobDetail.name}</div>
+              <div>{CampaignDetail.name}</div>
             </Title>
             <div className="flex mt-3">
               <div>Thời gian :</div>
               <Tag className="ml-3" color="#87d068">
-                {jobDetail.duration}
+                {CampaignDetail.duration}
               </Tag>
             </div>
-            <div className="flex mt-3">
-              <div>Yêu cầu số thành biên </div>
-              <div className="ml-3 text-red-500">{jobDetail.totalMember} Thành viên</div>
-            </div>
+            <div className="flex mt-3" >
+            <div>vị trí ứng tuyển </div>
+            {CampaignDetail.trainingPrograms.map((jobs,index)=>(
+                  
+                  <div className="ml-3 text-red-500" key={index}>{jobs.name} </div>
+    
+            ))}
+          </div>
           </div>
         </div>
         <hr />
@@ -45,7 +49,7 @@ console.log('asdasd',jobDetail)
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-          <div dangerouslySetInnerHTML={{ __html: jobDetail.scopeOfWork }} />
+          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.scopeOfWork }} />
           </ul>
         </Paragraph>
 
@@ -54,7 +58,7 @@ console.log('asdasd',jobDetail)
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-          <div dangerouslySetInnerHTML={{ __html: jobDetail.requirements }} />
+          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.requirements }} />
           </ul>
         </Paragraph>
 
@@ -63,7 +67,7 @@ console.log('asdasd',jobDetail)
         </Title>
         <Paragraph>
           <ul className="list-disc list-inside">
-          <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
+          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.benefits }} />
           </ul>
         </Paragraph>
 
@@ -103,4 +107,4 @@ console.log('asdasd',jobDetail)
   );
 };
 
-export default HRCampaignsDetails;
+export default HRCampaignsDetailss;

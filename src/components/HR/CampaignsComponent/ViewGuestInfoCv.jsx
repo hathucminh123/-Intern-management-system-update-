@@ -46,6 +46,11 @@ const ViewGuestInfoCv = () => {
       key: 'list',
     },
     {
+      title: 'vị trí ứng tuyển',
+      dataIndex: 'listjob',
+      key: 'list',
+    },
+    {
       title: 'Note',
       dataIndex: 'note',
       key: 'note',

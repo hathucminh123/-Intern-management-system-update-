@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Space, Typography, Row, Col, Image, Card, Collapse, Button, message } from 'antd';
 import { Container } from 'reactstrap';
 import { ClockCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
@@ -7,44 +7,12 @@ import FormCVModal from '../FormCVComponent/FormCVModal';
 import './GuessDetailsComponent.css';
 import image1 from '../../../assets/javaImage.jpg';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
+import * as Campaign from '../../../service/Campaign';
 
 const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
 
-const internships = [
-  {
-    id: 1,
-    title: 'Internship Team Summer 2024',
-    positions: [
-      'Frontend Developer',
-      'Backend Developer',
-      'Product Mindset',
-      'Software Development',
-      'Communication',
-    ],
-    duration: '10 weeks',
-    startDate: '03/06/2024',
-    details: 'Detailed information about Internship Team Summer 2024...',
-    imgurl: 'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90',
-  },
-  {
-    id: 2,
-    title: 'Internship Program Summer 2024',
-    positions: [
-      'Frontend Developer',
-      'Backend Developer',
-      'UX/UI Designer',
-      'Data Analyst',
-      'Marketing Intern',
-    ],
-    duration: '12 weeks',
-    startDate: '06/07/2024',
-    details: 'Detailed information about Internship Program Summer 2024...',
-    imgurl: 'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90',
-  },
-];
-
-const JobDescriptionComponent = () => {
+const JobDescriptionComponent = ({ data }) => {
   const panels = [
     {
       key: '1',
@@ -94,29 +62,71 @@ const JobDescriptionComponent = () => {
           <Title level={2} className="job-description-title mb-[64px] text-center font-bold text-neutral-10">
             Chi tiết <strong style={{ color: 'rgb(0, 164, 153)' }}>chương trình thực tập</strong>
           </Title>
-          {panels.map((panel) => (
-            <Card key={panel.key} className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
+         
+            <Card  className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
               <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
                 <Panel
                   header={
                     <label className="flex cursor-pointer items-center p-10">
-                      <Image preview={false} src={panel.imgSrc} alt="Icon" width={64} height={64} className="mr-4" />
-                      <Title level={3} className="flex-1 text-neutral-10">{panel.title}</Title>
+                      <Image preview={false} src={panels[0].imgSrc} alt="Icon" width={64} height={64} className="mr-4" />
+                      <Title level={3} className="flex-1 text-neutral-10">{panels[0].title}</Title>
                     </label>
                   }
-                  key={panel.key}
+                  key={panels[0].key}
                   className="collapse-title"
                 >
                   <div className="p-10">
                     <Space direction="horizontal">
-                      <Paragraph className="text-neutral-7">{panel.content}</Paragraph>
-                      <Image preview={false} src={panel.imgSrc} alt="Decoration" width={200} />
+                      <div dangerouslySetInnerHTML={{ __html: data.scopeOfWork }} />
+                      <Image preview={false} src={panels[0].imgSrc} alt="Decoration" width={200} />
                     </Space>
                   </div>
                 </Panel>
               </Collapse>
             </Card>
-          ))}
+            <Card  className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
+              <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
+                <Panel
+                  header={
+                    <label className="flex cursor-pointer items-center p-10">
+                      <Image preview={false} src={panels[1].imgSrc} alt="Icon" width={64} height={64} className="mr-4" />
+                      <Title level={3} className="flex-1 text-neutral-10">{panels[1].title}</Title>
+                    </label>
+                  }
+                  key={panels[1].key}
+                  className="collapse-title"
+                >
+                  <div className="p-10">
+                    <Space direction="horizontal">
+                      <div dangerouslySetInnerHTML={{ __html: data.requirements }} />
+                      <Image preview={false} src={panels[1].imgSrc} alt="Decoration" width={200} />
+                    </Space>
+                  </div>
+                </Panel>
+              </Collapse>
+            </Card>
+            <Card  className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
+              <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
+                <Panel
+                  header={
+                    <label className="flex cursor-pointer items-center p-10">
+                      <Image preview={false} src={panels[2].imgSrc} alt="Icon" width={64} height={64} className="mr-4" />
+                      <Title level={3} className="flex-1 text-neutral-10">{panels[2].title}</Title>
+                    </label>
+                  }
+                  key={panels[2].key}
+                  className="collapse-title"
+                >
+                  <div className="p-10">
+                    <Space direction="horizontal">
+                      <div dangerouslySetInnerHTML={{ __html: data.requirements }} />
+                      <Image preview={false} src={panels[2].imgSrc} alt="Decoration" width={200} />
+                    </Space>
+                  </div>
+                </Panel>
+              </Collapse>
+            </Card>
+        
         </div>
       </div>
     </section>
@@ -124,11 +134,27 @@ const JobDescriptionComponent = () => {
 };
 
 const GuessDetailsComponent = ({ id }) => {
-  const internship = internships.find((internship) => internship.id === parseInt(id));
+  const [campaigns, setCampaigns] = useState([]);
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectJobs,setSelectJobs]=useState(null)
+  useEffect(() => {
+    const fetchCampaignsData = async () => {
+      try {
+        const res = await Campaign.fetchCampaigns();
+        setCampaigns(res.events); // Assumed API returns { events: [] }
+        console.log("Campaigns data:", res.events); // Add this line
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
+    fetchCampaignsData();
+  }, []);
 
-  const showModal = () => {
+  const internship = campaigns.find((internship) => internship.id === parseInt(id));
+
+  const showModal = (job) => {
+    setSelectJobs(job);
     setIsModalVisible(true);
   };
 
@@ -142,11 +168,11 @@ const GuessDetailsComponent = ({ id }) => {
 
   return (
     <Space className="container" direction="vertical">
-      <Title level={1} className="customTitle">{internship.title}</Title>
+      <Title level={1} className="customTitle">{internship.name}</Title>
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
-        {internship.positions.map((position, index) => (
+        {internship.trainingPrograms.map((position, index) => (
           <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
-            {position}
+            {position.name}
           </Button>
         ))}
       </div>
@@ -160,18 +186,20 @@ const GuessDetailsComponent = ({ id }) => {
       </Container>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Image src={image1} alt="image product" preview={false} className="customImage" />
+          <Image src={internship.imagePath} alt="image product" preview={false} className="customImage" width={600} />
         </Col>
         <Col span={12}>
-          <Row gutter={[16, 16]}>
-            {Array(4)
-              .fill()
-              .map((_, index) => (
-                <Col span={12} key={index}>
-                  <Image src={image1} alt="image small" preview={false} className="customImage" />
-                </Col>
-              ))}
-          </Row>
+            <Row gutter={[16, 16]}>
+                {internship.trainingPrograms.map((program, index) => (
+                    <React.Fragment key={index}>
+                        <Col span={12}>
+                            <Image src={program.imagePath} alt="image small" preview={false} className="customImage" />
+                        </Col>
+                      
+                      
+                    </React.Fragment>
+                ))}
+            </Row>
         </Col>
       </Row>
       <div className="flex w-full justify-center mt-20">
@@ -224,18 +252,24 @@ const GuessDetailsComponent = ({ id }) => {
           </Row>
         </div>
       </div>
-      <JobDescriptionComponent />
-      <Space direction="horizontal" size={500} className="Recruitment">
-        <Button type="primary" className="rounded-full customButton" onClick={showModal}>Ứng tuyển ngay</Button>
-        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.title} intern={internships} />
+      <JobDescriptionComponent data={internship} />
+
+      {internship.trainingPrograms.map((list,index)=>(  
+      <Space direction="vertical" size={20} className="Recruitment" key={index}>
+        <Typography.Title level={10} > {list.name}</Typography.Title>
+        <Space direction='horizontal' size={800} >
+        <Button type="primary" className="rounded-full customButton" onClick={() => showModal(list)}>Ứng tuyển ngay</Button>
+        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={campaigns} job={selectJobs} />
         <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" width={300} />
-      </Space>
+        </Space>
+      </Space>))}
+    
       <div className="flex w-full justify-center mt-20">
         <div className="w-[1200px]">
           <Title level={2} className="title-hero-banner text-center font-bold">
             Khám phá những <strong style={{ color: 'rgb(0, 164, 153)' }}>Chương trình thực tập khác</strong>
           </Title>
-          {internships.map((internship) => (
+          {campaigns.map((internship) => (
             <Card
               key={internship.id}
               hoverable
@@ -245,12 +279,12 @@ const GuessDetailsComponent = ({ id }) => {
               <Space direction="horizontal">
                 <div>
                   <Title className="text-center" level={3}>
-                    {internship.title}
+                    {internship.name}
                   </Title>
                   <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
-                    {internship.positions.map((position, index) => (
+                    {internship.trainingPrograms.map((position, index) => (
                       <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
-                        {position}
+                        {position.name}
                       </Button>
                     ))}
                   </div>

@@ -2,7 +2,7 @@ import httpClient from "../httpClient/httpClient";
 
 const baseURL = process.env.NODE_ENV !== "production"
     ? "https://localhost:7251/api"
-    : "https://fa-training-management.somee.com/api";
+    : "https://intern-management.onrender.com/api";
 
 
 const apiLinks = {
