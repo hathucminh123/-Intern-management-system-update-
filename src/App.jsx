@@ -58,6 +58,11 @@ function App() {
               <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
+            <Route path="/internshipcoordinators" element={<CustomMenu userRole={'internshipcoordinators'} />}>
+              <Route index element={<Navigate to="home" replace />} />
+              <Route path="home" element={<HRPage />} />
+              <Route path="schedule" element={<Schedule />} />
+              </Route>
             <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
               <Route path="info" element={<GuestInfo />} />

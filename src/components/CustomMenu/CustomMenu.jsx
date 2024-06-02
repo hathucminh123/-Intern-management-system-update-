@@ -109,14 +109,14 @@ const CustomMenu = ({ userRole }) => {
       },
     ],
 
-    IC:[
+    internshipcoordinators:[
       {
-        key: '/IC/home',
+        key: '/internshipcoordinators/home',
         icon: <HomeOutlined />,
         label: 'Trang chủ',
       },
       {
-        key: '/IC/schedule',
+        key: '/internshipcoordinators/schedule',
         icon: <AreaChartOutlined />,
         label: 'Lịch trình',
       },
