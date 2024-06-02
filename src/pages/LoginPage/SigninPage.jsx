@@ -29,7 +29,7 @@ const SigninPage = () => {
 
 
   const handleSignIn = async () => {
-    const result = await User.loginUser({ userName: email, password: password })
+    const result = await login({ userName: email, password: password })
     console.log(result);
     if (result.isSuccess){
       const userInfo = jwtDecode(result.result);
