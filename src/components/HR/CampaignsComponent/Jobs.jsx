@@ -4,22 +4,16 @@ import SearchBarCampaigns from "./SearchBarCampaigns";
 import { useNavigate } from "react-router-dom";
 import data from "../../../const/jobsDetailData";
 
-const Jobs = () => {
+const Campaings = () => {
   const navigate = useNavigate();
 
   const handleDetails = (item) => {
-    navigate(`/hrmanager/Detail/${item.id}`, { state: { item } });
+    navigate(`/hr/Detail/${item.id}`, { state: { item } });
   };
-  const handleNewJobs = () => {
-    navigate("/hrmanager/NewJobs");
-  };
-  const handleSearch = (value) => {
-    console.log("Search value:", value);
-    // Perform search logic here
-  };
+
   return (
     <div className="flex flex-col items-center w-full">
-      <SearchBarCampaigns onSearch={handleSearch} onCreateNew={handleNewJobs} />
+      <SearchBarCampaigns />
       <Space
         className="mt-10 flex-col items-center"
         direction="vertical"
@@ -71,4 +65,4 @@ const Jobs = () => {
   );
 };
 
-export default Jobs;
+export default Campaings;

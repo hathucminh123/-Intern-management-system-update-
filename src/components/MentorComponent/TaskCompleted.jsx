@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Space, Table, Typography, Input, Modal, Form, Rate, Popover, DatePicker,Select } from 'antd';
+import { Button, Space, Table, Typography, Input, Modal, Form, Rate, Popover, DatePicker,Select,Tag  } from 'antd';
 import {
   FilterOutlined
 } from '@ant-design/icons';
@@ -8,8 +8,9 @@ import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
 import { getIntern } from '../../api';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
-import { gettest1 } from '../../redux/userSlice';
+import { gettest1 } from'../../redux/userSlice';
 const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -18,8 +19,8 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [taskToReview, setTaskToReview] = useState(null);
   const [user, setUser] = useState([]);
-  const test = useSelector((state) => state.user.test);
-  console.log('hiep',test);
+  // const test = useSelector((state) => state.user.test);
+  // console.log('hiep',test);
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -136,6 +137,38 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     </div>
   );
 
+  if (value?.feedback){
+    const endDateColumnIndex = columns.findIndex(column => column.key === 'endDate');
+    if (endDateColumnIndex !== -1) {
+      columns.splice(endDateColumnIndex + 1, 0, {
+        title: 'Feedback',
+        dataIndex: 'feedback',
+        key: 'feedback',
+      });
+  
+    }
+  }
+  
+  if (value?.files) {
+    const feedbackColumnIndex = columns.findIndex(column => column.key === 'feedback');
+    if (feedbackColumnIndex !== -1) {
+      const filesColumn = {
+        title: 'Files',
+        dataIndex: 'files',
+        key: 'files',
+        render: (files) => (
+          <Space>
+            {files.map(file => (
+              <Tag color="blue" key={file.name}>
+                {file.name}
+              </Tag>
+            ))}
+          </Space>
+        ),
+      };
+      columns.splice(feedbackColumnIndex + 1, 0, filesColumn);
+    }
+  }
   return (
     <>
       <AddModal

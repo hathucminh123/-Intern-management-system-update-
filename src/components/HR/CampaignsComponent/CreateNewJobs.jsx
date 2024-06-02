@@ -1,28 +1,20 @@
 import React, { useState } from "react";
-import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-
-import {
-  Form,
-  Input,
-  Button,
-  DatePicker,
-  Select,
-  Typography,
-  Upload,
-} from "antd";
-
+import { Form, Input, Button, DatePicker, Typography, message } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { v4 as uuidv4 } from 'uuid';
+import { createNewJobs } from '../../../service/JobsService';
+
 const { Title } = Typography;
 
 const CreateNewJobs = () => {
   const [form] = Form.useForm();
-  const [requirement, seRequirement] = useState("");
+  const [requirement, setRequirement] = useState("");
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
-  const [apply, setApply] = useState("");
+
   const handleRequirement = (value) => {
-    seRequirement(value);
+    setRequirement(value);
   };
   const handleDescription = (value) => {
     setDescription(value);
@@ -30,144 +22,141 @@ const CreateNewJobs = () => {
   const handleBenefits = (value) => {
     setBenefits(value);
   };
-  const handleApply = (value) => {
-    setApply(value);
-  };
-  const onFinish = (values) => {
-    console.log("Form values:", values);
-  };
-  const normFile = (e) => {
-    console.log("Upload event:", e);
-    if (Array.isArray(e)) {
-      return e;
+
+  const onFinish = async (values) => {
+    const newJob = {
+      id: uuidv4(),
+      ...values,
+      scopeOfWork: description,
+      requirements: requirement,
+      benefits
+    };
+
+    try {
+      const response = await createNewJobs(newJob);
+      message.success("Job created successfully!");
+      form.resetFields();
+      setDescription("");
+      setRequirement("");
+      setBenefits("");
+      console.log("Form values:", response);
+    } catch (error) {
+      message.error(`Error: ${error.message}`);
+      console.error("Error creating job:", error);
     }
-    return e?.fileList;
   };
+
   return (
     <div>
-      <div>
-        <Title level={1}>Create new jobs</Title>
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          style={{ maxWidth: 600, margin: "0 auto" }}
+      <Title level={1}>Create new jobs</Title>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        style={{ maxWidth: 600, margin: "0 auto" }}
+      >
+        <Form.Item
+          name="name"
+          label="Job Name"
+          rules={[
+            { required: true, message: "Please enter the name of the job" },
+          ]}
         >
-          <Form.Item
-            name="nameJobs"
-            label="Name Jobs"
-            rules={[
-              { required: true, message: "Please enter the name of job" },
-            ]}
-          >
-            <Input placeholder="Enter the Job name" />
-          </Form.Item>
-          <Form.Item
-            name="upload"
-            label="Jobs Image"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            extra=""
-          >
-            <Upload name="logo" action="/upload.do" listType="picture">
-              <Button icon={<UploadOutlined />}>Click to upload</Button>
-            </Upload>
-          </Form.Item>
-          <Form.Item
-            name="jobtype"
-            label="Job Type"
-            rules={[{ required: true, message: "Please select the positions" }]}
-          >
-            <Select
-              mode="multiple"
-              placeholder="Select Job type"
-              style={{ width: "100%" }}
-            >
-              <Option value="Frontend Developer">Part-time</Option>
-              <Option value="Backend Developer">Full-time</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="expireDate"
-            label="ExpireDate Date"
-            rules={[
-              { required: true, message: "Please select the ExpireDate Date" },
-            ]}
-          >
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description of jobs"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the Description of work",
-              },
-            ]}
-          >
-            <ReactQuill
-              value={description}
-              onChange={handleDescription}
-              placeholder="Enter the requirement of jobs"
-            />
-          </Form.Item>
-          <Form.Item
-            name="requirement"
-            label="Requirement of jobs"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the scope of work",
-              },
-            ]}
-          >
-            <ReactQuill
-              value={requirement}
-              onChange={handleRequirement}
-              placeholder="Enter the requirement of jobs"
-            />
-          </Form.Item>
-          <Form.Item
-            name="benefits"
-            label="Benefits of jobs"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the benefits of work",
-              },
-            ]}
-          >
-            <ReactQuill
-              value={benefits}
-              onChange={handleBenefits}
-              placeholder="Enter the requirement of jobs"
-            />
-          </Form.Item>
-          <Form.Item
-            name="apply"
-            label="Apply Link"
+          <Input placeholder="Enter the job name" />
+        </Form.Item>
+        <Form.Item
+          name="startDate"
+          label="Start Date"
+          rules={[
+            { required: true, message: "Please select the start date" },
+          ]}
+        >
+          <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item
+          name="scopeOfWork"
+          label="Scope of Work"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the description of the work",
+            },
+          ]}
+        >
+          <ReactQuill
+            value={description}
+            onChange={handleDescription}
+            placeholder="Enter the scope of work"
+          />
+        </Form.Item>
+        <Form.Item
+          name="requirements"
+          label="Requirements"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the requirements of the job",
+            },
+          ]}
+        >
+          <ReactQuill
+            value={requirement}
+            onChange={handleRequirement}
+            placeholder="Enter the requirements of the job"
+          />
+        </Form.Item>
+        <Form.Item
+          name="benefits"
+          label="Benefits"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the benefits of the job",
+            },
+          ]}
+        >
+          <ReactQuill
+            value={benefits}
+            onChange={handleBenefits}
+            placeholder="Enter the benefits of the job"
+          />
+        </Form.Item>
+        <Form.Item
+          name="duration"
+          label="Duration (in months)"
+          rules={[
+            { required: true, message: "Please enter the job duration" },
+          ]}
+        >
+          <Input placeholder="Enter the duration of the job" type="number" />
+        </Form.Item>
+        <Form.Item
+          name="totalMember"
+          label="Total Members"
+          rules={[
+            { required: true, message: "Please enter the total number of members" },
+          ]}
+        >
+          <Input placeholder="Enter the total number of members" type="number" />
+        </Form.Item>
+        <Form.Item>
+        <Form.Item
+            name="imagePath"
+            label="Jobs Image Path"
             rules={[
               {
                 required: true,
-                message: "Please enter apply information",
+                message: "Please enter the campaign image path",
               },
             ]}
           >
-            <ReactQuill
-              value={apply}
-              onChange={handleApply}
-              placeholder="Enter the requirement of jobs"
-            />
+            <Input placeholder="Enter the image path" />
           </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

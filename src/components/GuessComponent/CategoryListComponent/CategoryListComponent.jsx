@@ -1,38 +1,50 @@
-import React from 'react';
-import { Button, Card, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, List, Typography } from 'antd';
+import { fetchCampaigns } from '../../../service/Campaign';
 
-const CategoryListComponent = ({category}) => {
-    const jobCategories = [
-        { name: 'Frontend Developer', count: 7 },
-        { name: 'Backend Developer', count: 1 },
-        { name: 'Product Design', count: 1 },
-        { name: 'Product Mindset', count: 1 },
-        { name: 'Software Development', count: 1 },
-        { name: 'Communication', count: 1 },
-        { name: 'UX/UI Designer', count: 1 },
-        { name: 'Product Backend', count: 1 },
-        { name: 'Data Analyst', count: 0 },
-        { name: 'Marketing Intern', count: 0 },
-      
-       
-      ];
+const { Title } = Typography;
+
+const CategoryListComponent = ({ category }) => {
+  const [campaigns, setCampaigns] = useState([]);
+  console.log(campaigns);
+
+  useEffect(() => {
+    const fetchCampaignsData = async () => {
+      try {
+        const res = await fetchCampaigns();
+        setCampaigns(res.events);
+        console.log("Campaigns data:", res.events); // Add this line
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
+    fetchCampaignsData();
+  }, []);
 
   return (
-    <div className="flex flex-col bg-neutral-1 shadow-level-1">
-      <h3 className="px-6 py-6 font-bold">Nhóm công việc</h3>
-      <ul className="flex-1 overflow-y-auto px-6 text-neutral-7">
-        {jobCategories.map((category, index) => (
-          <li key={index} className="px-4 py-5 hover:text-tertiary-5">
-            <Button justify="between" className="w-full"  style={{ whiteSpace: "normal" }}
-                >
-                
-              <span>{category.name} ({category.count})</span>
-             
-            
-            </Button>
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col bg-neutral-1 shadow-level-1 p-6">
+      <Title level={3} className="font-bold mb-4">Nhóm công việc</Title>
+      <List
+        dataSource={campaigns}
+        renderItem={(campaign) => (
+          <Card
+            key={campaign.id}
+            title={campaign.name}
+            bordered={false}
+            className="mb-4"
+          >
+            {campaign.trainingPrograms.map((position) => (
+              <Button
+                key={position.id}
+                className="rounded-full me-2 mb-2"
+                style={{ whiteSpace: "normal", display: 'flex' }}
+              >
+                {position.name}
+              </Button>
+            ))}
+          </Card>
+        )}
+      />
     </div>
   );
 };
