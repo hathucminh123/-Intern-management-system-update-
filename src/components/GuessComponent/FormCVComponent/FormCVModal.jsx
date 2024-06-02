@@ -8,7 +8,7 @@ import { collection, addDoc } from 'firebase/firestore'; // Import Firestore fun
 
 const { Title, Text } = Typography;
 
-const FormCVModal = ({ visible, onClose, title, intern }) => {
+const FormCVModal = ({ visible, onClose, title, intern, job }) => {
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
 
@@ -32,6 +32,7 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
         email: values.email,
         phone: values.phone,
         list: values.list,
+        listjob: values.listjob,
         note: values.note,
         cvUrl: fileUrl,
       });
@@ -52,11 +53,24 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
   };
 
   return (
-    <Modal visible={visible} footer={null} onCancel={onClose} width={1200}>
-      <Form form={form} layout="vertical" onFinish={handleSubmit} className="max-h-[calc(100vh-48px)] overflow-hidden">
+    <Modal
+      visible={visible}
+      footer={null}
+      onCancel={onClose}
+      width={1200}
+      title={`Apply for ${job?.name || 'the job'}`}
+    >
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        className="max-h-[calc(100vh-48px)] overflow-hidden"
+        initialValues={{ name: job?.name || '' }}
+      >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
           <Title level={3}>{title}</Title>
         </div>
+
         <div className="px-8 pt-4">
           <Form.Item
             name="cvUrl"
@@ -68,7 +82,12 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
             }
             rules={[{ required: true, message: 'Please upload your CV!' }]}
           >
-            <Upload.Dragger name="files" multiple={false} accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" beforeUpload={handleBeforeUpload}>
+            <Upload.Dragger
+              name="files"
+              multiple={false}
+              accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+              beforeUpload={handleBeforeUpload}
+            >
               <p className="ant-upload-drag-icon">
                 <UploadOutlined />
               </p>
@@ -76,7 +95,11 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
               <p className="ant-upload-hint">(PDF, DOC, PNG, JPEG)</p>
             </Upload.Dragger>
           </Form.Item>
-          <Form.Item name="fullName" label="Họ và tên" rules={[{ required: true, message: 'Please enter your full name!' }]}>
+          <Form.Item
+            name="fullName"
+            label="Họ và tên"
+            rules={[{ required: true, message: 'Please enter your full name!' }]}
+          >
             <Input placeholder="Họ và tên" />
           </Form.Item>
           <Form.Item
@@ -89,7 +112,11 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
           >
             <Input placeholder="Email liên hệ" />
           </Form.Item>
-          <Form.Item name="phone" label="Số điện thoại" rules={[{ required: true, message: 'Please enter your phone number!' }]}>
+          <Form.Item
+            name="phone"
+            label="Số điện thoại"
+            rules={[{ required: true, message: 'Please enter your phone number!' }]}
+          >
             <Input placeholder="Số điện thoại liên hệ" />
           </Form.Item>
           <Form.Item
@@ -99,10 +126,23 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
           >
             <Select placeholder="chọn training program" allowClear>
               {intern.map((item) => (
-                <Select.Option key={item.id} value={item.title}>
-                  {item.title}
+                <Select.Option key={item.id} value={item.name}>
+                  {item.name}
                 </Select.Option>
               ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="listjob"
+            label="vị trí muốn ứng tuyển"
+            rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+          >
+            <Select placeholder="chọn vị trí ứng tuyển" allowClear>
+              {job && (
+                <Select.Option value={job.name}>
+                  {job.name}
+                </Select.Option>
+              )}
             </Select>
           </Form.Item>
           <Form.Item name="note" label="Khác (nếu có)">
@@ -118,7 +158,9 @@ const FormCVModal = ({ visible, onClose, title, intern }) => {
             </div>
             <div className="flex items-center">
               <CiLocationOn />
-              <Text className="ml-1 text-neutral-10">CN2: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000</Text>
+              <Text className="ml-1 text-neutral-10">
+                CN2: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000
+              </Text>
             </div>
           </div>
         </div>

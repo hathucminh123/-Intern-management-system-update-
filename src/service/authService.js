@@ -1,7 +1,8 @@
 import httpClient from "../httpClient/httpClient";
 
-const baseURL = "https://intern-management.onrender.com/api"
-
+const baseURL = process.env.NODE_ENV !== "production"
+    ? "https://localhost:7251/api"
+    : "https://intern-management.onrender.com/api";
 
 
 const apiLinks = {

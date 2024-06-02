@@ -1,11 +1,14 @@
-import React from "react";
-import { Card } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, Image } from "antd";
 import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
 import { Typography, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import * as campaign from '../../../service/Campaign'
+import { set } from "lodash";
+
 const { Title } = Typography;
 const suffix = (
   <AudioOutlined
@@ -15,40 +18,26 @@ const suffix = (
     }}
   />
 );
-const internships = [
-  {
-    id: 1,
-    title: "Internship Team Summer 2024",
-    positions: [
-      "Frontend Developer",
-      "Backend Developer",
-      "Product Mindset",
-      "Software Development",
-      "Communication",
-    ],
-    duration: "10 weeks",
-    startDate: "03/06/2024",
-  },
-  {
-    id: 2,
-    title: "Internship Program Summer 2024",
-    positions: [
-      "Frontend Developer",
-      "Backend Developer",
-      "UX/UI Designer",
-      "Data Analyst",
-      "Marketing Intern",
-    ],
-    duration: "12 weeks",
-    startDate: "06/07/2024",
-  },
-];
 
 const HRCampaigns = () => {
   const navigate = useNavigate();
+  const [campaigns, setCampaigns] = useState([]);
+console.log(campaigns)
+  useEffect(() => {
+    const fetchCampaignsData = async () => {
+      try {
+        const res = await campaign.fetchCampaigns();
+        setCampaigns(res.events);
+        console.log("Campaigns data:", res.events); // Add this line
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
+    fetchCampaignsData();
+  }, []);
 
   const handleJobs = (item) => {
-    navigate(`/hrmanager/Jobs/${item.id}`, { state: { item } });
+    navigate(`/hrmanager/campaigns/${item.id}`, { state: { item } });
   };
 
   const handleAddNewCampaign = () => {
@@ -79,46 +68,49 @@ const HRCampaigns = () => {
         </Space>
       </div>
 
-      {internships.map((internship) => (
+      {campaigns.map((campaign) => (
         <Card
-          key={internship.id}
+          key={campaign.id}
           hoverable={true}
           style={{
-            width: 600,
+            width: 700,
             borderWidth: 3,
             marginBottom: 20,
           }}
-          onClick={() => handleJobs(internship)}
+          onClick={() => handleJobs(campaign)}
         >
+          <Space direction="horizontal" size={50}>
+                <Image  preview={false} src={campaign.imagePath} width={300}/>
           <div>
             <Title className="text-center" level={3}>
-              {internship.title}
+              {campaign.name}
             </Title>
 
             <div
               style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}
             >
-              {internship.positions.map((position, index) => (
+              {campaign.trainingPrograms.map((position, index) => (
                 <Button
                   key={index}
                   className="rounded-full me-2 mb-6"
                   style={{ whiteSpace: "normal" }}
                 >
-                  {position}
+                  {position.name}
                 </Button>
               ))}
             </div>
             <div className="flex mt-4">
               <ClockCircleOutlined />
               <div className="ml-3">Kỳ thực tập:</div>
-              <div className="ml-3 font-bold">{internship.duration}</div>
+              <div className="ml-3 font-bold">{campaign.duration} months</div>
             </div>
-            <div className="flex mt-4">
+            {/* <div className="flex mt-4">
               <ScheduleOutlined />
               <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-              <div className="ml-3 font-bold">{internship.startDate}</div>
-            </div>
+              <div className="ml-3 font-bold">{campaign.startDate}</div>
+            </div> */}
           </div>
+          </Space>
         </Card>
       ))}
     </div>

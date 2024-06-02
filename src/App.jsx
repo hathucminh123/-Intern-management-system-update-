@@ -21,6 +21,9 @@ import Jobs from "./components/HR/CampaignsComponent/Jobs";
 import CreateCampainsHrComponent from "./components/HR/CampaignsComponent/CreateCampainsHrComponent";
 import CreateNewJobs from "./components/HR/CampaignsComponent/CreateNewJobs";
 import CvListComponent from "./components/HR/CampaignsComponent/CvListComponent";
+import HRPage from "./pages/HRPage/HRPage"
+import GuessDetailPage from "./pages/GuessDetailPage/GuessDetailPage";
+import HRCampaignsDetailss from "./components/HR/CampaignsComponent/HRCampaignsDetailss";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -43,19 +46,23 @@ function App() {
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
+
+              <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
+              
               <Route
                 path="NewCampaigns"
                 element={<CreateCampainsHrComponent />}
               />
-              <Route path="cvlist" element={<CvListComponent />} />
+              <Route path="cvlist" element={<HRPage/>} />
               <Route path="NewJobs" element={<CreateNewJobs />} />
-              <Route path="Jobs/:id" element={<Jobs />} />
+              <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
             <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
               <Route path="info" element={<GuestInfo />} />
               {/* <Route path="about" element={<GuestAbout />} /> */}
+              <Route path="Detail/:id" element={<GuessDetailPage />} />
             </Route>
           </Route>
         </Routes>

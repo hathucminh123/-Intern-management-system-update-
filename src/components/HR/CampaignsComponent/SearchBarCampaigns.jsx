@@ -3,7 +3,10 @@ import { Input, Space, Button } from "antd";
 import FilterDropDown from "./FilterDropDown";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 
-const { Search } = Input;
+const onSearch = (value, _e, info) => console.log(info?.source, value);
+// const handleNewJobs = () => {
+//   navigate("/hrmanager/NewJobs");
+// };
 
 const SearchBarCampaigns = ({ onSearch, onCreateNew }) => (
   <Space direction="vertical" className="flex flex-row items-center ">
@@ -16,13 +19,14 @@ const SearchBarCampaigns = ({ onSearch, onCreateNew }) => (
       textbutton="Tìm kiếm"
       onClick={onSearch} // Call onSearch when this button is clicked
     />
-    <ButtonComponent
+    {/* <ButtonComponent
       styleButton={{ background: "#06701c", border: "none" }}
       styleTextButton={{ color: "#fff", fontWeight: "bold" }}
       size="middle"
+    
       textbutton="Tạo mới"
-      onClick={onCreateNew} // Call onCreateNew when this button is clicked
-    />
+      onClick={handleNewJobs}
+    /> */}
   </Space>
 );
 
