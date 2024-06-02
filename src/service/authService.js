@@ -14,10 +14,9 @@ const apiLinks = {
 
 export const login = async (user) => {
     const response = await httpClient.post({
-      url: `${apiLinks.auth.login}`,
-      data: user,
+        url: `${apiLinks.auth.login}`,
+        data: user,
     });
-    
+
     return response.data;
-  };
-  
+};

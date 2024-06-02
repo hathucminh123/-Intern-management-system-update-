@@ -97,6 +97,7 @@ const Schedule = () => {
   };
 
   const handleSelectEvent = (event) => {
+    console.log(event)
     setShowModal(true);
     setSelectedDate(event.start);
     setEventToEdit(event);
