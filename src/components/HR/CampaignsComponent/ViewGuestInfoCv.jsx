@@ -1,34 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message ,Typography} from 'antd';
-import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '../../../firebase/config'; // Adjust the path as needed
+import { Table, message, Typography } from 'antd';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const ViewGuestInfoCv = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { state } = useLocation();
+  const programId = state?.programId;
+  const CampaignDetails = state?.CampaignDetail;
+  console.log('asdasd',CampaignDetails)
+
+
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const querySnapshot = await getDocs(collection(firestore, 'applications'));
-        const applications = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setData(applications);
+        const response = await axios.get(`https://intern-management.onrender.com/api/Candidate?programId=${programId}`);
+        setData(response.data.result);
+        console.log('data', response.data.result);
       } catch (error) {
-        message.error('Error fetching data from Firestore');
+        message.error('Error fetching data from API');
         console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    if (programId) {
+      fetchData();
+    } else {
+      message.error('Program ID not found');
+      setLoading(false);
+    }
+  }, [programId]);
 
   const columns = [
     {
       title: 'Full Name',
-      dataIndex: 'fullName',
-      key: 'fullName',
+      dataIndex: 'firstName',
+      key: 'firstName',
+      render: (text, record) => `${record.firstName} ${record.lastName}`,
     },
     {
       title: 'Email',
@@ -36,41 +49,31 @@ const ViewGuestInfoCv = () => {
       key: 'email',
     },
     {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'phone',
+      title: 'Phone Number',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
     },
     {
-      title: 'Training Program',
-      dataIndex: 'list',
-      key: 'list',
+      title: 'Education',
+      dataIndex: 'education',
+      key: 'education',
     },
     {
-      title: 'vị trí ứng tuyển',
-      dataIndex: 'listjob',
-      key: 'list',
-    },
-    {
-      title: 'Note',
-      dataIndex: 'note',
-      key: 'note',
-    },
-    {
-      title: 'CV Người dùng',
-      dataIndex: 'cvUrl',
-      key: 'cvUrl',
+      title: 'CV',
+      dataIndex: 'cvPath',
+      key: 'cvPath',
       render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">View CV</a>,
     },
   ];
 
   return (
     <div style={{ padding: '24px' }}>
-      <Typography.Title >Danh sách ứng tuyển Training program</Typography.Title>
-      <Table 
-        columns={columns} 
-        dataSource={data} 
-        loading={loading} 
-        rowKey="id" 
+      <Typography.Title>Vị trí ứng tuyển {CampaignDetails.name}</Typography.Title>
+      <Table
+        columns={columns}
+        dataSource={data}
+        loading={loading}
+        rowKey="id"
       />
     </div>
   );

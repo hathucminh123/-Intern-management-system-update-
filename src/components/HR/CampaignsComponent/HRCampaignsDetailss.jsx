@@ -1,18 +1,26 @@
 import React from "react";
 import { Typography, Button, Image, Tag } from "antd";
-import "tailwindcss/tailwind.css"; // đảm bảo Tailwind CSS được import
-import { useLocation, useParams } from "react-router-dom";
+import "tailwindcss/tailwind.css"; // ensure Tailwind CSS is imported
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 const { Title, Paragraph, Text } = Typography;
 
 const HRCampaignsDetailss = () => {
   let { id } = useParams();
   const { state } = useLocation();
+  const navigate = useNavigate();
   const CampaignDetail = state?.item;
 
   if (!CampaignDetail) {
     return <div>Job detail not found</div>;
   }
+
+  const handleViewGuestInfoClick = (key) => {
+    navigate(`/hrmanager/cvlist`, { state: { programId: key.id, CampaignDetail } });
+  };
+
+
+
   return (
     <div className="flex justify-center items-center ">
       <div className="max-w-fit w-full bg-white p-8 shadow-lg rounded-lg">
@@ -33,14 +41,18 @@ const HRCampaignsDetailss = () => {
                 {CampaignDetail.duration}
               </Tag>
             </div>
-            <div className="flex mt-3" >
-            <div>vị trí ứng tuyển </div>
-            {CampaignDetail.trainingPrograms.map((jobs,index)=>(
-                  
-                  <div className="ml-3 text-red-500" key={index}>{jobs.name} </div>
-    
-            ))}
-          </div>
+            <div className="flex mt-3">
+              <div>vị trí ứng tuyển </div>
+              {CampaignDetail.trainingPrograms.map((jobs, index) => (
+                <Button 
+                  onClick={() => handleViewGuestInfoClick(jobs)} 
+                  className="ml-3 text-red-500" 
+                  key={index}
+                >
+                  {jobs.name}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
         <hr />
@@ -48,27 +60,21 @@ const HRCampaignsDetailss = () => {
           MÔ TẢ CÔNG VIỆC
         </Title>
         <Paragraph>
-          <ul className="list-disc list-inside">
           <div dangerouslySetInnerHTML={{ __html: CampaignDetail.scopeOfWork }} />
-          </ul>
         </Paragraph>
 
         <Title level={3} className="">
           YÊU CẦU CÔNG VIỆC
         </Title>
         <Paragraph>
-          <ul className="list-disc list-inside">
           <div dangerouslySetInnerHTML={{ __html: CampaignDetail.requirements }} />
-          </ul>
         </Paragraph>
 
         <Title level={3} className="">
           QUYỀN LỢI
         </Title>
         <Paragraph>
-          <ul className="list-disc list-inside">
           <div dangerouslySetInnerHTML={{ __html: CampaignDetail.benefits }} />
-          </ul>
         </Paragraph>
 
         <Title level={3} className="">
@@ -102,6 +108,7 @@ const HRCampaignsDetailss = () => {
             https://fsoft-academy.edu.vn/
           </a>
         </Paragraph>
+     
       </div>
     </div>
   );

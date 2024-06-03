@@ -5,10 +5,13 @@ const baseURL = process.env.NODE_ENV !== "production"
     : "https://intern-management.onrender.com/api";
 
 
-const apiLinks = {
+ export const apiLinks = {
     auth: {
         login: `${baseURL}/Auth/login`,
     },
+    Campaign:{
+        get:  `${baseURL}/Auth/Campaign`,
+    }
 
 }
 

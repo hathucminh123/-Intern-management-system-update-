@@ -97,11 +97,11 @@ const CustomMenu = ({ userRole }) => {
         icon: <HomeOutlined />,
         label: 'campaigns',
       },
-      {
-        key: "/hrmanager/cvlist",
-        icon: <HomeOutlined />,
-        label: "Cv list",
-      },
+      // {
+      //   key: "/hrmanager/cvlist",
+      //   icon: <HomeOutlined />,
+      //   label: "Cv list",
+      // },
       {
         key: "/hrmanager/Jobs",
         icon: <HomeOutlined />,
