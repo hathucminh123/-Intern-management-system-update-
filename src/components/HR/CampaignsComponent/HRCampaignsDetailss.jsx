@@ -16,7 +16,7 @@ const HRCampaignsDetailss = () => {
   }
 
   const handleViewGuestInfoClick = (key) => {
-    navigate(`/hrmanager/cvlist`, { state: { programId: key.id, CampaignDetail } });
+    navigate(`/hrmanager/cvlist`, { state: { programId: key.id, CampaignDetail ,job:key.name} });
   };
 
 

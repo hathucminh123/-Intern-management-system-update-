@@ -5,6 +5,7 @@ import SearchBarCampaigns from "./SearchBarCampaigns";
 import { useNavigate } from "react-router-dom";
 import * as Jobss from "../../../service/JobsService";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+// import { fetchJobs } from "../../../service/authService";
 
 const Jobs = () => {
     const [jobs, setJobs] = useState([]);

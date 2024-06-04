@@ -144,7 +144,8 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
                 </Select.Option>
               ))}
             </Select> */}
-                <Input placeholder="Trường bạn học" />
+
+                <Input placeholder="nhập trường đại học bạn theo học"/>
           </Form.Item>
           <Form.Item
             name="listjob"

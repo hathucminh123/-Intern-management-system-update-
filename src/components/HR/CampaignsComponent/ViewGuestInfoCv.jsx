@@ -9,7 +9,9 @@ const ViewGuestInfoCv = () => {
   const { state } = useLocation();
   const programId = state?.programId;
   const CampaignDetails = state?.CampaignDetail;
+  const Jobss=state?.job;
   console.log('asdasd',CampaignDetails)
+  console.log('asd',Jobss)
 
 
 
@@ -68,7 +70,7 @@ const ViewGuestInfoCv = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Typography.Title>Vị trí ứng tuyển {CampaignDetails.name}</Typography.Title>
+      <Typography.Title>Vị trí ứng tuyển {Jobss}  vào  chương trình {CampaignDetails.name}</Typography.Title>
       <Table
         columns={columns}
         dataSource={data}

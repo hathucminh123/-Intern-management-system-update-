@@ -43,6 +43,22 @@ const SigninPage = () => {
       navigate(`/${userRole}`);
     }
   }
+  // const handleSignIn = async () => {
+  //   const result = await login({ userName: email, password: password })
+  //   console.log(result);
+  //   if (result.isSuccess){
+  //     const userInfo = jwtDecode(result.result);
+      
+  //     const userRole = userInfo.Role.toLowerCase();
+  //     console.log('userRole',userRole)
+  //     console.log('userInfo',userInfo);
+  //     localStorage.setItem("Auth", 'true');
+  //     localStorage.setItem("role", userRole);
+  //     localStorage.setItem("token",result.result);
+  //     navigate(`/${userRole}`);
+  //   }
+  // }
+
 
 
 
