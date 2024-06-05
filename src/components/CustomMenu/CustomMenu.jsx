@@ -97,11 +97,11 @@ const CustomMenu = ({ userRole }) => {
         icon: <HomeOutlined />,
         label: 'campaigns',
       },
-      // {
-      //   key: "/hrmanager/cvlist",
-      //   icon: <HomeOutlined />,
-      //   label: "Cv list",
-      // },
+      {
+        key: "/hrmanager/schedule",
+        icon: <HomeOutlined />,
+        label: "lịch trình",
+      },
       {
         key: "/hrmanager/Jobs",
         icon: <HomeOutlined />,
@@ -255,6 +255,8 @@ const CustomMenu = ({ userRole }) => {
             padding: 24,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            flex: 1, 
+            padding: '15px 0 15px 15px'
           }}
         >
           <Outlet />

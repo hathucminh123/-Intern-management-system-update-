@@ -71,14 +71,14 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       footer={null}
       onCancel={onClose}
       width={1200}
-      title={`Apply for ${job?.name || 'the job'}`}
+      title={`Ứng tuyển cho vị trí ${job?.name || 'the job'}`}
     >
       <Form
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
         className="max-h-[calc(100vh-48px)] overflow-hidden"
-        initialValues={{ name: job?.name || '' }}
+        initialValues={{ name: job?.name || '',list:intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
           <Title level={3}>{title}</Title>
@@ -144,8 +144,9 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
                 </Select.Option>
               ))}
             </Select> */}
+          
 
-                <Input placeholder="nhập trường đại học bạn theo học"/>
+                <Input value={intern.id} placeholder={ intern.name}/>
           </Form.Item>
           <Form.Item
             name="listjob"

@@ -48,7 +48,7 @@ const CreateNewJobs = () => {
 
   return (
     <div>
-      <Title level={1}>Create new jobs</Title>
+      <Title level={1}>Create New Job</Title>
       <Form
         form={form}
         layout="vertical"
@@ -59,7 +59,7 @@ const CreateNewJobs = () => {
           name="name"
           label="Job Name"
           rules={[
-            { required: true, message: "Please enter the name of the job" },
+            { required: true, message: "Please enter the job name" },
           ]}
         >
           <Input placeholder="Enter the job name" />
@@ -74,7 +74,6 @@ const CreateNewJobs = () => {
           <DatePicker style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
-          name="scopeOfWork"
           label="Scope of Work"
           rules={[
             {
@@ -90,7 +89,6 @@ const CreateNewJobs = () => {
           />
         </Form.Item>
         <Form.Item
-          name="requirements"
           label="Requirements"
           rules={[
             {
@@ -106,7 +104,6 @@ const CreateNewJobs = () => {
           />
         </Form.Item>
         <Form.Item
-          name="benefits"
           label="Benefits"
           rules={[
             {
@@ -139,19 +136,16 @@ const CreateNewJobs = () => {
         >
           <Input placeholder="Enter the total number of members" type="number" />
         </Form.Item>
-        <Form.Item>
         <Form.Item
-            name="imagePath"
-            label="Jobs Image Path"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the campaign image path",
-              },
-            ]}
-          >
-            <Input placeholder="Enter the image path" />
-          </Form.Item>
+          name="imagePath"
+          label="Job Image Path"
+          rules={[
+            { required: true, message: "Please enter the job image path" },
+          ]}
+        >
+          <Input placeholder="Enter the image path" />
+        </Form.Item>
+        <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

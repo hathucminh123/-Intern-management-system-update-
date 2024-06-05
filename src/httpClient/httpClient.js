@@ -34,13 +34,14 @@ const request = (arg) => {
   }).catch((e) => {
     if (e.response) {
       console.error("Axios request failed with response:", e.response);
+      throw new Error(`Error: ${e.response.status} - ${e.response.data}`);
     } else if (e.request) {
       console.error("Axios request failed with request:", e.request);
+      throw new Error('No response received from server');
     } else {
       console.error("Axios request failed with error message:", e.message);
+      throw new Error(e.message);
     }
-    console.error("Axios request failed config:", e.config); // Log chi tiết config
-    throw new Error(e);
   });
 };
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Card, Space, Image, Pagination, message } from "antd";
+import { Card, Space, Image, Pagination, message ,Typography} from "antd";
 import moment from "moment";
 import SearchBarCampaigns from "./SearchBarCampaigns";
 import { useNavigate } from "react-router-dom";
 import * as Jobss from "../../../service/JobsService";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
-// import { fetchJobs } from "../../../service/authService";
 
+const { Title}=Typography
 const Jobs = () => {
     const [jobs, setJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -49,6 +49,9 @@ const Jobs = () => {
 
     return (
         <div className="flex flex-col items-center w-full">
+            <Title className="text-center" level={1}>
+        List Jobs
+      </Title>
             <Space direction="vertical" className="flex flex-row items-center ">
                 <SearchBarCampaigns onSearch={handleSearch} />
                 <ButtonComponent
