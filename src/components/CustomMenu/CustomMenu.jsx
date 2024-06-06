@@ -152,7 +152,7 @@ const CustomMenu = ({ userRole }) => {
     <Layout className="Header sidebar">
       <Sider trigger={null} collapsible collapsed={collapsed} style={{
         position: "fixed",
-        width: "8%",
+        width: "8%"
       }}>
         <Logo />
         <div className="demo-logo-vertical" />
