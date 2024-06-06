@@ -258,7 +258,9 @@ const CustomMenu = ({ userRole }) => {
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
             flex: 1,
-            padding: '15px 0 15px 15px'
+            padding: '15px 0 15px 15px',
+            marginLeft:'8%'
+
           }}
         >
           <Outlet />

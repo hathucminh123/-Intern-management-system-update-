@@ -103,9 +103,9 @@ const Schedule = () => {
   };
 
   return (
-    <Layout style={{ marginLeft: '8%' }}>
+    <Layout >
       <Header style={{ color: 'white' }}>Lịch trình   </Header>
-      <Content style={{ minHeight: '80vh' }}>
+    <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div style={{ height: "500px" }}>
           <Calendar
             localizer={localizer}
