@@ -16,7 +16,7 @@ const HRCampaignsDetailss = () => {
   }
 
   const handleViewGuestInfoClick = (key) => {
-    navigate(`/hrmanager/cvlist`, { state: { programId: key.id, CampaignDetail ,job:key.name} });
+    navigate(`/hrmanager/cvlist`, { state: { programId: key.id, CampaignDetail, job: key.name } });
   };
 
 
@@ -38,15 +38,15 @@ const HRCampaignsDetailss = () => {
             <div className="flex mt-3">
               <div>Thời gian :</div>
               <Tag className="ml-3" color="#87d068">
-                {CampaignDetail.duration}
+                {CampaignDetail.duration} months
               </Tag>
             </div>
             <div className="flex mt-3">
               <div>vị trí ứng tuyển </div>
               {CampaignDetail.trainingPrograms.map((jobs, index) => (
-                <Button 
-                  onClick={() => handleViewGuestInfoClick(jobs)} 
-                  className="ml-3 text-red-500" 
+                <Button
+                  onClick={() => handleViewGuestInfoClick(jobs)}
+                  className="ml-3 text-red-500"
                   key={index}
                 >
                   {jobs.name}
@@ -108,7 +108,7 @@ const HRCampaignsDetailss = () => {
             https://fsoft-academy.edu.vn/
           </a>
         </Paragraph>
-     
+
       </div>
     </div>
   );

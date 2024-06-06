@@ -109,7 +109,7 @@ const CustomMenu = ({ userRole }) => {
       },
     ],
 
-    internshipcoordinators:[
+    internshipcoordinators: [
       {
         key: '/internshipcoordinators/home',
         icon: <HomeOutlined />,
@@ -149,8 +149,11 @@ const CustomMenu = ({ userRole }) => {
   );
 
   return (
-    <Layout className="Header">
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+    <Layout className="Header sidebar">
+      <Sider trigger={null} collapsible collapsed={collapsed} style={{
+        position: "fixed",
+        width: "8%",
+      }}>
         <Logo />
         <div className="demo-logo-vertical" />
         <Menu
@@ -164,7 +167,6 @@ const CustomMenu = ({ userRole }) => {
             flexDirection: "column",
             gap: "15px",
             fontSize: "1rem",
-            position: "relative",
           }}
           onClick={handleMenuClick}
           items={userItems} // Use items instead of children
@@ -255,7 +257,7 @@ const CustomMenu = ({ userRole }) => {
             padding: 24,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
-            flex: 1, 
+            flex: 1,
             padding: '15px 0 15px 15px'
           }}
         >

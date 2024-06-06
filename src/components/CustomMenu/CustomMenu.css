@@ -1,12 +1,18 @@
-.WrapperContentPopup{
+.WrapperContentPopup {
     cursor: pointer;
+
     &:hover {
         color: rgb(26, 148, 255);
     }
 }
-.nameaccount{
+
+.nameaccount {
     cursor: pointer;
     max-width: 100;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.sidebar {
+    position: relative;
 }
