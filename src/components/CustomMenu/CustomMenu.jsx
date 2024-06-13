@@ -29,7 +29,6 @@ import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import "./CustomMenu.css";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
-import { Children } from "react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -61,8 +60,6 @@ const CustomMenu = ({ userRole }) => {
   useEffect(() => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
-
-  // Giả sử bạn lưu thông tin đăng nhập trong localStorage
 
   const items = {
     mentor: [
@@ -113,15 +110,8 @@ const CustomMenu = ({ userRole }) => {
         icon: <HomeOutlined />,
         label: "Jobs",
       },
-
     ],
-
     internshipcoordinators: [
-      // {
-      //   key: '/internshipcoordinators/home',
-      //   icon: <HomeOutlined />,
-      //   label: 'Trang chủ',
-      // },
       {
         key: '/internshipcoordinators/schedule',
         icon: <AreaChartOutlined />,
@@ -131,7 +121,7 @@ const CustomMenu = ({ userRole }) => {
         key: '/internshipcoordinators/TrainingProgram',
         icon: <AreaChartOutlined />,
         label: 'TrainingProgram',
-        children:[
+        children: [
           {
             key: '/internshipcoordinators/NewTrainingProgram',
             icon: <AreaChartOutlined />,
@@ -144,7 +134,6 @@ const CustomMenu = ({ userRole }) => {
           },
         ]
       },
-    
     ]
   };
 
@@ -175,10 +164,7 @@ const CustomMenu = ({ userRole }) => {
 
   return (
     <Layout className="Header sidebar">
-      <Sider trigger={null} collapsible collapsed={collapsed} style={{
-        position: "fixed",
-  
-      }}>
+      <Sider trigger={null} collapsible collapsed={collapsed} style={{ height: '100vh', position: 'fixed', left: 0 }}>
         <Logo />
         <div className="demo-logo-vertical" />
         <Menu
@@ -186,26 +172,28 @@ const CustomMenu = ({ userRole }) => {
           mode="inline"
           selectedKeys={[selectedKey]}
           style={{
-            height: "100vh",
-            marginTop: "2rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
+            height: "calc(100% - 64px)",
+            marginTop: "64px", 
             fontSize: "1rem",
           }}
           onClick={handleMenuClick}
-          items={userItems} // Use items instead of children
+          items={userItems}
         />
       </Sider>
-      <Layout>
+      <Layout style={{ marginLeft: collapsed ? '80px' : '200px', transition: 'all 0.2s' }}>
         <Header
           style={{
             padding: 0,
             background: colorBgContainer,
+            position: 'fixed',
+            width: `calc(100% - ${collapsed ? '80px' : '200px'})`,
+            left: collapsed ? '80px' : '200px',
+            zIndex: 1000,
+            transition: 'all 0.2s'
           }}
         >
           <Row>
-            <Col md={21}>
+            <Col span={21}>
               <Button
                 type="text"
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -217,7 +205,7 @@ const CustomMenu = ({ userRole }) => {
                 }}
               />
             </Col>
-            <Col md={3}>
+            <Col span={3}>
               <Space size={10}>
                 <Avatar size="default" icon={<UserOutlined />} />
                 <Popover
@@ -282,10 +270,8 @@ const CustomMenu = ({ userRole }) => {
             padding: 24,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
-            flex: 1,
             padding: '15px 0 15px 15px',
-            marginLeft:'8%'
-
+            marginTop: '64px',
           }}
         >
           <Outlet />
