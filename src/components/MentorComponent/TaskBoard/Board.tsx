@@ -8,6 +8,8 @@ import { AddOutline } from "react-ionicons";
 import { onDragEnd } from "./onDragEnd";
 import AddTaskModal from "./AddTaskModal";
 import Task from "./Task";
+import { Layout } from "antd";
+const { Header, Content, Footer } = Layout;
 const Boards = () => {
     const [columns, setColumns] = useState<Columns>(Board);
     const [modalOpen, setModalOpen] = useState(false);
@@ -29,6 +31,9 @@ const Boards = () => {
 
     return (
         <>
+        <Layout>
+      <Header style={{ color: 'white', textAlign: 'center' }}>Task Board</Header>
+      <Content style={{ padding: '24px', minHeight: '80vh' }}>
             <DragDropContext onDragEnd={(result: any) => onDragEnd(result, columns, setColumns)}>
                 <div className="w-full flex items-start justify-between px-5 pb-8 md:gap-0 gap-10">
                     {Object.entries(columns).map(([columnId, column]: any) => (
@@ -80,13 +85,16 @@ const Boards = () => {
                     ))}
                 </div>
             </DragDropContext>
-
+        
             <AddTaskModal
                 isOpen={modalOpen}
                 onClose={closeModal}
                 setOpen={setModalOpen}
                 handleAddTask={handleAddTask}
             />
+              </Content>
+   
+    </Layout>
         </>
     );
 };
