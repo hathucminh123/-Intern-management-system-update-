@@ -29,6 +29,7 @@ import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import "./CustomMenu.css";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
+import { Children } from "react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -85,6 +86,11 @@ const CustomMenu = ({ userRole }) => {
         icon: <AreaChartOutlined />,
         label: "Lịch trình",
       },
+      {
+        key: "/mentor/taskboard",
+        icon: <AreaChartOutlined />,
+        label: "Task Board",
+      },
     ],
     hrmanager: [
       {
@@ -107,19 +113,38 @@ const CustomMenu = ({ userRole }) => {
         icon: <HomeOutlined />,
         label: "Jobs",
       },
+
     ],
 
     internshipcoordinators: [
-      {
-        key: '/internshipcoordinators/home',
-        icon: <HomeOutlined />,
-        label: 'Trang chủ',
-      },
+      // {
+      //   key: '/internshipcoordinators/home',
+      //   icon: <HomeOutlined />,
+      //   label: 'Trang chủ',
+      // },
       {
         key: '/internshipcoordinators/schedule',
         icon: <AreaChartOutlined />,
         label: 'Lịch trình',
       },
+      {
+        key: '/internshipcoordinators/TrainingProgram',
+        icon: <AreaChartOutlined />,
+        label: 'TrainingProgram',
+        children:[
+          {
+            key: '/internshipcoordinators/NewTrainingProgram',
+            icon: <AreaChartOutlined />,
+            label: 'Create',
+          },
+          {
+            key: '/internshipcoordinators/ViewTrainingProgram',
+            icon: <AreaChartOutlined />,
+            label: 'View',
+          },
+        ]
+      },
+    
     ]
   };
 
@@ -152,7 +177,7 @@ const CustomMenu = ({ userRole }) => {
     <Layout className="Header sidebar">
       <Sider trigger={null} collapsible collapsed={collapsed} style={{
         position: "fixed",
-        width: "8%"
+  
       }}>
         <Logo />
         <div className="demo-logo-vertical" />

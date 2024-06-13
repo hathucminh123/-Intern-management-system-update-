@@ -25,6 +25,10 @@ import HRPage from "./pages/HRPage/HRPage"
 import GuessDetailPage from "./pages/GuessDetailPage/GuessDetailPage";
 import HRCampaignsDetailss from "./components/HR/CampaignsComponent/HRCampaignsDetailss";
 import ViewGuestInfoCv from "./components/HR/CampaignsComponent/ViewGuestInfoCv";
+import CreateTrainingProgram from "./components/ICComponent/CreateTrainingProgram";
+import TrainingProgram from "./components/ICComponent/TrainingProgram";
+import ViewList from "./components/ICComponent/ViewTrainingProgram/ViewList"
+import TaskBoard from "./components/MentorComponent/TaskBoard/Board"
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -42,6 +46,7 @@ function App() {
               <Route path="task" element={<TaskPerformance />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="chat" element={<Chat />} />
+              <Route path="taskboard" element={<TaskBoard />} />
             </Route>
             <Route path="/hrmanager" element={<CustomMenu userRole={'hrmanager'} />}>
               <Route index element={<Navigate to="home" replace />} />
@@ -61,9 +66,15 @@ function App() {
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
             <Route path="/internshipcoordinators" element={<CustomMenu userRole={'internshipcoordinators'} />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<ViewGuestInfoCv />} />
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<ViewGuestInfoCv />} /> */}
               <Route path="schedule" element={<Schedule />} />
+              <Route path="TrainingProgram" element={<TrainingProgram />} />
+              <Route path="NewTrainingProgram" element={<CreateTrainingProgram />} />
+              <Route path="ViewTrainingProgram" element={<ViewList />} />  
+
+
+
               </Route>
             <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />

@@ -98,6 +98,7 @@ const CreateNewJobs = () => {
           ]}
         >
           <ReactQuill
+          
             value={requirement}
             onChange={handleRequirement}
             placeholder="Enter the requirements of the job"
