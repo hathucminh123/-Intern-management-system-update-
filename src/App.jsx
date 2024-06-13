@@ -24,6 +24,7 @@ import CvListComponent from "./components/HR/CampaignsComponent/CvListComponent"
 import HRPage from "./pages/HRPage/HRPage"
 import GuessDetailPage from "./pages/GuessDetailPage/GuessDetailPage";
 import HRCampaignsDetailss from "./components/HR/CampaignsComponent/HRCampaignsDetailss";
+import TaskBoard from "./components/MentorComponent/TaskBoard/Board"
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -41,6 +42,7 @@ function App() {
               <Route path="task" element={<TaskPerformance />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="chat" element={<Chat />} />
+              <Route path="taskboard" element={<TaskBoard />} />
             </Route>
             <Route path="/hrmanager" element={<CustomMenu userRole={'hrmanager'} />}>
               <Route index element={<Navigate to="home" replace />} />
@@ -48,12 +50,12 @@ function App() {
               <Route path="campaigns" element={<HRCampaings />} />
 
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
-              
+
               <Route
                 path="NewCampaigns"
                 element={<CreateCampainsHrComponent />}
               />
-              <Route path="cvlist" element={<HRPage/>} />
+              <Route path="cvlist" element={<HRPage />} />
               <Route path="NewJobs" element={<CreateNewJobs />} />
               <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />

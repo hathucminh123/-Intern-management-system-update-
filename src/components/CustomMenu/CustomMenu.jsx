@@ -85,6 +85,11 @@ const CustomMenu = ({ userRole }) => {
         icon: <AreaChartOutlined />,
         label: "Lịch trình",
       },
+      {
+        key: "/mentor/taskboard",
+        icon: <AreaChartOutlined />,
+        label: "Task Board",
+      },
     ],
     hrmanager: [
       {
@@ -109,7 +114,7 @@ const CustomMenu = ({ userRole }) => {
       },
     ],
 
-    IC:[
+    IC: [
       {
         key: '/IC/home',
         icon: <HomeOutlined />,
