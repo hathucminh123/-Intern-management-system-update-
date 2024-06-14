@@ -138,6 +138,7 @@ const GuessDetailsComponent = ({ id }) => {
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectJobs,setSelectJobs]=useState(null)
+  const [selectCampaigns,setSelectCampaigns]=useState(null)
   useEffect(() => {
     const fetchCampaignsData = async () => {
       try {
@@ -153,8 +154,13 @@ const GuessDetailsComponent = ({ id }) => {
 
   const internship = campaigns.find((internship) => internship.id === parseInt(id));
 
-  const showModal = (job) => {
+  const showModal = (job,campaigns) => {
     setSelectJobs(job);
+    setSelectCampaigns(campaigns)
+    setIsModalVisible(true);
+  };
+  const showModall = (campaigns) => {
+    setSelectJobs(campaigns);
     setIsModalVisible(true);
   };
 
@@ -169,12 +175,17 @@ const GuessDetailsComponent = ({ id }) => {
   return (
     <Space className="container" direction="vertical">
       <Title level={1} className="customTitle">{internship.name}</Title>
+      <Typography.Text style={{fontSize:'20px'}}>những vị trí có thể ứng tuyển trong chương trình:</Typography.Text>
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
+     
         {internship.trainingPrograms.map((position, index) => (
           <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
             {position.name}
           </Button>
+
         ))}
+      
+       
       </div>
       <Container>
         <Row>
@@ -258,8 +269,8 @@ const GuessDetailsComponent = ({ id }) => {
       <Space direction="vertical" size={20} className="Recruitment" key={index}>
         <Typography.Title level={10} > {list.name}</Typography.Title>
         <Space direction='horizontal' size={800} >
-        <Button type="primary" className="rounded-full customButton" onClick={() => showModal(list)}>Ứng tuyển ngay</Button>
-        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={campaigns} job={selectJobs} />
+        <Button type="primary" className="rounded-full customButton" onClick={() => showModal(list,internship)} >Ứng tuyển ngay</Button>
+        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectJobs} campaigns={selectCampaigns} />
         <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" width={300} />
         </Space>
       </Space>))}

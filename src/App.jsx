@@ -24,6 +24,10 @@ import CvListComponent from "./components/HR/CampaignsComponent/CvListComponent"
 import HRPage from "./pages/HRPage/HRPage"
 import GuessDetailPage from "./pages/GuessDetailPage/GuessDetailPage";
 import HRCampaignsDetailss from "./components/HR/CampaignsComponent/HRCampaignsDetailss";
+import ViewGuestInfoCv from "./components/HR/CampaignsComponent/ViewGuestInfoCv";
+import CreateTrainingProgram from "./components/ICComponent/CreateTrainingProgram";
+import TrainingProgram from "./components/ICComponent/TrainingProgram";
+import ViewList from "./components/ICComponent/ViewTrainingProgram/ViewList"
 import TaskBoard from "./components/MentorComponent/TaskBoard/Board"
 
 function App() {
@@ -46,7 +50,8 @@ function App() {
             </Route>
             <Route path="/hrmanager" element={<CustomMenu userRole={'hrmanager'} />}>
               <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<Schedule />} />
+              <Route path="home" element={<HRPage />} />
+              <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
 
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
@@ -55,10 +60,21 @@ function App() {
                 path="NewCampaigns"
                 element={<CreateCampainsHrComponent />}
               />
-              <Route path="cvlist" element={<HRPage />} />
+              <Route path="cvlist" element={<ViewGuestInfoCv />} />
               <Route path="NewJobs" element={<CreateNewJobs />} />
               <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+            </Route>
+            <Route path="/internshipcoordinators" element={<CustomMenu userRole={'internshipcoordinators'} />}>
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<ViewGuestInfoCv />} /> */}
+              <Route path="schedule" element={<Schedule />} />
+              <Route path="TrainingProgram" element={<TrainingProgram />} />
+              <Route path="NewTrainingProgram" element={<CreateTrainingProgram />} />
+              <Route path="ViewTrainingProgram" element={<ViewList />} />
+
+
+
             </Route>
             <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />

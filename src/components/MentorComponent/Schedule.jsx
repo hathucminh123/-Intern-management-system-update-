@@ -46,8 +46,8 @@
 //             {item.events}
 //             <Button onClick={() => handleRemoveEvent(item.id)}>Remove</Button>
 //             </Space>
-          
-            
+
+
 //           </div>
 //         ))}
 //       </ul>
@@ -104,34 +104,34 @@ const Schedule = () => {
   };
 
   return (
-    <Layout>
-    <Header style={{ color: 'white' }}>Lịch trình   </Header>
+    <Layout >
+      <Header style={{ color: 'white' }}>Lịch trình   </Header>
     <Content style={{ padding: '24px', minHeight: '80vh' }}>
-      <div style={{height:"500px"}}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ margin: '50px' }}
-        selectable
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-      />
-      <AddScheduleModal
-        visible={showModal}
-        onClose={() => setShowModal(false)}
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        setEvents={setEvents}
-        events={events}
-        eventToEdit={eventToEdit}
-        setEventToEdit={setEventToEdit}
-      />
-      </div>
-    </Content>
-  
-  </Layout>
+        <div style={{ height: "500px" }}>
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ margin: '50px' }}
+            selectable
+            onSelectSlot={handleSelectSlot}
+            onSelectEvent={handleSelectEvent}
+          />
+          <AddScheduleModal
+            visible={showModal}
+            onClose={() => setShowModal(false)}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            setEvents={setEvents}
+            events={events}
+            eventToEdit={eventToEdit}
+            setEventToEdit={setEventToEdit}
+          />
+        </div>
+      </Content>
+
+    </Layout>
   );
 };
 

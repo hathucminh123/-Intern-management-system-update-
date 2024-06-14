@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Modal, Form, Input, Button, Upload, Typography, Select, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
-import { storage, firestore } from '../../../firebase/config'; // Import your Firebase configuration
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import necessary functions from Firebase storage
-import { collection, addDoc } from 'firebase/firestore'; // Import Firestore functions
-
+import { storage, firestore } from '../../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc } from 'firebase/firestore';
+import { createNewCandidate } from '../../../service/Candidate';
 const { Title, Text } = Typography;
 
 const FormCVModal = ({ visible, onClose, title, intern, job }) => {
@@ -13,7 +13,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
   const [cvFile, setCvFile] = useState(null);
 
   const handleSubmit = async (values) => {
-    console.log('Form values:', values); // Log the form values to inspect the structure
+    console.log('Form values:', values);
 
     try {
       if (!cvFile) {
@@ -37,9 +37,22 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         cvUrl: fileUrl,
       });
 
+      // Create a new candidate using the provided API
+      const candidateData = {
+        firstName: values.fullName.split(' ')[0], // Assuming first name is the first part of full name
+        lastName: values.fullName.split(' ').slice(1).join(' '), // Rest is the last name
+        email: values.email,
+        phoneNumber: values.phone,
+        education: values.list, // Assuming list contains the education/training program
+        cvPath: fileUrl,
+        trainingProgramId: values.listjob, // Assuming listjob contains the ID of the training program/job
+      };
+
+      await createNewCandidate(candidateData);
+
       message.success('Form submitted successfully!');
       form.resetFields();
-      setCvFile(null); // Reset the file state
+      setCvFile(null);
       onClose();
     } catch (error) {
       message.error('Error submitting form. Please try again.');
@@ -58,14 +71,14 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       footer={null}
       onCancel={onClose}
       width={1200}
-      title={`Apply for ${job?.name || 'the job'}`}
+      title={`Ứng tuyển cho vị trí ${job?.name || 'the job'}`}
     >
       <Form
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
         className="max-h-[calc(100vh-48px)] overflow-hidden"
-        initialValues={{ name: job?.name || '' }}
+        initialValues={{ name: job?.name || '',list:intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
           <Title level={3}>{title}</Title>
@@ -121,16 +134,19 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
           </Form.Item>
           <Form.Item
             name="list"
-            label="Những chương trình training program"
-            rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+            label="Trường bạn đang học"
+            rules={[{ required: true, message: 'Please select the school' }]}
           >
-            <Select placeholder="chọn training program" allowClear>
+            {/* <Select placeholder="chọn training program" allowClear>
               {intern.map((item) => (
                 <Select.Option key={item.id} value={item.name}>
                   {item.name}
                 </Select.Option>
               ))}
-            </Select>
+            </Select> */}
+          
+
+                <Input value={intern.id} placeholder={ intern.name}/>
           </Form.Item>
           <Form.Item
             name="listjob"
@@ -139,7 +155,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
           >
             <Select placeholder="chọn vị trí ứng tuyển" allowClear>
               {job && (
-                <Select.Option value={job.name}>
+                <Select.Option value={job.id}>
                   {job.name}
                 </Select.Option>
               )}
@@ -175,3 +191,5 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
 };
 
 export default FormCVModal;
+
+
