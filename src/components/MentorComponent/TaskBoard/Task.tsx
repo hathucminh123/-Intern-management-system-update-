@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TimeOutline } from "react-ionicons";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import { TaskT } from "./Columns";
 import React from 'react';
 
@@ -44,7 +44,7 @@ const Task = ({ task, provided }: TaskProps) => {
             <div className="w-full border border-dashed"></div>
             <div className="w-full flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                    <TimeOutline
+                    <ClockCircleOutlined
                         color={"#666"}
                         width="19px"
                         height="19px"

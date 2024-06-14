@@ -4,7 +4,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Columns } from "./Columns";
 import { Board } from "./data";
 import React from 'react';
-import { AddOutline } from "react-ionicons";
+import { PlusOutlined } from "@ant-design/icons";
 import { onDragEnd } from "./onDragEnd";
 import AddTaskModal from "./AddTaskModal";
 import Task from "./Task";
@@ -71,9 +71,9 @@ const Boards = () => {
                             </Droppable>
                             <div
                                 onClick={() => openModal(columnId)}
-                                className="flex cursor-pointer items-center justify-center gap-1 py-[10px] md:w-[90%] w-full opacity-90 bg-white rounded-lg shadow-sm text-[#555] font-medium text-[15px]"
+                                className="flex cursor-pointer items-center justify-center gap-1 py-[10px] md:w-[90%] w-full opacity-90 bg-white rounded-lg shadow-sm text-[#555] font-medium text-[15px] "
                             >
-                                <AddOutline color={"#555"} />
+                                <PlusOutlined color={"#555"} />
                                 Add Task
                             </div>
                         </div>
