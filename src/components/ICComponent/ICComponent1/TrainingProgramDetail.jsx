@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Typography, Button, Image, Tag } from "antd";
-import "tailwindcss/tailwind.css"; // ensure Tailwind CSS is imported
+import "tailwindcss/tailwind.css"; 
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 const { Title, Paragraph, Text } = Typography;
 
-const HRCampaignsDetailss = () => {
+const TrainingProgramDetail = () => {
   let { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -17,25 +17,25 @@ const HRCampaignsDetailss = () => {
     return <div>Job detail not found</div>;
   }
 
-  const handleViewGuestInfoClick = (CampaignDetail, job) => {
-    navigate(`/hrmanager/cvlist`, { state: { jobID: job.id, CampaignDetail, job: job.name, CampaignID: CampaignDetail.id } });
-  };
+//   const handleViewGuestInfoClick = (CampaignDetail, job) => {
+//     navigate(`/hrmanager/cvlist`, { state: { jobID: job.id, CampaignDetail, job: job.name, CampaignID: CampaignDetail.id } });
+//   };
 
-  const handleViewCVListClick = () => {
-    setShowJobs(!showJobs);
-  };
+//   const handleViewCVListClick = () => {
+//     setShowJobs(!showJobs);
+//   };
 
   return (
     <div className="flex justify-center items-center">
       <div className="max-w-fit w-full bg-white p-8 shadow-lg rounded-lg">
         <div className="flex mb-8">
-          <Image
+          {/* <Image
             width={250}
             preview={false}
             src={CampaignDetail.imagePath}
             className="border-4 border-gray-300 shadow-xl rounded-lg"
-          />
-          <div className="ml-8">
+          /> */}
+          <div className="mt-8">
             <Title className="" level={2}>
               <div>{CampaignDetail.name}</div>
             </Title>
@@ -46,10 +46,10 @@ const HRCampaignsDetailss = () => {
               </Tag>
             </div>
             <div className="flex mt-3">
-              <div>vị trí ứng tuyển</div>
+              <div>các jobs apply:</div>
               {CampaignDetail.jobs.map((jobs, index) => (
                 <Button
-                  onClick={() => handleViewGuestInfoClick(CampaignDetail, jobs)}
+                //   onClick={() => handleViewGuestInfoClick(CampaignDetail, jobs)}
                   className="ml-3 text-red-500"
                   key={index}
                 >
@@ -61,28 +61,23 @@ const HRCampaignsDetailss = () => {
         </div>
         <hr />
         <Title className="mt-8" level={3}>
-          MÔ TẢ CÔNG VIỆC
+          Mô tả khóa học
         </Title>
         <Paragraph>
-          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.scopeOfWork }} />
+          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.courseObject }} />
         </Paragraph>
 
         <Title level={3} className="">
-          YÊU CẦU CÔNG VIỆC
+          Kết quả đầu ra
         </Title>
         <Paragraph>
-          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.requirements }} />
+          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.outputObject }} />
         </Paragraph>
 
-        <Title level={3} className="">
-          QUYỀN LỢI
-        </Title>
-        <Paragraph>
-          <div dangerouslySetInnerHTML={{ __html: CampaignDetail.benefits }} />
-        </Paragraph>
+
 
         <Title level={3} className="">
-          ỨNG TUYỂN
+          Ứng tuyển
         </Title>
         <Paragraph>
           Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail:{" "}
@@ -113,13 +108,13 @@ const HRCampaignsDetailss = () => {
           </a>
         </Paragraph>
 
-        <div className="flex justify-end mt-8">
+        {/* <div className="flex justify-end mt-8">
           <Button type="primary" onClick={handleViewCVListClick}>
             Xem danh sách hồ sơ
           </Button>
-        </div>
+        </div> */}
 
-        {showJobs && (
+        {/* {showJobs && (
           <div className="mt-8">
             <Title level={3}>Vị trí ứng tuyển</Title>
             <div>
@@ -134,10 +129,10 @@ const HRCampaignsDetailss = () => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
 };
 
-export default HRCampaignsDetailss;
+export default TrainingProgramDetail;

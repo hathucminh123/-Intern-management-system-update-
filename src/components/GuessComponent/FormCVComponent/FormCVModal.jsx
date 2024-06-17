@@ -33,6 +33,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         phone: values.phone,
         list: values.list,
         listjob: values.listjob,
+        listcampaign:values.listcampaign,
         note: values.note,
         cvUrl: fileUrl,
       });
@@ -45,7 +46,8 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         phoneNumber: values.phone,
         education: values.list, // Assuming list contains the education/training program
         cvPath: fileUrl,
-        trainingProgramId: values.listjob, // Assuming listjob contains the ID of the training program/job
+        jobId: values.listjob, // Assuming listjob contains the ID of the training program/job
+        campaignId:values.listcampaign
       };
 
       await createNewCandidate(candidateData);
@@ -147,6 +149,19 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
           
 
                 <Input value={intern.id} placeholder={ intern.name}/>
+          </Form.Item>
+          <Form.Item
+            name="listcampaign"
+            label="vị trí muốn ứng tuyển"
+            rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+          >
+            <Select placeholder="chọn vị trí ứng tuyển" allowClear>
+              {intern && (
+                <Select.Option value={intern.id}>
+                  {intern.name}
+                </Select.Option>
+              )}
+            </Select>
           </Form.Item>
           <Form.Item
             name="listjob"

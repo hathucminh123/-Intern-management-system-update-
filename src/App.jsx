@@ -29,6 +29,9 @@ import CreateTrainingProgram from "./components/ICComponent/CreateTrainingProgra
 import TrainingProgram from "./components/ICComponent/TrainingProgram";
 import ViewList from "./components/ICComponent/ViewTrainingProgram/ViewList"
 import TaskBoard from "./components/MentorComponent/TaskBoard/Board"
+import Create from "./components/ICComponent/ICComponent1/create";
+import ViewCampaigns from "./components/ICComponent/ICComponent1/view";
+import TrainingProgramDetail from "./components/ICComponent/ICComponent1/TrainingProgramDetail";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -70,8 +73,11 @@ function App() {
               {/* <Route path="home" element={<ViewGuestInfoCv />} /> */}
               <Route path="schedule" element={<Schedule />} />
               <Route path="TrainingProgram" element={<TrainingProgram />} />
-              <Route path="NewTrainingProgram" element={<CreateTrainingProgram />} />
-              <Route path="ViewTrainingProgram" element={<ViewList />} />  
+              <Route path="NewTrainingProgram" element={<Create />} />
+              
+              <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
+              
+              <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />  
 
 
 

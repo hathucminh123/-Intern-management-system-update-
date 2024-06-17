@@ -178,7 +178,7 @@ const GuessDetailsComponent = ({ id }) => {
       <Typography.Text style={{fontSize:'20px'}}>những vị trí có thể ứng tuyển trong chương trình:</Typography.Text>
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
      
-        {internship.trainingPrograms.map((position, index) => (
+        {internship.jobs.map((position, index) => (
           <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
             {position.name}
           </Button>
@@ -201,7 +201,7 @@ const GuessDetailsComponent = ({ id }) => {
         </Col>
         <Col span={12}>
             <Row gutter={[16, 16]}>
-                {internship.trainingPrograms.map((program, index) => (
+                {internship.jobs.map((program, index) => (
                     <React.Fragment key={index}>
                         <Col span={12}>
                             <Image src={program.imagePath} alt="image small" preview={false} className="customImage" />
@@ -265,7 +265,7 @@ const GuessDetailsComponent = ({ id }) => {
       </div>
       <JobDescriptionComponent data={internship} />
 
-      {internship.trainingPrograms.map((list,index)=>(  
+      {internship.jobs.map((list,index)=>(  
       <Space direction="vertical" size={20} className="Recruitment" key={index}>
         <Typography.Title level={10} > {list.name}</Typography.Title>
         <Space direction='horizontal' size={800} >
@@ -293,7 +293,7 @@ const GuessDetailsComponent = ({ id }) => {
                     {internship.name}
                   </Title>
                   <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
-                    {internship.trainingPrograms.map((position, index) => (
+                    {internship.jobs.map((position, index) => (
                       <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
                         {position.name}
                       </Button>

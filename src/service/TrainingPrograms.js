@@ -1,10 +1,10 @@
-
 import httpClient from "../httpClient/httpClient";
-import { apiLinks } from "./authService";
-export const createNewCandidate=async(eventData)=> {
+ import { apiLinks } from "./authService";
+
+export const   createNewTraining= async (eventData)=> {
   try {
     const response = await httpClient.post({
-        url: `${apiLinks.Candidates.post}`,
+        url: `${apiLinks.TrainingProgram.post}`,
         data: eventData,
     });
 
@@ -23,11 +23,11 @@ export const createNewCandidate=async(eventData)=> {
   }
 }
 
-export const fetchCandidate= async( campaignId,jobId) => {
+
+export const fetchTraining= async() => {
   try {
     const response = await httpClient.get({
-      url: `${apiLinks.Candidates.get}?campaignId=${campaignId}&jobId=${jobId}`, 
-
+      url: `${apiLinks.TrainingProgram.get}`,
     });
 
     // Check if the response status is not OK (200)
@@ -42,11 +42,10 @@ export const fetchCandidate= async( campaignId,jobId) => {
     const job = response.data;
     return {
       events: job.result, 
-    
+   
     };
   } catch (error) {
     console.error("Fetching jobs failed", error);
     throw error;
   }
 };
-  

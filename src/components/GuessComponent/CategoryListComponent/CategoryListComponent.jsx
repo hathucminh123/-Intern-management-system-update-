@@ -33,7 +33,7 @@ const CategoryListComponent = ({ category }) => {
             bordered={false}
             className="mb-4"
           >
-            {campaign.trainingPrograms.map((position) => (
+            {campaign.jobs.map((position) => (
               <Button
                 key={position.id}
                 className="rounded-full me-2 mb-2"

@@ -89,7 +89,7 @@ console.log(campaigns)
             <div
               style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}
             >
-              {campaign.trainingPrograms.map((position, index) => (
+              {campaign.jobs.map((position, index) => (
                 <Button
                   key={index}
                   className="rounded-full me-2 mb-6"

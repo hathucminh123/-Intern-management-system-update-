@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Form, Input, Button, Select, Typography, message } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
-import * as Campaign from '../../../service/Campaign';
+import * as Training from '../../../service/TrainingPrograms';
 import * as Jobss from '../../../service/JobsService';
 
 const { Title } = Typography;
 const { Option } = Select;
 
-const CreateCampaignsHrComponent = () => {
+const Create = () => {
   const [form] = Form.useForm();
-  const [requirement, setRequirement] = useState("");
-  const [description, setDescription] = useState("");
+  const [courseObject, setCourseObject] = useState("");
+  const [outputObject, setOutputObject] = useState("");
   const [jobs, setJobs] = useState([]);
-  // const [imagePath, setImagePath] = useState("");
-console.log('jobs',jobs)
+  
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
@@ -31,21 +29,19 @@ console.log('jobs',jobs)
   }, []);
 
   const onFinish = async (values) => {
-    const NewCampaigns = {
+    const NewTraining = {
       id: uuidv4(),
       ...values,
-      scopeOfWork: description,
-      requirements: requirement,
-     
+      courseObject: courseObject,
+      outputObject: outputObject,
     };
 
     try {
-      const response = await Campaign.createNewCampaign(NewCampaigns);
+      const response = await Training.createNewTraining(NewTraining);
       message.success("Campaign created successfully!");
       form.resetFields();
-      setDescription("");
-      setRequirement("");
-    
+      setCourseObject("");
+      setOutputObject("");
       console.log("Form values:", response);
     } catch (error) {
       message.error(`Error: ${error.message}`);
@@ -53,23 +49,13 @@ console.log('jobs',jobs)
     }
   };
 
-  const handleScopeOfWorkChange = (value) => {
-    setDescription(value);
+  const handleCourseObjectChange = (value) => {
+    setCourseObject(value);
   };
 
-  const handleRequirement = (value) => {
-    setRequirement(value);
+  const handleOutputObjectChange = (value) => {
+    setOutputObject(value);
   };
-
-  // const handleImageUpload = (info) => {
-  //   if (info.file.status === 'done') {
-  //     // Set imagePath as string
-  //     setImagePath(info.file.response.imagePath);
-  //     message.success(`${info.file.name} file uploaded successfully`);
-  //   } else if (info.file.status === 'error') {
-  //     message.error(`${info.file.name} file upload failed.`);
-  //   }
-  // };
 
   return (
     <div className="container flex flex-col">
@@ -85,9 +71,9 @@ console.log('jobs',jobs)
         >
           <Form.Item
             name="name"
-            label="Campaign Name"
+            label="Training Program name"
             rules={[
-              { required: true, message: "Please enter the campaign title" },
+              { required: true, message: "Please enter the Training title" },
             ]}
           >
             <Input placeholder="Enter the campaign title" />
@@ -120,66 +106,38 @@ console.log('jobs',jobs)
           </Form.Item>
 
           <Form.Item
-            name="scopeOfWork"
-            label="Scope of Work"
+            name="courseObject"
+            label="Course Object"
             rules={[
               {
                 required: true,
-                message: "Please enter the scope of work",
+                message: "Please enter the course object",
               },
             ]}
           >
             <ReactQuill
-              value={description}
-              onChange={handleScopeOfWorkChange}
-              placeholder="Enter the scope of work"
+              value={courseObject}
+              onChange={handleCourseObjectChange}
+              placeholder="Enter the course object"
             />
           </Form.Item>
           <Form.Item
-            name="requirement"
-            label="Requirement"
+            name="outputObject"
+            label="Output Object"
             rules={[
               {
                 required: true,
-                message: "Please enter the requirement",
+                message: "Please enter the output object",
               },
             ]}
           >
             <ReactQuill
-              value={requirement}
-              onChange={handleRequirement}
-              placeholder="Enter the requirement"
+              value={outputObject}
+              onChange={handleOutputObjectChange}
+              placeholder="Enter the output object"
             />
           </Form.Item>
-          <Form.Item
-            name="imagePath"
-            label="Campaign Image Path"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the campaign image path",
-              },
-            ]}
-          >
-            <Input placeholder="Enter the image path" />
-          </Form.Item>
-{/* 
-          <Form.Item
-            name="upload"
-            label="Campaign Image"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            extra=""
-          >
-            <Upload
-              name="file"
-              listType="picture"
-              onChange={handleImageUpload}
-            >
-              <Button icon={<UploadOutlined />}>Click to upload</Button>
-            </Upload>
-          </Form.Item> */}
-
+          
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
@@ -191,4 +149,4 @@ console.log('jobs',jobs)
   );
 };
 
-export default CreateCampaignsHrComponent;
+export default Create;

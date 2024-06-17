@@ -1,15 +1,16 @@
+
 import httpClient from "../httpClient/httpClient";
 
 const baseURL = 
-   "https://intern-management.onrender.com/api";
+   "https://intern-management-35fd3e77666d.herokuapp.com/api";
 
 export const apiLinks = {
   auth: {
     login: `${baseURL}/Auth/login`,
   },
   Jobs: {
-    get: `${baseURL}/TrainingProgram`,
-    post: `${baseURL}/TrainingProgram`,
+    get: `${baseURL}/Job`,
+    post: `${baseURL}/Job`,
   },
   Campaigns:{
     get: `${baseURL}/Campaign`,
@@ -18,6 +19,13 @@ export const apiLinks = {
    Candidates:{
       get:`${baseURL}/Candidate`,
       post:`${baseURL}/Candidate`,
+   },
+   Email:{
+    post:`${baseURL}/Mail`,
+   },
+   TrainingProgram:{
+    get:`${baseURL}/TrainingProgram`,
+      post:`${baseURL}/TrainingProgram`,
    }
 };
 

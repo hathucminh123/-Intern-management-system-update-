@@ -70,7 +70,7 @@ const GuestCampainsComponent = () => {
         {campaigns.map((campaign) => (
 
           <div key={campaign.id}>
-            {campaign.trainingPrograms.map((position, index) => (
+            {campaign.jobs.map((position, index) => (
               <Button
                 key={index}
                 className="rounded-full me-2 mb-6"
@@ -104,7 +104,7 @@ const GuestCampainsComponent = () => {
                     {internship.name}
                   </Title>
                   <div style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}>
-                    {internship.trainingPrograms.map((position, index) => (
+                    {internship.jobs.map((position, index) => (
                       <Button
                         key={index}
                         className="rounded-full me-2 mb-6"
