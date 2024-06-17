@@ -1,19 +1,22 @@
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Columns } from "./Columns";
 import { Board } from "./data";
-import React from 'react';
 import { AddOutline } from "react-ionicons";
 import { onDragEnd } from "./onDragEnd";
 import AddTaskModal from "./AddTaskModal";
 import Task from "./Task";
+import TaskDetailModal from "./TaskDetailModal";
 import { Layout } from "antd";
+
 const { Header, Content, Footer } = Layout;
+
 const Boards = () => {
     const [columns, setColumns] = useState<Columns>(Board);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState("");
+    const [selectedTask, setSelectedTask] = useState<any>(null);
+    const [taskDetailModalOpen, setTaskDetailModalOpen] = useState(false);
 
     const openModal = (columnId: any) => {
         setSelectedColumn(columnId);
@@ -27,6 +30,27 @@ const Boards = () => {
     const handleAddTask = (taskData: any) => {
         const newBoard = { ...columns };
         newBoard[selectedColumn].items.push(taskData);
+        setColumns(newBoard);
+    };
+
+    const handleUpdateTask = (updatedTask: any) => {
+        const newBoard = { ...columns };
+        const column = newBoard[selectedColumn];
+        const taskIndex = column.items.findIndex((task: any) => task.id === updatedTask.id);
+        if (taskIndex !== -1) {
+            column.items[taskIndex] = updatedTask;
+            setColumns(newBoard);
+        }
+    };
+
+    const openTaskDetailModal = (task: any, columnId: any) => {
+        setSelectedTask(task);
+        setSelectedColumn(columnId);
+        setTaskDetailModalOpen(true);
+    };
+
+    const closeTaskDetailModal = () => {
+        setTaskDetailModalOpen(false);
     };
 
     return (
@@ -61,12 +85,11 @@ const Boards = () => {
                                                         index={index}
                                                     >
                                                         {(provided: any) => (
-                                                            <>
-                                                                <Task
-                                                                    provided={provided}
-                                                                    task={task}
-                                                                />
-                                                            </>
+                                                            <Task
+                                                                provided={provided}
+                                                                task={task}
+                                                                onClick={() => openTaskDetailModal(task, columnId)}
+                                                            />
                                                         )}
                                                     </Draggable>
                                                 ))}
@@ -76,7 +99,7 @@ const Boards = () => {
                                     </Droppable>
                                     <div
                                         onClick={() => openModal(columnId)}
-                                        className="flex cursor-pointer items-center justify-center gap-1 py-[10px] md:w-[90%] w-full opacity-90 bg-white rounded-lg shadow-sm text-[#555] font-medium text-[15px]"
+                                        className="flex cursor-pointer items-center justify-center gap-1 py-[10px] md:w-[250px] w-full opacity-90 bg-white rounded-lg shadow-sm text-[#555] font-medium text-[15px]"
                                     >
                                         <AddOutline color={"#555"} />
                                         Add Task
@@ -92,10 +115,18 @@ const Boards = () => {
                         setOpen={setModalOpen}
                         handleAddTask={handleAddTask}
                     />
-                </Content>
 
+                    <TaskDetailModal
+                        isOpen={taskDetailModalOpen}
+                        onClose={closeTaskDetailModal}
+                        setOpen={setTaskDetailModalOpen}
+                        handleUpdateTask={handleUpdateTask}
+                        task={selectedTask}
+                    />
+                </Content>
             </Layout>
         </>
     );
 };
+
 export default Boards;

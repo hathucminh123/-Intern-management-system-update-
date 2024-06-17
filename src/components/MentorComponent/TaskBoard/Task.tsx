@@ -6,9 +6,10 @@ import React from 'react';
 interface TaskProps {
     task: TaskT;
     provided: any;
+    onClick: () => void
 }
 
-const Task = ({ task, provided }: TaskProps) => {
+const Task = ({ task, provided, onClick }: TaskProps) => {
     const { title, description, priority, deadline, image, alt, tags } = task;
 
     return (
@@ -18,6 +19,7 @@ const Task = ({ task, provided }: TaskProps) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             className="w-full cursor-grab bg-[#fff] flex flex-col justify-between gap-3 items-start shadow-sm rounded-xl px-3 py-4"
+            onClick={onClick}
         >
             {image && alt && (
                 <img

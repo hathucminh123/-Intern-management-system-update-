@@ -100,4 +100,4 @@ const Jobs = () => {
   );
 };
 
-export default Campaings;
+export default Jobs;
