@@ -98,7 +98,7 @@ const GuestCampainsComponent = () => {
               }}
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
-              <Space direction='horizontal'>
+              <Space direction='horizontal' size={200}>
                 <div>
                   <Title className="text-center" level={3}>
                     {internship.name}

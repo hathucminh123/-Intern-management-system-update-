@@ -26,6 +26,11 @@ export const apiLinks = {
    TrainingProgram:{
     get:`${baseURL}/TrainingProgram`,
       post:`${baseURL}/TrainingProgram`,
+   },
+   Resource:{
+    
+    get:`${baseURL}/Resource`,
+      post:`${baseURL}/Resource`,
    }
 };
 

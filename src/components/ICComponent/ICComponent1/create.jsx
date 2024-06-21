@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message } from "antd";
+import { Form, Input, Button, Select, Typography, message,Layout } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -8,7 +8,7 @@ import * as Jobss from '../../../service/JobsService';
 
 const { Title } = Typography;
 const { Option } = Select;
-
+const { Header, Content, Footer } = Layout;
 const Create = () => {
   const [form] = Form.useForm();
   const [courseObject, setCourseObject] = useState("");
@@ -38,7 +38,7 @@ const Create = () => {
 
     try {
       const response = await Training.createNewTraining(NewTraining);
-      message.success("Campaign created successfully!");
+      message.success("Training program created successfully!");
       form.resetFields();
       setCourseObject("");
       setOutputObject("");
@@ -58,10 +58,13 @@ const Create = () => {
   };
 
   return (
+    <Layout >
+    <Header style={{ color: 'white' }}>Create new TrainingProgram   </Header>
+  <Content style={{ padding: '10px', minHeight: '80vh' }}>
     <div className="container flex flex-col">
-      <Title className="text-center mt-5" level={2}>
+      {/* <Title className="text-center mt-5" level={2}>
         Create New Campaign
-      </Title>
+      </Title> */}
       <div className="mt-5">
         <Form
           form={form}
@@ -146,6 +149,8 @@ const Create = () => {
         </Form>
       </div>
     </div>
+    </Content>
+    </Layout>
   );
 };
 

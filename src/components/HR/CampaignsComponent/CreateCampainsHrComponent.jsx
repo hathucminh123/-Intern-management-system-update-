@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, Upload } from "antd";
+import { Form, Input, Button, Select, Typography, message, Upload,Layout } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -9,7 +9,7 @@ import * as Jobss from '../../../service/JobsService';
 
 const { Title } = Typography;
 const { Option } = Select;
-
+const { Header, Content, Footer } = Layout;
 const CreateCampaignsHrComponent = () => {
   const [form] = Form.useForm();
   const [requirement, setRequirement] = useState("");
@@ -72,10 +72,13 @@ console.log('jobs',jobs)
   // };
 
   return (
+    <Layout >
+    <Header style={{ color: 'white' }}>Create new Campaign</Header>
+  <Content style={{ padding: '24px', minHeight: '80vh' }}>
     <div className="container flex flex-col">
-      <Title className="text-center mt-5" level={2}>
+      {/* <Title className="text-center mt-5" level={2}>
         Create New Campaign
-      </Title>
+      </Title> */}
       <div className="mt-5">
         <Form
           form={form}
@@ -188,6 +191,8 @@ console.log('jobs',jobs)
         </Form>
       </div>
     </div>
+    </Content>
+    </Layout>
   );
 };
 

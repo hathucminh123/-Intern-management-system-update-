@@ -27,6 +27,7 @@ import {
 } from "antd";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import "./CustomMenu.css";
+import { MdOutlineCampaign } from "react-icons/md";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
 
@@ -97,12 +98,12 @@ const CustomMenu = ({ userRole }) => {
       },
       {
         key: '/hrmanager/campaigns',
-        icon: <HomeOutlined />,
+        icon: <MdOutlineCampaign />,
         label: 'campaigns',
       },
       {
         key: "/hrmanager/schedule",
-        icon: <HomeOutlined />,
+        icon: <AreaChartOutlined />,
         label: "lịch trình",
       },
       {

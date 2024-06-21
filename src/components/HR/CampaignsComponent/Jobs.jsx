@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Space, Image, Pagination, message ,Typography} from "antd";
+import { Card, Space, Image, Pagination, message ,Typography,Layout} from "antd";
 import moment from "moment";
 import SearchBarCampaigns from "./SearchBarCampaigns";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import * as Jobss from "../../../service/JobsService";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 
 const { Title}=Typography
+const {Header,Content}=Layout
 const Jobs = () => {
     const [jobs, setJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +49,9 @@ const Jobs = () => {
     };
 
     return (
+        <Layout >
+        <Header style={{ color: 'white' }}>List Jobs </Header>
+      <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div className="flex flex-col items-center w-full">
             <Title className="text-center" level={1}>
         List Jobs
@@ -88,10 +92,10 @@ const Jobs = () => {
                             <div className="ml-10">
                                 <div className="flex">
                                     <p className="font-bold">Thời gian:</p>
-                                    <p className="ml-2">{item.duration}</p>
+                                    <p className="ml-2">{item.duration} months</p>
                                 </div>
                                 <div className="flex">
-                                    <p className="font-bold">Hết hạn:</p>
+                                    <p className="font-bold">Ngày bắt đầu:</p>
                                     <p className="ml-2">{moment(item.startDate).format('DD-MM-YYYY')}</p>
                                 </div>
                                 <div className="flex">
@@ -111,6 +115,8 @@ const Jobs = () => {
                 />
             </Space>
         </div>
+        </Content>
+        </Layout>
     );
 };
 

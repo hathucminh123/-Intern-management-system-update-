@@ -2,7 +2,7 @@ import React from "react";
 import { Typography, Button, Image, Tag } from "antd";
 import "tailwindcss/tailwind.css"; // đảm bảo Tailwind CSS được import
 import { useLocation, useParams } from "react-router-dom";
-
+import moment from "moment";
 const { Title, Paragraph, Text } = Typography;
 
 const HRCampaignsDetails = () => {
@@ -30,12 +30,16 @@ console.log('asdasd',jobDetail)
             <div className="flex mt-3">
               <div>Thời gian :</div>
               <Tag className="ml-3" color="#87d068">
-                {jobDetail.duration}
+                {jobDetail.duration} months
               </Tag>
             </div>
             <div className="flex mt-3">
               <div>Yêu cầu số thành biên </div>
               <div className="ml-3 text-red-500">{jobDetail.totalMember} Thành viên</div>
+            </div>
+            <div className="flex mt-3">
+              <div>Ngày hết hạn </div>
+              <div className="ml-3 text-red-500">{moment(jobDetail.startDate).format('DD-MM-YYYY')} </div>
             </div>
           </div>
         </div>

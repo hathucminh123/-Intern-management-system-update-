@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Form, Input, Button, DatePicker, Typography, message } from "antd";
+import { Form, Input, Button, DatePicker, Typography, message, Layout } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
 import { createNewJobs } from '../../../service/JobsService';
 
 const { Title } = Typography;
+const {Header,Content}=Layout
 
 const CreateNewJobs = () => {
   const [form] = Form.useForm();
@@ -47,8 +48,12 @@ const CreateNewJobs = () => {
   };
 
   return (
+    <Layout >
+    <Header style={{ color: 'white' }}>Create New Jobs </Header>
+  <Content style={{ padding: '24px', minHeight: '80vh' }}>
     <div>
-      <Title level={1}>Create New Job</Title>
+{/*    
+      <Title level={1}>Create New Job</Title> */}
       <Form
         form={form}
         layout="vertical"
@@ -153,6 +158,8 @@ const CreateNewJobs = () => {
         </Form.Item>
       </Form>
     </div>
+    </Content>
+    </Layout>
   );
 };
 

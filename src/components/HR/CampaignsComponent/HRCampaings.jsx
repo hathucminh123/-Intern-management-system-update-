@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Image } from "antd";
 import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
-import { Typography, Button } from "antd";
+import { Typography, Button ,Layout} from "antd";
 import { useNavigate } from "react-router-dom";
 import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
@@ -10,6 +10,7 @@ import * as campaign from '../../../service/Campaign'
 import { set } from "lodash";
 
 const { Title } = Typography;
+const { Header, Content, Footer } = Layout;
 const suffix = (
   <AudioOutlined
     style={{
@@ -45,10 +46,13 @@ console.log(campaigns)
   };
 
   return (
+    <Layout >
+    <Header style={{ color: 'white' }}>List campaigns </Header>
+  <Content style={{ padding: '24px', minHeight: '80vh' }}>
     <div className="flex flex-col items-center">
-      <Title className="text-center" level={1}>
+      {/* <Title className="text-center" level={1}>
         List Campaigns
-      </Title>
+      </Title> */}
       <div className="flex m-4">
         <Space direction="vertical" className="flex flex-row items-center ">
           <Input placeholder="Tìm kiếm" />
@@ -107,13 +111,17 @@ console.log(campaigns)
             {/* <div className="flex mt-4">
               <ScheduleOutlined />
               <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-              <div className="ml-3 font-bold">{campaign.startDate}</div>
+              <div className="ml-3 font-bold">{campaign.jobs.map((position,index)=>(
+                <>{position.startDate}</>
+              ))}</div>
             </div> */}
           </div>
           </Space>
         </Card>
       ))}
     </div>
+    </Content>
+    </Layout>
   );
 };
 

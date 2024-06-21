@@ -79,7 +79,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
-        className="max-h-[calc(100vh-48px)] overflow-hidden"
+        className="max-h-[calc(1000vh-48px)] overflow-hidden"
         initialValues={{ name: job?.name || '',list:intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
@@ -148,11 +148,12 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             </Select> */}
           
 
-                <Input value={intern.id} placeholder={ intern.name}/>
+                {/* <Input value={intern.id} placeholder={ intern.name}/> */}
+                <Input placeholder='nhập trường bạn đang học'/>
           </Form.Item>
           <Form.Item
             name="listcampaign"
-            label="vị trí muốn ứng tuyển"
+            label="vị trí  campaign muốn ứng tuyển"
             rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
           >
             <Select placeholder="chọn vị trí ứng tuyển" allowClear>
