@@ -3,6 +3,7 @@ import { Table, message, Typography, Layout, Button, Modal, Form, Input} from 'a
 import { useLocation } from 'react-router-dom';
 import { fetchCandidate } from '../../../service/Candidate';
 import { sendEmail } from '../../../service/EmailService';
+import { Candidate } from '../../../assets/data/data';
 const { Header, Content, Footer } = Layout;
 
 const ViewGuestInfoCv = () => {
@@ -17,26 +18,35 @@ const ViewGuestInfoCv = () => {
   const CampaignID = state?.CampaignID;
   const Jobss = state?.job;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchCandidate(CampaignID, jobID);
-        setData(response.events);
-      } catch (error) {
-        message.error('Error fetching data from API');
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetchCandidate(CampaignID, jobID);
+  //       setData(response.events);
+  //     } catch (error) {
+  //       message.error('Error fetching data from API');
+  //       console.error('Error fetching data:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    if (CampaignID && jobID) {
-      fetchData();
-    } else {
-      message.error('Campaign ID or Job ID not found');
-      setLoading(false);
+  //   if (CampaignID && jobID) {
+  //     fetchData();
+  //   } else {
+  //     message.error('Campaign ID or Job ID not found');
+  //     setLoading(false);
+  //   }
+  // }, [CampaignID, jobID]);
+
+
+  useEffect(()=>{
+    const fetchData =async()=>{
+      setData(Candidate);
+      setLoading(false)
     }
-  }, [CampaignID, jobID]);
+    fetchData()
+  })
 
   const showModal = (email) => {
     setSelectedUser(email);

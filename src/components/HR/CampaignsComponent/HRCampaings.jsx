@@ -8,7 +8,7 @@ import { Input, Space } from "antd";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 import * as campaign from '../../../service/Campaign'
 import { set } from "lodash";
-
+import { Campaign } from "../../../assets/data/data";
 const { Title } = Typography;
 const { Header, Content, Footer } = Layout;
 const suffix = (
@@ -31,13 +31,14 @@ const [pageSize] = useState(2);
 console.log(campaigns)
   useEffect(() => {
     const fetchCampaignsData = async () => {
-      try {
-        const res = await campaign.fetchCampaigns();
-        setCampaigns(res.events);
-        console.log("Campaigns data:", res.events); // Add this line
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
+      setCampaigns(Campaign)
+      // try {
+      //   const res = await campaign.fetchCampaigns();
+      //   setCampaigns(res.events);
+      //   console.log("Campaigns data:", res.events); // Add this line
+      // } catch (error) {
+      //   console.error("Error fetching campaigns:", error);
+      // }
     };
     fetchCampaignsData();
   }, []);

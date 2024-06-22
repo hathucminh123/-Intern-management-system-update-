@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, List, Typography } from 'antd';
 import { fetchCampaigns } from '../../../service/Campaign';
+import { Campaign } from '../../../assets/data/data';
 
 const { Title } = Typography;
 
@@ -10,13 +11,14 @@ const CategoryListComponent = ({ category }) => {
 
   useEffect(() => {
     const fetchCampaignsData = async () => {
-      try {
-        const res = await fetchCampaigns();
-        setCampaigns(res.events);
-        console.log("Campaigns data:", res.events); // Add this line
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
+      // try {
+      //   const res = await fetchCampaigns();
+      //   setCampaigns(res.events);
+      //   console.log("Campaigns data:", res.events); // Add this line
+      // } catch (error) {
+      //   console.error("Error fetching campaigns:", error);
+      // }
+setCampaigns(Campaign)
     };
     fetchCampaignsData();
   }, []);

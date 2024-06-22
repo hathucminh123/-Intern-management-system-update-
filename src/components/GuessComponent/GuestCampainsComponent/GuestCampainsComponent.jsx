@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Card, Typography, Button, Space, Image, Row, Col } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import * as Campaign from "../../../service/Campaign";
+// import * as Campaign from "../../../service/Campaign";
 import CategoryListComponent from "../CategoryListComponent/CategoryListComponent";
+import { Campaign } from "../../../assets/data/data";
 
 const { Title } = Typography;
 
@@ -44,12 +45,13 @@ const GuestCampainsComponent = ({ searchQuery }) => {
 
   useEffect(() => {
     const fetchCampaignsData = async () => {
-      try {
-        const res = await Campaign.fetchCampaigns();
-        setCampaigns(res.events);
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
+      // try {
+      //   const res = await Campaign.fetchCampaigns();
+      //   setCampaigns(res.events);
+      // } catch (error) {
+      //   console.error("Error fetching campaigns:", error);
+      // }
+      setCampaigns(Campaign)
     };
     fetchCampaignsData();
   }, []);

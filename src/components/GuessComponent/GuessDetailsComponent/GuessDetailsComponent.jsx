@@ -7,7 +7,8 @@ import FormCVModal from '../FormCVComponent/FormCVModal';
 import './GuessDetailsComponent.css';
 import image1 from '../../../assets/javaImage.jpg';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
-import * as Campaign from '../../../service/Campaign';
+// import * as Campaign from '../../../service/Campaign';
+import { Campaign } from '../../../assets/data/data';
 
 const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
@@ -141,13 +142,14 @@ const GuessDetailsComponent = ({ id }) => {
   const [selectCampaigns,setSelectCampaigns]=useState(null)
   useEffect(() => {
     const fetchCampaignsData = async () => {
-      try {
-        const res = await Campaign.fetchCampaigns();
-        setCampaigns(res.events); // Assumed API returns { events: [] }
-        console.log("Campaigns data:", res.events); // Add this line
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
+      // try {
+      //   const res = await Campaign.fetchCampaigns();
+      //   setCampaigns(res.events); // Assumed API returns { events: [] }
+      //   console.log("Campaigns data:", res.events); // Add this line
+      // } catch (error) {
+      //   console.error("Error fetching campaigns:", error);
+      // }
+      setCampaigns(Campaign)
     };
     fetchCampaignsData();
   }, []);

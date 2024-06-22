@@ -4,6 +4,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import * as Jobss from "../../../service/JobsService";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import { jobss } from "../../../assets/data/data";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -28,13 +29,14 @@ const Jobs = () => {
   }, []);
 
   const fetchAllJobs = async () => {
-    try {
-      const res = await Jobss.fetchJobs();
-      setJobs(res.events);
-    } catch (error) {
-      message.error("Error fetching jobs: " + error.message);
-      console.error("Error fetching jobs:", error);
-    }
+    setJobs(jobss);
+    // try {
+    //   const res = await Jobss.fetchJobs();
+    //   setJobs(res.events);
+    // } catch (error) {
+    //   message.error("Error fetching jobs: " + error.message);
+    //   console.error("Error fetching jobs:", error);
+    // }
   };
 
   const handleDetails = (item) => {
@@ -49,7 +51,6 @@ const Jobs = () => {
     setCurrentPage(page);
   };
 
-  // Calculate jobs to display based on current page and page size
   const currentJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (

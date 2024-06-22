@@ -3,6 +3,7 @@ import { Card, Row, Col, Typography, message,Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
+import { TrainingPrograms } from "../../../assets/data/data";
 
 const { Title, Text } = Typography;
 const { Header, Content, Footer } = Layout;
@@ -12,13 +13,14 @@ const ViewCampaigns = () => {
 
   useEffect(() => {
     const fetchCampaigns = async () => {
-      try {
-        const res = await Training.fetchTraining();
-        setCampaigns(res.events);
-      } catch (error) {
-        message.error("Error fetching campaigns: " + error.message);
-        console.error("Error fetching campaigns:", error);
-      }
+      // try {
+      //   const res = await Training.fetchTraining();
+      //   setCampaigns(res.events);
+      // } catch (error) {
+      //   message.error("Error fetching campaigns: " + error.message);
+      //   console.error("Error fetching campaigns:", error);
+      // }
+      setCampaigns(TrainingPrograms)
     };
     fetchCampaigns();
   }, []);
