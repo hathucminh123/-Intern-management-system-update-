@@ -21,15 +21,16 @@ import Jobs from "./components/HR/CampaignsComponent/Jobs";
 import CreateCampainsHrComponent from "./components/HR/CampaignsComponent/CreateCampainsHrComponent";
 import CreateNewJobs from "./components/HR/CampaignsComponent/CreateNewJobs";
 import CvListComponent from "./components/HR/CampaignsComponent/CvListComponent";
-import HRPage from "./pages/HRPage/HRPage"
+import HRPage from "./pages/HRPage/HRPage";
 import GuessDetailPage from "./pages/GuessDetailPage/GuessDetailPage";
 import HRCampaignsDetailss from "./components/HR/CampaignsComponent/HRCampaignsDetailss";
 import ViewGuestInfoCv from "./components/HR/CampaignsComponent/ViewGuestInfoCv";
 
-import TaskBoard from "./components/MentorComponent/TaskBoard/Board"
+import TaskBoard from "./components/MentorComponent/TaskBoard/Board";
 import Create from "./components/ICComponent/ICComponent1/create";
 import ViewCampaigns from "./components/ICComponent/ICComponent1/view";
 import TrainingProgramDetail from "./components/ICComponent/ICComponent1/TrainingProgramDetail";
+import InternPage from "./pages/InternPage/InternPage";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -40,8 +41,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
+          
           <Route element={<ProtectedRoute />}>
-            <Route path="/mentor" element={<CustomMenu userRole={'mentor'} />}>
+            {/* Mentor Routes */}
+            <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Dashboard />} />
               <Route path="task" element={<TaskPerformance />} />
@@ -50,45 +53,46 @@ function App() {
               <Route path="taskboard" element={<TaskBoard />} />
             </Route>
             
-            <Route path="/hrmanager" element={<CustomMenu userRole={'hrmanager'} />}>
+            {/* HR Manager Routes */}
+            <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<HRPage />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
-
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
-              
-              <Route
-                path="NewCampaigns"
-                element={<CreateCampainsHrComponent />}
-              />
-              <Route path="cvlist" element={<ViewGuestInfoCv/>} />
+              <Route path="NewCampaigns" element={<CreateCampainsHrComponent />} />
+              <Route path="cvlist" element={<ViewGuestInfoCv />} />
               <Route path="NewJobs" element={<CreateNewJobs />} />
               <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
             </Route>
-           
-           
-           <Route path="/internshipcoordinators" element={<CustomMenu userRole={'internshipcoordinators'} />}>
+
+            {/* Internship Coordinator Routes */}
+            <Route path="/internshipcoordinators" element={<CustomMenu userRole="internshipcoordinators" />}>
               <Route index element={<Navigate to="schedule" replace />} />
-              {/* <Route path="home" element={<ViewGuestInfoCv />} /> */}
               <Route path="schedule" element={<Schedule />} />
-              {/* <Route path="TrainingProgram" element={<TrainingProgram />} /> */}
               <Route path="NewTrainingProgram" element={<Create />} />
-              {/* <Route path="NewTrainingProgram" element={< CreateTrainingProgram />} /> */}
-              
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
-              
-              <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />  
-              {/* <Route path="ViewTrainingProgram" element={<ViewList />} />   */}
-             
+              <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
+            </Route>
+                {/* Internship Routes */}
+                <Route path="/intern" element={<CustomMenu userRole="intern" />}>
+              <Route index element={<Navigate to="home" replace />} />
+              <Route path="home" element={<InternPage />} />
+              <Route path="schedule" element={<Schedule />} />
+              <Route path="taskboard" element={<TaskBoard />} />
+              <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
+              <Route path="Trainingprogram" element={<ViewCampaigns />} />
+              <Route path="chat" element={<Chat />} />
+            </Route>
 
 
-              </Route>
+
+
+            {/* Guest Routes */}
             <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
               <Route path="info" element={<GuestInfo />} />
-              {/* <Route path="about" element={<GuestAbout />} /> */}
               <Route path="Detail/:id" element={<GuessDetailPage />} />
             </Route>
           </Route>

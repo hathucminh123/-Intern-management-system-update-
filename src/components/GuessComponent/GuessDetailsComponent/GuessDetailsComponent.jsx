@@ -197,14 +197,14 @@ const GuessDetailsComponent = ({ id }) => {
       </Container>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Image src={internship.imagePath} alt="image product" preview={false} className="customImage" width={600} />
+          <Image src={internship.imagePath} alt="image product" preview={false} className="customImage" width={550} />
         </Col>
         <Col span={12}>
             <Row gutter={[16, 16]}>
                 {internship.jobs.map((program, index) => (
                     <React.Fragment key={index}>
                         <Col span={12}>
-                            <Image src={program.imagePath} alt="image small" preview={false} className="customImage" />
+                            <Image src={program.imagePath} alt="image small" width={200} height={100} preview={false} className="customImage" />
                         </Col>
                       
                       
@@ -266,9 +266,9 @@ const GuessDetailsComponent = ({ id }) => {
       <JobDescriptionComponent data={internship} />
 
       {internship.jobs.map((list,index)=>(  
-      <Space direction="vertical" size={20} className="Recruitment" key={index}>
-        <Typography.Title level={10} > {list.name}</Typography.Title>
-        <Space direction='horizontal' size={800} >
+      <Space direction="vertical" size={20} className="recruitment" key={index}>
+        <Typography.Title level={10} > Vị trí ứng tuyển: {list.name}</Typography.Title>
+        <Space direction='horizontal' size={400} >
         <Button type="primary" className="rounded-full customButton" onClick={() => showModal(list,internship)} >Ứng tuyển ngay</Button>
         <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectJobs} campaigns={selectCampaigns} />
         <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" width={300} />
@@ -287,7 +287,7 @@ const GuessDetailsComponent = ({ id }) => {
               style={{ width: 900, borderWidth: 3, marginBottom: 20 }}
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
-              <Space direction="horizontal">
+              <Space direction="horizontal" size={200}>
                 <div>
                   <Title className="text-center" level={3}>
                     {internship.name}
@@ -302,15 +302,15 @@ const GuessDetailsComponent = ({ id }) => {
                   <div className="flex mt-4">
                     <ClockCircleOutlined />
                     <div className="ml-3">Kỳ thực tập:</div>
-                    <div className="ml-3 font-bold">{internship.duration}</div>
+                    <div className="ml-3 font-bold">{internship.duration} months</div>
                   </div>
-                  <div className="flex mt-4">
+                  {/* <div className="flex mt-4">
                     <ScheduleOutlined />
                     <div className="ml-3">Ngày bắt đầu dự kiến:</div>
                     <div className="ml-3 font-bold">{internship.startDate}</div>
-                  </div>
+                  </div> */}
                 </div>
-                <Image preview={false} src={internship.imgurl} width={200} />
+                <Image preview={false} src={internship.imagePath} height={200} width="auto" />
               </Space>
             </Card>
           ))}

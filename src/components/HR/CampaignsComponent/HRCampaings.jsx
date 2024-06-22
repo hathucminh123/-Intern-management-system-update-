@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Image } from "antd";
 import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
-import { Typography, Button ,Layout} from "antd";
+import { Typography, Button ,Layout,Pagination} from "antd";
 import { useNavigate } from "react-router-dom";
 import { AudioOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
@@ -22,7 +22,12 @@ const suffix = (
 
 const HRCampaigns = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+const [currentPage, setCurrentPage] = useState(1);
+const [pageSize] = useState(2);
+  const onSearch = (value) => setSearchQuery(value);
   const [campaigns, setCampaigns] = useState([]);
+  const { Search } = Input;
 console.log(campaigns)
   useEffect(() => {
     const fetchCampaignsData = async () => {
@@ -44,7 +49,15 @@ console.log(campaigns)
   const handleAddNewCampaign = () => {
     navigate("/hrmanager/NewCampaigns");
   };
-
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const filteredCampaigns = campaigns.filter((campaign) => {
+    const matchesName = campaign.name.toLowerCase().includes(searchQuery.toLowerCase());
+   
+    return matchesName
+  });
+  const currentCampaign = filteredCampaigns.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   return (
     <Layout >
     <Header style={{ color: 'white' }}>List campaigns </Header>
@@ -55,7 +68,8 @@ console.log(campaigns)
       </Title> */}
       <div className="flex m-4">
         <Space direction="vertical" className="flex flex-row items-center ">
-          <Input placeholder="Tìm kiếm" />
+          <Search placeholder="Tìm kiếm"   onSearch={onSearch}
+          enterButton />
           <ButtonComponent
             size="middle"
             styleButton={{ background: "#063970", border: "none" }}
@@ -72,7 +86,7 @@ console.log(campaigns)
         </Space>
       </div>
 
-      {campaigns.map((campaign) => (
+      {filteredCampaigns.flatMap((campaign) => (
         <Card
           key={campaign.id}
           hoverable={true}
@@ -116,9 +130,17 @@ console.log(campaigns)
               ))}</div>
             </div> */}
           </div>
+     
           </Space>
         </Card>
       ))}
+           <Pagination
+              className="mt-6"
+              current={currentPage}
+              total={currentCampaign.length}
+              pageSize={pageSize}
+              onChange={handlePageChange}
+            />
     </div>
     </Content>
     </Layout>

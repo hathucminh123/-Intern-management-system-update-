@@ -1,19 +1,20 @@
-.Container{
-    background-image: url(https://geekadventure.vn/backgrounds/tl-internship-list-page.jpg);
-    background-size: 2304px  1554px;
-    background-size: no-repeat;
+.Container {
+    background-image: url('https://geekadventure.vn/backgrounds/tl-internship-list-page.jpg');
+    background-size: 2304px 1554px;
+    background-repeat: no-repeat;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-.title{
+  }
+  
+  .title {
     --tw-text-opacity: 1;
     color: rgb(0 164 153 / var(--tw-text-opacity));
-}
-
-.logo{
+  }
+  
+  .logo {
     width: 100%;
     display: flex;
     z-index: 10;
@@ -21,9 +22,33 @@
     align-items: center;
     flex-direction: column;
     position: relative;
-}
-.logoedit{
-    position: relative;
-    width: 48px;
-    height: 48px;
-}
+  }
+  
+  .logoedit {
+    position: absolute;
+  }
+  
+  .max-w-3xl {
+    max-width: 768px;
+  }
+  
+  .mt-8 {
+    margin-top: 2rem;
+  }
+  
+  .mt-4 {
+    margin-top: 1rem;
+  }
+  
+  .mr-4 {
+    margin-right: 1rem;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  

@@ -1,25 +1,22 @@
-.Container{
-   
-    /* background-image: url(https://geekadventure.vn/backgrounds/mb-footer.jpg); */
-    background-image: url(https://geekadventure.vn/backgrounds/internship-detail-page.jpg);
-    
-   
-    padding: 20px;
-    background-color: #f8f9fa;
+.Container {
+  padding: 20px;
 }
 
-  
 .content-wrapper {
-  width: 100%;
-  max-width: 1270px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .breadcrumb {
-  color: #007bff;
   cursor: pointer;
+  color: #1677ff;
+  text-decoration: underline;
 }
 
 .breadcrumb:hover {
-  text-decoration: underline;
+  color: #0056b3;
 }

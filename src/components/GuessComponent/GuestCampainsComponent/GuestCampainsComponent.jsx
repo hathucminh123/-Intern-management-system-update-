@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, Typography, Button, Space, Image } from "antd";
-import { ClockCircleOutlined, ScheduleOutlined } from "@ant-design/icons";
+import { Card, Typography, Button, Space, Image, Row, Col } from "antd";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import * as Campaign from "../../../service/Campaign"
-const { Title } = Typography;
+import * as Campaign from "../../../service/Campaign";
 import CategoryListComponent from "../CategoryListComponent/CategoryListComponent";
 
-
-
+const { Title } = Typography;
 
 const internships = [
   {
@@ -22,7 +20,6 @@ const internships = [
     ],
     duration: "10 weeks",
     startDate: "03/06/2024",
-    // imgurl:'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
   },
   {
     id: 2,
@@ -38,21 +35,18 @@ const internships = [
     startDate: "06/07/2024",
     imgurl: 'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
   },
-
 ];
 
-
-
-const GuestCampainsComponent = () => {
+const GuestCampainsComponent = ({ searchQuery }) => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
-  console.log(campaigns)
+  const [selectedPosition, setSelectedPosition] = useState("");
+
   useEffect(() => {
     const fetchCampaignsData = async () => {
       try {
         const res = await Campaign.fetchCampaigns();
         setCampaigns(res.events);
-        console.log("Campaigns data:", res.events); // Add this line
       } catch (error) {
         console.error("Error fetching campaigns:", error);
       }
@@ -60,109 +54,101 @@ const GuestCampainsComponent = () => {
     fetchCampaignsData();
   }, []);
 
+  const filteredCampaigns = campaigns.filter((campaign) => {
+    const matchesName = campaign.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesPosition = selectedPosition
+      ? campaign.jobs.some((job) => job.name === selectedPosition)
+      : true;
+    return matchesName && matchesPosition;
+  });
+
   return (
-    <Space direction="vertical">
-
-
-      <Title>Những vị trí ứng tuyển: </Title>
-      <div style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}>
-
-        {campaigns.map((campaign) => (
-
-          <div key={campaign.id}>
-            {campaign.jobs.map((position, index) => (
-              <Button
-                key={index}
-                className="rounded-full me-2 mb-6"
-                style={{ whiteSpace: "normal" }}
-              >
-                {position.name}
-              </Button>
-            ))}
-          </div>
-        ))}
+    <Space direction="vertical" style={{ width: '100%', padding: '20px' }}>
+      <Title level={2}>Những vị trí ứng tuyển:</Title>
+      <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "24px" }}>
+        {filteredCampaigns.flatMap((campaign) =>
+          campaign.jobs.map((position, index) => (
+            <Button
+              key={index}
+              className="rounded-full me-2 mb-2"
+              style={{ whiteSpace: "normal" }}
+              onClick={() => setSelectedPosition(position.name)}
+            >
+              {position.name}
+            </Button>
+          ))
+        )}
+        <Button
+          className="rounded-full me-2 mb-2"
+          style={{ whiteSpace: "normal" }}
+          onClick={() => setSelectedPosition("")}
+        >
+          Show All
+        </Button>
       </div>
-      <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex' }}>
-        <CategoryListComponent />
-        <div>
-          {campaigns.map((internship) => (
-
-
+      
+      <Row gutter={[16, 16]}>
+        <Col span={6}>
+          <CategoryListComponent />
+        </Col>
+        <Col span={18}>
+          {filteredCampaigns.map((internship) => (
             <Card
               key={internship.id}
-              hoverable={true}
+              hoverable
               style={{
-                width: 900,
                 borderWidth: 3,
                 marginBottom: 20,
               }}
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
-              <Space direction='horizontal' size={200}>
-                <div>
-                  <Title className="text-center" level={3}>
-                    {internship.name}
-                  </Title>
-                  <div style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}>
-                    {internship.jobs.map((position, index) => (
-                      <Button
-                        key={index}
-                        className="rounded-full me-2 mb-6"
-                        style={{ whiteSpace: "normal" }}
-                      >
-                        {position.name}
-
-                      </Button>
-
-                    ))}
+              <Row gutter={[16, 16]}>
+                <Col span={16}>
+                  <Title level={3}>{internship.name}</Title>
+                  <div className="mt-4">
+                    <div className="font-bold">Vị trí:</div>
+                    <div className="ml-3" style={{ display: "flex", flexWrap: "wrap" }}>
+                      {internship.jobs.map((position, index) => (
+                        <Button
+                          key={index}
+                          className="rounded-full me-2 mb-2"
+                          style={{ whiteSpace: "normal" }}
+                        >
+                          {position.name}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex mt-4">
                     <ClockCircleOutlined />
-                    <div className="ml-3">Kỳ thực tập:</div>
+                    <div className="ml-3">Thời gian thực tập:</div>
                     <div className="ml-3 font-bold">{internship.duration} months</div>
                   </div>
-                  {/* <div className="flex mt-4">
-              <ScheduleOutlined />
-              <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-              <div className="ml-3 font-bold">asdasd</div>
-            </div> */}
-                </div>
-
-
-                {internship?.imagePath ? (
-
-                  <Image
-
-                    preview={false}
-                    src={internship.imagePath}
-                    width={300}
-                  />
-
-                ) : (
-                  // <Image
-                  //   preview={false}
-                  //   src="path_to_default_image" // Thay đổi bằng đường dẫn ảnh mặc định của bạn
-                  //   width={300}
-                  // />
-                  internships.map((intern, index) => (
+                </Col>
+                <Col span={8}>
+                  {internship?.imagePath ? (
                     <Image
-                      key={index}
                       preview={false}
-                      src={intern.imgurl}
-                      width={300}
+                      src={internship.imagePath}
+                      width={200}
+                      height={150}
+                      style={{ objectFit: 'cover' }}
                     />
-                  ))
-                )}
-
-
-
-              </Space>
+                  ) : (
+                    <Image
+                      preview={false}
+                      src="https://via.placeholder.com/200x150"
+                      width={200}
+                      height={150}
+                      style={{ objectFit: 'cover' }}
+                    />
+                  )}
+                </Col>
+              </Row>
             </Card>
-
           ))}
-        </div>
-      </div>
-
+        </Col>
+      </Row>
     </Space>
   );
 };
