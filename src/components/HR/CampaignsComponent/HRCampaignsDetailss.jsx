@@ -114,7 +114,7 @@ const HRCampaignsDetailss = () => {
         </div>
         {showJobs && (
           <div className="mt-8">
-            <Title level={3}>Vị trí ứng tuyển</Title>
+            <Title level={3}>Danh sách Vị trí ứng tuyển vào {CampaignDetail.name} Campaign</Title>
             <div className="flex flex-wrap">
               {CampaignDetail.jobs.map((job, index) => (
                 <Button

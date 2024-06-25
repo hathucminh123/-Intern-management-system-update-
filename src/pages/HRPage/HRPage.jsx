@@ -2,21 +2,25 @@ import React, { useMemo } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import CustomizedContent from './components/CustomizedContent';
 
-import * as Campaign from '../../service/Campaign';
-import * as JobsService from '../../service/JobsService';
+// import * as Campaign from '../../service/Campaign';
+// import * as JobsService from '../../service/JobsService';
 import { Typography } from 'antd';
+import { Campaign } from '../../assets/data/data';
+import { jobss } from '../../assets/data/data';
 
 const HRPage = () => {
   const getAllCampaigns = async () => {
-    const res = await Campaign.fetchCampaigns();
+    // const res = await Campaign.fetchCampaigns();
     console.log('Campaigns data:', res);
-    return { data: res?.events || [], key: 'campaign' };
+    return { data: Campaign|| [], key: 'campaign' };
+    // return { data: res?.events || [], key: 'campaign' };
   };
 
   const getAllJobs = async () => {
-    const res = await JobsService.fetchJobs();
+    // const res = await JobsService.fetchJobs();
     console.log('Jobs data:', res);
-    return { data: res?.events || [], key: 'jobs' };
+    return { data: jobss|| [], key: 'jobs' };
+    //return { data: res?.events || [], key: 'jobs' };
   };
 
   const queries = useQueries({
