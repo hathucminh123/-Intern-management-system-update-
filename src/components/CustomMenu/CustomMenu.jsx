@@ -55,6 +55,8 @@ const CustomMenu = ({ userRole }) => {
   }, []);
 
   useEffect(() => {
+    if(localStorage.getItem('role').toLocaleLowerCase()!== userRole.toLowerCase()) 
+      navigate(`/${localStorage.getItem('role').toLocaleLowerCase()}`, { replace: true });
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
@@ -100,7 +102,7 @@ const CustomMenu = ({ userRole }) => {
     if (type === "logout") {
       localStorage.clear();
       navigate("/sign-in");
-      window.location.reload();
+      // window.location.reload();
     }
   };
 

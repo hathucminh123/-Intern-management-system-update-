@@ -45,7 +45,7 @@ function App() {
           
           <Route element={<ProtectedRoute />}>
             {/* Mentor Routes */}
-            <Route path="/mentor" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Dashboard />} />
               <Route path="task" element={<TaskPerformance />} />
@@ -55,7 +55,7 @@ function App() {
             </Route>
             
             {/* HR Manager Routes */}
-            <Route path="/hrmanager" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<HRPage />} />
               <Route path="schedule" element={<Schedule />} />
@@ -69,7 +69,7 @@ function App() {
             </Route>
 
             {/* Internship Coordinator Routes */}
-            <Route path="/internshipcoordinators" element={<CustomMenu userRole={userRole} />}>
+            <Route path="/internshipcoordinators" element={<CustomMenu userRole="internshipcoordinators" />}>
               <Route index element={<Navigate to="schedule" replace />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="NewTrainingProgram" element={<Create />} />
@@ -77,7 +77,7 @@ function App() {
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
             </Route>
                 {/* Internship Routes */}
-                <Route path="/intern" element={<CustomMenu userRole={userRole} />}>
+                <Route path="/intern" element={<CustomMenu userRole="intern" />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<InternPage />} />
               <Route path="schedule" element={<Schedule />} />
