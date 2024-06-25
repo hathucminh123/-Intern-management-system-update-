@@ -63,30 +63,32 @@ const GuestCampainsComponent = ({ searchQuery }) => {
   });
 
   return (
-    <Space direction="vertical" style={{ width: '100%', padding: '20px' }}>
-      <Title level={2}>Những vị trí ứng tuyển:</Title>
-      <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "24px" }}>
-        {filteredCampaigns.flatMap((campaign) =>
-          campaign.jobs.map((position, index) => (
-            <Button
-              key={index}
-              className="rounded-full me-2 mb-2"
-              style={{ whiteSpace: "normal" }}
-              onClick={() => setSelectedPosition(position.name)}
-            >
-              {position.name}
-            </Button>
-          ))
-        )}
-        <Button
-          className="rounded-full me-2 mb-2"
-          style={{ whiteSpace: "normal" }}
-          onClick={() => setSelectedPosition("")}
-        >
-          Show All
-        </Button>
+    <Space direction="vertical" style={{ width: '100%', padding: '20px', marginLeft: '50px' }}>
+      <div style={{ width: '100%', padding: '20px', marginLeft: '35%' }}>
+        <Title level={2}>Những vị trí ứng tuyển:</Title>
+        <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "24px" }}>
+          {filteredCampaigns.flatMap((campaign) =>
+            campaign.jobs.map((position, index) => (
+              <Button
+                key={index}
+                className="rounded-full me-2 mb-2"
+                style={{ whiteSpace: "normal" }}
+                onClick={() => setSelectedPosition(position.name)}
+              >
+                Lập trình viên {position.name}
+              </Button>
+            ))
+          )}
+          <Button
+            className="rounded-full me-2 mb-2"
+            style={{ whiteSpace: "normal" }}
+            onClick={() => setSelectedPosition("")}
+          >
+            Show All
+          </Button>
+        </div>
       </div>
-      
+
       <Row gutter={[16, 16]}>
         <Col span={6}>
           <CategoryListComponent />
@@ -114,7 +116,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                           className="rounded-full me-2 mb-2"
                           style={{ whiteSpace: "normal" }}
                         >
-                          {position.name}
+                          Lập trình viên {position.name}
                         </Button>
                       ))}
                     </div>

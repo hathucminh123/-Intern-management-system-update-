@@ -33,7 +33,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         phone: values.phone,
         list: values.list,
         listjob: values.listjob,
-        listcampaign:values.listcampaign,
+        listcampaign: values.listcampaign,
         note: values.note,
         cvUrl: fileUrl,
       });
@@ -47,7 +47,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         education: values.list, // Assuming list contains the education/training program
         cvPath: fileUrl,
         jobId: values.listjob, // Assuming listjob contains the ID of the training program/job
-        campaignId:values.listcampaign
+        campaignId: values.listcampaign
       };
 
       await createNewCandidate(candidateData);
@@ -80,7 +80,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         layout="vertical"
         onFinish={handleSubmit}
         className="max-h-[calc(1000vh-48px)] overflow-hidden"
-        initialValues={{ name: job?.name || '',list:intern?.name }}
+        initialValues={{ name: job?.name || '', list: intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
           <Title level={3}>{title}</Title>
@@ -146,10 +146,10 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
                 </Select.Option>
               ))}
             </Select> */}
-          
 
-                {/* <Input value={intern.id} placeholder={ intern.name}/> */}
-                <Input placeholder='nhập trường bạn đang học'/>
+
+            {/* <Input value={intern.id} placeholder={ intern.name}/> */}
+            <Input placeholder='nhập trường bạn đang học' />
           </Form.Item>
           <Form.Item
             name="listcampaign"
@@ -172,7 +172,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             <Select placeholder="chọn vị trí ứng tuyển" allowClear>
               {job && (
                 <Select.Option value={job.id}>
-                  {job.name}
+                  Lập trình viên {job.name}
                 </Select.Option>
               )}
             </Select>
