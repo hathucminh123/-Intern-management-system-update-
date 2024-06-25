@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 import InputFormComponent from '../../components/InputFormComponent/InputFormComponent';
 import './SigninPage.css';
 import { login } from '../../service/authService';
-import { jwtDecode } from "jwt-decode";
-import * as User from '../../service/userService'
+import {jwtDecode} from "jwt-decode";
 
 const SigninPage = () => {
   const navigate = useNavigate();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   const handleNavigateSignUp = () => {
     navigate('/sign-up');
@@ -27,40 +25,27 @@ const SigninPage = () => {
     setEmail(value);
   };
 
-
-  // const handleSignIn = async () => {
-  //   const result = await User.loginUser({ userName: email, password: password })
-  //   console.log(result);
-  //   if (result.isSuccess){
-  //     const userInfo = jwtDecode(result.result);
-      
-  //     const userRole = userInfo.Role.toLowerCase();
-  //     console.log('userRole',userRole)
-  //     console.log('userInfo',userInfo);
-  //     localStorage.setItem("Auth", 'true');
-  //     localStorage.setItem("role", userRole);
-  //     localStorage.setItem("token",result.result);
-  //     navigate(`/${userRole}`);
-  //   }
-  // }
   const handleSignIn = async () => {
-    const result = await login({ userName: email, password: password })
+    const result = await login({ userName: email, password: password });
     console.log(result);
-    if (result.isSuccess){
+    if (result.isSuccess) {
       const userInfo = jwtDecode(result.result);
-      
       const userRole = userInfo.Role.toLowerCase();
-      console.log('userRole',userRole)
-      console.log('userInfo',userInfo);
+      console.log('userRole', userRole);
+      console.log('userInfo', userInfo);
       localStorage.setItem("Auth", 'true');
       localStorage.setItem("role", userRole);
-      localStorage.setItem("token",result.result);
-      navigate(`/${userRole}`);
+      localStorage.setItem("token", result.result);
+      
+
+      navigate(`/${userRole}`, { replace: true });
+      
+    
+   
+        window.location.reload();
+  
     }
-  }
-
-
-
+  };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #ffffff 0%, #ffffff 50%, #ADD8E6 50%, #ADD8E6 100%)', height: '100vh' }}>
@@ -110,8 +95,7 @@ const SigninPage = () => {
         </div>
       </div>
     </div>
-  )
-
-}
+  );
+};
 
 export default SigninPage;

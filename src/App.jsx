@@ -35,6 +35,7 @@ import InternPage from "./pages/InternPage/InternPage";
 function App() {
   const userRole = localStorage.getItem("role");
 
+    console.log('asd',userRole) 
   return (
     <div className="App">
       <Router>
@@ -44,7 +45,7 @@ function App() {
           
           <Route element={<ProtectedRoute />}>
             {/* Mentor Routes */}
-            <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
+            <Route path="/mentor" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<Dashboard />} />
               <Route path="task" element={<TaskPerformance />} />
@@ -54,7 +55,7 @@ function App() {
             </Route>
             
             {/* HR Manager Routes */}
-            <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
+            <Route path="/hrmanager" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<HRPage />} />
               <Route path="schedule" element={<Schedule />} />
@@ -68,7 +69,7 @@ function App() {
             </Route>
 
             {/* Internship Coordinator Routes */}
-            <Route path="/internshipcoordinators" element={<CustomMenu userRole="internshipcoordinators" />}>
+            <Route path="/internshipcoordinators" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="schedule" replace />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="NewTrainingProgram" element={<Create />} />
@@ -76,7 +77,7 @@ function App() {
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
             </Route>
                 {/* Internship Routes */}
-                <Route path="/intern" element={<CustomMenu userRole="intern" />}>
+                <Route path="/intern" element={<CustomMenu userRole={userRole} />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<InternPage />} />
               <Route path="schedule" element={<Schedule />} />
