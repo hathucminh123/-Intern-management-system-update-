@@ -55,7 +55,7 @@ const CustomMenu = ({ userRole }) => {
   }, []);
 
   useEffect(() => {
-    if(localStorage.getItem('role').toLocaleLowerCase()!== userRole.toLowerCase()) 
+    if(localStorage.getItem('role').toLocaleLowerCase() !== userRole.toLowerCase()) 
       navigate(`/${localStorage.getItem('role').toLocaleLowerCase()}`, { replace: true });
     setSelectedKey(location.pathname);
   }, [location.pathname]);
@@ -63,16 +63,17 @@ const CustomMenu = ({ userRole }) => {
   const items = {
     mentor: [
       { key: `/mentor/home`, icon: <HomeOutlined />, label: "Trang chủ" },
-      { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Quản lý Task" },
+      // { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Quản lý Task" },
+    
+      { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "schedule" },
+      { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
-      { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "Lịch trình" },
-      { key: "/mentor/taskboard", icon: <AreaChartOutlined />, label: "Task Board" },
     ],
     hrmanager: [
       { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Trang chủ" },
-      { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
-      { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Lịch trình" },
       { key: "/hrmanager/jobs", icon: <HomeOutlined />, label: "Jobs" },
+      { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
+      { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
     ],
     internshipcoordinators: [
       { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "Lịch trình" },
@@ -88,9 +89,9 @@ const CustomMenu = ({ userRole }) => {
     ],
     intern: [
       { key: "/intern/home", icon: <HomeOutlined />, label: "Trang chủ" },
-      { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Lịch trình" },
+      { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
       { key: "/intern/Trainingprogram", icon: <AreaChartOutlined />, label: "Training program" },
-      { key: "/intern/taskboard", icon: <AreaChartOutlined />, label: "Task" },
+      { key: "/intern/taskboard", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },
     ],
   };

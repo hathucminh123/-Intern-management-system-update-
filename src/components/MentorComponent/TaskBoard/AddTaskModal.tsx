@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getRandomColors } from "./getRandomColors";
 import { v4 as uuidv4 } from "uuid";
+import { AddAssessment } from "../../../service/Assessment";
+import { message } from "antd";
 
 interface Tag {
     title: string;
     bg: string;
     text: string;
 }
+
 interface AddModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -17,13 +20,14 @@ interface AddModalProps {
 const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps) => {
     const initialTaskData = {
         id: uuidv4(),
-        title: "",
+        name: "",
         description: "",
-        priority: "",
-        deadline: "",
-        image: "",
-        alt: "",
-        tags: [] as Tag[],
+        startDate: "",
+        estimateTime: 0, // Khởi tạo với một giá trị số nguyên
+        endDate: "",
+        actualTime: 0,
+        userId: 1,
+        status: [] as Tag[],
     };
 
     const [taskData, setTaskData] = useState(initialTaskData);
@@ -36,23 +40,11 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
         setTaskData({ ...taskData, [name]: value });
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                if (e.target) {
-                    setTaskData({ ...taskData, image: e.target.result as string });
-                }
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-    };
-
     const handleAddTag = () => {
         if (tagTitle.trim() !== "") {
             const { bg, text } = getRandomColors();
             const newTag: Tag = { title: tagTitle.trim(), bg, text };
-            setTaskData({ ...taskData, tags: [...taskData.tags, newTag] });
+            setTaskData({ ...taskData, status: [...taskData.status, newTag] });
             setTagTitle("");
         }
     };
@@ -63,9 +55,25 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
         setTaskData(initialTaskData);
     };
 
-    const handleSubmit = () => {
-        handleAddTask(taskData);
+    const handleSubmit = async () => {
+        const formattedTaskData = {
+            ...taskData,
+            status: taskData.status.map(tag => tag.title).join(", "), // Chuyển đổi mảng tag thành chuỗi
+            startDate: new Date(taskData.startDate).toISOString(),
+            endDate: new Date(taskData.endDate).toISOString(),
+        };
+
+        try {
+            const response = await AddAssessment(formattedTaskData);
+            message.success("Task created successfully");
+            console.log(response);
+        } catch (error: any) {
+            message.error(`Error: ${error.message}`);
+            console.error("Error creating task:", error);
+        }
+
         closeModal();
+        window.location.reload();
     };
 
     return (
@@ -80,10 +88,10 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
             <div className="md:w-[30vw] w-[90%] bg-white rounded-lg shadow-md z-50 flex flex-col items-center gap-3 px-5 py-6">
                 <input
                     type="text"
-                    name="title"
-                    value={taskData.title}
+                    name="name"
+                    value={taskData.name}
                     onChange={handleChange}
-                    placeholder="Title"
+                    placeholder="Name"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
                 />
                 <input
@@ -94,26 +102,49 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     placeholder="Description"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
                 />
-                <select
-                    name="priority"
+                <input
+                    type="datetime-local"
+                    name="startDate"
+                    value={taskData.startDate}
                     onChange={handleChange}
-                    value={taskData.priority}
-                    className="w-full h-12 px-2 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
-                >
-                    <option value="">Priority</option>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
+                    placeholder="Start Date"
+                    className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
+                />
                 <input
                     type="number"
-                    name="deadline"
-                    value={taskData.deadline}
+                    name="estimateTime"
+                    value={taskData.estimateTime}
                     onChange={handleChange}
-                    placeholder="Deadline (mins)"
+                    placeholder="Estimate Time (hours)"
+                    className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
+                />
+                <input
+                    type="number"
+                    name="actualTime"
+                    value={taskData.actualTime}
+                    onChange={handleChange}
+                    placeholder="Actual Time (hours)"
+                    className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
+                />
+                <select
+                    name="userId"
+                    onChange={handleChange}
+                    value={taskData.userId}
+                    className="w-full h-12 px-2 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
+                >
+                    <option value={1}>HRAcount</option>
+                    {/* Thêm các tùy chọn khác nếu cần */}
+                </select>
+                <input
+                    type="datetime-local"
+                    name="endDate"
+                    value={taskData.endDate}
+                    onChange={handleChange}
+                    placeholder="End Date"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
                 />
                 <input
+                    name="status"
                     type="text"
                     value={tagTitle}
                     onChange={(e) => setTagTitle(e.target.value)}
@@ -127,8 +158,8 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     Add Tag
                 </button>
                 <div className="w-full">
-                    {taskData.tags && <span>Tags:</span>}
-                    {taskData.tags.map((tag, index) => (
+                    {taskData.status && <span>Tags:</span>}
+                    {taskData.status.map((tag, index) => (
                         <div
                             key={index}
                             className="inline-block mx-1 px-[10px] py-[2px] text-[13px] font-medium rounded-md"
@@ -137,22 +168,6 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                             {tag.title}
                         </div>
                     ))}
-                </div>
-                <div className="w-full flex items-center gap-4 justify-between">
-                    <input
-                        type="text"
-                        name="alt"
-                        value={taskData.alt}
-                        onChange={handleChange}
-                        placeholder="Image Alt"
-                        className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
-                    />
-                    <input
-                        type="file"
-                        name="image"
-                        onChange={handleImageChange}
-                        className="w-full"
-                    />
                 </div>
                 <button
                     className="w-full mt-3 rounded-md h-9 bg-orange-400 text-blue-50 font-medium"

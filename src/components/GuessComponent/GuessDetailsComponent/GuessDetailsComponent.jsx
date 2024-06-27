@@ -264,7 +264,21 @@ const GuessDetailsComponent = ({ id }) => {
         </div>
       </div>
       <JobDescriptionComponent data={internship} />
-
+   
+      <Typography.Title className="job-description-title mb-[64px] text-center font-bold text-neutral-10"> 
+      Những vị trí ứng tuyển <strong style={{ color: 'rgb(0, 164, 153)' }}>lập trình viên </strong>  </Typography.Title>
+     <Card className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
+     <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
+     <Panel
+                header={
+                  <label className="flex cursor-pointer items-center p-10">
+                    <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" alt="Icon" width={64} height={64} className="mr-4" />
+                    <Title level={3} className="flex-1 text-neutral-10">Những vị trí ứng tuyển</Title>
+                  </label>
+                }
+             
+                className="collapse-title"
+              >
       {internship.jobs.map((list, index) => (
         <Space direction="vertical" size={20} className="recruitment" key={index}>
           <Typography.Title level={10} > Vị trí ứng tuyển: {list.name}</Typography.Title>
@@ -274,7 +288,9 @@ const GuessDetailsComponent = ({ id }) => {
             <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" width={300} />
           </Space>
         </Space>))}
-
+        </Panel>
+        </Collapse>
+        </Card>
       <div className="flex w-full justify-center mt-20">
         <div className="w-[1200px]">
           <Title level={2} className="title-hero-banner text-center font-bold">

@@ -31,6 +31,11 @@ export const apiLinks = {
     
     get:`${baseURL}/Resource`,
       post:`${baseURL}/Resource`,
+   },
+   
+   Assessment:{
+    get:`${baseURL}/Assessment`,
+    post:`${baseURL}/Assessment`,
    }
 };
 

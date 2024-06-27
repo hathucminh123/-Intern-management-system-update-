@@ -87,6 +87,7 @@ const TrainingProgramDetail = () => {
     },
     
   ];
+  const userRole =localStorage.getItem('role').toLowerCase();
 
   const handleBeforeUpload = (file) => {
     setCvFile(file);
@@ -162,7 +163,9 @@ const TrainingProgramDetail = () => {
             </Paragraph>
           </TabPane>
           <TabPane tab="Resources" key="2">
-            <Form layout="vertical" onFinish={handleAddResource}>
+        {userRole === "internshipcoordinators" 
+        &&
+        ( <Form layout="vertical" onFinish={handleAddResource}>
               <Form.Item
                 name="name"
                 label="Name"
@@ -207,6 +210,7 @@ const TrainingProgramDetail = () => {
                 </Button>
               </Form.Item>
             </Form>
+        )}
             <Table columns={columns} dataSource={resources} rowKey="name" />
           </TabPane>
         </Tabs>

@@ -38,7 +38,7 @@ console.log('asdasd',jobDetail)
               <div className="ml-3 text-red-500">{jobDetail.totalMember} Thành viên</div>
             </div>
             <div className="flex mt-3">
-              <div>Ngày hết hạn </div>
+              <div>Ngày Bắt đầu: </div>
               <div className="ml-3 text-red-500">{moment(jobDetail.startDate).format('DD-MM-YYYY')} </div>
             </div>
           </div>
