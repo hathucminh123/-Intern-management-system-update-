@@ -10,6 +10,7 @@ import TaskDetailModal from "./TaskDetailModal";
 import { Layout, message } from "antd";
 import { GetAssessment } from "../../../service/Assessment";
 import { v4 as uuidv4 } from "uuid";
+import { Taskk } from "../../../assets/data/data";
 
 const { Header, Content } = Layout;
 
@@ -62,8 +63,9 @@ const Boards: React.FC = () => {
 
     const fetchTasks = useCallback(async () => {
         try {
-            const res = await GetAssessment();
-            const events = res?.events || [];
+            // const res = await GetAssessment();
+            // const events = res?.events || [];
+            const events= Taskk ||[]
 
             const newTasks: Columns = events.reduce((acc: Columns, event: any) => {
                 const column = acc[event.status] || { name: event.status, items: [] };
