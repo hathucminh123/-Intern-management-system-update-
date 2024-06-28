@@ -1,6 +1,7 @@
 import React from 'react';
 import { UserOutlined, AppstoreOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { MdEngineering } from "react-icons/md";
 
 
 
@@ -9,7 +10,7 @@ const CustomizedContent = ({ data = {}, colors = {} }) => {
   const getIcon = (key) => {
     switch (key) {
       case 'jobs':
-        return <UserOutlined />;
+        return <MdEngineering />;
       case 'campaign':
         return <AppstoreOutlined />;
       default:
@@ -55,7 +56,7 @@ const CustomizedContent = ({ data = {}, colors = {} }) => {
             {getIcon(item)}
           </span>
           <span  style={{ color: '#fff', fontSize: 30, fontWeight: 'bold', textTransform: 'uppercase' }}>{item}</span>
-          <span style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', textTransform: 'uppercase' }}>{data[item]}</span>
+          <span style={{ color: '#fff', fontSize: 30, fontWeight: 'bold', textTransform: 'uppercase' }}>{data[item]}</span>
         </div>
       ))}
   

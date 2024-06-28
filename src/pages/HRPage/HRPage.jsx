@@ -52,14 +52,19 @@ const HRPage = () => {
   return (
     <div style={{display:'flex',flexDirection:'column',textAlign:'center',justifyItems:'center',justifyContent:'center'}}>
       <Typography.Title level={20}>Chào mừng quay trở lại HR MANAGEMENT System</Typography.Title>
-    <div style={{ display: 'flex', overflowX: 'hidden' }}>
+    <div style={{ display: 'flex', overflowX: 'hidden', }}>
     
       <div style={{ flex: 1, padding: '15px 0 15px 15px' }}>
        
         <CustomizedContent data={memoCount} colors={COLORS} />
-    
+  
       </div>
+
+
+           
     </div>
+
+   
     </div>
   );
 };

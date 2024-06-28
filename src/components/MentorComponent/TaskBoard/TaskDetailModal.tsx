@@ -17,16 +17,16 @@ const formatDateForInput = (dateString: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);
     const offset = date.getTimezoneOffset();
-    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    const adjustedDate = new Date(date.getTime() - offset * 60 * 1000);
     return adjustedDate.toISOString().slice(0, 16);
 };
-
+const useRole =localStorage.getItem('role')?.toLocaleLowerCase();
 const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
     isOpen,
     onClose,
     setOpen,
     handleUpdateTask,
-    task
+    task,
 }) => {
     const initialTaskData: TaskT = {
         id: uuidv4(),
@@ -49,8 +49,8 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
             lastName: "",
             email: "",
             phoneNumber: null,
-            role: 0
-        }
+            role: 0,
+        },
     };
 
     const [taskData, setTaskData] = useState<TaskT>(initialTaskData);
@@ -74,7 +74,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
         const { name, value } = e.target;
         setTaskData({
             ...taskData,
-            [name]: name === 'deadline' || name === 'estimateTime' || name === 'actualTime' ? Number(value) : value
+            [name]: name === "deadline" || name === "estimateTime" || name === "actualTime" ? Number(value) : value,
         });
     };
 
@@ -82,7 +82,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                if (e.target) {
+                if ( e.target) {
                     setTaskData({ ...taskData, image: e.target.result as string });
                 }
             };
@@ -105,10 +105,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
 
     return (
         <div className={`w-screen h-screen fixed top-0 left-0 ${isOpen ? "grid" : "hidden"} place-items-center`}>
-            <div
-                className="w-full h-full bg-black opacity-70 absolute left-0 top-0 z-20"
-                onClick={closeModal}
-            ></div>
+            <div className="w-full h-full bg-black opacity-70 absolute left-0 top-0 z-20" onClick={closeModal}></div>
             <div className="md:w-[30vw] w-[90%] bg-white rounded-lg shadow-md z-50 flex flex-col items-center gap-3 px-5 py-6">
                 <Text className="mr-100">Tên task</Text>
                 <input
@@ -131,20 +128,11 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                 <Text className="mr-100">Tên người làm</Text>
                 <input
                     type="text"
-                    name="owner"
+                    name="owner.userName"
                     onChange={handleChange}
                     value={taskData.owner.userName}
                     placeholder="Tên người làm"
                     className="w-full h-12 px-2 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
-                />
-                <Text className="mr-100">Deadline (mins)</Text>
-                <input
-                    type="number"
-                    name="deadline"
-                    value={taskData.deadline}
-                    onChange={handleChange}
-                    placeholder="Deadline (mins)"
-                    className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
                 />
                 <Text>Ngày bắt đầu</Text>
                 <input
@@ -165,20 +153,25 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
                 />
                 <Text className="mr-100">Priority</Text>
-                <input
-                    type="text"
+                <select
                     name="priority"
                     value={taskData.priority}
                     onChange={handleChange}
-                    placeholder="Priority"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
-                />
+                >
+                    <option value="TODO">TODO</option>
+                    <option value="In-Progress">In-Progress</option>
+                    <option value="DONE">DONE</option>
+                </select>
+
+           
                 <button
                     className="w-full mt-3 rounded-md h-9 bg-orange-400 text-blue-50 font-medium"
                     onClick={handleSubmit}
                 >
                     {task ? "Update Task" : "Submit Task"}
                 </button>
+               
             </div>
         </div>
     );

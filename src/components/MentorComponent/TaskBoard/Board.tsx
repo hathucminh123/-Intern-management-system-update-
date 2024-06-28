@@ -122,7 +122,7 @@ const Boards: React.FC = () => {
                                             className="flex flex-col md:w-[250px] w-[250px] gap-3 items-center py-5"
                                         >
                                             <div className="flex items-center justify-center py-[10px] w-full bg-white rounded-lg shadow-sm text-[#555] font-medium text-[15px]">
-                                                {column.name}
+                                             Trạng thái:  {column.name}
                                             </div>
                                             {column.items.map((task: any, index: any) => (
                                                 <Draggable key={task.id.toString()} draggableId={task.id.toString()} index={index}>

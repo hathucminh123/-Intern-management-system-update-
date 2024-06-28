@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getRandomColors } from "./getRandomColors";
 import { v4 as uuidv4 } from "uuid";
 import { AddAssessment } from "../../../service/Assessment";
-import { message } from "antd";
+import { message,Typography } from "antd";
+
+const {Text,Title} =Typography
 
 interface Tag {
     title: string;
@@ -48,6 +50,10 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
             setTagTitle("");
         }
     };
+    const handleRemoveTag = (index: number) => {
+        const newStatus = taskData.status.filter((_, i) => i !== index);
+        setTaskData({ ...taskData, status: newStatus });
+      };
 
     const closeModal = () => {
         setOpen(false);
@@ -78,14 +84,15 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
 
     return (
         <div
-            className={`w-screen h-screen place-items-center fixed top-0 left-0 ${isOpen ? "grid" : "hidden"
+            className={`w-screen h-screen  place-items-center fixed top-0 left-0 ${isOpen ? "grid" : "hidden"
                 }`}
         >
             <div
                 className="w-full h-full bg-black opacity-70 absolute left-0 top-0 z-20"
                 onClick={closeModal}
             ></div>
-            <div className="md:w-[30vw] w-[90%] bg-white rounded-lg shadow-md z-50 flex flex-col items-center gap-3 px-5 py-6">
+            <div className="md:w-[30vw] w-[90%] bg-white rounded-lg shadow-md z-50  items-center gap-3 px-5 py-6">
+            <Text className="mr-100">Tên task</Text>
                 <input
                     type="text"
                     name="name"
@@ -94,6 +101,7 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     placeholder="Name"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
                 />
+                  <Text className="mr-100">Nội dung</Text>
                 <input
                     type="text"
                     name="description"
@@ -102,6 +110,7 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     placeholder="Description"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
                 />
+                   <Text className="mr-100">Ngày bắt đầu</Text>
                 <input
                     type="datetime-local"
                     name="startDate"
@@ -110,6 +119,7 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     placeholder="Start Date"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
                 />
+                    {/* <Text className="mr-100">Thời gian dự kiến</Text>
                 <input
                     type="number"
                     name="estimateTime"
@@ -118,6 +128,7 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     placeholder="Estimate Time (hours)"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
                 />
+                    <Text className="mr-100">Thời gian Thực tế</Text>
                 <input
                     type="number"
                     name="actualTime"
@@ -125,7 +136,8 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     onChange={handleChange}
                     placeholder="Actual Time (hours)"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm font-medium"
-                />
+                /> */}
+                   <Text className="mr-100">Giao task cho</Text>
                 <select
                     name="userId"
                     onChange={handleChange}
@@ -135,6 +147,7 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     <option value={1}>HRAcount</option>
                     {/* Thêm các tùy chọn khác nếu cần */}
                 </select>
+                <Text className="mr-100">Deadline</Text>
                 <input
                     type="datetime-local"
                     name="endDate"
@@ -143,14 +156,19 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     placeholder="End Date"
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
                 />
-                <input
+                  <Text className="mr-100">Trạng thái</Text>
+                <select
                     name="status"
-                    type="text"
+                   
                     value={tagTitle}
                     onChange={(e) => setTagTitle(e.target.value)}
-                    placeholder="Tag Title"
+                    
                     className="w-full h-12 px-3 outline-none rounded-md bg-slate-100 border border-slate-300 text-sm"
-                />
+                > 
+                <option value="TODO">TODO</option>
+                <option value="In-Progress">In-Progress</option>
+                <option value="DONE">DONE</option>
+                </select>
                 <button
                     className="w-full rounded-md h-9 bg-slate-500 text-amber-50 font-medium"
                     onClick={handleAddTag}
@@ -161,12 +179,13 @@ const AddTaskModal = ({ isOpen, onClose, setOpen, handleAddTask }: AddModalProps
                     {taskData.status && <span>Tags:</span>}
                     {taskData.status.map((tag, index) => (
                         <div
-                            key={index}
-                            className="inline-block mx-1 px-[10px] py-[2px] text-[13px] font-medium rounded-md"
-                            style={{ backgroundColor: tag.bg, color: tag.text }}
-                        >
-                            {tag.title}
-                        </div>
+                        key={index}
+                        className="inline-block mx-1 px-[10px] py-[2px] text-[13px] font-medium rounded-md cursor-pointer"
+                        style={{ backgroundColor: tag.bg, color: tag.text }}
+                        onClick={() => handleRemoveTag(index)}
+                      >
+                        {tag.title}
+                      </div>
                     ))}
                 </div>
                 <button

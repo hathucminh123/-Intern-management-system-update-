@@ -91,7 +91,7 @@ console.log(campaigns)
           key={campaign.id}
           hoverable={true}
           style={{
-            width: 700,
+            width: 800,
             borderWidth: 3,
             marginBottom: 20,
           }}
@@ -107,13 +107,14 @@ console.log(campaigns)
             <div
               style={{ display: "flex", flexWrap: "wrap", marginTop: "24px" }}
             >
+          
               {campaign.jobs.map((position, index) => (
                 <Button
                   key={index}
                   className="rounded-full me-2 mb-6"
                   style={{ whiteSpace: "normal" }}
                 >
-                  {position.name}
+                 lập trình viên  {position.name}
                 </Button>
               ))}
             </div>

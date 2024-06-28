@@ -82,7 +82,7 @@ const Jobs = () => {
                 hoverable
                 bordered
                 className="items-center"
-                title={<div className="text-3xl">{item.name}</div>}
+                title={<div className="text-3xl">Lập trình viên {item.name}</div>}
                 extra={<a href="#">{item.extra}</a>}
                 style={{ width: 900, borderWidth: 3 }}
                 onClick={() => handleDetails(item)}

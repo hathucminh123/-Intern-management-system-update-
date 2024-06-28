@@ -15,6 +15,8 @@ const ViewCampaigns = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
   const [hovered, setHovered] = useState(null);
+  const [pageSize]=useState(3)
+  const [currentPage,setCurrentPage]=useState(1)
 
 
   const columns =[
@@ -47,6 +49,10 @@ const ViewCampaigns = () => {
   const filteredCampaigns = campaigns.filter((train) => {
     return train.name.toLowerCase().includes(searchQuery.toLowerCase());
   });
+
+  const onchange =(page)=>{
+    setCurrentPage(page)
+  }
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -118,7 +124,7 @@ const ViewCampaigns = () => {
                       header={
                         <div className="flex cursor-pointer flex-col">
                           <Title style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                            {campaign.name}
+                            Chương trình thực tập: {campaign.name}
                           </Title>
                           <p style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: "20px" }}>
                             <Text strong style={{ fontSize: '20px' }}>Thời gian:</Text> {campaign.duration} months
@@ -128,6 +134,8 @@ const ViewCampaigns = () => {
                             onClick={() => handleJobs(campaign)}
                             onMouseEnter={() => setHovered(campaign.id)}
                             onMouseLeave={() => setHovered(null)}
+                            className="max-w-fit"
+                            
                           >
                            xem chi tiết
                           </Text>
@@ -139,7 +147,8 @@ const ViewCampaigns = () => {
                       {/* {campaign.resources.map((item) => ( */}
                         {/* // <p key={item.id}>{item.name}</p> */}
                         <Title>resource</Title>
-                        <Table  dataSource={campaign.resources} columns={columns} />
+                        <Table  dataSource={campaign.resources} columns={columns} 
+                        pagination={{pageSize:pageSize ,current:currentPage,onChange:onchange}} />
                       {/* ))} */}
                     </Panel>
                   </Collapse>

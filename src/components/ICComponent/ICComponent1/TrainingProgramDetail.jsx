@@ -19,17 +19,22 @@ const TrainingProgramDetail = () => {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cvFile, setCvFile] = useState(null);
-
+const [pageSize]=useState(3)
+const [currentPage,setCurrentPage]=useState(1)
   useEffect(() => {
     if (CampaignDetail?.resources) {
       setResources(CampaignDetail.resources);
     }
   }, [CampaignDetail]);
 
+
+
   if (!CampaignDetail) {
     return <div>Training program detail not found</div>;
   }
-
+const onchange =(page)=>{
+  setCurrentPage(page)
+}
   const handleAddResource = async (values) => {
     setLoading(true);
     try {
@@ -99,7 +104,7 @@ const TrainingProgramDetail = () => {
     <Header style={{ color: 'white' }}>Create new TrainingProgram   </Header>
   <Content style={{ padding: '10px', minHeight: '80vh' }}>
     <div className="flex justify-center items-center">
-      <div className="max-w-fit w-full bg-white p-8 shadow-lg rounded-lg">
+      <div className=" w-full bg-white p-8 shadow-lg rounded-lg">
         <Tabs defaultActiveKey="1" className="w-full">
           <TabPane tab="Training Details" key="1">
             <div className="flex mb-8">
@@ -211,7 +216,7 @@ const TrainingProgramDetail = () => {
               </Form.Item>
             </Form>
         )}
-            <Table columns={columns} dataSource={resources} rowKey="name" />
+            <Table columns={columns} dataSource={resources} rowKey="name" pagination={{pageSize:pageSize,current:currentPage,onChange:onchange}}/>
           </TabPane>
         </Tabs>
       </div>

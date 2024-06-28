@@ -9,6 +9,9 @@ import {
   AppstoreOutlined,
   AreaChartOutlined,
   WechatWorkOutlined,
+  ProjectOutlined,
+  PlusSquareOutlined,
+  
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -29,7 +32,7 @@ import "./CustomMenu.css";
 import { MdOutlineCampaign } from "react-icons/md";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
-
+import { MdEngineering } from "react-icons/md";
 const { Header, Sider, Content } = Layout;
 
 const CustomMenu = ({ userRole }) => {
@@ -71,26 +74,26 @@ const CustomMenu = ({ userRole }) => {
     ],
     hrmanager: [
       { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Trang chủ" },
-      { key: "/hrmanager/jobs", icon: <HomeOutlined />, label: "Jobs" },
+      { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
       { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
     ],
     internshipcoordinators: [
-      { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "Lịch trình" },
+      { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "schedule" },
       {
         key: "/internshipcoordinators/training-program",
-        icon: <AreaChartOutlined />,
+        icon:<ProjectOutlined />,
         label: "Training Program",
         children: [
-          { key: "/internshipcoordinators/NewTrainingProgram", icon: <AreaChartOutlined />, label: "Create" },
-          { key: "/internshipcoordinators/ViewTrainingProgram", icon: <AreaChartOutlined />, label: "View" },
+          { key: "/internshipcoordinators/NewTrainingProgram", icon: <PlusSquareOutlined />, label: "Create" },
+          { key: "/internshipcoordinators/ViewTrainingProgram", icon:<ProjectOutlined />, label: "View" },
         ],
       },
     ],
     intern: [
       { key: "/intern/home", icon: <HomeOutlined />, label: "Trang chủ" },
       { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
-      { key: "/intern/Trainingprogram", icon: <AreaChartOutlined />, label: "Training program" },
+      { key: "/intern/Trainingprogram", icon: <ProjectOutlined />, label: "Training program" },
       { key: "/intern/taskboard", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },
     ],
