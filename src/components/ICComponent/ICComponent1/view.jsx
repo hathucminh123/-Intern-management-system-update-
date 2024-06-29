@@ -105,12 +105,12 @@ const ViewCampaigns = () => {
                             <strong>Duration:</strong> {campaign.duration} months
                           </Text>
                           <Text
-                            style={{ cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
+                            style={{ width:"fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
                             onClick={() => handleJobs(campaign)}
                             onMouseEnter={() => setHovered(campaign.id)}
                             onMouseLeave={() => setHovered(null)}
                           >
-                            View Details
+                            View Details {'-->'} 
                           </Text>
                         </div>
                       }

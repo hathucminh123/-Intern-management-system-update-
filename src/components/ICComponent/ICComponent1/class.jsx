@@ -63,7 +63,7 @@ const ClassList = () => {
                   <Paragraph className="mt-2">{classItem.description}</Paragraph>
                   {expandedId === classItem.id && (
                     <div className="mt-4">
-                      <Title level={5}>Class Details</Title>
+                      <Title level={5}>Danh sách lớp</Title>
                       <Row gutter={[16, 16]}>
                         <Col xs={24} sm={12} md={8}>
                           <Card

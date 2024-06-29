@@ -6,15 +6,16 @@ const { Title } = Typography;
 const { Header, Content } = Layout;
 
 const studentData = [
-  { key: 1, name: "Alice Johnson", age: 20, class: "React Basics" },
-  { key: 2, name: "Bob Smith", age: 22, class: "React Basics" },
-  { key: 3, name: "Charlie Brown", age: 21, class: "Advanced JavaScript" },
-  { key: 4, name: "David Wilson", age: 23, class: "CSS Mastery" },
+  { key: 1, name: "Minh", email:"minhtse150913@fpt.edu.vn" , class: "React Basics" },
+  { key: 1, name: "Tâm", email:"minhtse150913@fpt.edu.vn" , class: "React Basics" },
+  { key: 1, name: "Trí", email:"minhtse150913@fpt.edu.vn" , class: "React Basics" },
+  { key: 1, name: "Hiệp", email:"minhtse150913@fpt.edu.vn" , class: "React Basics" },
+
 ];
 
 const columns = [
   { title: "Name", dataIndex: "name", key: "name" },
-  { title: "Age", dataIndex: "age", key: "age" },
+  { title: "Email", dataIndex: "email", key: "email" },
   { title: "Class", dataIndex: "class", key: "class" },
 ];
 

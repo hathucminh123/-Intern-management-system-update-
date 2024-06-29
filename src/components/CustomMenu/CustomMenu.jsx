@@ -66,7 +66,8 @@ const CustomMenu = ({ userRole }) => {
   const items = {
     mentor: [
       { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
-      { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
+      // { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
+      { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
     ],
     hrmanager: [
@@ -176,7 +177,7 @@ const userRolle=localStorage.getItem('role');
                    style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                  >
                    <Avatar size="default" icon={<UserOutlined />} />
-                   <Typography.Text>Trí</Typography.Text>
+                   <Typography.Text>internshipcoordinators</Typography.Text>
                  </div>
                </Popover>
                <Badge count={comments.length} dot>
@@ -204,7 +205,7 @@ const userRolle=localStorage.getItem('role');
                    style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                  >
                    <Avatar size="default" icon={<UserOutlined />} />
-                   <Typography.Text> Thúc Minh</Typography.Text>
+                   <Typography.Text>hrmanager </Typography.Text>
                  </div>
                </Popover>
                <Badge count={comments.length} dot>
@@ -232,7 +233,7 @@ const userRolle=localStorage.getItem('role');
                    style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                  >
                    <Avatar size="default" icon={<UserOutlined />} />
-                   <Typography.Text>Tâm</Typography.Text>
+                   <Typography.Text>mentor</Typography.Text>
                  </div>
                </Popover>
                <Badge count={comments.length} dot>
@@ -260,7 +261,7 @@ const userRolle=localStorage.getItem('role');
                    style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                  >
                    <Avatar size="default" icon={<UserOutlined />} />
-                   <Typography.Text>Hệp</Typography.Text>
+                   <Typography.Text>intern</Typography.Text>
                  </div>
                </Popover>
                <Badge count={comments.length} dot>

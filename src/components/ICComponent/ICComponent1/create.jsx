@@ -58,9 +58,11 @@ const Create = () => {
   };
 
   return (
-    <Layout >
-    <Header style={{ color: 'white' }}>Create new TrainingProgram   </Header>
-  <Content style={{ padding: '10px', minHeight: '80vh' }}>
+    <Layout>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+        Create Training Programs
+      </Header>
+      <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
     <div className="container flex flex-col">
       {/* <Title className="text-center mt-5" level={2}>
         Create New Campaign

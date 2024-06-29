@@ -33,6 +33,7 @@ import TrainingProgramDetail from "./components/ICComponent/ICComponent1/Trainin
 import InternPage from "./pages/InternPage/InternPage";
 import ClassList from "./components/ICComponent/ICComponent1/class";
 import StudentList from "./components/ICComponent/ICComponent1/StudentList";
+import TaskDetails from "./components/MentorComponent/TaskDetails";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -47,12 +48,13 @@ function App() {
           <Route element={<ProtectedRoute />}>
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<Dashboard />} />
+              <Route index element={<Navigate to="task" replace />} />
+              {/* <Route path="home" element={<Dashboard />} /> */}
               <Route path="task" element={<TaskPerformance />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="chat" element={<Chat />} />
               <Route path="taskboard" element={<TaskBoard />} />
+              <Route path="taskDetail/:id" element={<TaskDetails />} />
             </Route>
             
             {/* HR Manager Routes */}

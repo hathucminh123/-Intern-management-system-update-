@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Space, Table, Typography, Input, Modal, Form, Rate, Popover, DatePicker,Select,Tag  } from 'antd';
+import React, { useState, useEffect, Children } from 'react';
+import { Button, Space, Table, Typography, Input, Modal, Form, Rate, Popover, DatePicker,Select,Tag ,Dropdown,Menu } from 'antd';
 import {
-  FilterOutlined
+  FilterOutlined,
+  DownOutlined 
 } from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
@@ -11,7 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 import { gettest1 } from'../../redux/userSlice';
+import { render } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
+  const {Text,Title}=Typography
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -19,6 +23,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [taskToReview, setTaskToReview] = useState(null);
   const [user, setUser] = useState([]);
+  const navigate =useNavigate();
   // const test = useSelector((state) => state.user.test);
   // console.log('hiep',test);
   const dispatch = useDispatch();
@@ -43,6 +48,10 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     setOpenDetailModal(true);
   };
 
+  const handleDetails =(task)=>{
+    navigate(`/mentor/taskDetail/${task.id}`,{state : {task}}) 
+  }
+
   const handleOpenReviewModal = (task) => {
     setTaskToReview(task);
     setOpenReviewModal(true);
@@ -66,6 +75,22 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   {tasks.map((task)=>(
     value=task
   ))}
+  const menu = (record) => (
+    <Menu>
+      <Menu.Item key="1">
+        {/* <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button> */}
+        <Button onClick={() => handleDetails(record)}>View/Edit</Button>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <Button  onClick={() => handleDeleteTask(record.key)}>Delete</Button>
+      </Menu.Item>
+      {record.completed && (
+        <Menu.Item key="3">
+          <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>
+        </Menu.Item>
+      )}
+    </Menu>
+  );
 
   const columns = [
     {
@@ -99,6 +124,33 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (text,record) => (
+      
+       <span>
+        {record.status.toUpperCase() === "DONE" &&
+        (
+          <Tag color='green'>
+             {record.status.toUpperCase()}
+          </Tag>
+        
+        )}
+         {record.status.toUpperCase() === "ON-PROGRESS" &&
+        (
+          <Tag color='geekblue'>
+             {record.status.toUpperCase()}
+          </Tag>
+        
+        )}
+           {record.status.toUpperCase() === "TODOS" &&
+        (
+          <Tag color='blue'>
+             {record.status.toUpperCase()}
+          </Tag>
+        
+        )}
+        </span>
+        
+      ),
     },
     // {
     //   title: 'Feedback',
@@ -110,9 +162,12 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       key: 'actions',
       render: (text, record) => (
         <Space size="middle">
-          <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
-          <Button danger onClick={() => handleDeleteTask(record.key)}>Delete</Button>
-          {record.completed && <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>}
+      
+          <Dropdown overlay={menu(record)}>
+          <Button>
+            More <DownOutlined />
+          </Button>
+        </Dropdown>
         </Space>
       ),
     },
@@ -120,21 +175,30 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
 
 
   const content = (
-    <div>
+    <Space>
+      <div>
+      start Date  : <DatePicker />
+      </div>
+      <div>
       End Date   : <DatePicker />
-
-      Assigned To<Select
+      </div>
+      <div>
+      Assigned To
+      <Select
         placeholder="chọn người dùng"
         allowClear
 
       >
-        items={user.map((item) => (
+       
+       {user.map((item) => (
           <Select.Option key={item.id} value={item.firstName}>{item.firstName}</Select.Option>
         ))}
+    
 
 
       </Select>
-    </div>
+      </div>
+    </Space>
   );
 
   if (value?.feedback){
@@ -205,7 +269,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
         </Popover>
       </div>
 
-      <Table dataSource={filteredTasks} columns={columns} />
+      <Table   className="shadow-lg" dataSource={filteredTasks} columns={columns} />
     </>
   );
 };

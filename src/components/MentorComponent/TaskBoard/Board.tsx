@@ -110,8 +110,8 @@ const Boards: React.FC = () => {
 
     return (
         <Layout>
-            <Header style={{ color: 'white', textAlign: 'center' }}>Task Board</Header>
-            <Content style={{ padding: '24px', minHeight: '80vh' }}>
+       
+        <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
                 <DragDropContext onDragEnd={(result: any) => onDragEnd(result, columns, setColumns)}>
                     <div className="w-full flex items-start justify-between px-5 pb-8 md:gap-0 gap-10">
                         {Object.entries(columns).map(([columnId, column]: [string, any]) => (

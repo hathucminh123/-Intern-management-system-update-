@@ -44,6 +44,7 @@ const Schedule = () => {
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}
+              className="shadow-lg"
           />
           <AddScheduleModal
             visible={showModal}
