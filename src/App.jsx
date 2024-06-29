@@ -31,7 +31,8 @@ import Create from "./components/ICComponent/ICComponent1/create";
 import ViewCampaigns from "./components/ICComponent/ICComponent1/view";
 import TrainingProgramDetail from "./components/ICComponent/ICComponent1/TrainingProgramDetail";
 import InternPage from "./pages/InternPage/InternPage";
-
+import ClassList from "./components/ICComponent/ICComponent1/class";
+import StudentList from "./components/ICComponent/ICComponent1/StudentList";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -75,6 +76,8 @@ function App() {
               <Route path="NewTrainingProgram" element={<Create />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
+              <Route path="class" element={<ClassList/>}/>
+              <Route path="students/:className" element={<StudentList />} />
             </Route>
                 {/* Internship Routes */}
                 <Route path="/intern" element={<CustomMenu userRole="intern" />}>

@@ -1,86 +1,12 @@
-// import React, { useState } from 'react';
-// import { Badge, Button, Calendar, Space, Typography} from 'antd';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { addEvent, removeEvent, setIsAddEventVisible } from '../../redux/calendarSlice';
-// import AddScheduleModal from './AddScheduleModal';
-
-// const Schedule = () => {
-//   const dispatch = useDispatch();
-//   const events = useSelector(state => state.calendar.events);
-//   const isAddEventVisible = useSelector(state => state.calendar.isAddEventVisible);
-//   const [selectedDate, setSelectedDate] = useState(null);
-
-//   const handleAddEvent = (value) => {
-//     setSelectedDate(value.format('YYYY-MM-DD')); // Update selected date
-//     dispatch(setIsAddEventVisible(true));
-//   };
-
-//   const handleRemoveEvent = (eventId) => {
-//     dispatch(removeEvent(eventId));
-//     dispatch(setIsAddEventVisible(true));
-//   };
-
-//   const handleModalClose = () => {
-//     dispatch(setIsAddEventVisible(false));
-//   };
-
-//   const monthCellRender = (value) => {
-//     const currentMonth = new Date().getMonth();
-//     return value.month() === currentMonth ? (
-//       <div className="notes-month">
-//         <section>1394</section>
-//         <span>Backlog month</span>
-//       </div>
-//     ) : null;
-//   };
-
-//   const dateCellRender = (value) => {
-//     const listData = events.filter(event => event.date === value.format('YYYY-MM-DD'));
-//     return (
-//       <ul className="events">
-//         {listData.map(item => (
-//           <div key={item.id}>
-//             <Badge status={item.types} text={item.events} />
-//             <Space direction='vertical'>
-//             {item.types}
-//             {item.events}
-//             <Button onClick={() => handleRemoveEvent(item.id)}>Remove</Button>
-//             </Space>
-
-
-//           </div>
-//         ))}
-//       </ul>
-//     );
-//   };
-
-//   const cellRender = (current, info) => {
-//     console.log('info', info)
-//     if (info.type === 'date') return dateCellRender(current);
-//     if (info.type === 'month') return monthCellRender(current);
-//     return info.originNode;
-//   };
-
-//   return (
-//     <Space size={20} direction='vertical'>
-//       <Typography.Title level={5}>Lịch Trình</Typography.Title>
-//       <Button onClick={handleAddEvent}>Thêm sự kiện</Button>
-//       <Calendar cellRender={cellRender} onSelect={handleAddEvent} />
-//       {isAddEventVisible && <AddScheduleModal visible={isAddEventVisible} onClose={handleModalClose} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />}
-//     </Space>
-//   );
-// };
-
-// export default Schedule;
-
-
 import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import { Layout } from 'antd';
+import { Layout, Typography, Card, Button, Row, Col } from 'antd';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import AddScheduleModal from './AddScheduleModal';
-const { Header, Content, Footer } = Layout;
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
 
 const localizer = momentLocalizer(moment);
 
@@ -103,16 +29,18 @@ const Schedule = () => {
   };
 
   return (
-    <Layout >
-      <Header style={{ color: 'white' }}>Lịch trình   </Header>
-    <Content style={{ padding: '24px', minHeight: '80vh' }}>
-        <div style={{ height: "500px" }}>
+    <Layout>
+      <Header style={{ backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+        <Title level={3} style={{ margin: 0 }}>Schedule</Title>
+      </Header>
+      <Content style={{ padding: '24px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
+        <div className="container mx-auto">
           <Calendar
             localizer={localizer}
             events={events}
             startAccessor="start"
             endAccessor="end"
-            style={{ margin: '50px' }}
+            style={{ height: 500, backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}
@@ -127,12 +55,28 @@ const Schedule = () => {
             eventToEdit={eventToEdit}
             setEventToEdit={setEventToEdit}
           />
+          <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
+            {events.map((item) => (
+              <Col xs={24} sm={12} md={8} key={item.id}>
+                <Card
+                  hoverable
+                  className="shadow-lg"
+                  style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                >
+                  <Title level={5}>{item.title}</Title>
+                  <p><strong>Date:</strong> {moment(item.start).format('DD-MM-YYYY')}</p>
+                  <p><strong>Start Time:</strong> {moment(item.start).format('HH:mm')}</p>
+                  <p><strong>End Time:</strong> {moment(item.end).format('HH:mm')}</p>
+                  <p><strong>Description:</strong> {item.description}</p>
+                  <Button type="primary">View Details</Button>
+                </Card>
+              </Col>
+            ))}
+          </Row>
         </div>
       </Content>
-
     </Layout>
   );
 };
 
 export default Schedule;
-

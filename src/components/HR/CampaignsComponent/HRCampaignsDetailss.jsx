@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Typography, Button, Image, Tag } from "antd";
-import "tailwindcss/tailwind.css"; // ensure Tailwind CSS is imported
+import "tailwindcss/tailwind.css";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 const { Title, Paragraph, Text } = Typography;
 
 const HRCampaignsDetailss = () => {
-  let { id } = useParams();
+  const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
   const CampaignDetail = state?.item;
@@ -46,11 +46,11 @@ const HRCampaignsDetailss = () => {
               </Tag>
             </div>
             <div className="flex flex-wrap mt-3">
-              <div>Vị trí ứng tuyển lập trình viên:</div>
+              <div>Vị trí ứng tuyển:</div>
               {CampaignDetail.jobs.map((job, index) => (
                 <Button
                   onClick={() => handleViewGuestInfoClick(CampaignDetail, job)}
-                  className="ml-3 mt-0 text-red-500"
+                  className="ml-3 mt-0 text-blue-500"
                   key={index}
                 >
                   {job.name}
@@ -114,12 +114,12 @@ const HRCampaignsDetailss = () => {
         </div>
         {showJobs && (
           <div className="mt-8">
-            <Title level={3}>Danh sách  Vị trí ứng tuyển vào  {CampaignDetail.name} Campaign</Title>
+            <Title level={3}>Danh sách vị trí ứng tuyển vào {CampaignDetail.name} Campaign</Title>
             <div className="flex flex-wrap">
               {CampaignDetail.jobs.map((job, index) => (
                 <Button
                   onClick={() => handleViewGuestInfoClick(CampaignDetail, job)}
-                  className="m-3 text-red-500"
+                  className="m-3 text-blue-500"
                   key={index}
                 >
                   {job.name}

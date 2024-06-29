@@ -100,9 +100,11 @@ const ViewGuestInfoCv = () => {
 
   return (
     <Layout>
-      <Header style={{ color: 'white' }}>Trang chủ</Header>
-      <Content style={{ padding: '24px', minHeight: '80vh' }}>
-        <div style={{ padding: '24px' }}>
+       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+        Danh sách ứng tuyển
+      </Header>
+      <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
+      <div className="container mx-auto" style={{padding:"24px"}}>
           <Typography.Title>Vị trí ứng tuyển {Jobss} vào chương trình {CampaignDetails.name}</Typography.Title>
           <Table
             columns={columns}

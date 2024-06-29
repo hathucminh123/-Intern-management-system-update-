@@ -11,7 +11,6 @@ import {
   WechatWorkOutlined,
   ProjectOutlined,
   PlusSquareOutlined,
-  
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -29,10 +28,10 @@ import {
 } from "antd";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import "./CustomMenu.css";
-import { MdOutlineCampaign } from "react-icons/md";
+import { MdOutlineCampaign, MdEngineering } from "react-icons/md";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
-import { MdEngineering } from "react-icons/md";
+
 const { Header, Sider, Content } = Layout;
 
 const CustomMenu = ({ userRole }) => {
@@ -58,65 +57,62 @@ const CustomMenu = ({ userRole }) => {
   }, []);
 
   useEffect(() => {
-    if(localStorage.getItem('role').toLocaleLowerCase() !== userRole.toLowerCase()) 
-      navigate(`/${localStorage.getItem('role').toLocaleLowerCase()}`, { replace: true });
+    if (localStorage.getItem("role").toLowerCase() !== userRole.toLowerCase()) {
+      navigate(`/${localStorage.getItem("role").toLowerCase()}`, { replace: true });
+    }
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
   const items = {
     mentor: [
-      { key: `/mentor/home`, icon: <HomeOutlined />, label: "Trang chủ" },
-      // { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Quản lý Task" },
-    
-      { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "schedule" },
+      { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
       { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
     ],
     hrmanager: [
-      { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Trang chủ" },
+      { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
       { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
     ],
     internshipcoordinators: [
-      { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "schedule" },
+      { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
       {
         key: "/internshipcoordinators/training-program",
-        icon:<ProjectOutlined />,
+        icon: <ProjectOutlined />,
         label: "Training Program",
         children: [
           { key: "/internshipcoordinators/NewTrainingProgram", icon: <PlusSquareOutlined />, label: "Create" },
-          { key: "/internshipcoordinators/ViewTrainingProgram", icon:<ProjectOutlined />, label: "View" },
+          { key: "/internshipcoordinators/ViewTrainingProgram", icon: <ProjectOutlined />, label: "View" },
         ],
       },
+      { key: "/internshipcoordinators/class", icon: <AreaChartOutlined />, label: "Class" },
     ],
     intern: [
-      { key: "/intern/home", icon: <HomeOutlined />, label: "Trang chủ" },
+      { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },
       { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
-      { key: "/intern/Trainingprogram", icon: <ProjectOutlined />, label: "Training program" },
+      { key: "/intern/Trainingprogram", icon: <ProjectOutlined />, label: "Training Program" },
       { key: "/intern/taskboard", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },
     ],
   };
-  const userRolle = localStorage.getItem("role");
-
+const userRolle=localStorage.getItem('role');
   const userItems = items[userRole] || [];
 
   const handleClickNavigate = (type) => {
     if (type === "logout") {
       localStorage.clear();
       navigate("/sign-in");
-      // window.location.reload();
     }
   };
 
   const content = (
     <div>
       <div className="WrapperContentPopup" onClick={() => handleClickNavigate("profile")}>
-        Thông tin người dùng
+        User Information
       </div>
       <div className="WrapperContentPopup" onClick={() => handleClickNavigate("logout")}>
-        Đăng xuất
+        Logout
       </div>
     </div>
   );
@@ -127,235 +123,175 @@ const CustomMenu = ({ userRole }) => {
         trigger={null}
         collapsible
         collapsed={collapsed}
-        style={{ height: "100vh", position: "fixed", left: 0 }}
+        style={{ height: "100vh", position: "fixed", left: 0, backgroundColor: 'white' }}
       >
         <Logo />
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
           selectedKeys={[selectedKey]}
-          style={{ height: "calc(100% - 64px)", marginTop: "64px", fontSize: "1rem" }}
+          style={{ height: "calc(100% - 64px)", marginTop: "64px", fontSize: "1rem", backgroundColor: 'white' }}
           onClick={handleMenuClick}
           items={userItems}
         />
       </Sider>
+
+
       <Layout style={{ marginLeft: collapsed ? "80px" : "200px", transition: "all 0.2s" }}>
-        {userRolle === "internshipcoordinators" && (
-          <Header
-            style={{
-              padding: 0,
-              background: "#fff",
-              position: "fixed",
-              width: `calc(100% - ${collapsed ? "80px" : "200px"})`,
-              left: collapsed ? "80px" : "200px",
-              zIndex: 10000,
-              transition: "all 0.2s",
-            }}
-          >
-            <Row justify="space-between" align="middle">
-              <Col>
-                <Button
-                  type="text"
-                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                  onClick={() => setCollapsed(!collapsed)}
-                  style={{ fontSize: "16px", width: 64, height: 64 }}
-                />
-              </Col>
-              <Col>
-                <Space size={10} align="center" style={{ marginRight: "30px" }}>
-                  <Popover
-                    content={content}
-                    trigger="click"
-                    open={isOpenPopup}
-                    onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                    getPopupContainer={() => popoverRef.current}
-                  >
-                    <div
-                      ref={popoverRef}
-                      onClick={() => setIsOpenPopup(!isOpenPopup)}
-                      style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                    >
-                      <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>Tâm</Typography.Text>
-                    </div>
-                  </Popover>
-                  <Badge count={comments.length} dot>
-                    <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
-                  </Badge>
-                  <Badge count={comments.length}>
-                    <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
-                </Space>
-              </Col>
-            </Row>
-          </Header>
-        )}
-          {userRolle === "hrmanager" && (
-          <Header
-            style={{
-              padding: 0,
-              background: "#fff",
-              position: "fixed",
-              width: `calc(100% - ${collapsed ? "80px" : "200px"})`,
-              left: collapsed ? "80px" : "200px",
-              zIndex: 10000,
-              transition: "all 0.2s",
-            }}
-          >
-            <Row justify="space-between" align="middle">
-              <Col>
-                <Button
-                  type="text"
-                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                  onClick={() => setCollapsed(!collapsed)}
-                  style={{ fontSize: "16px", width: 64, height: 64 }}
-                />
-              </Col>
-              <Col>
-                <Space size={10} align="center" style={{ marginRight: "30px" }}>
-                  <Popover
-                    content={content}
-                    trigger="click"
-                    open={isOpenPopup}
-                    onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                    getPopupContainer={() => popoverRef.current}
-                  >
-                    <div
-                      ref={popoverRef}
-                      onClick={() => setIsOpenPopup(!isOpenPopup)}
-                      style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                    >
-                      <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>Hà Thúc Minh</Typography.Text>
-                    </div>
-                  </Popover>
-                  <Badge count={comments.length} dot>
-                    <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
-                  </Badge>
-                  <Badge count={comments.length}>
-                    <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
-                </Space>
-              </Col>
-            </Row>
-          </Header>
-        )}
-         {userRolle === "mentor" && (
-          <Header
-            style={{
-              padding: 0,
-              background: "#fff",
-              position: "fixed",
-              width: `calc(100% - ${collapsed ? "80px" : "200px"})`,
-              left: collapsed ? "80px" : "200px",
-              zIndex: 10000,
-              transition: "all 0.2s",
-            }}
-          >
-            <Row justify="space-between" align="middle">
-              <Col>
-                <Button
-                  type="text"
-                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                  onClick={() => setCollapsed(!collapsed)}
-                  style={{ fontSize: "16px", width: 64, height: 64 }}
-                />
-              </Col>
-              <Col>
-                <Space size={10} align="center" style={{ marginRight: "30px" }}>
-                  <Popover
-                    content={content}
-                    trigger="click"
-                    open={isOpenPopup}
-                    onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                    getPopupContainer={() => popoverRef.current}
-                  >
-                    <div
-                      ref={popoverRef}
-                      onClick={() => setIsOpenPopup(!isOpenPopup)}
-                      style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                    >
-                      <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>Hiệp</Typography.Text>
-                    </div>
-                  </Popover>
-                  <Badge count={comments.length} dot>
-                    <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
-                  </Badge>
-                  <Badge count={comments.length}>
-                    <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
-                </Space>
-              </Col>
-            </Row>
-          </Header>
-        )}
-         {userRolle === "intern" && (
-          <Header
-            style={{
-              padding: 0,
-              background: "#fff",
-              position: "fixed",
-              width: `calc(100% - ${collapsed ? "80px" : "200px"})`,
-              left: collapsed ? "80px" : "200px",
-              zIndex: 10000,
-              transition: "all 0.2s",
-            }}
-          >
-            <Row justify="space-between" align="middle">
-              <Col>
-                <Button
-                  type="text"
-                  icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                  onClick={() => setCollapsed(!collapsed)}
-                  style={{ fontSize: "16px", width: 64, height: 64 }}
-                />
-              </Col>
-              <Col>
-                <Space size={10} align="center" style={{ marginRight: "30px" }}>
-                  <Popover
-                    content={content}
-                    trigger="click"
-                    open={isOpenPopup}
-                    onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                    getPopupContainer={() => popoverRef.current}
-                  >
-                    <div
-                      ref={popoverRef}
-                      onClick={() => setIsOpenPopup(!isOpenPopup)}
-                      style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                    >
-                      <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>Trí</Typography.Text>
-                    </div>
-                  </Popover>
-                  <Badge count={comments.length} dot>
-                    <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
-                  </Badge>
-                  <Badge count={comments.length}>
-                    <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
-                </Space>
-              </Col>
-            </Row>
-          </Header>
-        )}
+        <Header
+          style={{
+            padding: 0,
+            background: "#fff",
+            position: "fixed",
+            width: `calc(100% - ${collapsed ? "80px" : "200px"})`,
+            left: collapsed ? "80px" : "200px",
+            zIndex: 10000,
+            transition: "all 0.2s",
+          }}
+        >
+          <Row justify="space-between" align="middle">
+            <Col>
+              <Button
+                type="text"
+                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={() => setCollapsed(!collapsed)}
+                style={{ fontSize: "16px", width: 64, height: 64 }}
+              />
+            </Col>
+            <Col>
+            {userRolle =="internshipcoordinators" && (
+               <Space size={10} align="center" style={{ marginRight: "30px" }}>
+              
+              
+               <Popover
+                 content={content}
+                 trigger="click"
+                 open={isOpenPopup}
+                 onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                 getPopupContainer={() => popoverRef.current}
+               >
+                 <div
+                   ref={popoverRef}
+                   onClick={() => setIsOpenPopup(!isOpenPopup)}
+                   style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                 >
+                   <Avatar size="default" icon={<UserOutlined />} />
+                   <Typography.Text>Trí</Typography.Text>
+                 </div>
+               </Popover>
+               <Badge count={comments.length} dot>
+                 <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
+               </Badge>
+               <Badge count={comments.length}>
+                 <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
+               </Badge>
+             </Space>
+            )}
+               {userRolle =="hrmanager" && (
+               <Space size={10} align="center" style={{ marginRight: "30px" }}>
+              
+              
+               <Popover
+                 content={content}
+                 trigger="click"
+                 open={isOpenPopup}
+                 onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                 getPopupContainer={() => popoverRef.current}
+               >
+                 <div
+                   ref={popoverRef}
+                   onClick={() => setIsOpenPopup(!isOpenPopup)}
+                   style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                 >
+                   <Avatar size="default" icon={<UserOutlined />} />
+                   <Typography.Text> Thúc Minh</Typography.Text>
+                 </div>
+               </Popover>
+               <Badge count={comments.length} dot>
+                 <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
+               </Badge>
+               <Badge count={comments.length}>
+                 <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
+               </Badge>
+             </Space>
+            )}
+               {userRolle =="mentor" && (
+               <Space size={10} align="center" style={{ marginRight: "30px" }}>
+              
+              
+               <Popover
+                 content={content}
+                 trigger="click"
+                 open={isOpenPopup}
+                 onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                 getPopupContainer={() => popoverRef.current}
+               >
+                 <div
+                   ref={popoverRef}
+                   onClick={() => setIsOpenPopup(!isOpenPopup)}
+                   style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                 >
+                   <Avatar size="default" icon={<UserOutlined />} />
+                   <Typography.Text>Tâm</Typography.Text>
+                 </div>
+               </Popover>
+               <Badge count={comments.length} dot>
+                 <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
+               </Badge>
+               <Badge count={comments.length}>
+                 <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
+               </Badge>
+             </Space>
+            )}
+               {userRolle =="intern" && (
+               <Space size={10} align="center" style={{ marginRight: "30px" }}>
+              
+              
+               <Popover
+                 content={content}
+                 trigger="click"
+                 open={isOpenPopup}
+                 onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                 getPopupContainer={() => popoverRef.current}
+               >
+                 <div
+                   ref={popoverRef}
+                   onClick={() => setIsOpenPopup(!isOpenPopup)}
+                   style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                 >
+                   <Avatar size="default" icon={<UserOutlined />} />
+                   <Typography.Text>Hệp</Typography.Text>
+                 </div>
+               </Popover>
+               <Badge count={comments.length} dot>
+                 <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
+               </Badge>
+               <Badge count={comments.length}>
+                 <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
+               </Badge>
+             </Space>
+            )}
+             
+            </Col>
+          </Row>
+        </Header>
         <Content
           style={{
             padding: 24,
-            background: "#fff",
+            background: "#f0f2f5",
             borderRadius: "8px",
             paddingTop: "80px",
             transition: "all 0.2s",
+            minHeight:"fit-content"
           }}
         >
           <Outlet />
         </Content>
       </Layout>
-      <Drawer title="Thông báo" onClose={() => setNotificationOpen(false)} open={notificationOpen} maskClosable>
+      <Drawer title="Notifications" onClose={() => setNotificationOpen(false)} open={notificationOpen} maskClosable>
         <List dataSource={comments} renderItem={(item) => <List.Item>{item.body}</List.Item>} />
       </Drawer>
-      <Drawer title="Tin nhắn" onClose={() => setCommentsOpen(false)} open={commentsOpen} maskClosable>
+      <Drawer title="Messages" onClose={() => setCommentsOpen(false)} open={commentsOpen} maskClosable>
         <List
           dataSource={comments}
           renderItem={(item) => (

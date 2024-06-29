@@ -73,7 +73,9 @@ console.log('jobs',jobs)
 
   return (
     <Layout >
-    <Header style={{ color: 'white' }}>Create new Campaign</Header>
+     <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+       Create new Campaign
+      </Header>
   <Content style={{ padding: '24px', minHeight: '80vh' }}>
     <div className="container flex flex-col">
       {/* <Title className="text-center mt-5" level={2}>

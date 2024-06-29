@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Typography, message, Layout, Input, Collapse ,Table } from "antd";
+import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
@@ -13,46 +13,40 @@ const ViewCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const [selected, setSelected] = useState(null);
   const [hovered, setHovered] = useState(null);
-  const [pageSize]=useState(3)
-  const [currentPage,setCurrentPage]=useState(1)
+  const [pageSize] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
 
-
-  const columns =[
-     {
+  const columns = [
+    {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-     },
-     {
+    },
+    {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-     },
-     {
-      title: 'file',
+    },
+    {
+      title: 'File',
       dataIndex: 'filePath',
       key: 'filePath',
       render: (filePath) => <a href={filePath} target="_blank" rel="noopener noreferrer">View File</a>,
-     }
-        
-  ]
+    },
+  ];
+
   const onSearch = (value) => {
     setSearchQuery(value);
   };
 
-  const handleSelectedTraining = (training) => {
-    setSelected(training);
+  const filteredCampaigns = campaigns.filter((train) =>
+    train.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const onchange = (page) => {
+    setCurrentPage(page);
   };
-
-  const filteredCampaigns = campaigns.filter((train) => {
-    return train.name.toLowerCase().includes(searchQuery.toLowerCase());
-  });
-
-  const onchange =(page)=>{
-    setCurrentPage(page)
-  }
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -67,89 +61,68 @@ const ViewCampaigns = () => {
     fetchCampaigns();
   }, []);
 
-  const userRole = localStorage.getItem('role').toLowerCase();
   const handleJobs = (item) => {
+    const userRole = localStorage.getItem('role').toLowerCase();
     navigate(`/${userRole}/TrainingPrograms/${item.id}`, {
       state: { item },
     });
   };
-  const textStyle = {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    fontSize: "30px",
-    transition: "all 0.3s ease",
-  };
-
-  const textHoverStyle = {
-    textDecoration: "underline",
-    transform: "translate3d(1, 2, 3)",
-    color:"blue"
-  };
 
   return (
     <Layout>
-      <Header style={{ color: 'white' }}>List training program</Header>
-      <Content style={{ padding: '10px', minHeight: '80vh' }}>
-        <div className="container flex flex-col">
-          <Title className="text-center mt-5" level={2}>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>Training List</Header>
+      <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
+        <div className="container mx-auto">
+          <Title className="text-center mb-5" level={2}>
             Training List
           </Title>
 
           <Search
             size="large"
-            placeholder="Tìm Kiếm"
+            placeholder="Search campaigns"
             onSearch={onSearch}
             enterButton
-            className="container flex flex-row items-center w-full"
+            className="w-full mb-5"
+            style={{ maxWidth: '500px', margin: '0 auto' }}
           />
 
-          <Row gutter={[16, 16]} className="mt-5">
+          <Row gutter={[16, 16]}>
             {filteredCampaigns.map((campaign) => (
-              <Col key={campaign.id} xs={24} sm={12} md={8} lg={6}>
+              <Col key={campaign.id} xs={24} sm={12} md={8}>
                 <Card
-                      // title={
-              //   <Title  style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              //   {campaign.name}
-              //    </Title>
-              // }
-              // hoverable={true}
-              // bordered={true}
-              // onClick={() => handleJobs(campaign)}
-                  className="hover:shadow-lg transition-shadow duration-300"
-                  style={{ overflow: "hidden", width: "1500px" }}
+                  hoverable
+                  className="shadow-lg"
+                  style={{ borderRadius: '8px', backgroundColor: 'white' }}
                 >
-                  <Collapse onChange={() => handleSelectedTraining(campaign)}>
+                  <Collapse>
                     <Panel
                       header={
-                        <div className="flex cursor-pointer flex-col">
-                          <Title style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                            Chương trình thực tập: {campaign.name}
+                        <div className="flex flex-col">
+                          <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            Internship Program: {campaign.name}
                           </Title>
-                          <p style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontSize: "20px" }}>
-                            <Text strong style={{ fontSize: '20px' }}>Thời gian:</Text> {campaign.duration} months
-                          </p>
+                          <Text>
+                            <strong>Duration:</strong> {campaign.duration} months
+                          </Text>
                           <Text
-                            style={hovered === campaign.id ? { ...textStyle, ...textHoverStyle } : textStyle}
+                            style={{ cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
                             onClick={() => handleJobs(campaign)}
                             onMouseEnter={() => setHovered(campaign.id)}
                             onMouseLeave={() => setHovered(null)}
-                            className="max-w-fit"
-                            
                           >
-                           xem chi tiết
+                            View Details
                           </Text>
                         </div>
                       }
                       key={campaign.id}
-                      style={{ borderRadius: "100px" }}
+                      style={{ borderRadius: '8px', backgroundColor: 'white' }}
                     >
-                      {/* {campaign.resources.map((item) => ( */}
-                        {/* // <p key={item.id}>{item.name}</p> */}
-                        <Title>resource</Title>
-                        <Table  dataSource={campaign.resources} columns={columns} 
-                        pagination={{pageSize:pageSize ,current:currentPage,onChange:onchange}} />
-                      {/* ))} */}
+                      <Title level={5}>Resources</Title>
+                      <Table
+                        dataSource={campaign.resources}
+                        columns={columns}
+                        pagination={{ pageSize, current: currentPage, onChange: onchange }}
+                      />
                     </Panel>
                   </Collapse>
                 </Card>

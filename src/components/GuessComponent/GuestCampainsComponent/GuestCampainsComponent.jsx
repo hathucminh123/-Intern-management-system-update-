@@ -96,12 +96,14 @@ const GuestCampainsComponent = ({ searchQuery }) => {
         <Col span={18}>
           {filteredCampaigns.map((internship) => (
             <Card
+              className="shadow-lg"
               key={internship.id}
               hoverable
               style={{
                 borderWidth: 3,
                 marginBottom: 20,
               }}
+            
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
               <Row gutter={[16, 16]}>

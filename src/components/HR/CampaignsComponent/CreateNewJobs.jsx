@@ -49,9 +49,11 @@ const CreateNewJobs = () => {
 
   return (
     <Layout >
-    <Header style={{ color: 'white' }}>Create New Jobs </Header>
-  <Content style={{ padding: '24px', minHeight: '80vh' }}>
-    <div>
+   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+       Create new Job
+      </Header>
+      <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
+        <div className="container mx-auto">
 {/*    
       <Title level={1}>Create New Job</Title> */}
       <Form
