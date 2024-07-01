@@ -12,7 +12,7 @@ const { Search } = Input;
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(6);
+  const [pageSize] = useState(3);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [hovered, setHovered] = useState(null);
@@ -92,7 +92,10 @@ const Jobs = () => {
     e.stopPropagation();
     setSelectJob(selectJob === jobId ? null : jobId);
   };
+const handleAddTrainingProgram =(item)=>{
+  navigate(`/hrmanager/ListTraining/${item.id}`,{state: {item}} );
 
+}
   const currentJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
@@ -171,8 +174,8 @@ const Jobs = () => {
                           styleButton={{ background: "#06701c", border: "none" }}
                           styleTextButton={{ color: "#fff", fontWeight: "bold" }}
                           size="middle"
-                          textbutton="Create New"
-                          // onClick={handleAddNewCampaign}
+                          textbutton="Add training program"
+                          onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(item); }} 
                         />
                       </Space>
 

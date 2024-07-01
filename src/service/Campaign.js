@@ -23,6 +23,49 @@ export const   createNewCampaign= async (eventData)=> {
   }
 }
 
+export const EditNewCampaign= async (eventData)=> {
+  try {
+    const response = await httpClient.put({
+        url: `${apiLinks.Campaigns.put}`,
+        data: eventData,
+    });
+
+    if (![200, 201].includes(response.status)) {
+      const error = new Error('An error occurred while editing the Campaign');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error editing job:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+};
+
+export const deleteNewCampaign = async (id) => {
+  try {
+    const response = await httpClient.delete({
+      url: `${apiLinks.Campaigns.delete}`,
+      params: { id },
+    });
+
+    if (![200, 204].includes(response.status)) {
+      const error = new Error('An error occurred while deleting the Campaign');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting job:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+};
 
 export const fetchCampaigns= async() => {
   try {
@@ -47,5 +90,48 @@ export const fetchCampaigns= async() => {
   } catch (error) {
     console.error("Fetching jobs failed", error);
     throw error;
+  }
+};
+
+export const addJobsNewCampaign = async (data) => {
+  try {
+    const response = await httpClient.post({
+      url: `${apiLinks.Campaigns.postJob}`,
+      data: data,
+    });
+
+    if (![200, 201].includes(response.status)) {
+      const error = new Error('An error occurred while creating the training program');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error creating training program:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+};
+export const deleteJobsNewCampaign = async (data) => {
+  try {
+    const response = await httpClient.delete({
+      url: `${apiLinks.Campaigns.deleteJob}`,
+      data: data,
+    });
+
+    if (![200, 201].includes(response.status)) {
+      const error = new Error('An error occurred while creating the training program');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error creating training program:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
   }
 };

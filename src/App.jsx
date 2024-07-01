@@ -37,6 +37,9 @@ import TaskDetails from "./components/MentorComponent/TaskDetails";
 import StudentAttendanceRecord from "./components/ICComponent/ICComponent1/StudentAttendanceRecord";
 import ClassAttendanceRecord from "./components/ICComponent/ICComponent1/ClassAttendanceRecord";
 import EditJob from "./components/HR/CampaignsComponent/EditJob ";
+import ListTraining from "./components/HR/CampaignsComponent/ListTraining";
+import ListJobs from "./components/HR/CampaignsComponent/ListJobs";
+import EditCampaign from "./components/HR/CampaignsComponent/EditCampaign";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -78,6 +81,10 @@ function App() {
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="EditJob/:id" element={<EditJob/>} />
+              <Route path="ListTraining/:id" element={<ListTraining/>} />
+              <Route path="ListJobs/:id" element={<ListJobs/>} />
+              <Route path="EditCampaign/:id" element={<EditCampaign/>} />
+
             </Route>
 
             {/* Internship Coordinator Routes */}

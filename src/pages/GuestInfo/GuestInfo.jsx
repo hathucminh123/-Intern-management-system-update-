@@ -30,8 +30,8 @@ const GuestInfo = () => {
             <GuestCampainsComponent searchQuery={searchQuery} />
           </div>
         );
-      // case "upcoming":
-      //   return <p>Content for Sắp diễn ra</p>;
+      case "upcoming":
+        return <p>Content for Sắp diễn ra</p>;
       default:
         return null;
     }

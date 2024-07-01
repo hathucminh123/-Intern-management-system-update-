@@ -5,21 +5,23 @@ import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
 import * as Campaign from '../../../service/Campaign';
 import * as Jobss from '../../../service/JobsService';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import moment from 'moment';
 
 const { Title } = Typography;
 const { Option } = Select;
 const { Header, Content } = Layout;
 
-const CreateCampaignsHrComponent = () => {
+const EditCampaign = () => {
+  const {state} =useLocation(); 
+  const CampaignDetail =state?.item;
   const [form] = Form.useForm();
   const [requirement, setRequirement] = useState("");
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
   const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
-
+console.log("asdasd",CampaignDetail)
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
@@ -33,20 +35,35 @@ const CreateCampaignsHrComponent = () => {
     fetchAllJobs();
   }, []);
 
+
+
+
+  useEffect(() => {
+    if (CampaignDetail) {
+      setRequirement(CampaignDetail.requirements || "");
+      setDescription(CampaignDetail.scopeOfWork || "");
+      setBenefits(CampaignDetail.benefits || "");
+      form.setFieldsValue({
+        ...CampaignDetail,
+        estimateStartDate: moment(CampaignDetail.estimateStartDate),
+      });
+    }
+  }, [CampaignDetail, form]);
+
   const onFinish = async (values) => {
     const NewCampaigns = {
-      id: uuidv4(),
+      id: CampaignDetail.id,
       ...values,
       scopeOfWork: description,
       requirements: requirement,
       benefits: benefits,
       duration: parseInt(values.duration),
-      estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+    //   estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
     };
 
     try {
-      const response = await Campaign.createNewCampaign(NewCampaigns);
-      message.success("Campaign created successfully!");
+      const response = await Campaign.EditNewCampaign(NewCampaigns);
+      message.success("Campaign edit successfully!");
       form.resetFields();
       navigate('/hrmanager/campaigns');
       setDescription("");
@@ -74,7 +91,7 @@ const CreateCampaignsHrComponent = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Create new Campaign
+      {CampaignDetail?.id ? "Edit Campaign" : "Create New Campaign"}
       </Header>
       <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div className="container flex flex-col">
@@ -84,6 +101,7 @@ const CreateCampaignsHrComponent = () => {
               layout="vertical"
               onFinish={onFinish}
               style={{ maxWidth: 800, margin: "0 auto" }}
+              
             >
               <Row gutter={16}>
                 <Col span={12}>
@@ -95,7 +113,7 @@ const CreateCampaignsHrComponent = () => {
                     <Input placeholder="Enter the campaign name" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     name="estimateStartDate"
                     label="Start Date"
@@ -103,9 +121,18 @@ const CreateCampaignsHrComponent = () => {
                   >
                     <DatePicker style={{ width: '100%' }} />
                   </Form.Item>
+                </Col> */}
+                <Col span={12}>
+                  <Form.Item
+                    name="duration"
+                    label="Internship Duration"
+                    rules={[{ required: true, message: "Please enter the duration in weeks" }]}
+                  >
+                    <Input placeholder="Enter the duration, e.g., 10 weeks" />
+                  </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={16}>
+              {/* <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
                     name="duration"
@@ -126,7 +153,7 @@ const CreateCampaignsHrComponent = () => {
                       placeholder="Select positions"
                       style={{ width: "100%" }}
                     >
-                      {jobs.map(program => (
+                      {CampaignDetail.jobs.map(program => (
                         <Option key={program.id} value={program.id}>
                           {program.name}
                         </Option>
@@ -134,7 +161,7 @@ const CreateCampaignsHrComponent = () => {
                     </Select>
                   </Form.Item>
                 </Col>
-              </Row>
+              </Row> */}
               <Form.Item
                 name="scopeOfWork"
                 label="Scope of Work"
@@ -188,4 +215,4 @@ const CreateCampaignsHrComponent = () => {
   );
 };
 
-export default CreateCampaignsHrComponent;
+export default EditCampaign;

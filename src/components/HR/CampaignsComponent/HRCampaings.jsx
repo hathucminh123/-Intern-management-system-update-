@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Typography, Layout, Pagination, Input, Space, Image } from "antd";
-import { ClockCircleOutlined } from "@ant-design/icons";
+import { Card, Row, Col, Typography, Layout, Pagination, Input, Space, Image, Button, Popconfirm, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
-import * as campaign from '../../../service/Campaign';
+import * as Campaign from '../../../service/Campaign';
+import moment from "moment";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Header, Content } = Layout;
 const { Search } = Input;
 
@@ -13,22 +13,24 @@ const HRCampaigns = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(4);
+  const [pageSize] = useState(6);
   const [campaigns, setCampaigns] = useState([]);
+  const [hovered, setHovered] = useState(null);
 
   useEffect(() => {
-    const fetchCampaignsData = async () => {
-      try {
-        const res = await campaign.fetchCampaigns();
-        setCampaigns(res.events);
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
-    };
     fetchCampaignsData();
   }, []);
 
-  const handleJobs = (item) => {
+  const fetchCampaignsData = async () => {
+    try {
+      const res = await Campaign.fetchCampaigns();
+      setCampaigns(res.events);
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+    }
+  };
+
+  const handleDetails = (item) => {
     navigate(`/hrmanager/campaigns/${item.id}`, { state: { item } });
   };
 
@@ -38,6 +40,21 @@ const HRCampaigns = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleEdit = (item) => {
+    navigate(`/hrmanager/EditCampaign/${item.id}`, { state: { item } });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await Campaign.deleteNewCampaign(id);
+      message.success("Campaign deleted successfully");
+      fetchCampaignsData();
+    } catch (error) {
+      message.error("Error deleting job: " + error.message);
+      console.error("Error deleting job:", error);
+    }
   };
 
   const filteredCampaigns = campaigns.filter((campaign) =>
@@ -79,7 +96,17 @@ const HRCampaigns = () => {
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  onClick={() => handleJobs(campaign)}
+                  actions={[
+                    <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
+                    <Popconfirm
+                      title="Are you sure to delete this job?"
+                      onConfirm={() => handleDelete(campaign.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="danger">Delete</Button>
+                    </Popconfirm>
+                  ]}
                 >
                   <Image
                     className="rounded-lg mb-3"
@@ -92,13 +119,18 @@ const HRCampaigns = () => {
                   <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {campaign.name}
                   </Title>
-                  <p><strong>Duration:</strong> {campaign.duration} months</p>
                   <p><strong>Jobs:</strong> {campaign.jobs.map((job) => job.name).join(", ")}</p>
-                  <div className="flex items-center mt-4">
-                    <ClockCircleOutlined />
-                    <span className="ml-3">Internship Duration:</span>
-                    <span className="ml-3 font-bold">{campaign.duration} months</span>
-                  </div>
+                  <p><strong>Duration:</strong> {campaign.duration} months</p>
+                  <p><strong>Start Date:</strong>{moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
+                  <p><strong>End Date:</strong>{moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
+                  <Text
+                    style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
+                    onClick={(e) => { e.stopPropagation(); handleDetails(campaign); }}
+                    onMouseEnter={() => setHovered(campaign.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    View Details {'-->'}
+                  </Text>
                 </Card>
               </Col>
             ))}

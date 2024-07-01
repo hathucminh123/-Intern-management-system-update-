@@ -64,7 +64,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
 
   return (
     <Space direction="vertical" style={{ width: '100%', padding: '20px', marginLeft: '50px' }}>
-      <div style={{ width: '100%', padding: '20px', marginLeft: '35%' }}>
+      <div style={{ width: '100%', padding: '20px', marginLeft: '25%' }}>
         <Title level={2}>Những vị trí ứng tuyển:</Title>
         <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "24px" }}>
           {filteredCampaigns.flatMap((campaign) =>
