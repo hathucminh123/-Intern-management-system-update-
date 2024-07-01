@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, DatePicker, Typography, message, Layout } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { v4 as uuidv4 } from 'uuid';
-import { createNewJobs } from '../../../service/JobsService';
+import moment from "moment";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { editNewJobs } from "../../../service/JobsService";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
 
-const CreateNewJobs = () => {
+const EditJob = () => {
+  const { id } = useParams();
+  const { state } = useLocation();
+  const jobDetail = state?.item;
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [requirement, setRequirement] = useState("");
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
+
+  useEffect(() => {
+    if (jobDetail) {
+      setRequirement(jobDetail.requirements || "");
+      setDescription(jobDetail.scopeOfWork || "");
+      setBenefits(jobDetail.benefits || "");
+      form.setFieldsValue({
+        ...jobDetail,
+        startDate: moment(jobDetail.startDate),
+      });
+    }
+  }, [jobDetail, form]);
 
   const handleRequirement = (value) => {
     setRequirement(value);
@@ -25,37 +42,33 @@ const CreateNewJobs = () => {
   };
 
   const onFinish = async (values) => {
-    const newJob = {
-      id: uuidv4(),
+    const updatedJob = {
+      id:id,
       ...values,
       scopeOfWork: description,
       requirements: requirement,
-      benefits
+      benefits,
     };
 
     try {
-      const response = await createNewJobs(newJob);
-      message.success("Job created successfully!");
-      form.resetFields();
-      setDescription("");
-      setRequirement("");
-      setBenefits("");
-      console.log("Form values:", response);
+      await editNewJobs(updatedJob);
+      message.success("Job updated successfully!");
+      navigate("/hrmanager/jobs");
     } catch (error) {
       message.error(`Error: ${error.message}`);
-      console.error("Error creating job:", error);
+      console.error("Error updating job:", error);
     }
   };
 
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Create New Job
+        Edit Job
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Title className="text-center mb-5" level={2}>
-            Create New Job
+            Edit Job
           </Title>
           <Form
             form={form}
@@ -155,7 +168,7 @@ const CreateNewJobs = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                Save
               </Button>
             </Form.Item>
           </Form>
@@ -165,4 +178,4 @@ const CreateNewJobs = () => {
   );
 };
 
-export default CreateNewJobs;
+export default EditJob;

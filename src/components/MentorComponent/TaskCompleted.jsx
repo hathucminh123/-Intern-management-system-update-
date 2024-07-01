@@ -23,11 +23,15 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [taskToReview, setTaskToReview] = useState(null);
   const [user, setUser] = useState([]);
+  const [dateRange, setDateRange] = useState([]);
+  const [assignedToFilter, setAssignedToFilter] = useState('');
   const navigate =useNavigate();
   // const test = useSelector((state) => state.user.test);
   // console.log('hiep',test);
   const dispatch = useDispatch();
+  const { RangePicker } = DatePicker;
   
+  const userRole = localStorage.getItem('role')
   useEffect(() => {
     dispatch(gettest1())
     getIntern()
@@ -49,7 +53,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   };
 
   const handleDetails =(task)=>{
-    navigate(`/mentor/taskDetail/${task.id}`,{state : {task}}) 
+    navigate(`/${userRole}/taskDetail/${task.id}`,{state : {task}}) 
   }
 
   const handleOpenReviewModal = (task) => {
@@ -66,10 +70,45 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
+  const handleDateRangeChange = (dates, dateStrings) => {
+    setDateRange(dateStrings);
+  };
 
-  const filteredTasks = tasks.filter(task =>
-    task.taskName.toLowerCase().includes(searchText.toLowerCase())
+  const handleAssignedToChange = (value) => {
+    setAssignedToFilter(value);
+  };
+
+
+  const filteredTasks = tasks.filter(task => {
+    const taskNameMatch = task.taskName.toLowerCase().includes(searchText.toLowerCase());
+    const startDateMatch = dateRange[0] ? moment(task.startDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
+    const endDateMatch = dateRange[0] ? moment(task.endDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
+    const assignedToMatch = assignedToFilter ? task.assignedTo === assignedToFilter : true;
+
+    return taskNameMatch && startDateMatch && endDateMatch && assignedToMatch;
+  });
+  const content = (
+    <Space direction="vertical">
+      <div>
+        Date Range:
+        <RangePicker onChange={handleDateRangeChange} />
+      </div>
+      <div>
+        Assigned To:
+        <Select
+          placeholder="Choose user"
+          allowClear
+          onChange={handleAssignedToChange}
+          style={{ width: '100%' }}
+        >
+          {user.map(item => (
+            <Select.Option key={item.id} value={item.firstName}>{item.firstName}</Select.Option>
+          ))}
+        </Select>
+      </div>
+    </Space>
   );
+
 
   let value
   {tasks.map((task)=>(
@@ -79,13 +118,17 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     <Menu>
       <Menu.Item key="1">
         {/* <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button> */}
-        <Button onClick={() => handleDetails(record)}>View/Edit</Button>
+        <Button onClick={() => handleDetails(record)}>View</Button>
       </Menu.Item>
       <Menu.Item key="2">
+        <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
+        {/* <Button onClick={() => handleDetails(record)}>View/Edit</Button> */}
+      </Menu.Item>
+      <Menu.Item key="3">
         <Button  onClick={() => handleDeleteTask(record.key)}>Delete</Button>
       </Menu.Item>
       {record.completed && (
-        <Menu.Item key="3">
+        <Menu.Item key="4">
           <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>
         </Menu.Item>
       )}
@@ -173,33 +216,16 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     },
   ];
 
-
-  const content = (
-    <Space>
-      <div>
-      start Date  : <DatePicker />
-      </div>
-      <div>
-      End Date   : <DatePicker />
-      </div>
-      <div>
-      Assigned To
-      <Select
-        placeholder="chọn người dùng"
-        allowClear
-
-      >
-       
-       {user.map((item) => (
-          <Select.Option key={item.id} value={item.firstName}>{item.firstName}</Select.Option>
-        ))}
-    
-
-
-      </Select>
-      </div>
-    </Space>
-  );
+// const handle =(types)=>{
+//   if (types ==="start" && types ==="end"&& types ==="user" )
+//     {
+//       const matchesPosition = selectedPosition
+//       ? campaign.jobs.some((job) => job.name === selectedPosition)
+//       : true;
+//     return matchesName && matchesPosition;
+//     }
+// return 
+// }
 
   if (value?.feedback){
     const endDateColumnIndex = columns.findIndex(column => column.key === 'endDate');

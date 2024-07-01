@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Typography, message, Layout, Input, Pagination, Space, Image } from "antd";
+import { Card, Row, Col, Typography, message, Layout, Input, Pagination, Space, Image, Button, Popconfirm } from "antd";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import * as Jobss from "../../../service/JobsService";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Header, Content } = Layout;
 const { Search } = Input;
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(4);
+  const [pageSize] = useState(6);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [hovered, setHovered] = useState(null);
+  const [selectJob, setSelectJob] = useState(null);
 
   const onSearch = (value) => setSearchQuery(value);
 
@@ -40,12 +42,55 @@ const Jobs = () => {
     navigate(`/hrmanager/Detail/${item.id}`, { state: { item } });
   };
 
+  const handleTrainingDetails = (item) => {
+    const userRole = localStorage.getItem('role').toLowerCase();
+    navigate(`/${userRole}/TrainingPrograms/${item.id}`, {
+      state: { item },
+    });
+  };
+
   const handleNewJobs = () => {
     navigate("/hrmanager/NewJobs");
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleEdit = (item) => {
+    navigate(`/hrmanager/EditJob/${item.id}`, { state: { item } });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await Jobss.deleteNewJobs(id);
+      message.success("Job deleted successfully");
+      fetchAllJobs();
+    } catch (error) {
+      message.error("Error deleting job: " + error.message);
+      console.error("Error deleting job:", error);
+    }
+  };
+
+  const handleDeleteTraining = async (jobId, trainingProgramId) => {
+    try {
+      const dataDeleteTraining = {
+        jobId:jobId,
+        trainingProgramId:trainingProgramId,
+      };
+
+      await Jobss.deleteTrainingNewJobs(dataDeleteTraining);
+      message.success("Training program deleted successfully");
+      fetchAllJobs();
+    } catch (error) {
+      message.error("Error deleting training program: " + error.message);
+      console.error("Error deleting training program:", error);
+    }
+  };
+
+  const handleSelect = (jobId, e) => {
+    e.stopPropagation();
+    setSelectJob(selectJob === jobId ? null : jobId);
   };
 
   const currentJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -83,7 +128,18 @@ const Jobs = () => {
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  onClick={() => handleDetails(item)}
+                  onClick={(e) => handleSelect(item.id, e)}
+                  actions={[
+                    <Button key="edit" onClick={() => handleEdit(item)}>Edit</Button>,
+                    <Popconfirm
+                      title="Are you sure to delete this job?"
+                      onConfirm={() => handleDelete(item.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="danger">Delete</Button>
+                    </Popconfirm>
+                  ]}
                 >
                   <Image
                     className="rounded-lg mb-3"
@@ -98,7 +154,73 @@ const Jobs = () => {
                   </Title>
                   <p><strong>Duration:</strong> {item.duration} months</p>
                   <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
-                  <p><strong>Total Members:</strong> {item.totalMember}</p>
+                  <Text
+                    style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
+                    onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                    onMouseEnter={() => setHovered(item.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    View Details {'-->'}
+                  </Text>
+
+                  {selectJob === item.id && (
+                    <div className="mt-4">
+                      <Space size={100}>
+                        <Title level={5}>Danh sách Training Program</Title>
+                        <ButtonComponent
+                          styleButton={{ background: "#06701c", border: "none" }}
+                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                          size="middle"
+                          textbutton="Create New"
+                          // onClick={handleAddNewCampaign}
+                        />
+                      </Space>
+
+                      {item.trainingPrograms && item.trainingPrograms.map((trainingProgram) => (
+                        <Space direction="vertical" style={{ width: '100%' }} key={trainingProgram.id}>
+                          <Card
+                            hoverable
+                            className="shadow-lg"
+                            style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
+                            actions={[
+                              // <Popconfirm
+                              //   title="Are you sure to delete this training program?"
+                              //   onConfirm={() => handleDeleteTraining(item.id, trainingProgram.id)}
+                              //   okText="Yes"
+                              //   cancelText="No"
+                              //   onMouseDown={(e) => e.stopPropagation()}
+                              // >
+                                <Button 
+                                 onClick={(e) => { e.stopPropagation(); handleDeleteTraining(item.id,trainingProgram.id); }} 
+                                 style={{width:'fit-content'}} 
+                                 type="danger"> 
+                                 Delete
+                                
+                                 </Button>
+                              // </Popconfirm>
+                            ]}
+                          >
+                            <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              Training Program: {trainingProgram.name}
+                            </Title>
+                            <Space direction="vertical">
+                              <Text>
+                                <strong>Duration:</strong> {trainingProgram.duration} months
+                              </Text>
+                              <Text
+                                style={{ width: "fit-content", cursor: 'pointer', color: hovered === trainingProgram.id ? 'blue' : 'black' }}
+                                onClick={(e) => { e.stopPropagation(); handleTrainingDetails(trainingProgram); }}
+                                onMouseEnter={() => setHovered(trainingProgram.id)}
+                                onMouseLeave={() => setHovered(null)}
+                              >
+                                View Details {'-->'}
+                              </Text>
+                            </Space>
+                          </Card>
+                        </Space>
+                      ))}
+                    </div>
+                  )}
                 </Card>
               </Col>
             ))}

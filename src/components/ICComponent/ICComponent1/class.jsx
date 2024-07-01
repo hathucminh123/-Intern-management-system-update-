@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Col, Row, Typography, Layout, Tag, Image } from "antd";
+import { Card, Col, Row, Typography, Layout, Tag, Image,Space } from "antd";
 import "tailwindcss/tailwind.css";
 
   import { useNavigate } from "react-router-dom";
@@ -34,9 +34,10 @@ const ClassList = () => {
     setExpandedId(expandedId === id ? null : id);
   };
   const navigate =useNavigate();
+  const userRole = localStorage.getItem('role')
 
   const handleTableClick = (className) => {
-    navigate(`/internshipcoordinators/students/${className}`);
+    navigate(`/${userRole}/students/${className}`);
     console.log("wtf",className)
   };
   console
@@ -64,10 +65,10 @@ const ClassList = () => {
                   {expandedId === classItem.id && (
                     <div className="mt-4">
                       <Title level={5}>Danh sách lớp</Title>
-                      <Row gutter={[16, 16]}>
-                        <Col xs={24} sm={12} md={8}>
+                      <Space direction="vertical" style={{width:'100%'}} >
                           <Card
                             hoverable
+                            
                             className="shadow-lg"
                             style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
                             onClick={() => handleTableClick(classItem.name)}
@@ -87,8 +88,7 @@ const ClassList = () => {
                             <p><strong>Start Date:</strong> 01-01-2022</p>
                             <p><strong>Total Members:</strong> 30</p>
                           </Card>
-                        </Col>
-                      </Row>
+                          </Space>
                     </div>
                   )}
                 </Card>

@@ -69,6 +69,7 @@ const CustomMenu = ({ userRole }) => {
       // { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
       { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
+      { key: "/mentor/class", icon: <AreaChartOutlined />, label: "Class" },
     ],
     hrmanager: [
       { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },

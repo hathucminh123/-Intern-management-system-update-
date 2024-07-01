@@ -34,6 +34,9 @@ import InternPage from "./pages/InternPage/InternPage";
 import ClassList from "./components/ICComponent/ICComponent1/class";
 import StudentList from "./components/ICComponent/ICComponent1/StudentList";
 import TaskDetails from "./components/MentorComponent/TaskDetails";
+import StudentAttendanceRecord from "./components/ICComponent/ICComponent1/StudentAttendanceRecord";
+import ClassAttendanceRecord from "./components/ICComponent/ICComponent1/ClassAttendanceRecord";
+import EditJob from "./components/HR/CampaignsComponent/EditJob ";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -55,6 +58,10 @@ function App() {
               <Route path="chat" element={<Chat />} />
               <Route path="taskboard" element={<TaskBoard />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
+              <Route path="class" element={<ClassList/>}/>
+              <Route path="students/:className" element={<StudentList />} />
+              <Route path="ClassAttendance/:className" element={<StudentAttendanceRecord/>} />
+              <Route path="StudentAttendance/:className" element={<ClassAttendanceRecord/>} />
             </Route>
             
             {/* HR Manager Routes */}
@@ -69,6 +76,8 @@ function App() {
               <Route path="NewJobs" element={<CreateNewJobs />} />
               <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+              <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
+              <Route path="EditJob/:id" element={<EditJob/>} />
             </Route>
 
             {/* Internship Coordinator Routes */}
@@ -86,9 +95,10 @@ function App() {
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<InternPage />} />
               <Route path="schedule" element={<Schedule />} />
-              <Route path="taskboard" element={<TaskBoard />} />
+              <Route path="taskboard" element={<TaskPerformance />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="Trainingprogram" element={<ViewCampaigns />} />
+              <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="chat" element={<Chat />} />
             </Route>
 

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { Card, Row, Col, Typography, Layout, Space, Tag, Table, Button, Dropdown, Menu, Form, Modal, Input, Upload } from "antd";
-import "tailwindcss/tailwind.css"; // Ensure Tailwind CSS is imported
+import React, { useState, useRef } from 'react';
+import {
+  Card, Row, Col, Typography, Layout, Space, Tag, Table, Button,
+  Dropdown, Menu, Form, Modal, Input, Upload, Popover, Checkbox, Avatar
+} from "antd";
+import "tailwindcss/tailwind.css";
 import { useLocation } from "react-router-dom";
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { DownOutlined, UploadOutlined } from '@ant-design/icons';
+import { DownOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import ReactQuill from 'react-quill';
 
 const { Title, Text, Paragraph } = Typography;
@@ -12,13 +15,24 @@ const { Header, Content } = Layout;
 const TaskDetails = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [description, setDescription] = useState("");
+  const [comment, setComment] = useState("");
+  const [check, setCheck] = useState(false);
   const [form] = Form.useForm();
   const { state } = useLocation();
   const taskDetail = state?.task;
-  console.log("Task Detail", taskDetail);
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const popoverRef = useRef(null);
 
-  const handleDescription = value => {
+  const handleDescription = (value) => {
     setDescription(value);
+  };
+
+  const handleComment = (value) => {
+    setComment(value);
+  };
+
+  const handleCheck = (value) => {
+    setCheck(value.target.checked);
   };
 
   const ColorStatus = taskDetail.status.toUpperCase() === "DONE"
@@ -29,10 +43,8 @@ const TaskDetails = () => {
 
   const taskData = [
     { key: 1, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "ON-PROGRESS" },
-    { key: 1, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "DONE" },
-    { key: 1, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "TODOS" },
-   
-    // Add more data if needed
+    { key: 2, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "DONE" },
+    { key: 3, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "TODOS" },
   ];
 
   const menu = (record) => (
@@ -54,7 +66,6 @@ const TaskDetails = () => {
   const handleUpload = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    // Add upload logic here
   };
 
   const columns = [
@@ -116,6 +127,49 @@ const TaskDetails = () => {
     setIsModalVisible(true);
   };
 
+  const handleClickNavigate = (type) => {
+    if (type === "logout") {
+      localStorage.clear();
+      navigate("/sign-in");
+    }
+  };
+
+  const content = (
+    <div>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          Finish your review
+        </Title>
+      </Header>
+
+      <Form form={form} layout="vertical" style={{ maxWidth: 600, margin: "0 auto" }}>
+        <Form.Item label="Comment" name="comment">
+          <ReactQuill
+            style={{ width: "100%", height: '200px' }}
+            value={comment}
+            onChange={handleComment}
+            placeholder="Enter the Comment"
+          />
+        </Form.Item>
+        <Form.Item style={{ marginTop: "50px" }} label="Check" name="check">
+          <Checkbox onChange={handleCheck} checked={check}>Approve</Checkbox>
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+          {/* <div className="WrapperContentPopup" onClick={() => handleClickNavigate("profile")}>
+        User Information
+      </div>
+      <div className="WrapperContentPopup" onClick={() => handleClickNavigate("logout")}>
+        Logout
+      </div> */}
+    </div>
+  );
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -123,12 +177,8 @@ const TaskDetails = () => {
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
-          <Space direction='vertical'>
-            <Card
-              style={{ width: "1500px" }}
-              hoverable
-              className="shadow-lg"
-            >
+          <Space direction='vertical' style={{ width: '100%' }}>
+            <Card style={{ width: "100%", marginBottom: '20px' }} hoverable className="shadow-lg">
               <Row justify="space-between" align="middle">
                 <Col span={12}>
                   <Space direction='vertical'>
@@ -175,19 +225,15 @@ const TaskDetails = () => {
               </Row>
             </Card>
 
-            <Row style={{ marginTop: '10px' }} justify="space-between" align="middle">
+            <Row gutter={16} justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
               <Col span={12}>
-                <Card
-                  style={{ width: "650px",height:"450px" }}
-                  hoverable
-                  className="shadow-lg"
-                >
+                <Card hoverable className="shadow-lg" style={{ height: "100%" }}>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       Member
                     </Title>
                   </Header>
-                  <div style={{ display: 'flex', gap: "20px", marginLeft: '50px', padding: '20px' }}>
+                  <div style={{ padding: '20px' }}>
                     <Title level={5} style={{ margin: 0 }}>
                       Người làm:
                     </Title>
@@ -196,52 +242,61 @@ const TaskDetails = () => {
                 </Card>
               </Col>
               <Col span={12}>
-                <Card
-                  style={{ width: "fit-content" }}
-                  hoverable
-                  className="shadow-lg"
-                >
+                <Card hoverable className="shadow-lg">
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                    <Row>
-                      <Col span={10}>
+                    <Row justify="space-between" align="middle">
+                      <Col>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Task submits list
                         </Title>
                       </Col>
-                      <Col span={14}>
-                        <ButtonComponent
-                          styleButton={{ background: "#06701c", border: "none" }}
-                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                          size="middle"
-                          textbutton="Post Task"
-                          onClick={handlePostTask}
-                        />
+                      <Col>
+                        <Space direction='horizontal'>
+                          <ButtonComponent
+                            styleButton={{ background: "#06701c", border: "none" }}
+                            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                            size="middle"
+                            textbutton="Post Task"
+                            onClick={handlePostTask}
+                          />
+                          <Popover
+                            content={content}
+                            trigger="click"
+                            open={isOpenPopup}
+                            onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                            getPopupContainer={() => popoverRef.current}
+                          >
+                            <div
+                              ref={popoverRef}
+                              onClick={() => setIsOpenPopup(!isOpenPopup)}
+                              style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                            >
+                              <ButtonComponent
+                                styleButton={{ background: "#06701c", border: "none" }}
+                                styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                                size="middle"
+                                textbutton="Review"
+                              />
+                            </div>
+                          </Popover>
+                        </Space>
                       </Col>
                     </Row>
                   </Header>
                   <div style={{ padding: '20px' }}>
-                    <Table dataSource={taskData} columns={columns} />
+                    <Table dataSource={taskData} columns={columns} pagination={false} />
                   </div>
                 </Card>
               </Col>
             </Row>
 
-            <Card 
-              style={{ width: "fit-content", marginTop:'30px' }}
-              hoverable
-              className="shadow-lg"
-            >
+            <Card hoverable className="shadow-lg" style={{ marginBottom: '20px' }}>
               <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          Evidence
-                        </Title>
+                <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  Evidence
+                </Title>
               </Header>
-              <Form
-                form={form}
-                layout="vertical"
-                style={{ maxWidth: 10000, margin: "0 auto" }}
-              >
+              <Form form={form} layout="vertical" style={{ padding: '20px' }}>
                 <Form.Item
                   label="Description"
                   name="description"
@@ -253,29 +308,53 @@ const TaskDetails = () => {
                   ]}
                 >
                   <ReactQuill
-                    style={{ height: '1000px' ,width:"1200px"}}
+                    style={{ height: '200px', width: "100%" }}
                     value={description}
                     onChange={handleDescription}
                     placeholder="Enter the Description"
                   />
                 </Form.Item>
                 <Form.Item>
-                  <Button style={{marginTop:"50px"}} type="primary" htmlType="submit">
+                  <Button style={{ marginTop: "20px" }} type="primary" htmlType="submit">
                     Submit
                   </Button>
                 </Form.Item>
               </Form>
             </Card>
+
+      <Card style={{ maxWidth: 800, backgroundColor: '#f0f8ff', borderRadius: 8 }} className="shadow-lg">
+      <Row align="middle" gutter={16}>
+        <Col>
+          <Avatar icon={<UserOutlined />} />
+        </Col>
+        <Col flex="auto">
+          <Space direction="vertical">
+            <Space>
+              <Text strong>hathucminh123</Text>
+              <Text type="secondary">commented 12 hours ago</Text>
+            </Space>
+            <Card style={{ backgroundColor: '#e6f7ff', borderRadius: 8 }}>
+              <Space direction="vertical">
+                <Text strong>hathucminh123 left a comment</Text>
+                <Text>sadasdasdasdasd</Text>
+              </Space>
+            </Card>
           </Space>
+        </Col>
+      </Row>
+    </Card>
+          </Space>
+
         </div>
 
         <Modal
           title="Nộp task"
-          visible={isModalVisible}
+          open={isModalVisible}
           onCancel={handleCancel}
           footer={null}
-          width={1000}
+          width={800}
         >
+        {/* <Form form={form} onFinish={}></Form> */}
           <Form form={form}>
             <Form.Item
               name="name"
