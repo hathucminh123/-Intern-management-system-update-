@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
-import { Tabs,Layout ,Typography} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Tabs,Layout ,Typography,message} from 'antd';
 import TaskCompleted from './TaskCompleted';
 import InternTaskView from './MentorTaskView';
  import Boards from './TaskBoard/Board';
 const { Header, Content, Footer } = Layout;
 const {Text,Title}= Typography
-
+import * as Assessment from "../../service/Assessment"
 const TaskPerformance = () => {
   const [tasks, setTasks] = useState([]);
+
+
+const fetchAssessment = async()=>{
+  try{
+   const res= await Assessment.GetAssessment()
+    setTasks(res.events)
+  }catch(error)
+  {
+    message.error("fetch Assessment failed")
+  }
+}
+
+useEffect(()=>{
+  fetchAssessment();
+},[])
+
 
   const handleAddTask = (newTask) => {
     console.log('newTask',newTask)

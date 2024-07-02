@@ -84,7 +84,7 @@ const ListJobs = () => {
       message.success("Jobs added successfully");
       navigate("/hrmanager/campaigns");
     } catch (error) {
-      message.error("Error adding jobs to campaign: " + error.message);
+      message.error("Error adding jobs to campaign: " + CampaignDetail.name );
     }
   };
 
@@ -114,7 +114,7 @@ const ListJobs = () => {
               size="middle"
               textbutton="Add jobs to training program"
               onClick={handleAddNewJobs}
-              disabled={selectedJobs.length === 0}
+              // disabled={selectedJobs.length === 2}
             />
           </Space>
           <Row gutter={[16, 16]}>

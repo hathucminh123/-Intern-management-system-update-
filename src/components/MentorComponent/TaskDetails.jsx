@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { DownOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import ReactQuill from 'react-quill';
+import moment from 'moment';
 
 const { Title, Text, Paragraph } = Typography;
 const { Header, Content } = Layout;
@@ -22,6 +23,8 @@ const TaskDetails = () => {
   const taskDetail = state?.task;
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
+
+  console.log("asdasd",taskDetail);
 
   const handleDescription = (value) => {
     setDescription(value);
@@ -185,7 +188,7 @@ const TaskDetails = () => {
                     <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       Task name:
                     </Title>
-                    <p><strong>{taskDetail.taskName}</strong></p>
+                    <p><strong>{taskDetail.name}</strong></p>
                     <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       Description:
                     </Title>
@@ -200,13 +203,13 @@ const TaskDetails = () => {
                       <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         Start Date
                       </Title>
-                      <p><strong>{taskDetail.startDate}</strong></p>
+                      <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY")}</strong></p>
                     </div>
                     <div style={{ marginTop: '10px' }}>
                       <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         End Date
                       </Title>
-                      <p><strong>{taskDetail.endDate}</strong></p>
+                      <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY")}</strong></p>
                     </div>
                     <div style={{ marginTop: '10px' }}>
                       <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -230,14 +233,18 @@ const TaskDetails = () => {
                 <Card hoverable className="shadow-lg" style={{ height: "100%" }}>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      Member
+                      Owner
                     </Title>
                   </Header>
                   <div style={{ padding: '20px' }}>
                     <Title level={5} style={{ margin: 0 }}>
-                      Người làm:
+                      userName:
                     </Title>
-                    <Text>{taskDetail.assignedTo}</Text>
+                    <Text>{taskDetail.owner.userName}</Text>
+                    <Title level={5} style={{ margin: 0 }}>
+                      Email:
+                    </Title>
+                    <Text>{taskDetail.owner.email}</Text>
                   </div>
                 </Card>
               </Col>

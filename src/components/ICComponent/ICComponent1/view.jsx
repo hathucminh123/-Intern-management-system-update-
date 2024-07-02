@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table, Button } from "antd";
+import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table, Button ,Popconfirm} from "antd";
 import { useNavigate } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
+import ButtonComponent from "../../ButtonComponent/ButtonComponent"
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -48,16 +49,17 @@ const ViewCampaigns = () => {
     setCurrentPage(page);
   };
 
+  const fetchCampaigns = async () => {
+    try {
+      const res = await Training.fetchTraining();
+      setCampaigns(res.events);
+    } catch (error) {
+      message.error("Error fetching campaigns: " + error.message);
+      console.error("Error fetching campaigns:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCampaigns = async () => {
-      try {
-        const res = await Training.fetchTraining();
-        setCampaigns(res.events);
-      } catch (error) {
-        message.error("Error fetching campaigns: " + error.message);
-        console.error("Error fetching campaigns:", error);
-      }
-    };
     fetchCampaigns();
   }, []);
 
@@ -67,6 +69,24 @@ const ViewCampaigns = () => {
       state: { item },
     });
   };
+
+  const handleEdit = (campaign) => {
+    navigate(`/internshipcoordinators/Details/${campaign.id}`, { state: { campaign } })
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await Training.DeleteNewTraining(id)
+      message.success("Complete Delete Training")
+      fetchCampaigns();
+    } catch (error) {
+      message.error("Failed to delete Training")
+    }
+  }
+ const handleAddResourceList=(item)=>{
+  navigate(`/internshipcoordinators/ResourceList/${item.id}`,{state:{item}})
+
+ } 
 
   return (
     <Layout>
@@ -94,10 +114,16 @@ const ViewCampaigns = () => {
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
                   actions={[
-
-                    <Button>sadasd</Button>
+                    <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
+                    <Popconfirm
+                      title="Are you sure to delete this job?"
+                      onConfirm={() => handleDelete(campaign.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="danger">Delete</Button>
+                    </Popconfirm>
                   ]}
-                   
                 >
                   <Collapse>
                     <Panel
@@ -110,19 +136,31 @@ const ViewCampaigns = () => {
                             <strong>Duration:</strong> {campaign.duration} months
                           </Text>
                           <Text
-                            style={{ width:"fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
+                            style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
                             onClick={() => handleJobs(campaign)}
                             onMouseEnter={() => setHovered(campaign.id)}
                             onMouseLeave={() => setHovered(null)}
                           >
-                            View Details {'-->'} 
+                            View Details {'-->'}
                           </Text>
                         </div>
                       }
                       key={campaign.id}
                       style={{ borderRadius: '8px', backgroundColor: 'white' }}
                     >
+                      <Row gutter={170}>
+                        <Col>
                       <Title level={5}>Resources</Title>
+                      </Col>
+                        <Col>
+                       <ButtonComponent
+                          styleButton={{ background: "#06701c", border: "none" }}
+                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                          size="middle"
+                          textbutton="Add Resource"
+                          onClick={(e) => { e.stopPropagation(); handleAddResourceList(campaign); }} 
+                        /></Col>
+                      </Row>
                       <Table
                         dataSource={campaign.resources}
                         columns={columns}

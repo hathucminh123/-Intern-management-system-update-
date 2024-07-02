@@ -1,21 +1,17 @@
-import React, { useState, useEffect, Children } from 'react';
-import { Button, Space, Table, Typography, Input, Modal, Form, Rate, Popover, DatePicker,Select,Tag ,Dropdown,Menu } from 'antd';
-import {
-  FilterOutlined,
-  DownOutlined 
-} from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message } from 'antd';
+import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
 import { getIntern } from '../../api';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import moment from 'moment';
-
-import { gettest1 } from'../../redux/userSlice';
-import { render } from 'react-dom';
+import { gettest1 } from '../../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
+
 const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
-  const {Text,Title}=Typography
+  const { Text, Title } = Typography;
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -25,36 +21,34 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const [user, setUser] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [assignedToFilter, setAssignedToFilter] = useState('');
-  const navigate =useNavigate();
-  // const test = useSelector((state) => state.user.test);
-  // console.log('hiep',test);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { RangePicker } = DatePicker;
-  
-  const userRole = localStorage.getItem('role')
+  const userRole = localStorage.getItem('role');
+
   useEffect(() => {
-    dispatch(gettest1())
+    dispatch(gettest1());
     getIntern()
       .then(res => {
         setUser(res.users.splice(0, 20));
       })
       .catch(err => {
-        setError(err);
+        message.error('Error fetching users: ' + err.message);
       });
-  }, []);
+  }, [dispatch]);
+
   const handleDeleteTask = (key) => {
     onUpdateTask(tasks.filter((task) => task.key !== key));
   };
 
   const handleOpenDetailModal = (task) => {
-    console.log('task', task)
     setSelectedTask(task);
     setOpenDetailModal(true);
   };
 
-  const handleDetails =(task)=>{
-    navigate(`/${userRole}/taskDetail/${task.id}`,{state : {task}}) 
-  }
+  const handleDetails = (task) => {
+    navigate(`/${userRole}/taskDetail/${task.id}`, { state: { task } });
+  };
 
   const handleOpenReviewModal = (task) => {
     setTaskToReview(task);
@@ -70,6 +64,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const handleSearch = (e) => {
     setSearchText(e.target.value);
   };
+
   const handleDateRangeChange = (dates, dateStrings) => {
     setDateRange(dateStrings);
   };
@@ -78,15 +73,15 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
     setAssignedToFilter(value);
   };
 
-
   const filteredTasks = tasks.filter(task => {
-    const taskNameMatch = task.taskName.toLowerCase().includes(searchText.toLowerCase());
+    const taskNameMatch = task.name.toLowerCase().includes(searchText.toLowerCase());
     const startDateMatch = dateRange[0] ? moment(task.startDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
     const endDateMatch = dateRange[0] ? moment(task.endDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
-    const assignedToMatch = assignedToFilter ? task.assignedTo === assignedToFilter : true;
+    const assignedToMatch = assignedToFilter ? task.owner?.userName === assignedToFilter : true;
 
     return taskNameMatch && startDateMatch && endDateMatch && assignedToMatch;
   });
+
   const content = (
     <Space direction="vertical">
       <div>
@@ -102,30 +97,23 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
           style={{ width: '100%' }}
         >
           {user.map(item => (
-            <Select.Option key={item.id} value={item.firstName}>{item.firstName}</Select.Option>
+            <Select.Option key={item.id} value={item.userName}>{item.userName}</Select.Option>
           ))}
         </Select>
       </div>
     </Space>
   );
 
-
-  let value
-  {tasks.map((task)=>(
-    value=task
-  ))}
   const menu = (record) => (
     <Menu>
       <Menu.Item key="1">
-        {/* <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button> */}
         <Button onClick={() => handleDetails(record)}>View</Button>
       </Menu.Item>
       <Menu.Item key="2">
         <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
-        {/* <Button onClick={() => handleDetails(record)}>View/Edit</Button> */}
       </Menu.Item>
       <Menu.Item key="3">
-        <Button  onClick={() => handleDeleteTask(record.key)}>Delete</Button>
+        <Button onClick={() => handleDeleteTask(record.key)}>Delete</Button>
       </Menu.Item>
       {record.completed && (
         <Menu.Item key="4">
@@ -138,18 +126,14 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   const columns = [
     {
       title: 'Task Name',
-      dataIndex: 'taskName',
-      key: 'taskName',
+      dataIndex: 'name',
+      key: 'name',
     },
-    // {
-    //   title: 'Description',
-    //   dataIndex: 'description',
-    //   key: 'description',
-    // },
     {
       title: 'Assigned To',
-      dataIndex: 'assignedTo',
-      key: 'assignedTo',
+      dataIndex: 'owner',
+      key: 'owner',
+      render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
     },
     {
       title: 'Start Date',
@@ -167,98 +151,67 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (text,record) => (
-      
-       <span>
-        {record.status.toUpperCase() === "DONE" &&
-        (
-          <Tag color='green'>
-             {record.status.toUpperCase()}
-          </Tag>
-        
-        )}
-         {record.status.toUpperCase() === "ON-PROGRESS" &&
-        (
-          <Tag color='geekblue'>
-             {record.status.toUpperCase()}
-          </Tag>
-        
-        )}
-           {record.status.toUpperCase() === "TODOS" &&
-        (
-          <Tag color='blue'>
-             {record.status.toUpperCase()}
-          </Tag>
-        
-        )}
+      render: (text, record) => (
+        <span>
+          {record.status.toUpperCase() === "DONE" && (
+            <Tag color='green'>
+              {record.status.toUpperCase()}
+            </Tag>
+          )}
+          {record.status.toUpperCase() === "ON-PROGRESS" && (
+            <Tag color='geekblue'>
+              {record.status.toUpperCase()}
+            </Tag>
+          )}
+          {record.status.toUpperCase() === "TODOS" && (
+            <Tag color='blue'>
+              {record.status.toUpperCase()}
+            </Tag>
+          )}
         </span>
-        
       ),
     },
-    // {
-    //   title: 'Feedback',
-    //   dataIndex: 'feedback',
-    //   key: 'feedback',
-    // },
     {
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
         <Space size="middle">
-      
           <Dropdown overlay={menu(record)}>
-          <Button>
-            More <DownOutlined />
-          </Button>
-        </Dropdown>
+            <Button>
+              More <DownOutlined />
+            </Button>
+          </Dropdown>
         </Space>
       ),
     },
   ];
 
-// const handle =(types)=>{
-//   if (types ==="start" && types ==="end"&& types ==="user" )
-//     {
-//       const matchesPosition = selectedPosition
-//       ? campaign.jobs.some((job) => job.name === selectedPosition)
-//       : true;
-//     return matchesName && matchesPosition;
-//     }
-// return 
-// }
+  if (tasks.some(task => task.feedback)) {
+    columns.splice(columns.findIndex(column => column.key === 'endDate') + 1, 0, {
+      title: 'Feedback',
+      dataIndex: 'feedback',
+      key: 'feedback',
+    });
+  }
 
-  if (value?.feedback){
-    const endDateColumnIndex = columns.findIndex(column => column.key === 'endDate');
-    if (endDateColumnIndex !== -1) {
-      columns.splice(endDateColumnIndex + 1, 0, {
-        title: 'Feedback',
-        dataIndex: 'feedback',
-        key: 'feedback',
-      });
-  
-    }
-  }
-  
-  if (value?.files) {
+  if (tasks.some(task => task.files)) {
     const feedbackColumnIndex = columns.findIndex(column => column.key === 'feedback');
-    if (feedbackColumnIndex !== -1) {
-      const filesColumn = {
-        title: 'Files',
-        dataIndex: 'files',
-        key: 'files',
-        render: (files) => (
-          <Space>
-            {files.map(file => (
-              <Tag color="blue" key={file.name}>
-                {file.name}
-              </Tag>
-            ))}
-          </Space>
-        ),
-      };
-      columns.splice(feedbackColumnIndex + 1, 0, filesColumn);
-    }
+    columns.splice(feedbackColumnIndex + 1, 0, {
+      title: 'Files',
+      dataIndex: 'files',
+      key: 'files',
+      render: (files) => (
+        <Space>
+          {files.map(file => (
+            <Tag color="blue" key={file.name}>
+              {file.name}
+            </Tag>
+          ))}
+        </Space>
+      ),
+    });
   }
+
   return (
     <>
       <AddModal
@@ -289,13 +242,17 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
           onChange={handleSearch}
           style={{ width: '300px', marginRight: '30px' }}
         />
-        <Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
+{userRole ==="mentor" &&(
+
+
+<Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
+)}
+      
         <Popover content={content}>
           <Button style={{ marginRight: '30px' }} icon={<FilterOutlined />} />
         </Popover>
       </div>
-
-      <Table   className="shadow-lg" dataSource={filteredTasks} columns={columns} />
+      <Table className="shadow-lg" dataSource={filteredTasks} columns={columns} />
     </>
   );
 };

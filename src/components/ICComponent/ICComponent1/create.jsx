@@ -5,12 +5,14 @@ import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
 import * as Training from '../../../service/TrainingPrograms';
 import * as Jobss from '../../../service/JobsService';
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 const { Option } = Select;
 const { Header, Content, Footer } = Layout;
 const Create = () => {
   const [form] = Form.useForm();
+  const navigate =useNavigate();
   const [courseObject, setCourseObject] = useState("");
   const [outputObject, setOutputObject] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -42,6 +44,7 @@ const Create = () => {
       form.resetFields();
       setCourseObject("");
       setOutputObject("");
+      navigate('/internshipcoordinators/ViewTrainingProgram')
       console.log("Form values:", response);
     } catch (error) {
       message.error(`Error: ${error.message}`);

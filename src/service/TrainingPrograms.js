@@ -45,6 +45,75 @@ export const   DeleteResourceNewTraining= async (eventData)=> {
   }
 }
 
+export const   AddResourceNewTraining= async (eventData)=> {
+  try {
+    const response = await httpClient.post({
+        url: `${apiLinks.TrainingProgram.postResource}`,
+        data: eventData,
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      const error = new Error('An error occurred while deleteting Resource');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data); 
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+}
+
+
+export const  DeleteNewTraining= async (id)=> {
+  try {
+    const response = await httpClient.delete({
+        url: `${apiLinks.TrainingProgram.delete}`,
+        params: { id },
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      const error = new Error('An error occurred while deleteting Resource');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data); 
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+}
+
+
+export const  EditNewTraining= async (data)=> {
+  try {
+    const response = await httpClient.put({
+        url: `${apiLinks.TrainingProgram.put}`,
+        data: data,
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      const error = new Error('An error occurred while deleteting Resource');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data); 
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+}
+
+
 
 export const fetchTraining= async() => {
   try {

@@ -38,12 +38,13 @@ const Jobs = () => {
     }
   };
 
+  const userRole = localStorage.getItem('role').toLowerCase();
+
   const handleDetails = (item) => {
-    navigate(`/hrmanager/Detail/${item.id}`, { state: { item } });
+    navigate(`/${userRole}/Detail/${item.id}`, { state: { item } });
   };
 
   const handleTrainingDetails = (item) => {
-    const userRole = localStorage.getItem('role').toLowerCase();
     navigate(`/${userRole}/TrainingPrograms/${item.id}`, {
       state: { item },
     });
@@ -75,8 +76,8 @@ const Jobs = () => {
   const handleDeleteTraining = async (jobId, trainingProgramId) => {
     try {
       const dataDeleteTraining = {
-        jobId:jobId,
-        trainingProgramId:trainingProgramId,
+        jobId: jobId,
+        trainingProgramId: trainingProgramId,
       };
 
       await Jobss.deleteTrainingNewJobs(dataDeleteTraining);
@@ -92,22 +93,39 @@ const Jobs = () => {
     e.stopPropagation();
     setSelectJob(selectJob === jobId ? null : jobId);
   };
-const handleAddTrainingProgram =(item)=>{
-  navigate(`/hrmanager/ListTraining/${item.id}`,{state: {item}} );
 
-}
+  const handleAddTrainingProgram = (item) => {
+    navigate(`/${userRole}/ListTraining/${item.id}`, { state: { item } });
+  };
+
   const currentJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Job Listings
-      </Header>
+         { userRole ==="internshipcoordinators" &&(
+            <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+              Job Class List
+            </Header>)
+      
+          }
+           { userRole ==="hrmanager" &&(
+            <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+              Job  List
+            </Header>)
+      
+          }
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
+        { userRole ==="internshipcoordinators" &&(
+          <Title className="text-center mb-5" level={2}>
+            List class jobs
+          </Title>
+        )}
+            { userRole ==="hrmanager" &&(
           <Title className="text-center mb-5" level={2}>
             List Jobs
           </Title>
+        )}
           <Space direction="vertical" className="flex flex-row items-center mb-5">
             <Search
               size="large"
@@ -116,13 +134,17 @@ const handleAddTrainingProgram =(item)=>{
               enterButton
               className="w-full"
             />
+
+{ userRole ==="hrmanager" &&(
             <ButtonComponent
-              styleButton={{ background: "#06701c", border: "none" }}
-              styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-              size="middle"
-              textbutton="Create New"
-              onClick={handleNewJobs}
-            />
+            styleButton={{ background: "#06701c", border: "none" }}
+            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+            size="middle"
+            textbutton="Create New"
+            onClick={handleNewJobs}
+          />
+        )}
+         
           </Space>
           <Row gutter={[16, 16]}>
             {currentJobs.map((item) => (
@@ -132,7 +154,7 @@ const handleAddTrainingProgram =(item)=>{
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
                   onClick={(e) => handleSelect(item.id, e)}
-                  actions={[
+                  actions={userRole === "hrmanager" ? [
                     <Button key="edit" onClick={() => handleEdit(item)}>Edit</Button>,
                     <Popconfirm
                       title="Are you sure to delete this job?"
@@ -142,7 +164,7 @@ const handleAddTrainingProgram =(item)=>{
                     >
                       <Button type="danger">Delete</Button>
                     </Popconfirm>
-                  ]}
+                  ] : []}
                 >
                   <Image
                     className="rounded-lg mb-3"
@@ -165,8 +187,7 @@ const handleAddTrainingProgram =(item)=>{
                   >
                     View Details {'-->'}
                   </Text>
-
-                  {selectJob === item.id && (
+                  {userRole === "internshipcoordinators" && selectJob === item.id && (
                     <div className="mt-4">
                       <Space size={100}>
                         <Title level={5}>Danh sách Training Program</Title>
@@ -175,10 +196,9 @@ const handleAddTrainingProgram =(item)=>{
                           styleTextButton={{ color: "#fff", fontWeight: "bold" }}
                           size="middle"
                           textbutton="Add training program"
-                          onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(item); }} 
+                          onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(item); }}
                         />
                       </Space>
-
                       {item.trainingPrograms && item.trainingPrograms.map((trainingProgram) => (
                         <Space direction="vertical" style={{ width: '100%' }} key={trainingProgram.id}>
                           <Card
@@ -186,21 +206,13 @@ const handleAddTrainingProgram =(item)=>{
                             className="shadow-lg"
                             style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
                             actions={[
-                              // <Popconfirm
-                              //   title="Are you sure to delete this training program?"
-                              //   onConfirm={() => handleDeleteTraining(item.id, trainingProgram.id)}
-                              //   okText="Yes"
-                              //   cancelText="No"
-                              //   onMouseDown={(e) => e.stopPropagation()}
-                              // >
-                                <Button 
-                                 onClick={(e) => { e.stopPropagation(); handleDeleteTraining(item.id,trainingProgram.id); }} 
-                                 style={{width:'fit-content'}} 
-                                 type="danger"> 
-                                 Delete
-                                
-                                 </Button>
-                              // </Popconfirm>
+                              <Button
+                                onClick={(e) => { e.stopPropagation(); handleDeleteTraining(item.id, trainingProgram.id); }}
+                                style={{ width: 'fit-content' }}
+                                type="danger"
+                              >
+                                Delete
+                              </Button>
                             ]}
                           >
                             <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

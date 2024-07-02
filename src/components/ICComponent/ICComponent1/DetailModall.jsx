@@ -34,6 +34,7 @@ const DetailModall = ({ isVisible, onClose, task, onUpdateTask }) => {
       const updatedTask = { 
         ...task, 
         ...values, 
+        id:task.id,
         filePath: fileUrl,
       };
       
@@ -103,9 +104,7 @@ const DetailModall = ({ isVisible, onClose, task, onUpdateTask }) => {
           </Upload.Dragger>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Update Resource
-          </Button>
+        
         </Form.Item>
       </Form>
     </Modal>

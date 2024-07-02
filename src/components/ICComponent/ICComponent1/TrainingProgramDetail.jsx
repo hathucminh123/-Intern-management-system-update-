@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu } from "antd";
-import "tailwindcss/tailwind.css";
-import { useLocation, useParams } from "react-router-dom";
+import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu, Popconfirm, Card, Row, Col } from "antd";
 import { UploadOutlined, DownOutlined } from '@ant-design/icons';
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import * as Resource from "../../../service/Resource";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, firestore } from '../../../firebase/config';
-import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import DetailModall from './DetailModall';
 import * as Training from "../../../service/TrainingPrograms";
+import "tailwindcss/tailwind.css";
 import '../../../index.css';
 
 const { Title, Paragraph, Text } = Typography;
@@ -16,7 +16,7 @@ const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
 const TrainingProgramDetail = () => {
-  let { id } = useParams();
+  const { id } = useParams();
   const { state } = useLocation();
   const CampaignDetail = state?.item;
   const [resources, setResources] = useState([]);
@@ -26,6 +26,8 @@ const TrainingProgramDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [form] = Form.useForm();
+  const navigate =useNavigate();
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -36,6 +38,13 @@ const TrainingProgramDetail = () => {
   if (!CampaignDetail) {
     return <div>Training program detail not found</div>;
   }
+
+  const fetchResources = async () => {
+    const q = query(collection(firestore, 'resources'), where('trainingProgramIds', 'array-contains', CampaignDetail.id));
+    const querySnapshot = await getDocs(q);
+    const updatedResources = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setResources(updatedResources);
+  };
 
   const handleAddResource = async (values) => {
     setLoading(true);
@@ -57,9 +66,14 @@ const TrainingProgramDetail = () => {
 
       await addDoc(collection(firestore, 'resources'), resourceData);
       await Resource.createNewResource(resourceData);
-      setResources([...resources, resourceData]);
+      
       message.success('Resource added successfully!');
+      form.resetFields();
+      navigate('/internshipcoordinators/ViewTrainingProgram')
+      
       setCvFile(null);
+
+      await fetchResources();
     } catch (error) {
       message.error('Error submitting form. Please try again.');
       console.error('Error submitting form:', error);
@@ -68,16 +82,8 @@ const TrainingProgramDetail = () => {
     }
   };
 
-  const handleUpdateResource = async (updatedResource) => {
-    try {
-      const resourceDoc = doc(firestore, 'resources', updatedResource.id);
-      await updateDoc(resourceDoc, updatedResource);
-      setResources((prev) => prev.map(resource => resource.id === updatedResource.id ? updatedResource : resource));
-      message.success('Resource updated successfully!');
-    } catch (error) {
-      message.error('Error updating resource. Please try again.');
-      console.error('Error updating resource:', error);
-    }
+  const handleUpdateResource = async (updatedTask) => {
+    setResources((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
   };
 
   const handleDeleteResource = async (resourceId) => {
@@ -207,7 +213,7 @@ const TrainingProgramDetail = () => {
             </TabPane>
             <TabPane tab="Resources" key="2">
               {userRole === "internshipcoordinators" && (
-                <Form layout="vertical" onFinish={handleAddResource}>
+                <Form form={form} layout="vertical" onFinish={handleAddResource}>
                   <Form.Item
                     name="name"
                     label="Name"

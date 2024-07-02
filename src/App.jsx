@@ -41,6 +41,8 @@ import ListTraining from "./components/HR/CampaignsComponent/ListTraining";
 import ListJobs from "./components/HR/CampaignsComponent/ListJobs";
 import EditCampaign from "./components/HR/CampaignsComponent/EditCampaign";
 import ResourceList from "./components/ICComponent/ICComponent1/ResourceList";
+import EditTraining from "./components/ICComponent/ICComponent1/EditTraining";
+import ResourceListt from "./components/ICComponent/ICComponent1/ResourceListt";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -95,9 +97,13 @@ function App() {
               <Route path="NewTrainingProgram" element={<Create />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
-              <Route path="class" element={<ClassList/>}/>
+              <Route path="class" element={<Jobs/>}/>
               <Route path="students/:className" element={<StudentList />} />
-              <Route path="ResourceList" element={<ResourceList />} />
+              <Route path="ListTraining/:id" element={<ListTraining/>} />
+              <Route path="ResourceList/:id" element={<ResourceList />} />
+              <Route path="ResourceList" element={<ResourceListt />} />
+              <Route path="Details/:id" element={<EditTraining />} />
+              <Route path="Detail/:id" element={<HRCampaignsDetails />} />
 
             </Route>
                 {/* Internship Routes */}
@@ -109,6 +115,7 @@ function App() {
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="Trainingprogram" element={<ViewCampaigns />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
+              <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="chat" element={<Chat />} />
             </Route>
 

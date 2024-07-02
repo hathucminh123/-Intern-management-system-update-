@@ -75,7 +75,7 @@ const ListTraining = () => {
       setSelectTraining(null);
     }
   }
-
+const userRole =localStorage.getItem('role')
   const handleAddTraining = async () => {
    try{
     const newTraining = {
@@ -84,12 +84,12 @@ const ListTraining = () => {
     };
 
     await AddTraining.createTrainingNewJobs(newTraining);
-    message.success("Training program deleted successfully");
-    navigate('/hrmanager/Jobs')
+    message.success("Training program added successfully");
+    navigate(`/${userRole}/class`)
 
 
    }catch (error) {
-      message.error("Error deleting training program: " + error.message);
+      message.error(" training program exist in this "+Trainingprogram.name +" Job" );
       console.error("Error deleting training program:", error);
   }
   }

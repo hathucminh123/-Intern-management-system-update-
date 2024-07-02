@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Modal, Input, DatePicker, Select, Row, Col } from 'antd';
 import ReactQuill from 'react-quill';
-import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
 import { getIntern } from '../../api';
+import * as Assessment from "../../service/Assessment";
 
 const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const [form] = Form.useForm();
   const [user, setUser] = useState([]);
-  const [error, setError] = useState(null);
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -17,35 +15,30 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
         setUser(res.users.splice(0, 20));
       })
       .catch(err => {
-        setError(err);
+        console.error('Error fetching users:', err);
       });
   }, []);
-
-  const { RangePicker } = DatePicker;
-  const { Option } = Select;
 
   const handleDescription = value => {
     setDescription(value);
   };
 
-  const handleOk = () => {
-    form
-      .validateFields()
-      .then(values => {
-        const newTask = {
-          id: uuidv4(),
-          ...values,
-          startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : null,
-          endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null,
-          description: description,
-        };
-        onAddTask(newTask);
-        form.resetFields();
-        onClose();
-      })
-      .catch(info => {
-        console.log('Validate Failed:', info);
-      });
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields();
+      const newTask = {
+        ...values,
+        // startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : null,
+        // endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null,
+        description: description,
+      };
+      await Assessment.AddAssessment(newTask);
+      onAddTask(newTask);
+      form.resetFields();
+      onClose();
+    } catch (error) {
+      console.log('Validate Failed:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -67,7 +60,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
           <Col span={12}>
             <Form.Item
               label="Task Name"
-              name="taskName"
+              name="name"
               rules={[{ required: true, message: 'Please input the task name!' }]}
             >
               <Input />
@@ -75,14 +68,14 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
 
             <Form.Item
               label="Assigned To"
-              name="assignedTo"
+              name="userId"
               rules={[{ required: true, message: 'Please select the person to assign the task to!' }]}
             >
               <Select placeholder="Select user" allowClear>
-                {user.map(item => (
-                  <Option key={item.id} value={item.firstName}>
-                    {item.firstName}
-                  </Option>
+                {user.map(u => (
+                  <Select.Option key={u.id} value={u.id}>
+                    {u.userName}
+                  </Select.Option>
                 ))}
               </Select>
             </Form.Item>
@@ -109,9 +102,9 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               rules={[{ required: true, message: 'Please select the status!' }]}
             >
               <Select placeholder="Select status" allowClear>
-                <Option value="TODOS">TODOS</Option>
-                <Option value="On-Progress">On-Progress</Option>
-                <Option value="DONE">DONE</Option>
+                <Select.Option value="TODOS">TODOS</Select.Option>
+                <Select.Option value="ON-PROGRESS">ON-PROGRESS</Select.Option>
+                <Select.Option value="DONE">DONE</Select.Option>
               </Select>
             </Form.Item>
           </Col>

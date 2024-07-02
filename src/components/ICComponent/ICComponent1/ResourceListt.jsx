@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const { Text, Title } = Typography;
 const { Header, Content } = Layout;
 
-const ResourceList = () => {
+const ResourceListt = () => {
   const { state } = useLocation();
   const TrainingProgram = state?.item;
   const [resource, setResource] = useState([]);
@@ -88,17 +88,17 @@ const ResourceList = () => {
   };
 
   const columns = [
-    {
-      title: "",
-      dataIndex: "checkbox",
-      key: "checkbox",
-      render: (_, record) => (
-        <Checkbox
-          checked={!!checkedKeys[record.id]}
-          onChange={(e) => handleCheckboxChange(record, e.target.checked)}
-        />
-      ),
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "checkbox",
+    //   key: "checkbox",
+    //   render: (_, record) => (
+    //     <Checkbox
+    //       checked={!!checkedKeys[record.id]}
+    //       onChange={(e) => handleCheckboxChange(record, e.target.checked)}
+    //     />
+    //   ),
+    // },
     { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
     { title: "Description", dataIndex: "description", key: "description", responsive: ['md'] },
     { 
@@ -138,9 +138,9 @@ const ResourceList = () => {
           pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
         />
         <div style={{ marginTop: "20px" }}>
-          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
+          {/* <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
             Add to Training Program
-          </Button>
+          </Button> */}
         </div>
       </Content>
       {selectedResource && (
@@ -155,4 +155,4 @@ const ResourceList = () => {
   );
 }
 
-export default ResourceList;
+export default ResourceListt;
