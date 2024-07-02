@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table } from "antd";
+import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
@@ -93,6 +93,11 @@ const ViewCampaigns = () => {
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                  actions={[
+
+                    <Button>sadasd</Button>
+                  ]}
+                   
                 >
                   <Collapse>
                     <Panel

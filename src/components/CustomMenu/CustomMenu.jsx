@@ -89,6 +89,7 @@ const CustomMenu = ({ userRole }) => {
         ],
       },
       { key: "/internshipcoordinators/class", icon: <AreaChartOutlined />, label: "Class" },
+      { key: "/internshipcoordinators/ResourceList", icon: <AreaChartOutlined />, label: "Resource" },
     ],
     intern: [
       { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },

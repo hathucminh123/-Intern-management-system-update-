@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout } from "antd";
+import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu } from "antd";
 import "tailwindcss/tailwind.css";
 import { useLocation, useParams } from "react-router-dom";
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, DownOutlined } from '@ant-design/icons';
 import * as Resource from "../../../service/Resource";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, firestore } from '../../../firebase/config';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import DetailModall from './DetailModall';
+import * as Training from "../../../service/TrainingPrograms";
+import '../../../index.css';
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -21,6 +24,8 @@ const TrainingProgramDetail = () => {
   const [cvFile, setCvFile] = useState(null);
   const [pageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -63,6 +68,49 @@ const TrainingProgramDetail = () => {
     }
   };
 
+  const handleUpdateResource = async (updatedResource) => {
+    try {
+      const resourceDoc = doc(firestore, 'resources', updatedResource.id);
+      await updateDoc(resourceDoc, updatedResource);
+      setResources((prev) => prev.map(resource => resource.id === updatedResource.id ? updatedResource : resource));
+      message.success('Resource updated successfully!');
+    } catch (error) {
+      message.error('Error updating resource. Please try again.');
+      console.error('Error updating resource:', error);
+    }
+  };
+
+  const handleDeleteResource = async (resourceId) => {
+    try {
+      const resourceDoc = {
+        trainingProgramId: CampaignDetail.id,
+        resourceId: resourceId
+      };
+      await Training.DeleteResourceNewTraining(resourceDoc);
+      setResources((prev) => prev.filter(resource => resource.id !== resourceId));
+      message.success('Resource deleted successfully!');
+    } catch (error) {
+      message.error('Error deleting resource. Please try again.');
+      console.error('Error deleting resource:', error);
+    }
+  };
+
+  const handleOpenDetailModal = (resource) => {
+    setSelectedResource(resource);
+    setOpenDetailModal(true);
+  };
+
+  const menu = (record) => (
+    <Menu>
+      <Menu.Item key="1">
+        <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
+      </Menu.Item>
+    </Menu>
+  );
+
   const columns = [
     {
       title: 'Name',
@@ -79,6 +127,19 @@ const TrainingProgramDetail = () => {
       dataIndex: 'filePath',
       key: 'filePath',
       render: (filePath) => <a href={filePath} target="_blank" rel="noopener noreferrer">View File</a>,
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Space size="middle">
+          <Dropdown overlay={menu(record)}>
+            <Button>
+              More <DownOutlined />
+            </Button>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
 
@@ -189,13 +250,21 @@ const TrainingProgramDetail = () => {
               <Table
                 columns={columns}
                 dataSource={resources}
-                rowKey="name"
+                rowKey="id"
                 pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
               />
             </TabPane>
           </Tabs>
         </div>
       </Content>
+      {selectedResource && (
+        <DetailModall
+          isVisible={openDetailModal}
+          onClose={() => setOpenDetailModal(false)}
+          task={selectedResource}
+          onUpdateTask={handleUpdateResource}
+        />
+      )}
     </Layout>
   );
 };

@@ -13,4 +13,6 @@ html{
   font-size: 100%;
 }
 
-
+.ant-message {
+  top: 80px !important; /* Adjust the value as needed */
+}

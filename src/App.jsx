@@ -40,6 +40,7 @@ import EditJob from "./components/HR/CampaignsComponent/EditJob ";
 import ListTraining from "./components/HR/CampaignsComponent/ListTraining";
 import ListJobs from "./components/HR/CampaignsComponent/ListJobs";
 import EditCampaign from "./components/HR/CampaignsComponent/EditCampaign";
+import ResourceList from "./components/ICComponent/ICComponent1/ResourceList";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -96,6 +97,8 @@ function App() {
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="class" element={<ClassList/>}/>
               <Route path="students/:className" element={<StudentList />} />
+              <Route path="ResourceList" element={<ResourceList />} />
+
             </Route>
                 {/* Internship Routes */}
                 <Route path="/intern" element={<CustomMenu userRole="intern" />}>

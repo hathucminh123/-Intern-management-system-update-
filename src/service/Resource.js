@@ -22,6 +22,51 @@ export const   createNewResource= async (eventData)=> {
     throw new Error(`Error: ${error.message}`);
   }
 }
+export const deleteResource = async (id) => {
+  try {
+    const response = await httpClient.delete({
+      url: `${apiLinks.Resource.delete}`,
+      params: { id },
+    });
+
+    if (![200, 204].includes(response.status)) {
+      const error = new Error('An error occurred while deleting the Resource');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting Resource:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+};
+
+export const editResource = async (data) => {
+  try {
+    const response = await httpClient.put({
+      url: `${apiLinks.Resource.put}`,
+      data:data
+    });
+
+    if (![200, 204].includes(response.status)) {
+      const error = new Error('An error occurred while Edit the Resource');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error Edit Resource:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+};
+
+
 
 
 export const fetchResource= async() => {
