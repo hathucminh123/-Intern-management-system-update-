@@ -118,12 +118,12 @@ const CreateCampaignsHrComponent = () => {
                 <Col span={12}>
                   <Form.Item
                     name="jobIds"
-                    label="Positions"
+                    label="Jobs"
                     rules={[{ required: true, message: "Please select the positions" }]}
                   >
                     <Select
                       mode="multiple"
-                      placeholder="Select positions"
+                      placeholder="Select jobs"
                       style={{ width: "100%" }}
                     >
                       {jobs.map(program => (

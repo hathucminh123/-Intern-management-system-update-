@@ -26,9 +26,11 @@ import {
   Typography,
   Popover,
 } from "antd";
+import { MdClass } from "react-icons/md";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import "./CustomMenu.css";
 import { MdOutlineCampaign, MdEngineering } from "react-icons/md";
+import { GrResources } from "react-icons/gr";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
 
@@ -88,8 +90,8 @@ const CustomMenu = ({ userRole }) => {
           { key: "/internshipcoordinators/ViewTrainingProgram", icon: <ProjectOutlined />, label: "View" },
         ],
       },
-      { key: "/internshipcoordinators/class", icon: <AreaChartOutlined />, label: "Class jobs" },
-      { key: "/internshipcoordinators/ResourceList", icon: <AreaChartOutlined />, label: "Resource" },
+      { key: "/internshipcoordinators/class", icon: < MdClass />, label: "Class jobs" },
+      { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource" },
     ],
     intern: [
       { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },

@@ -126,9 +126,10 @@ const ResourceList = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header style={{ backgroundColor: "#001529", color: "white", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
-        <Title level={4} style={{ lineHeight: '64px', color: 'white', margin: 0 }}>Resource List</Title>
-      </Header>
+     <div className="mt-8 flex justify-between items-center">
+              <Title level={3}>Resource List</Title>
+            
+            </div>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
         <Table
           dataSource={resource}

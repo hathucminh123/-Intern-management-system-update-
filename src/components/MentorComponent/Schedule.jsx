@@ -64,7 +64,7 @@ const Schedule = () => {
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
                 >
-                  <Title level={5}>{item.title}</Title>
+                  <Title level={5}>Name: {item.title}</Title>
                   <p><strong>Date:</strong> {moment(item.start).format('DD-MM-YYYY')}</p>
                   <p><strong>Start Time:</strong> {moment(item.start).format('HH:mm')}</p>
                   <p><strong>End Time:</strong> {moment(item.end).format('HH:mm')}</p>
