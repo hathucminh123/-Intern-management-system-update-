@@ -43,6 +43,7 @@ import EditCampaign from "./components/HR/CampaignsComponent/EditCampaign";
 import ResourceList from "./components/ICComponent/ICComponent1/ResourceList";
 import EditTraining from "./components/ICComponent/ICComponent1/EditTraining";
 import ResourceListt from "./components/ICComponent/ICComponent1/ResourceListt";
+import KPIList from "./components/ICComponent/ICComponent1/KPIList";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -104,6 +105,7 @@ function App() {
               <Route path="ResourceList" element={<ResourceListt />} />
               <Route path="Details/:id" element={<EditTraining />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+              <Route path="KPIList" element={<KPIList />} />
 
             </Route>
                 {/* Internship Routes */}

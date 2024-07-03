@@ -1,38 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs,Layout ,Typography,message} from 'antd';
+import { Tabs, Layout, Typography, message } from 'antd';
 import TaskCompleted from './TaskCompleted';
-import InternTaskView from './MentorTaskView';
- import Boards from './TaskBoard/Board';
-const { Header, Content, Footer } = Layout;
-const {Text,Title}= Typography
-import * as Assessment from "../../service/Assessment"
+import Boards from './TaskBoard/Board';
+import * as Assessment from "../../service/Assessment";
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
+
 const TaskPerformance = () => {
   const [tasks, setTasks] = useState([]);
 
+  const fetchAssessment = async () => {
+    try {
+      const res = await Assessment.GetAssessment();
+      setTasks(res.events);
+    } catch (error) {
+      message.error("Fetch Assessment failed");
+    }
+  };
 
-const fetchAssessment = async()=>{
-  try{
-   const res= await Assessment.GetAssessment()
-    setTasks(res.events)
-  }catch(error)
-  {
-    message.error("fetch Assessment failed")
-  }
-}
-
-useEffect(()=>{
-  fetchAssessment();
-},[])
-
+  useEffect(() => {
+    fetchAssessment();
+  }, []);
 
   const handleAddTask = (newTask) => {
-    console.log('newTask',newTask)
     setTasks((prevTasks) => [...prevTasks, { ...newTask, key: prevTasks.length + 1, completed: false, feedback: null, grade: null }]);
   };
 
   const handleUpdateTask = (updatedTask) => {
-    setTasks((prevTasks) => prevTasks.map((task) => (task.key === updatedTask.key ? updatedTask : task)));
+    setTasks((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
   };
+
 
   const handleCompleteTask = (completedTask) => {
     handleUpdateTask(completedTask);
@@ -43,30 +41,26 @@ useEffect(()=>{
       key: '1',
       label: 'Task List',
       children: (
-        <TaskCompleted tasks={tasks} onAddTask={handleAddTask} onUpdateTask={handleUpdateTask} />
+        <TaskCompleted tasks={tasks} onAddTask={handleAddTask} onUpdateTask={handleUpdateTask} fetchAssessment={fetchAssessment} />
       ),
     },
     {
       key: '2',
       label: 'Task Board',
-      children: (
-        // <InternTaskView tasks={tasks} onCompleteTask={handleCompleteTask} />
-        <Boards/>
-      ),
+      children: <Boards />,
     },
   ];
 
   return (
     <Layout>
-    <Header style={{ backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
-      <Title level={3} style={{ margin: 0 }}>Task</Title>
-    </Header>
-    <Content style={{ padding: '24px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
-  <Tabs defaultActiveKey="1" items={items} />;
-  </Content>
-
-</Layout>
-  )
+      <Header style={{ backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+        <Title level={3} style={{ margin: 0 }}>Task</Title>
+      </Header>
+      <Content style={{ padding: '24px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
+        <Tabs defaultActiveKey="1" items={items} />
+      </Content>
+    </Layout>
+  );
 };
 
 export default TaskPerformance;

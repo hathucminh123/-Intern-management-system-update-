@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message } from 'antd';
+import {
+  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message
+} from 'antd';
 import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
@@ -9,8 +11,9 @@ import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { gettest1 } from '../../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
+import * as Assessment from "../../service/Assessment";
 
-const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
+const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
   const { Text, Title } = Typography;
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -37,8 +40,14 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
       });
   }, [dispatch]);
 
-  const handleDeleteTask = (key) => {
-    onUpdateTask(tasks.filter((task) => task.key !== key));
+  const handleDeleteTask = async (id) => {
+    try {
+      await Assessment.DeleteAssessment(id);
+      message.success("Assessment deleted successfully");
+      fetchAssessment();
+    } catch (error) {
+      message.error("Failed to delete assessment");
+    }
   };
 
   const handleOpenDetailModal = (task) => {
@@ -74,7 +83,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
   };
 
   const filteredTasks = tasks.filter(task => {
-    const taskNameMatch = task.name.toLowerCase().includes(searchText.toLowerCase());
+    const taskNameMatch = task.name ? task.name.toLowerCase().includes(searchText.toLowerCase()) : false;
     const startDateMatch = dateRange[0] ? moment(task.startDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
     const endDateMatch = dateRange[0] ? moment(task.endDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
     const assignedToMatch = assignedToFilter ? task.owner?.userName === assignedToFilter : true;
@@ -113,7 +122,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
         <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
       </Menu.Item>
       <Menu.Item key="3">
-        <Button onClick={() => handleDeleteTask(record.key)}>Delete</Button>
+        <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
       </Menu.Item>
       {record.completed && (
         <Menu.Item key="4">
@@ -242,12 +251,9 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask }) => {
           onChange={handleSearch}
           style={{ width: '300px', marginRight: '30px' }}
         />
-{userRole ==="mentor" &&(
-
-
-<Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
-)}
-      
+        {userRole === "mentor" && (
+          <Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
+        )}
         <Popover content={content}>
           <Button style={{ marginRight: '30px' }} icon={<FilterOutlined />} />
         </Popover>

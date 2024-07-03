@@ -46,7 +46,18 @@ export const apiLinks = {
   Assessment: {
     get: `${baseURL}/Assessment`,
     post: `${baseURL}/Assessment`,
+    put: `${baseURL}/Assessment`,
+    delete: `${baseURL}/Assessment`,
   },
+  KPI: {
+    get: `${baseURL}/KPI`,
+    post: `${baseURL}/KPI`,
+    put: `${baseURL}/KPI`,
+    delete: `${baseURL}/KPI`,
+  },
+
+
+
 };
 export const login = async (user) => {
   try {
