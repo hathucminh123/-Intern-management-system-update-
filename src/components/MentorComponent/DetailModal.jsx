@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Modal, Input, DatePicker, Select, Row, Col } from 'antd';
+import { Form, Modal, Input, DatePicker, Select, Row, Col, message } from 'antd';
 import ReactQuill from 'react-quill';
 import { getIntern } from '../../api';
 import * as Assessment from "../../service/Assessment";
 import moment from 'moment';
+import * as User from "../../service/authService" 
 
 const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
   const [form] = Form.useForm();
   const [user, setUser] = useState([]);
   const [description, setDescription] = useState(task.description);
 
+const FetchUser =async()=>{
+try {
+  const res = await User.fetchUser()
+   setUser(res.events)
+}catch(error){
+  message.error('fetch User data failed ')
+
+}
+}
+
+
   useEffect(() => {
-    getIntern()
-      .then(res => {
-        setUser(res.users.splice(0, 20));
-      })
-      .catch(err => {
-        console.error('Error fetching users:', err);
-      });
+    FetchUser();
   }, []);
 
   useEffect(() => {
@@ -77,7 +83,7 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
               <Input />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               label="Assigned To"
               name="userId"
               rules={[{ required: true, message: 'Please select the person to assign the task to!' }]}
@@ -89,7 +95,7 @@ const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
                   </Select.Option>
                 ))}
               </Select>
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               label="Start Date"

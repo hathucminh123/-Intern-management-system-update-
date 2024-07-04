@@ -2,41 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { Form, Modal, Input, DatePicker, Select, Row, Col, message } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { getIntern } from '../../api';
 import * as Assessment from "../../service/Assessment";
 import * as Training from "../../service/TrainingPrograms";
+import * as User from "../../service/authService";
 
 const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const [form] = Form.useForm();
   const [user, setUser] = useState([]);
   const [description, setDescription] = useState('');
-  const [TrainingPrograms, setTrainingPrograms] = useState([]);
+  const [trainingPrograms, setTrainingPrograms] = useState([]);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await User.fetchUser();
+      setUser(res.events);
+    } catch (error) {
+      message.error("Failed to fetch users");
+    }
+  };
 
   useEffect(() => {
-    getIntern()
-      .then(res => {
-        setUser(res.users.splice(0, 20));
-      })
-      .catch(err => {
-        console.error('Error fetching users:', err);
-      });
+    fetchUsers();
   }, []);
 
-  const fetchingTraining = async () => {
+  const fetchTrainingPrograms = async () => {
     try {
       const res = await Training.fetchTraining();
       setTrainingPrograms(res.events);
-      message.success("Fetch training program complete");
     } catch (error) {
       message.error("Failed to fetch training programs");
     }
   };
 
   useEffect(() => {
-    fetchingTraining();
+    fetchTrainingPrograms();
   }, []);
 
-  const handleDescription = value => {
+  const handleDescriptionChange = (value) => {
     setDescription(value);
   };
 
@@ -52,7 +54,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       form.resetFields();
       onClose();
     } catch (error) {
-      console.log('Validate Failed:', error);
+      console.log('Validation Failed:', error);
     }
   };
 
@@ -67,7 +69,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       visible={isVisible}
       onOk={handleOk}
       onCancel={handleCancel}
-      destroyOnClose={true}
+      destroyOnClose
       width={1200}
     >
       <Form form={form} name="createTaskForm" initialValues={{ remember: true }}>
@@ -87,7 +89,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               rules={[{ required: true, message: 'Please select the person to assign the task to!' }]}
             >
               <Select placeholder="Select user" allowClear>
-                {user.map(u => (
+                {user.map((u) => (
                   <Select.Option key={u.id} value={u.id}>
                     {u.userName}
                   </Select.Option>
@@ -130,7 +132,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               rules={[{ required: true, message: 'Please select the training program!' }]}
             >
               <Select placeholder="Select training program" allowClear>
-                {TrainingPrograms.map(tp => (
+                {trainingPrograms.map((tp) => (
                   <Select.Option key={tp.id} value={tp.id}>
                     {tp.name}
                   </Select.Option>
@@ -146,7 +148,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               <ReactQuill
                 style={{ height: '200px' }}
                 value={description}
-                onChange={handleDescription}
+                onChange={handleDescriptionChange}
                 placeholder="Enter the description"
               />
             </Form.Item>

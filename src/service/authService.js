@@ -57,6 +57,9 @@ export const apiLinks = {
     put: `${baseURL}/KPI`,
     delete: `${baseURL}/KPI`,
   },
+  User:{
+    get: `${baseURL}/User`,
+  }
 
 
 
@@ -70,6 +73,29 @@ export const login = async (user) => {
     return response.data;
   } catch (error) {
     console.error("Login request failed", error);
+    throw error;
+  }
+};
+
+export const fetchUser = async (params) => {
+  try {
+    const response = await httpClient.get({
+      url: apiLinks.User.get,
+      params: params,
+    });
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the users');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    const user = response.data;
+    return {
+      events: user.result,
+    };
+  } catch (error) {
+    console.error("Fetching users failed", error);
     throw error;
   }
 };

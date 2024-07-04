@@ -6,12 +6,13 @@ import { DownOutlined } from '@ant-design/icons';
 import * as Training from "../../../service/TrainingPrograms";
 import { useLocation, useNavigate } from 'react-router-dom';
 import DetailKPIModal from './DetailKPIModal';
-import CreateKPIModal from './CreateKPIModal'; // Import the CreateKPIModal
+
+import CreateKPIModal from './CreateKPIModal'; 
 
 const { Text, Title } = Typography;
 const { Header, Content } = Layout;
 
-const KPIList = () => {
+const KPIListt = () => {
   const { state } = useLocation();
   const TrainingProgram = state?.item;
   const [resource, setResource] = useState([]);
@@ -20,7 +21,7 @@ const KPIList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false); // State to control CreateKPIModal visibility
+  const [openCreateModal, setOpenCreateModal] = useState(false); 
   const navigate = useNavigate();
 
   const fetchAllKPI = async () => {
@@ -52,10 +53,10 @@ const KPIList = () => {
       for (const resourceId of selectedResourceIds) {
         const dataResource = {
           trainingProgramId: TrainingProgram.id,
-          resourceId: resourceId,
+          kpiId: resourceId,
         };
         
-        await Training.AddResourceNewTraining(dataResource);
+        await Training.AddKPISNewTraining(dataResource);
       }
 
       message.success("Resources added to training program successfully!");
@@ -103,17 +104,17 @@ const  handleAddTrainingProgram =(item)=>{
   };
 
   const columns = [
-    // {
-    //   title: "",
-    //   dataIndex: "checkbox",
-    //   key: "checkbox",
-    //   render: (_, record) => (
-    //     <Checkbox
-    //       checked={!!checkedKeys[record.id]}
-    //       onChange={(e) => handleCheckboxChange(record, e.target.checked)}
-    //     />
-    //   ),
-    // },
+    {
+      title: "",
+      dataIndex: "checkbox",
+      key: "checkbox",
+      render: (_, record) => (
+        <Checkbox
+          checked={!!checkedKeys[record.id]}
+          onChange={(e) => handleCheckboxChange(record, e.target.checked)}
+        />
+      ),
+    },
     { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
     { title: "Value", dataIndex: "value", key: "value", responsive: ['md'] },
     { title: "Description", dataIndex: "descition", key: "description", responsive: ['md'] },
@@ -142,8 +143,8 @@ const  handleAddTrainingProgram =(item)=>{
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <div className="mt-8 flex justify-between items-center">
-        <Title level={3}>Resource List</Title>
-        <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button> {/* Button to open CreateKPIModal */}
+        <Title level={3}> Add Resource List to {TrainingProgram.name}</Title>
+        {/* <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button> */}
       </div>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
         <Table
@@ -153,11 +154,11 @@ const  handleAddTrainingProgram =(item)=>{
           style={{ marginTop: "20px" }}
           pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
         />
-        {/* <div style={{ marginTop: "20px" }}>
+        <div style={{ marginTop: "20px" }}>
           <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
             Add to Training Program
           </Button>
-        </div> */}
+        </div>
       </Content>
       {selectedResource && (
         <DetailKPIModal
@@ -177,4 +178,4 @@ const  handleAddTrainingProgram =(item)=>{
   );
 }
 
-export default KPIList;
+export default KPIListt;

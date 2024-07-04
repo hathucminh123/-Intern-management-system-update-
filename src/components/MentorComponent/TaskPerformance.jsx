@@ -23,8 +23,12 @@ const TaskPerformance = () => {
     fetchAssessment();
   }, []);
 
+  // const handleAddTask = (newTask) => {
+  //   setTasks((prevTasks) => [...prevTasks, { ...newTask, key: prevTasks.length + 1, completed: false, feedback: null, grade: null }]);
+  // };
+
   const handleAddTask = (newTask) => {
-    setTasks((prevTasks) => [...prevTasks, { ...newTask, key: prevTasks.length + 1, completed: false, feedback: null, grade: null }]);
+    setTasks((prev) => [...prev, newTask]);
   };
 
   const handleUpdateTask = (updatedTask) => {

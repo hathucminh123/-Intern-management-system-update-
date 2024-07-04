@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu, Popconfirm, Card, Row, Col } from "antd";
+import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu, Row, Col } from "antd";
 import { UploadOutlined, DownOutlined } from '@ant-design/icons';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import * as Resource from "../../../service/Resource";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, firestore } from '../../../firebase/config';
 import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import DetailModall from './DetailModall';
+import * as Resource from "../../../service/Resource";
 import * as Training from "../../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
 import '../../../index.css';
+import DetailKPIModal from "./DetailKPIModal";
+import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import Task from "../../MentorComponent/TaskBoard/Task";
+import moment from "moment";
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -20,14 +24,17 @@ const TrainingProgramDetail = () => {
   const { state } = useLocation();
   const CampaignDetail = state?.item;
   const [resources, setResources] = useState([]);
+  const [kpis, setKpis] = useState([]);
   const [loading, setLoading] = useState(false);
   const [cvFile, setCvFile] = useState(null);
   const [pageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
+  const [selectedKPI, setSelectedKPI] = useState(null);
+  const [task,setTask] =useState(null)
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [form] = Form.useForm();
-  const navigate =useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -35,6 +42,18 @@ const TrainingProgramDetail = () => {
     }
   }, [CampaignDetail]);
 
+  useEffect(() => {
+    if (CampaignDetail?.kpIs) {
+      setKpis(CampaignDetail.kpIs);
+    }
+  }, [CampaignDetail]);
+
+
+  useEffect(() => {
+    if (CampaignDetail?.assessments) {
+      setTask(CampaignDetail.assessments);
+    }
+  }, [CampaignDetail]);
   if (!CampaignDetail) {
     return <div>Training program detail not found</div>;
   }
@@ -69,10 +88,9 @@ const TrainingProgramDetail = () => {
       
       message.success('Resource added successfully!');
       form.resetFields();
-      navigate('/internshipcoordinators/ViewTrainingProgram')
+      navigate('/internshipcoordinators/ViewTrainingProgram');
       
       setCvFile(null);
-
       await fetchResources();
     } catch (error) {
       message.error('Error submitting form. Please try again.');
@@ -101,12 +119,47 @@ const TrainingProgramDetail = () => {
     }
   };
 
+  const handleDeleteKPIS = async (id) => {
+    try {
+      const KPIS = {
+        trainingProgramId: CampaignDetail.id,
+        kpiId: id
+      };
+      await Training.DeleteKPIsNewTraining(KPIS);
+      setKpis((prev) => prev.filter(kpi => kpi.id !== id));
+      message.success('KPIS deleted successfully!');
+    } catch (error) {
+      message.error('Error deleting KPIS. Please try again.');
+      console.error('Error deleting KPIS:', error);
+    }
+  };
+
   const handleOpenDetailModal = (resource) => {
     setSelectedResource(resource);
     setOpenDetailModal(true);
   };
 
-  const menu = (record) => (
+  const handleOpenDetailKPIModal = (kpi) => {
+    setSelectedKPI(kpi);
+    setOpenDetailModal(true);
+  };
+
+  const handleUpdateTask = (updatedTask) => {
+    setKpis((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
+  };
+
+
+  const handleAddKPIStoProgram= (item)=>{
+   navigate(`/internshipcoordinators/KPISListt/${item.id}`,{state: {item}})
+
+
+  }
+console.log('asdasda',task)
+
+  const handleDetails = (task) => {
+    navigate(`/${userRole}/taskDetail/${task.id}`, { state: { task } });
+  };
+  const resourceMenu = (record) => (
     <Menu>
       <Menu.Item key="1">
         <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
@@ -117,7 +170,42 @@ const TrainingProgramDetail = () => {
     </Menu>
   );
 
-  const columns = [
+  const kpiMenu = (record) => (
+    <Menu>
+      <Menu.Item key="1">
+        <Button onClick={() => handleOpenDetailKPIModal(record)}>View/Edit</Button>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <Button onClick={() => handleDeleteKPIS(record.id)}>Delete</Button>
+      </Menu.Item>
+    </Menu>
+  );
+
+
+
+
+  const TaskMenu = (record) => (
+    <Menu>
+      <Menu.Item key="1">
+        <Button onClick={() => handleDetails(record)}>View</Button>
+      </Menu.Item>
+      {/* <Menu.Item key="2">
+        <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
+      </Menu.Item> */}
+      {/* <Menu.Item key="3">
+        <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
+      </Menu.Item> */}
+      {/* {record.completed && (
+        <Menu.Item key="4">
+          <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>
+        </Menu.Item>
+      )} */}
+     </Menu>
+ ); 
+    
+
+
+  const resourceColumns = [
     {
       title: 'Name',
       dataIndex: 'name',
@@ -139,7 +227,7 @@ const TrainingProgramDetail = () => {
       key: 'actions',
       render: (text, record) => (
         <Space size="middle">
-          <Dropdown overlay={menu(record)}>
+          <Dropdown overlay={resourceMenu(record)}>
             <Button>
               More <DownOutlined />
             </Button>
@@ -149,7 +237,107 @@ const TrainingProgramDetail = () => {
     },
   ];
 
-  const userRole = localStorage.getItem('role').toLowerCase();
+  const kpiColumns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'descition',
+      key: 'description',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Space size="middle">
+          <Dropdown overlay={kpiMenu(record)}>
+            <Button>
+              More <DownOutlined />
+            </Button>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
+
+  const Takscolumns = [
+    {
+      title: 'Task Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Assigned To',
+      dataIndex: 'owner',
+      key: 'owner',
+      render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
+    },
+    {
+      title: 'Start Date',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    },
+    {
+      title: 'End Date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text, record) => (
+        <span>
+          {record.status.toUpperCase() === "DONE" && (
+            <Tag color='green'>
+              {record.status.toUpperCase()}
+            </Tag>
+          )}
+          {record.status.toUpperCase() === "ON-PROGRESS" && (
+            <Tag color='geekblue'>
+              {record.status.toUpperCase()}
+            </Tag>
+          )}
+          {record.status.toUpperCase() === "TODOS" && (
+            <Tag color='blue'>
+              {record.status.toUpperCase()}
+            </Tag>
+          )}
+        </span>
+      ),
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Space size="middle">
+          <Dropdown overlay={TaskMenu(record)}>
+            <Button>
+              More <DownOutlined />
+            </Button>
+          </Dropdown>
+        </Space>
+      ),
+    },
+  ];
+
+  const userRole = localStorage.getItem('role')?.toLowerCase();
 
   const handleBeforeUpload = (file) => {
     setCvFile(file);
@@ -158,7 +346,7 @@ const TrainingProgramDetail = () => {
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}> Training program details</Header>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>Training program details</Header>
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
         <div className="container mx-auto bg-white p-8 shadow-lg rounded-lg">
           <Tabs defaultActiveKey="1" className="w-full">
@@ -254,7 +442,7 @@ const TrainingProgramDetail = () => {
                 </Form>
               )}
               <Table
-                columns={columns}
+                columns={resourceColumns}
                 dataSource={resources}
                 rowKey="id"
                 pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
@@ -262,14 +450,63 @@ const TrainingProgramDetail = () => {
             </TabPane>
             <TabPane tab="KPIS" key="3">
               {userRole === "internshipcoordinators" && (
-                <Table
-                columns={columns}
-                dataSource={resources}
-                rowKey="id"
-                pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-              />
+                <Layout>
+                  <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+                    <Row gutter={1000}>
+                      <Col>
+                        <Title level={4}>KPI LIST in {CampaignDetail.name}</Title>
+                      </Col>
+                      <Col>
+                        <ButtonComponent
+                          styleButton={{ background: "#06701c", border: "none" }}
+                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                          size="middle"
+                          textbutton="Add KPI"
+                          onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
+                        />
+                      </Col>
+                    </Row>
+                  </Header>
+                  <Content>
+                    <Table
+                      columns={kpiColumns}
+                      dataSource={kpis}
+                      rowKey="id"
+                      pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
+                    />
+                  </Content>
+                </Layout>
               )}
-            
+            </TabPane>
+            <TabPane tab="Assessments" key="4">
+              {userRole === "internshipcoordinators" && (
+                <Layout>
+                  <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+                    <Row gutter={1000}>
+                      <Col>
+                        <Title level={4}>Assessment LIST in {CampaignDetail.name}</Title>
+                      </Col>
+                      <Col>
+                        {/* <ButtonComponent
+                          styleButton={{ background: "#06701c", border: "none" }}
+                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                          size="middle"
+                          textbutton="Add KPI"
+                          onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
+                        /> */}
+                      </Col>
+                    </Row>
+                  </Header>
+                  <Content>
+                    <Table
+                      columns={Takscolumns}
+                      dataSource={task}
+                      rowKey="id"
+                      pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
+                    />
+                  </Content>
+                </Layout>
+              )}
             </TabPane>
           </Tabs>
         </div>
@@ -280,6 +517,14 @@ const TrainingProgramDetail = () => {
           onClose={() => setOpenDetailModal(false)}
           task={selectedResource}
           onUpdateTask={handleUpdateResource}
+        />
+      )}
+      {selectedKPI && (
+        <DetailKPIModal
+          isVisible={openDetailModal}
+          onClose={() => setOpenDetailModal(false)}
+          task={selectedKPI}
+          onUpdateTask={handleUpdateTask}
         />
       )}
     </Layout>

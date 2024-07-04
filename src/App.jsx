@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import SigninPage from "./pages/LoginPage/SigninPage";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import Dashboard from "./components/MentorComponent/Dashboard";
+// import Dashboard from "./components/MentorComponent/Dashboard";
 import Schedule from "./components/MentorComponent/Schedule";
 import TaskPerformance from "./components/MentorComponent/TaskPerformance";
 import Chat from "./components/MentorComponent/Chat";
@@ -46,6 +46,7 @@ import ResourceListt from "./components/ICComponent/ICComponent1/ResourceListt";
 import KPIList from "./components/ICComponent/ICComponent1/KPIList";
 import Traininglistt from "./components/ICComponent/ICComponent1/TrainingListt";
 import TrainingProgramDetailOJobs from "./components/ICComponent/ICComponent1/TrainingProgramDetailOJobs";
+import KPIListt from "./components/ICComponent/ICComponent1/KPIListt";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -110,6 +111,8 @@ function App() {
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
               <Route path="KPIList" element={<KPIList />} />
               <Route path="TrainingListt/:id" element={<Traininglistt />} />
+              <Route path="KPISListt/:id" element={<KPIListt />} />
+              <Route path="taskDetail/:id" element={<TaskDetails/>}/>
 
             </Route>
                 {/* Internship Routes */}

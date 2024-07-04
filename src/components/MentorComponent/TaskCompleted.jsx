@@ -6,12 +6,10 @@ import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
-import { getIntern } from '../../api';
-import { useDispatch } from 'react-redux';
-import moment from 'moment';
-import { gettest1 } from '../../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 import * as Assessment from "../../service/Assessment";
+import * as User from "../../service/authService";
 
 const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
   const { Text, Title } = Typography;
@@ -25,20 +23,21 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
   const [dateRange, setDateRange] = useState([]);
   const [assignedToFilter, setAssignedToFilter] = useState('');
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { RangePicker } = DatePicker;
   const userRole = localStorage.getItem('role');
 
+  const fetchUsers = async () => {
+    try {
+      const res = await User.fetchUser();
+      setUser(res.events);
+    } catch (error) {
+      message.error("Failed to fetch users");
+    }
+  };
+
   useEffect(() => {
-    dispatch(gettest1());
-    getIntern()
-      .then(res => {
-        setUser(res.users.splice(0, 20));
-      })
-      .catch(err => {
-        message.error('Error fetching users: ' + err.message);
-      });
-  }, [dispatch]);
+    fetchUsers();
+  }, []);
 
   const handleDeleteTask = async (id) => {
     try {
@@ -225,13 +224,21 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
     <>
       <AddModal
         isVisible={openAddModal}
-        onClose={() => setOpenAddModal(false)}
-        onAddTask={onAddTask}
+        onClose={() => {
+          setOpenAddModal(false);
+          fetchAssessment();  
+        }}
+        onAddTask={(newTask) => {
+          onAddTask(newTask);
+          fetchAssessment();  
+        }}
       />
       {selectedTask && (
         <DetailModal
           isVisible={openDetailModal}
-          onClose={() => setOpenDetailModal(false)}
+          onClose={() => {setOpenDetailModal(false);
+            fetchAssessment();
+          }}
           task={selectedTask}
           onUpdateTask={onUpdateTask}
         />
