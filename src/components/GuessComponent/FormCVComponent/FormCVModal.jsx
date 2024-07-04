@@ -6,6 +6,7 @@ import { storage, firestore } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 import { createNewCandidate } from '../../../service/Candidate';
+import { v4 as uuidv4 } from 'uuid';
 const { Title, Text } = Typography;
 
 const FormCVModal = ({ visible, onClose, title, intern, job }) => {
@@ -27,27 +28,15 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       const fileUrl = await getDownloadURL(fileRef);
 
       // Save form data to Firestore
-      await addDoc(collection(firestore, 'applications'), {
-        fullName: values.fullName,
-        email: values.email,
-        phone: values.phone,
-        list: values.list,
-        listjob: values.listjob,
-        listcampaign: values.listcampaign,
-        note: values.note,
-        cvUrl: fileUrl,
-      });
-
+  
       // Create a new candidate using the provided API
       const candidateData = {
-        firstName: values.fullName.split(' ')[0], // Assuming first name is the first part of full name
-        lastName: values.fullName.split(' ').slice(1).join(' '), // Rest is the last name
-        email: values.email,
-        phoneNumber: values.phone,
-        education: values.list, // Assuming list contains the education/training program
+        ...values,
+        firstName: values.fullName.split(' ')[0], 
+        lastName: values.fullName.split(' ').slice(1).join(' '),
+        id: uuidv4(),
         cvPath: fileUrl,
-        jobId: values.listjob, // Assuming listjob contains the ID of the training program/job
-        campaignId: values.listcampaign
+     
       };
 
       await createNewCandidate(candidateData);
@@ -88,7 +77,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
 
         <div className="px-8 pt-4">
           <Form.Item
-            name="cvUrl"
+            name="cvPath"
             label={
               <div>
                 <Text strong>CV đính kèm</Text>
@@ -98,7 +87,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             rules={[{ required: true, message: 'Please upload your CV!' }]}
           >
             <Upload.Dragger
-              name="files"
+              name="cvPath"
               multiple={false}
               accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
               beforeUpload={handleBeforeUpload}
@@ -128,14 +117,14 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             <Input placeholder="Email liên hệ" />
           </Form.Item>
           <Form.Item
-            name="phone"
+            name="phoneNumber"
             label="Số điện thoại"
             rules={[{ required: true, message: 'Please enter your phone number!' }]}
           >
             <Input placeholder="Số điện thoại liên hệ" />
           </Form.Item>
           <Form.Item
-            name="list"
+            name="education"
             label="Trường bạn đang học"
             rules={[{ required: true, message: 'Please select the school' }]}
           >
@@ -152,7 +141,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             <Input placeholder='nhập trường bạn đang học' />
           </Form.Item>
           <Form.Item
-            name="listcampaign"
+            name="campaignId"
             label="vị trí  campaign muốn ứng tuyển"
             rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
           >
@@ -165,7 +154,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             </Select>
           </Form.Item>
           <Form.Item
-            name="listjob"
+            name="jobId"
             label="vị trí muốn ứng tuyển"
             rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
           >
@@ -177,9 +166,9 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
               )}
             </Select>
           </Form.Item>
-          <Form.Item name="note" label="Khác (nếu có)">
+          {/* <Form.Item name="note" label="Khác (nếu có)">
             <Input placeholder="Lời nhắn nhủ bạn muốn gửi tới" />
-          </Form.Item>
+          </Form.Item> */}
         </div>
         <div className="px-8 pt-4">
           <Text strong>Địa chỉ làm việc tại GEEK Up</Text>

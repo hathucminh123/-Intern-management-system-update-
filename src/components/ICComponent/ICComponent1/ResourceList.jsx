@@ -127,7 +127,7 @@ const ResourceList = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
      <div className="mt-8 flex justify-between items-center">
-              <Title level={3}>Resource List</Title>
+              <Title level={3}>Add Resource List to {TrainingProgram.name} Training Programs</Title>
             
             </div>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>

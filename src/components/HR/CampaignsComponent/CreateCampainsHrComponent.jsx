@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col } from "antd";
+import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col ,Upload} from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -7,8 +7,11 @@ import * as Campaign from '../../../service/Campaign';
 import * as Jobss from '../../../service/JobsService';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
+import { storage } from '../../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { UploadOutlined } from "@ant-design/icons";
 
-const { Title } = Typography;
+const { Title,Text } = Typography;
 const { Option } = Select;
 const { Header, Content } = Layout;
 
@@ -18,6 +21,7 @@ const CreateCampaignsHrComponent = () => {
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
   const [jobs, setJobs] = useState([]);
+  const [cvFile, setCvFile] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,6 +38,15 @@ const CreateCampaignsHrComponent = () => {
   }, []);
 
   const onFinish = async (values) => {
+    try {
+      if (!cvFile) {
+        message.error('Please upload an image!');
+        return;
+      }
+      const fileRef = ref(storage, cvFile.name);
+      await uploadBytes(fileRef, cvFile);
+      const fileUrl = await getDownloadURL(fileRef);
+    
     const NewCampaigns = {
       id: uuidv4(),
       ...values,
@@ -42,9 +55,10 @@ const CreateCampaignsHrComponent = () => {
       benefits: benefits,
       duration: parseInt(values.duration),
       estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+      imagePath: fileUrl,
     };
 
-    try {
+ 
       const response = await Campaign.createNewCampaign(NewCampaigns);
       message.success("Campaign created successfully!");
       form.resetFields();
@@ -53,7 +67,7 @@ const CreateCampaignsHrComponent = () => {
       setRequirement("");
       setBenefits("");
       console.log("Form values:", response);
-    } catch (error) {
+  }catch (error) {
       message.error(`Error: ${error.message}`);
       console.error("Error creating campaign:", error);
     }
@@ -70,7 +84,10 @@ const CreateCampaignsHrComponent = () => {
   const handleBenefits = (value) => {
     setBenefits(value);
   };
-
+  const handleBeforeUpload = (file) => {
+    setCvFile(file);
+    return false;
+  };
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -168,13 +185,38 @@ const CreateCampaignsHrComponent = () => {
                   placeholder="Enter the benefits"
                 />
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 name="imagePath"
                 label="Campaign Image Path"
                 rules={[{ required: true, message: "Please enter the campaign image path" }]}
               >
                 <Input placeholder="Enter the image path" />
-              </Form.Item>
+              </Form.Item> */}
+
+
+<Form.Item
+              name="imagePath"
+              label={
+                <div>
+                  <Text strong>Campaign Image</Text>
+                  <div>You can only upload one file</div>
+                </div>
+              }
+              rules={[{ required: true, message: 'Please upload an image!' }]}
+            >
+              <Upload.Dragger
+                name="imagePath"
+                multiple={false}
+                accept=".jpg,.jpeg,.png"
+                beforeUpload={handleBeforeUpload}
+              >
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined />
+                </p>
+                <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
+                <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
+              </Upload.Dragger>
+            </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
                   Submit

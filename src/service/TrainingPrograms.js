@@ -140,3 +140,25 @@ export const fetchTraining= async() => {
     throw error;
   }
 };
+
+export const   AddKPISNewTraining= async (eventData)=> {
+  try {
+    const response = await httpClient.post({
+        url: `${apiLinks.TrainingProgram.postKPI}`,
+        data: eventData,
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      const error = new Error('An error occurred while deleteting Resource');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data); 
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+}

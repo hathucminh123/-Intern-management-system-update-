@@ -75,6 +75,11 @@ const KPIList = () => {
     }
   };
 
+const  handleAddTrainingProgram =(item)=>{
+  navigate(`/internshipcoordinators/TrainingListt/${item.id}`,{state:{item}})
+  
+}
+
   const menu = (record) => (
     <Menu>
       <Menu.Item key="1">
@@ -82,6 +87,9 @@ const KPIList = () => {
       </Menu.Item>
       <Menu.Item key="2">
         <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <Button onClick={() => handleAddTrainingProgram(record)}>Add to Training Program</Button>
       </Menu.Item>
     </Menu>
   );
@@ -95,17 +103,17 @@ const KPIList = () => {
   };
 
   const columns = [
-    {
-      title: "",
-      dataIndex: "checkbox",
-      key: "checkbox",
-      render: (_, record) => (
-        <Checkbox
-          checked={!!checkedKeys[record.id]}
-          onChange={(e) => handleCheckboxChange(record, e.target.checked)}
-        />
-      ),
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "checkbox",
+    //   key: "checkbox",
+    //   render: (_, record) => (
+    //     <Checkbox
+    //       checked={!!checkedKeys[record.id]}
+    //       onChange={(e) => handleCheckboxChange(record, e.target.checked)}
+    //     />
+    //   ),
+    // },
     { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
     { title: "Value", dataIndex: "value", key: "value", responsive: ['md'] },
     { title: "Description", dataIndex: "descition", key: "description", responsive: ['md'] },

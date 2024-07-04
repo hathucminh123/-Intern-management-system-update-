@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Modal, Input, DatePicker, Select, Row, Col } from 'antd';
+import { Form, Modal, Input, DatePicker, Select, Row, Col, message } from 'antd';
 import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { getIntern } from '../../api';
 import * as Assessment from "../../service/Assessment";
+import * as Training from "../../service/TrainingPrograms";
 
 const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const [form] = Form.useForm();
   const [user, setUser] = useState([]);
   const [description, setDescription] = useState('');
+  const [TrainingPrograms, setTrainingPrograms] = useState([]);
 
   useEffect(() => {
     getIntern()
@@ -19,6 +22,20 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       });
   }, []);
 
+  const fetchingTraining = async () => {
+    try {
+      const res = await Training.fetchTraining();
+      setTrainingPrograms(res.events);
+      message.success("Fetch training program complete");
+    } catch (error) {
+      message.error("Failed to fetch training programs");
+    }
+  };
+
+  useEffect(() => {
+    fetchingTraining();
+  }, []);
+
   const handleDescription = value => {
     setDescription(value);
   };
@@ -28,8 +45,6 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       const values = await form.validateFields();
       const newTask = {
         ...values,
-        // startDate: values.startDate ? values.startDate.format('YYYY-MM-DD') : null,
-        // endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null,
         description: description,
       };
       await Assessment.AddAssessment(newTask);
@@ -110,20 +125,29 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
           </Col>
           <Col span={12}>
             <Form.Item
+              label="Training Program"
+              name="trainingProgramId"
+              rules={[{ required: true, message: 'Please select the training program!' }]}
+            >
+              <Select placeholder="Select training program" allowClear>
+                {TrainingPrograms.map(tp => (
+                  <Select.Option key={tp.id} value={tp.id}>
+                    {tp.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
               label="Description"
               name="description"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter the description of the work',
-                },
-              ]}
+              rules={[{ required: true, message: 'Please enter the description of the work!' }]}
             >
               <ReactQuill
                 style={{ height: '200px' }}
                 value={description}
                 onChange={handleDescription}
-                placeholder="Enter the Description"
+                placeholder="Enter the description"
               />
             </Form.Item>
           </Col>

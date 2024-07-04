@@ -44,6 +44,8 @@ import ResourceList from "./components/ICComponent/ICComponent1/ResourceList";
 import EditTraining from "./components/ICComponent/ICComponent1/EditTraining";
 import ResourceListt from "./components/ICComponent/ICComponent1/ResourceListt";
 import KPIList from "./components/ICComponent/ICComponent1/KPIList";
+import Traininglistt from "./components/ICComponent/ICComponent1/TrainingListt";
+import TrainingProgramDetailOJobs from "./components/ICComponent/ICComponent1/TrainingProgramDetailOJobs";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -97,6 +99,7 @@ function App() {
               <Route path="schedule" element={<Schedule />} />
               <Route path="NewTrainingProgram" element={<Create />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
+              <Route path="TrainingProgramsofjob/:id" element={<TrainingProgramDetailOJobs />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="class" element={<Jobs/>}/>
               <Route path="students/:className" element={<StudentList />} />
@@ -106,6 +109,7 @@ function App() {
               <Route path="Details/:id" element={<EditTraining />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
               <Route path="KPIList" element={<KPIList />} />
+              <Route path="TrainingListt/:id" element={<Traininglistt />} />
 
             </Route>
                 {/* Internship Routes */}

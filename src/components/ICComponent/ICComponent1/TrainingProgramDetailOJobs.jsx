@@ -15,7 +15,7 @@ const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
-const TrainingProgramDetail = () => {
+const TrainingProgramDetailOJobs = () => {
   const { id } = useParams();
   const { state } = useLocation();
   const CampaignDetail = state?.item;
@@ -211,7 +211,7 @@ const TrainingProgramDetail = () => {
                 </Paragraph>
               </div>
             </TabPane>
-            <TabPane tab="Resources" key="2">
+            {/* <TabPane tab="Resources" key="2">
               {userRole === "internshipcoordinators" && (
                 <Form form={form} layout="vertical" onFinish={handleAddResource}>
                   <Form.Item
@@ -259,18 +259,7 @@ const TrainingProgramDetail = () => {
                 rowKey="id"
                 pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
               />
-            </TabPane>
-            <TabPane tab="KPIS" key="3">
-              {userRole === "internshipcoordinators" && (
-                <Table
-                columns={columns}
-                dataSource={resources}
-                rowKey="id"
-                pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-              />
-              )}
-            
-            </TabPane>
+            </TabPane> */}
           </Tabs>
         </div>
       </Content>
@@ -286,4 +275,4 @@ const TrainingProgramDetail = () => {
   );
 };
 
-export default TrainingProgramDetail;
+export default TrainingProgramDetailOJobs;

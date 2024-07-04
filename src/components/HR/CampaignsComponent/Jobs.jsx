@@ -12,7 +12,7 @@ const { Search } = Input;
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(3);
+  const [pageSize] = useState(6);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [hovered, setHovered] = useState(null);
@@ -45,7 +45,7 @@ const Jobs = () => {
   };
 
   const handleTrainingDetails = (item) => {
-    navigate(`/${userRole}/TrainingPrograms/${item.id}`, {
+    navigate(`/${userRole}/TrainingProgramsofjob/${item.id}`, {
       state: { item },
     });
   };

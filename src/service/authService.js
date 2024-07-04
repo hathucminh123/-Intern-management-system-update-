@@ -36,6 +36,8 @@ export const apiLinks = {
     delete: `${baseURL}/TrainingProgram`,
     deleteResource: `${baseURL}/TrainingProgram/Resource`,
     postResource: `${baseURL}/TrainingProgram/Resource`,
+    deleteKPI: `${baseURL}/TrainingProgram/KPI`,
+    postKPI: `${baseURL}/TrainingProgram/KPI`,
   },
   Resource: {
     get: `${baseURL}/Resource`,

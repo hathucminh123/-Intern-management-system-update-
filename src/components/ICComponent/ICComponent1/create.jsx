@@ -89,7 +89,7 @@ const Create = () => {
           
           <Form.Item
             name="jobIds"
-            label="Positions"
+            label="Vị trí các jobs"
             rules={[{ required: true, message: "Please select the positions" }]}
           >
             <Select
