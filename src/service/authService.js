@@ -59,6 +59,15 @@ export const apiLinks = {
   },
   User:{
     get: `${baseURL}/User`,
+  },
+   Meetings:{
+    get: `${baseURL}/Meetings`,
+    post: `${baseURL}/Meetings`,
+    put: `${baseURL}/Meetings`,
+    delete: `${baseURL}/Meetings`,
+    getUserId: `${baseURL}/Meetings/id`,
+    postUser:`${baseURL}/Meetings/add-user`,
+    deleteUser:`${baseURL}/Meetings/remove-user`
   }
 
 
