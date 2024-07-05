@@ -102,7 +102,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               name="startDate"
               rules={[{ required: true, message: 'Please select the start date!' }]}
             >
-              <DatePicker />
+              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
             </Form.Item>
 
             <Form.Item
@@ -110,7 +110,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               name="endDate"
               rules={[{ required: true, message: 'Please select the end date!' }]}
             >
-              <DatePicker />
+              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
             </Form.Item>
 
             <Form.Item

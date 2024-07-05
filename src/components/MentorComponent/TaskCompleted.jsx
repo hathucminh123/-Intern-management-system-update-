@@ -121,13 +121,13 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
       </Menu.Item>
        
 
-       {userRole==="internshipcoordinators" &&(
+       {userRole==="mentor" &&(
         <Menu.Item key="2">
         <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
       </Menu.Item>
        )}
       
-      {userRole==="internshipcoordinators" &&(
+      {userRole==="mentor" &&(
       <Menu.Item key="3">
         <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
       </Menu.Item>

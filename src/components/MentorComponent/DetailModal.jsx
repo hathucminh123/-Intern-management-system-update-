@@ -102,7 +102,7 @@ try {
               name="startDate"
               rules={[{ required: true, message: 'Please select the start date!' }]}
             >
-              <DatePicker />
+              <DatePicker   showTime format="YYYY-MM-DD HH:mm"/>
             </Form.Item>
 
             <Form.Item
@@ -110,7 +110,7 @@ try {
               name="endDate"
               rules={[{ required: true, message: 'Please select the end date!' }]}
             >
-              <DatePicker />
+              <DatePicker   showTime format="YYYY-MM-DD HH:mm"/>
             </Form.Item>
 
             <Form.Item

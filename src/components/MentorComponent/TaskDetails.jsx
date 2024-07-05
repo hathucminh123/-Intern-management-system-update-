@@ -203,13 +203,13 @@ const TaskDetails = () => {
                       <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         Start Date
                       </Title>
-                      <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY")}</strong></p>
+                      <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
                     </div>
                     <div style={{ marginTop: '10px' }}>
                       <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         End Date
                       </Title>
-                      <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY")}</strong></p>
+                      <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
                     </div>
                     <div style={{ marginTop: '10px' }}>
                       <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col } from "antd";
+import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col ,Upload} from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -7,8 +7,11 @@ import * as Campaign from '../../../service/Campaign';
 import * as Jobss from '../../../service/JobsService';
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from 'moment';
+import { storage } from '../../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { UploadOutlined } from "@ant-design/icons";
+const { Title,Text } = Typography;
 
-const { Title } = Typography;
 const { Option } = Select;
 const { Header, Content } = Layout;
 
@@ -20,6 +23,7 @@ const EditCampaign = () => {
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
   const [jobs, setJobs] = useState([]);
+  const [cvFile, setCvFile] = useState(null);
   const navigate = useNavigate();
 console.log("asdasd",CampaignDetail)
   useEffect(() => {
@@ -51,6 +55,16 @@ console.log("asdasd",CampaignDetail)
   }, [CampaignDetail, form]);
 
   const onFinish = async (values) => {
+
+    try {
+      if (!cvFile) {
+        message.error('Please upload an image!');
+        return;
+      }
+      const fileRef = ref(storage, cvFile.name);
+      await uploadBytes(fileRef, cvFile);
+      const fileUrl = await getDownloadURL(fileRef);
+
     const NewCampaigns = {
       id: CampaignDetail.id,
       ...values,
@@ -58,10 +72,12 @@ console.log("asdasd",CampaignDetail)
       requirements: requirement,
       benefits: benefits,
       duration: parseInt(values.duration),
+      imagePath:fileUrl
+
     //   estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
     };
 
-    try {
+  
       const response = await Campaign.EditNewCampaign(NewCampaigns);
       message.success("Campaign edit successfully!");
       form.resetFields();
@@ -88,6 +104,10 @@ console.log("asdasd",CampaignDetail)
     setBenefits(value);
   };
 
+  const handleBeforeUpload = (file) => {
+    setCvFile(file);
+    return false;
+  };
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -196,12 +216,28 @@ console.log("asdasd",CampaignDetail)
                 />
               </Form.Item>
               <Form.Item
+              name="imagePath"
+              label={
+                <div>
+                  <Text strong>Upload Image</Text>
+                  <div>You can only upload one file</div>
+                </div>
+              }
+              rules={[{ required: true, message: 'Please upload an image!' }]}
+            >
+              <Upload.Dragger
                 name="imagePath"
-                label="Campaign Image Path"
-                rules={[{ required: true, message: "Please enter the campaign image path" }]}
+                multiple={false}
+                accept=".jpg,.jpeg,.png"
+                beforeUpload={handleBeforeUpload}
               >
-                <Input placeholder="Enter the image path" />
-              </Form.Item>
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined />
+                </p>
+                <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
+                <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
+              </Upload.Dragger>
+            </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
                   Submit

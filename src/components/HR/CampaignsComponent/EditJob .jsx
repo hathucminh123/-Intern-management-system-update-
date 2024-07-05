@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, DatePicker, Typography, message, Layout } from "antd";
+import { Form, Input, Button, DatePicker, Typography, message, Layout,Upload } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import moment from "moment";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { editNewJobs } from "../../../service/JobsService";
-
-const { Title } = Typography;
+import { storage } from '../../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { UploadOutlined } from "@ant-design/icons";
+const { Title,Text } = Typography;
 const { Header, Content } = Layout;
 
 const EditJob = () => {
@@ -18,6 +20,7 @@ const EditJob = () => {
   const [requirement, setRequirement] = useState("");
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
+  const [cvFile, setCvFile] = useState(null);
 
   useEffect(() => {
     if (jobDetail) {
@@ -40,17 +43,30 @@ const EditJob = () => {
   const handleBenefits = (value) => {
     setBenefits(value);
   };
+  const handleBeforeUpload = (file) => {
+    setCvFile(file);
+    return false;
+  };
 
   const onFinish = async (values) => {
+    try {
+      if (!cvFile) {
+        message.error('Please upload an image!');
+        return;
+      }
+      const fileRef = ref(storage, cvFile.name);
+      await uploadBytes(fileRef, cvFile);
+      const fileUrl = await getDownloadURL(fileRef);
     const updatedJob = {
       id:id,
       ...values,
       scopeOfWork: description,
       requirements: requirement,
       benefits,
+      imagePath: fileUrl,
     };
 
-    try {
+   
       await editNewJobs(updatedJob);
       message.success("Job updated successfully!");
       navigate("/hrmanager/jobs");
@@ -159,12 +175,26 @@ const EditJob = () => {
             </Form.Item>
             <Form.Item
               name="imagePath"
-              label="Job Image Path"
-              rules={[
-                { required: true, message: "Please enter the job image path" },
-              ]}
+              label={
+                <div>
+                  <Text strong>Upload Image</Text>
+                  <div>You can only upload one file</div>
+                </div>
+              }
+              rules={[{ required: true, message: 'Please upload an image!' }]}
             >
-              <Input placeholder="Enter the image path" />
+              <Upload.Dragger
+                name="imagePath"
+                multiple={false}
+                accept=".jpg,.jpeg,.png"
+                beforeUpload={handleBeforeUpload}
+              >
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined />
+                </p>
+                <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
+                <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
+              </Upload.Dragger>
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">

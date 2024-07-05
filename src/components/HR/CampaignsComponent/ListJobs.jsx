@@ -84,7 +84,7 @@ const ListJobs = () => {
       message.success("Jobs added successfully");
       navigate("/hrmanager/campaigns");
     } catch (error) {
-      message.error("Error adding jobs to campaign: " + CampaignDetail.name );
+      message.error("Error  jobs is exsit in campaign: " + CampaignDetail.name );
     }
   };
 

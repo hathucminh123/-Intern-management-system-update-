@@ -174,6 +174,7 @@ const ScheduleDetails = () => {
               </List.Item>
             )}
           />
+             {(userRole ==="mentor" || userRole === "hrmanager" || userRole=== "internshipcoordinators") &&(
           <Select
             placeholder="Add new attendee"
             className="mt-4"
@@ -184,6 +185,7 @@ const ScheduleDetails = () => {
               <Option key={item.id} value={item.id}>{item.userName}</Option>
             ))}
           </Select>
+              )}   
         </Card>
         {/* <div className="flex justify-end">
           <Button type="primary" icon={<SaveOutlined />} className="mr-2" htmlType="submit">Save</Button>
