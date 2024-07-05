@@ -71,9 +71,7 @@ export const fetchSchedule = async () => {
   try {
     const response = await httpClient.get({
       url: `${apiLinks.Meetings.get}`,
-      headers: {
-        'Cache-Control': 'no-cache' // Add no-cache header to avoid server-side caching
-      }
+  
     });
 
     if (response.status !== 200) {
@@ -90,5 +88,50 @@ export const fetchSchedule = async () => {
   } catch (error) {
     console.error("Fetching schedule failed", error);
     throw error;
+  }
+};
+
+export const createUserNewSchedule = async (meetingId,userId) => {
+  try {
+    const response = await httpClient.post({
+      url: `${apiLinks.Meetings.postUser}?meetingId=${meetingId}&userId=${userId}`,
+  
+    });
+
+    if (![200, 201].includes(response.status)) {
+      const error = new Error('An error occurred while add User to the schedule');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error Add User to  Schedule:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
+  }
+};
+
+
+export const deleteUserNewSchedule = async (meetingId,userId) => {
+  try {
+    const response = await httpClient.delete({
+      url: `${apiLinks.Meetings.deleteUser}?meetingId=${meetingId}&userId=${userId}`,
+  
+    });
+
+    if (![200, 201].includes(response.status)) {
+      const error = new Error('An error occurred while add User to the schedule');
+      error.code = response.status;
+      error.info = await response.data;
+      console.error('Server response:', response.data);
+      throw error;
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error Add User to  Schedule:', error.response ? error.response.data : error.message);
+    throw new Error(`Error: ${error.message}`);
   }
 };

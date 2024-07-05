@@ -114,15 +114,24 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
 
   const menu = (record) => (
     <Menu>
-      <Menu.Item key="1">
+     
+
+          <Menu.Item key="1">
         <Button onClick={() => handleDetails(record)}>View</Button>
       </Menu.Item>
-      <Menu.Item key="2">
+       
+
+       {userRole==="internshipcoordinators" &&(
+        <Menu.Item key="2">
         <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
       </Menu.Item>
+       )}
+      
+      {userRole==="internshipcoordinators" &&(
       <Menu.Item key="3">
         <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
       </Menu.Item>
+         )}
       {record.completed && (
         <Menu.Item key="4">
           <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>

@@ -26,7 +26,7 @@ const Schedule = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventToEdit, setEventToEdit] = useState(null);
-  const navigate =useNavigate()
+  const navigate = useNavigate();
 
   const fetchSchedule = async () => {
     try {
@@ -40,7 +40,7 @@ const Schedule = () => {
     } catch (error) {
       message.error('Fetch Meeting schedule failed: ' + error.message);
     }
-  }
+  };
 
   useEffect(() => {
     fetchSchedule();
@@ -57,9 +57,12 @@ const Schedule = () => {
     setSelectedDate(event.startTime);
     setEventToEdit(event);
   };
-  const handleDetails = () => {
-    navigate('/hrmanager/scheduleDetail');
+
+  const userRole = localStorage.getItem('role');
+  const handleDetails = (item) => {
+    navigate(`/${userRole}/scheduleDetail/${item.id}`, { state: { item } });
   };
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
@@ -101,12 +104,8 @@ const Schedule = () => {
                   <Title level={5}>Name: {item.title}</Title>
                   <p><strong>Start Time:</strong> {moment(item.startTime).format('YYYY-MM-DD HH:mm')}</p>
                   <p><strong>End Time:</strong> {moment(item.endTime).format('YYYY-MM-DD HH:mm')}</p>
-                  <p><strong>Description:</strong> {item.description}</p>
                   <p><strong>Location:</strong> {item.location}</p>
-                  <p><strong>Minutes:</strong> {item.minutes}</p>
-                  <p><strong>Status:</strong> {item.status}</p>
-                  <p><strong>Priority:</strong> {item.priority}</p>
-                  <Button type="primary" onClick={()=>{handleDetails()}}>View Details</Button>
+                  <Button type="primary" onClick={() => { handleDetails(item) }}>View Details</Button>
                 </Card>
               </Col>
             ))}

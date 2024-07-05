@@ -78,7 +78,7 @@ const CustomMenu = ({ userRole }) => {
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
       { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
-      { key: "/hrmanager/scheduleDetail", icon: <AreaChartOutlined />, label: "Schedule" },
+
     ],
     internshipcoordinators: [
       { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "Schedule" },

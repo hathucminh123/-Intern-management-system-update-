@@ -12,7 +12,6 @@ import "tailwindcss/tailwind.css";
 import '../../../index.css';
 import DetailKPIModal from "./DetailKPIModal";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
-import Task from "../../MentorComponent/TaskBoard/Task";
 import moment from "moment";
 
 const { Title, Paragraph, Text } = Typography;
@@ -31,7 +30,7 @@ const TrainingProgramDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [selectedKPI, setSelectedKPI] = useState(null);
-  const [task,setTask] =useState(null)
+  const [task, setTask] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -48,15 +47,17 @@ const TrainingProgramDetail = () => {
     }
   }, [CampaignDetail]);
 
-
   useEffect(() => {
     if (CampaignDetail?.assessments) {
       setTask(CampaignDetail.assessments);
     }
   }, [CampaignDetail]);
+
   if (!CampaignDetail) {
     return <div>Training program detail not found</div>;
   }
+  const userRole = localStorage.getItem('role')?.toLowerCase();
+
 
   const fetchResources = async () => {
     const q = query(collection(firestore, 'resources'), where('trainingProgramIds', 'array-contains', CampaignDetail.id));
@@ -85,11 +86,11 @@ const TrainingProgramDetail = () => {
 
       await addDoc(collection(firestore, 'resources'), resourceData);
       await Resource.createNewResource(resourceData);
-      
+
       message.success('Resource added successfully!');
       form.resetFields();
       navigate('/internshipcoordinators/ViewTrainingProgram');
-      
+
       setCvFile(null);
       await fetchResources();
     } catch (error) {
@@ -100,8 +101,8 @@ const TrainingProgramDetail = () => {
     }
   };
 
-  const handleUpdateResource = async (updatedTask) => {
-    setResources((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
+  const handleUpdateResource = async (updatedResource) => {
+    setResources((prev) => prev.map(item => item.id === updatedResource.id ? updatedResource : item));
   };
 
   const handleDeleteResource = async (resourceId) => {
@@ -148,17 +149,14 @@ const TrainingProgramDetail = () => {
     setKpis((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
   };
 
-
-  const handleAddKPIStoProgram= (item)=>{
-   navigate(`/internshipcoordinators/KPISListt/${item.id}`,{state: {item}})
-
-
-  }
-console.log('asdasda',task)
+  const handleAddKPIStoProgram = (item) => {
+    navigate(`/internshipcoordinators/KPISListt/${item.id}`, { state: { item } });
+  };
 
   const handleDetails = (task) => {
     navigate(`/${userRole}/taskDetail/${task.id}`, { state: { task } });
   };
+
   const resourceMenu = (record) => (
     <Menu>
       <Menu.Item key="1">
@@ -181,30 +179,13 @@ console.log('asdasda',task)
     </Menu>
   );
 
-
-
-
   const TaskMenu = (record) => (
     <Menu>
       <Menu.Item key="1">
         <Button onClick={() => handleDetails(record)}>View</Button>
       </Menu.Item>
-      {/* <Menu.Item key="2">
-        <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
-      </Menu.Item> */}
-      {/* <Menu.Item key="3">
-        <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
-      </Menu.Item> */}
-      {/* {record.completed && (
-        <Menu.Item key="4">
-          <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>
-        </Menu.Item>
-      )} */}
-     </Menu>
- ); 
-    
-
-
+    </Menu>
+  );
   const resourceColumns = [
     {
       title: 'Name',
@@ -220,9 +201,14 @@ console.log('asdasda',task)
       title: 'File',
       dataIndex: 'filePath',
       key: 'filePath',
-      render: (filePath) => <a href={filePath} target="_blank" rel="noopener noreferrer">View File</a>,
+      render: (filePath) => (
+        <a href={filePath} target="_blank" rel="noopener noreferrer">View File</a>
+      ),
     },
-    {
+  ];
+  
+  if (userRole === "internshipcoordinators") {
+    resourceColumns.push({
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
@@ -234,8 +220,8 @@ console.log('asdasda',task)
           </Dropdown>
         </Space>
       ),
-    },
-  ];
+    });
+  }
 
   const kpiColumns = [
     {
@@ -258,7 +244,11 @@ console.log('asdasda',task)
       dataIndex: 'type',
       key: 'type',
     },
-    {
+  
+  ];
+
+  if (userRole === "internshipcoordinators") {
+    kpiColumns.push({
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
@@ -270,9 +260,8 @@ console.log('asdasda',task)
           </Dropdown>
         </Space>
       ),
-    },
-  ];
-
+    });
+  }
 
   const Takscolumns = [
     {
@@ -322,22 +311,25 @@ console.log('asdasda',task)
         </span>
       ),
     },
-    {
+   
+  ];
+
+  if (userRole === "internshipcoordinators") {
+    Takscolumns.push({
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
         <Space size="middle">
-          <Dropdown overlay={TaskMenu(record)}>
+          <Dropdown overlay={resourceMenu(record)}>
             <Button>
               More <DownOutlined />
             </Button>
           </Dropdown>
         </Space>
       ),
-    },
-  ];
+    });
+  }
 
-  const userRole = localStorage.getItem('role')?.toLowerCase();
 
   const handleBeforeUpload = (file) => {
     setCvFile(file);
@@ -449,7 +441,7 @@ console.log('asdasda',task)
               />
             </TabPane>
             <TabPane tab="KPIS" key="3">
-              {userRole === "internshipcoordinators" && (
+              {(userRole === "internshipcoordinators" || userRole === "intern") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Row gutter={1000}>
@@ -457,13 +449,15 @@ console.log('asdasda',task)
                         <Title level={4}>KPI LIST in {CampaignDetail.name}</Title>
                       </Col>
                       <Col>
-                        <ButtonComponent
-                          styleButton={{ background: "#06701c", border: "none" }}
-                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                          size="middle"
-                          textbutton="Add KPI"
-                          onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
-                        />
+                {userRole ==="internshipcoordinators" &&(
+                  <ButtonComponent
+                  styleButton={{ background: "#06701c", border: "none" }}
+                  styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                  size="middle"
+                  textbutton="Add KPI"
+                  onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
+                />
+                )}        
                       </Col>
                     </Row>
                   </Header>
@@ -479,21 +473,12 @@ console.log('asdasda',task)
               )}
             </TabPane>
             <TabPane tab="Assessments" key="4">
-              {userRole === "internshipcoordinators" && (
+              {(userRole === "internshipcoordinators" || userRole === "intern") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Row gutter={1000}>
                       <Col>
                         <Title level={4}>Assessment LIST in {CampaignDetail.name}</Title>
-                      </Col>
-                      <Col>
-                        {/* <ButtonComponent
-                          styleButton={{ background: "#06701c", border: "none" }}
-                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                          size="middle"
-                          textbutton="Add KPI"
-                          onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
-                        /> */}
                       </Col>
                     </Row>
                   </Header>

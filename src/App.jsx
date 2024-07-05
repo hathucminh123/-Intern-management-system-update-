@@ -75,6 +75,7 @@ function App() {
               <Route path="students/:className" element={<StudentList />} />
               <Route path="ClassAttendance/:className" element={<StudentAttendanceRecord/>} />
               <Route path="StudentAttendance/:className" element={<ClassAttendanceRecord/>} />
+              <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
             </Route>
             
             {/* HR Manager Routes */}
@@ -94,7 +95,7 @@ function App() {
               <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="ListJobs/:id" element={<ListJobs/>} />
               <Route path="EditCampaign/:id" element={<EditCampaign/>} />
-              <Route path="scheduleDetail" element={<ScheduleDetails />} />
+              <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
 
             </Route>
 
@@ -117,6 +118,7 @@ function App() {
               <Route path="TrainingListt/:id" element={<Traininglistt />} />
               <Route path="KPISListt/:id" element={<KPIListt />} />
               <Route path="taskDetail/:id" element={<TaskDetails/>}/>
+              <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
           
 
             </Route>
@@ -131,6 +133,7 @@ function App() {
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="chat" element={<Chat />} />
+              <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
             </Route>
 
 
