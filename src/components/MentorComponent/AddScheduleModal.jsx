@@ -1,46 +1,188 @@
-// AddScheduleModal.js
-import React from 'react';
-import { Form, Modal, Input } from 'antd';
-import { useDispatch } from 'react-redux';
-import { addEvent } from '../../redux/calendarSlice';
+import React, { useEffect } from 'react';
+import { Form, Modal, Input, DatePicker, Button, Row, Col, message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
+import * as Meeting from "../../service/Schedule";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-const AddScheduleModal = ({ visible, onClose, selectedDate, setSelectedDate }) => {
-  const dispatch = useDispatch();
+const AddScheduleModal = ({ visible, onClose, selectedDate, setSelectedDate, fetchSchedule, eventToEdit, setEventToEdit }) => {
   const [form] = Form.useForm();
 
-  const handleOk = () => {
-    const { types, events } = form.getFieldsValue();
-    const newEvent = { id: uuidv4(), types, events, date: selectedDate };
-    dispatch(addEvent(newEvent));
-    form.resetFields();
-    onClose();
-    setSelectedDate(null); // Reset selected date after adding event
+  useEffect(() => {
+    if (eventToEdit) {
+      form.setFieldsValue({
+        title: eventToEdit.title,
+        description: eventToEdit.description,
+        startTime: moment(eventToEdit.startTime),
+        endTime: moment(eventToEdit.endTime),
+        location: eventToEdit.location,
+        minutes: eventToEdit.minutes,
+        status: eventToEdit.status,
+        priority: eventToEdit.priority,
+      });
+    } else {
+      form.resetFields();
+      form.setFieldsValue({
+        startTime: selectedDate ? moment(selectedDate) : null,
+        endTime: selectedDate ? moment(selectedDate).add(1, 'hours') : null,
+      });
+    }
+  }, [eventToEdit, selectedDate, form]);
+
+  const handleOk = async () => {
+    try {
+      const values = form.getFieldsValue();
+      const { title, startTime, endTime, location, minutes, status, priority } = values;
+      const description = form.getFieldValue('description');
+
+      if (!title || !description || !startTime || !endTime || !location || !minutes || !status || !priority) {
+        message.error('Please fill in all fields');
+        return;
+      }
+
+      const formattedStartTime = startTime.toDate();
+      const formattedEndTime = endTime.toDate();
+
+      if (eventToEdit) {
+        const updatedEvent = {
+          ...eventToEdit,
+          title,
+          description,
+          startTime: formattedStartTime,
+          endTime: formattedEndTime,
+          location,
+          minutes,
+          status,
+          priority
+        };
+
+        await Meeting.editNewSchedule(updatedEvent);
+        await fetchSchedule();
+        message.success("Schedule updated successfully");
+      } else {
+        const newEvent = {
+          id: uuidv4(),
+          title,
+          description,
+          startTime: formattedStartTime,
+          endTime: formattedEndTime,
+          location,
+          minutes,
+          status,
+          priority
+        };
+
+        await Meeting.createNewSchedule(newEvent);
+        await fetchSchedule();
+        message.success("Schedule created successfully");
+      }
+
+      form.resetFields();
+      onClose();
+      setSelectedDate(null);
+      setEventToEdit(null);
+    } catch (error) {
+      message.error('An error occurred while processing the event');
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (!eventToEdit) return;
+
+      await Meeting.deleteNewSchedule(eventToEdit.id);
+      await fetchSchedule();
+      form.resetFields();
+      onClose();
+      setSelectedDate(null);
+      setEventToEdit(null);
+      message.success("Schedule deleted successfully");
+    } catch (error) {
+      message.error('Delete Meeting schedule failed');
+      console.error(error);
+    }
   };
 
   const handleCancel = () => {
     form.resetFields();
     onClose();
-    setSelectedDate(null); // Reset selected date on modal close
+    setSelectedDate(null);
+    setEventToEdit(null);
   };
 
   return (
     <Modal
-      title='Tạo Sự Kiện'
+      title={eventToEdit ? 'Update Event' : 'Create Event'}
       visible={visible}
       onOk={handleOk}
       onCancel={handleCancel}
+      footer={[
+        <Button key="back" onClick={handleCancel}>
+          Cancel
+        </Button>,
+        eventToEdit && (
+          <Button key="delete" type="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        ),
+        <Button key="submit" type="primary" onClick={handleOk}>
+          {eventToEdit ? 'Update' : 'Create'}
+        </Button>
+      ]}
     >
       <Form form={form} layout='vertical'>
-        <Form.Item label='Loại Sự Kiện' name='types'>
-          <Input placeholder='Nhập loại sự kiện' />
-        </Form.Item>
-        <Form.Item label='Nội Dung' name='events'>
-          <Input.TextArea placeholder='Nhập nội dung sự kiện' />
-        </Form.Item>
-        <Form.Item label='Ngày'name='date'>
-          <Input value={selectedDate} disabled />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label='Event Title' name='title' rules={[{ required: true, message: 'Please enter the event title' }]}>
+              <Input placeholder='Enter event title' />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label='Location' name='location' rules={[{ required: true, message: 'Please enter the event location' }]}>
+              <Input placeholder='Enter event location' />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label='Start Time' name='startTime' rules={[{ required: true, message: 'Please select the start time' }]}>
+              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label='End Time' name='endTime' rules={[{ required: true, message: 'Please select the end time' }]}>
+              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label='Status' name='status' rules={[{ required: true, message: 'Please enter the event status' }]}>
+              <Input placeholder='Enter event status' />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label='Priority' name='priority' rules={[{ required: true, message: 'Please enter the event priority' }]}>
+              <Input placeholder='Enter event priority' />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item label='Description' name='description' rules={[{ required: true, message: 'Please enter the event description' }]}>
+              <ReactQuill theme="snow" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item label='Minutes' name='minutes' rules={[{ required: true, message: 'Please enter the event minutes' }]}>
+              <Input.TextArea placeholder='Enter event minutes' />
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
     </Modal>
   );

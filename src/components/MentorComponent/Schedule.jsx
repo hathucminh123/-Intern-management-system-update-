@@ -1,68 +1,118 @@
-import React, { useState } from 'react';
-import { Badge, Button, Calendar, Space, Typography } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { addEvent, removeEvent, setIsAddEventVisible } from '../../redux/calendarSlice';
+import React, { useEffect, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Layout, Typography, Card, Button, Row, Col, message } from 'antd';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import moment from 'moment';
 import AddScheduleModal from './AddScheduleModal';
+import * as Meeting from '../../service/Schedule';
+import { useNavigate } from 'react-router-dom';
+
+const { Header, Content } = Layout;
+const { Title } = Typography;
+
+const localizer = momentLocalizer(moment);
+
+const EventComponent = ({ event }) => (
+  <div>
+    <strong>{event.title}</strong>
+    <div>{moment(event.startTime).format('HH:mm')} - {moment(event.endTime).format('HH:mm')}</div>
+    <div>{event.location}</div>
+    <div>{event.status}</div>
+  </div>
+);
 
 const Schedule = () => {
-  const dispatch = useDispatch();
-  const events = useSelector(state => state.calendar.events);
-  const isAddEventVisible = useSelector(state => state.calendar.isAddEventVisible);
+  const [events, setEvents] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [eventToEdit, setEventToEdit] = useState(null);
+  const navigate = useNavigate();
 
-  const handleAddEvent = (value) => {
-    setSelectedDate(value.format('YYYY-MM-DD')); // Update selected date
-    dispatch(setIsAddEventVisible(true));
+  const fetchSchedule = async () => {
+    try {
+      const res = await Meeting.fetchSchedule();
+      const formattedEvents = res.events.map(event => ({
+        ...event,
+        startTime: new Date(event.startTime),
+        endTime: new Date(event.endTime)
+      }));
+      setEvents(formattedEvents);
+    } catch (error) {
+      message.error('Fetch Meeting schedule failed: ' + error.message);
+    }
   };
 
-  const handleRemoveEvent = (eventId) => {
-    dispatch(removeEvent(eventId));
-    dispatch(setIsAddEventVisible(false));
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
+
+  const handleSelectSlot = (slotInfo) => {
+    setShowModal(true);
+    setSelectedDate(slotInfo.start);
+    setEventToEdit(null);
   };
 
-  const handleModalClose = () => {
-    dispatch(setIsAddEventVisible(false));
+  const handleSelectEvent = (event) => {
+    setShowModal(true);
+    setSelectedDate(event.startTime);
+    setEventToEdit(event);
   };
 
-  const monthCellRender = (value) => {
-    const currentMonth = new Date().getMonth();
-    return value.month() === currentMonth ? (
-      <div className="notes-month">
-        <section>1394</section>
-        <span>Backlog month</span>
-      </div>
-    ) : null;
-  };
-
-  const dateCellRender = (value) => {
-    const listData = events.filter(event => event.date === value.format('YYYY-MM-DD'));
-    return (
-      <ul className="events">
-        {listData.map(item => (
-          <li key={item.id}>
-            <Badge status={item.type} text={item.events} />
-            <Button onClick={() => handleRemoveEvent(item.id)}>Remove</Button>
-            {item.type}
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
-  const cellRender = (current, info) => {
-    console.log('info', info)
-    if (info.type === 'date') return dateCellRender(current);
-    if (info.type === 'month') return monthCellRender(current);
-    return info.originNode;
+  const userRole = localStorage.getItem('role');
+  const handleDetails = (item) => {
+    navigate(`/${userRole}/scheduleDetail/${item.id}`, { state: { item } });
   };
 
   return (
-    <Space size={20} direction='vertical'>
-      <Typography.Title level={5}>Lịch Trình</Typography.Title>
-      <Button onClick={handleAddEvent}>Thêm sự kiện</Button>
-      <Calendar cellRender={cellRender} onSelect={handleAddEvent} />
-      {isAddEventVisible && <AddScheduleModal visible={isAddEventVisible} onClose={handleModalClose} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />}
-    </Space>
+    <Layout>
+      <Header style={{ backgroundColor: 'white', color: 'black', textAlign: 'center', borderBottom: '1px solid #f0f0f0' }}>
+        <Title level={3} style={{ margin: 0 }}>Schedule</Title>
+      </Header>
+      <Content style={{ padding: '24px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
+        <div className="container mx-auto">
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="startTime"
+            endAccessor="endTime"
+            style={{ height: 500, backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}
+            selectable
+            onSelectSlot={handleSelectSlot}
+            onSelectEvent={handleSelectEvent}
+            className="shadow-lg"
+            components={{
+              event: EventComponent
+            }}
+          />
+          <AddScheduleModal
+            visible={showModal}
+            onClose={() => setShowModal(false)}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            fetchSchedule={fetchSchedule}
+            eventToEdit={eventToEdit}
+            setEventToEdit={setEventToEdit}
+          />
+          <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
+            {events.map((item) => (
+              <Col xs={24} sm={12} md={8} key={item.id}>
+                <Card
+                  hoverable
+                  className="shadow-lg"
+                  style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                >
+                  <Title level={5}>Name: {item.title}</Title>
+                  <p><strong>Start Time:</strong> {moment(item.startTime).format('YYYY-MM-DD HH:mm')}</p>
+                  <p><strong>End Time:</strong> {moment(item.endTime).format('YYYY-MM-DD HH:mm')}</p>
+                  <p><strong>Location:</strong> {item.location}</p>
+                  <Button type="primary" onClick={() => { handleDetails(item) }}>View Details</Button>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      </Content>
+    </Layout>
   );
 };
 

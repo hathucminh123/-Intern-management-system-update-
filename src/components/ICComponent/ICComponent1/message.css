@@ -1,0 +1,5 @@
+/* Custom CSS to adjust the message position */
+.ant-message {
+    top: 80px !important; /* Adjust the value as needed */
+  }
+  

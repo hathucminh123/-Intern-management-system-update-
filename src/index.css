@@ -8,6 +8,11 @@ body {
   padding: 0;
 }
 
-html {
-  font-size: 80.5%;
+
+html{
+  font-size: 100%;
+}
+
+.ant-message {
+  top: 80px !important; /* Adjust the value as needed */
 }

@@ -1,53 +1,71 @@
-import React, { useState, useEffect } from "react";
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  HomeOutlined,
-  AppstoreOutlined,
-  AreaChartOutlined,
-  ContactsOutlined,
-  ProjectOutlined,
-  WechatWorkOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import { useNavigate, Outlet } from "react-router-dom";
-import Logo from "../../components/Logo/Logo";
-import Campaings from "../../components/HR/CampaignsComponent/Campaings";
-import HRCampaignsDetails from "../../components/HR/CampaignsComponent/HRCampaignsDetails";
+import React, { useMemo } from 'react';
+import { useQueries } from '@tanstack/react-query';
+import CustomizedContent from './components/CustomizedContent';
 
-const { Header, Sider, Content } = Layout;
+import * as Campaign from '../../service/Campaign';
+import * as JobsService from '../../service/JobsService';
+import { Typography } from 'antd';
 
 const HRPage = () => {
+  const getAllCampaigns = async () => {
+    const res = await Campaign.fetchCampaigns();
+    console.log('Campaigns data:', res);
+    return { data: res?.events || [], key: 'campaign' };
+  };
 
+  const getAllJobs = async () => {
+    const res = await JobsService.fetchJobs();
+    console.log('Jobs data:', res);
+    return { data: res?.events || [], key: 'jobs' };
+  };
 
- 
+  const queries = useQueries({
+    queries: [
+      { queryKey: ['jobs'], queryFn: getAllJobs, staleTime: 1000 * 60 },
+      { queryKey: ['campaign'], queryFn: getAllCampaigns, staleTime: 1000 * 60 }
+    ]
+  });
 
-  
+  console.log('Queries:', queries);
 
-  // useEffect(() => {
-  //   handleGetDetailsUser();
-  // }, []);
+  const memoCount = useMemo(() => {
+    const result = {};
+    try {
+      if(queries) {
+        queries.forEach((query) => {
+          result [query?.data?.key] = query?.data?.data?.length
+        })
+      }
+    } catch (error) {
+      console.error('Error processing queries:', error);
+    }
+    return result;
+  }, [queries]);
 
-  // const handleGetDetailsUser = () => {
-  //   try {
-  //     const isLoggined = localStorage.getItem("Auth");
-  //     if (!isLoggined) {
-  //       navigate('/sign-in')
-  //     } else {
-  //       setIsLoading(false);
-  //       navigate('/mentor')
-  //     }
-  //   } catch {
-  //     navigate("/sign-in");
-  //   }
-  // };
+  const COLORS = {
+    jobs: ['#e66465', '#9198e5'],
+    campaign: ['#a8c0ff', '#3f2b96']
+  };
+
+  console.log('memoCount', memoCount);
+
   return (
-    <CustomMenu>
-      {renderPage(location.pathname)}
-    </CustomMenu>
+    <div style={{display:'flex',flexDirection:'column',textAlign:'center',justifyItems:'center',justifyContent:'center'}}>
+      <Typography.Title level={20}>Chào mừng quay trở lại HR MANAGEMENT System</Typography.Title>
+    <div style={{ display: 'flex', overflowX: 'hidden', }}>
+    
+      <div style={{ flex: 1, padding: '15px 0 15px 15px' }}>
+       
+        <CustomizedContent data={memoCount} colors={COLORS} />
+  
+      </div>
+
+
+           
+    </div>
+
+   
+    </div>
   );
 };
 
