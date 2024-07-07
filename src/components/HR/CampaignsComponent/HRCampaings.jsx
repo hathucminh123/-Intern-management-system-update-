@@ -17,6 +17,9 @@ const HRCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [hovered, setHovered] = useState(null);
 
+
+
+  const userRole =localStorage.getItem('role')
   useEffect(() => {
     fetchCampaignsData();
   }, []);
@@ -31,7 +34,7 @@ const HRCampaigns = () => {
   };
 
   const handleDetails = (item) => {
-    navigate(`/hrmanager/campaigns/${item.id}`, { state: { item } });
+    navigate(`/${userRole}/campaigns/${item.id}`, { state: { item } });
   };
 
   const handleAddNewCampaign = () => {
@@ -81,13 +84,18 @@ const HRCampaigns = () => {
               enterButton
               className="w-full"
             />
-            <ButtonComponent
-              styleButton={{ background: "#06701c", border: "none" }}
-              styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-              size="middle"
-              textbutton="Create New"
-              onClick={handleAddNewCampaign}
-            />
+
+            {userRole ==="hrmanager" && (
+
+<ButtonComponent
+styleButton={{ background: "#06701c", border: "none" }}
+styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+size="middle"
+textbutton="Create New"
+onClick={handleAddNewCampaign}
+/>
+            )}
+           
           </Space>
           <Row gutter={[16, 16]}>
             {currentCampaigns.map((campaign) => (

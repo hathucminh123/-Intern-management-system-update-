@@ -19,6 +19,8 @@ const HRCampaignsDetailss = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
+
+  const userRole =localStorage.getItem('role')
   if (!CampaignDetail) {
     return <div>Job detail not found</div>;
   }
@@ -46,7 +48,7 @@ const HRCampaignsDetailss = () => {
   };
 
   const handleDetails = (item) => {
-    navigate(`/hrmanager/Detail/${item.id}`, { state: { item } });
+    navigate(`/${userRole}/Detail/${item.id}`, { state: { item } });
   };
 
   const handleDelete = async (id) => {
@@ -127,116 +129,179 @@ const HRCampaignsDetailss = () => {
               </Paragraph>
             </div>
           </TabPane>
-          <TabPane tab="Các Jobs có trong Campaign" key="2">
-            <div className="mt-8 flex justify-between items-center">
-              <Title level={3}>Danh sách Jobs</Title>
-              <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>
-                Add Job to Campaign
-              </Button>
-            </div>
-            <div className="mt-8">
-              <Row gutter={[16, 16]}>
-                {CampaignDetail.jobs.map((item) => (
-                  <Col key={item.id} xs={24} sm={12} md={8}>
-                    <Card
-                      hoverable
-                      className="shadow-lg"
-                      style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                      actions={[
-                        <Popconfirm
-                          title="Are you sure to delete this job?"
-                          onConfirm={() => handleDelete(item.id)}
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Button type="danger">Delete</Button>
-                        </Popconfirm>,
-                      ]}
+          {userRole=== 'hrmanager' && (
+               <TabPane tab="Các Jobs có trong Campaign" key="2">
+               <div className="mt-8 flex justify-between items-center">
+                 <Title level={3}>Danh sách Jobs</Title>
+                 <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>
+                   Add Job to Campaign
+                 </Button>
+               </div>
+               <div className="mt-8">
+                 <Row gutter={[16, 16]}>
+                   {CampaignDetail.jobs.map((item) => (
+                     <Col key={item.id} xs={24} sm={12} md={8}>
+                       <Card
+                         hoverable
+                         className="shadow-lg"
+                         style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                         actions={[
+                           <Popconfirm
+                             title="Are you sure to delete this job?"
+                             onConfirm={() => handleDelete(item.id)}
+                             okText="Yes"
+                             cancelText="No"
+                           >
+                             <Button type="danger">Delete</Button>
+                           </Popconfirm>,
+                         ]}
+                       >
+                         <Image
+                           className="rounded-lg mb-3"
+                           preview={false}
+                           width="100%"
+                           height={200}
+                           src={item.imagePath}
+                           alt={item.name}
+                         />
+                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                           Developer {item.name}
+                         </Title>
+                         <p><strong>Duration:</strong> {item.duration} months</p>
+                         <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
+                         <Text
+                           style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
+                           onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                           onMouseEnter={() => setHovered(item.id)}
+                           onMouseLeave={() => setHovered(null)}
+                         >
+                           View Details {'-->'}
+                         </Text>
+                       </Card>
+                     </Col>
+                   ))}
+                 </Row>
+               </div>
+             </TabPane>
+            
+          )}
+             {userRole=== 'internshipcoordinators' && (
+               <TabPane tab=" class Jobs in Campaign" key="2">
+               <div className="mt-8 flex justify-between items-center">
+                 <Title level={3}>Danh sách Jobs</Title>
+                 <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>
+                   Add Job to Campaign
+                 </Button>
+               </div>
+               <div className="mt-8">
+                 <Row gutter={[16, 16]}>
+                   {CampaignDetail.jobs.map((item) => (
+                     <Col key={item.id} xs={24} sm={12} md={8}>
+                       <Card
+                         hoverable
+                         className="shadow-lg"
+                         style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                        //  actions={[
+                        //    <Popconfirm
+                        //      title="Are you sure to delete this job?"
+                        //      onConfirm={() => handleDelete(item.id)}
+                        //      okText="Yes"
+                        //      cancelText="No"
+                        //    >
+                        //      <Button type="danger">Delete</Button>
+                        //    </Popconfirm>,
+                        //  ]}
+                       >
+                         <Image
+                           className="rounded-lg mb-3"
+                           preview={false}
+                           width="100%"
+                           height={200}
+                           src={item.imagePath}
+                           alt={item.name}
+                         />
+                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                           Developer {item.name}
+                         </Title>
+                         <p><strong>Duration:</strong> {item.duration} months</p>
+                         <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
+                         <Text
+                           style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
+                           onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                           onMouseEnter={() => setHovered(item.id)}
+                           onMouseLeave={() => setHovered(null)}
+                         >
+                           View Details {'-->'}
+                         </Text>
+                       </Card>
+                     </Col>
+                   ))}
+                 </Row>
+               </div>
+             </TabPane>
+            
+          )}
+       
+       {userRole === "hrmanager" && (
+        <TabPane tab="Xem danh sách hồ sơ" key="3">
+        <div className="mt-8">
+        <Row gutter={[16, 16]}>
+            {CampaignDetail.jobs.map((item) => (
+              <Col key={item.id} xs={24} sm={12} md={8}>
+                <Card
+                  hoverable
+                  className="shadow-lg"
+                  style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                  actions={[
+                    <Popconfirm
+                      title="Are you sure to delete this job?"
+                      onConfirm={() => handleDelete(item.id)}
+                      okText="Yes"
+                      cancelText="No"
                     >
-                      <Image
-                        className="rounded-lg mb-3"
-                        preview={false}
-                        width="100%"
-                        height={200}
-                        src={item.imagePath}
-                        alt={item.name}
-                      />
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Developer {item.name}
-                      </Title>
-                      <p><strong>Duration:</strong> {item.duration} months</p>
-                      <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
-                      <Text
-                        style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
-                        onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
-                        onMouseEnter={() => setHovered(item.id)}
-                        onMouseLeave={() => setHovered(null)}
-                      >
-                        View Details {'-->'}
-                      </Text>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          </TabPane>
-          <TabPane tab="Xem danh sách hồ sơ" key="3">
-            <div className="mt-8">
-            <Row gutter={[16, 16]}>
-                {CampaignDetail.jobs.map((item) => (
-                  <Col key={item.id} xs={24} sm={12} md={8}>
-                    <Card
-                      hoverable
-                      className="shadow-lg"
-                      style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                      actions={[
-                        <Popconfirm
-                          title="Are you sure to delete this job?"
-                          onConfirm={() => handleDelete(item.id)}
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Button type="danger">Delete</Button>
-                        </Popconfirm>,
-                      ]}
-                    >
-                      <Image
-                        className="rounded-lg mb-3"
-                        preview={false}
-                        width="100%"
-                        height={200}
-                        src={item.imagePath}
-                        alt={item.name}
-                      />
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Developer {item.name}
-                      </Title>
-                      <p><strong>Duration:</strong> {item.duration} months</p>
-                      <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
-                      <Space direction="vertical">
-                      <Text
-                        style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
-                        onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
-                        onMouseEnter={() => setHovered(item.id)}
-                        onMouseLeave={() => setHovered(null)}
-                      >
-                        View Details {'-->'}
-                      </Text>
-                      <Text
-                        style={{ width: "fit-content", cursor: 'pointer', color: hoveredd === item.id ? 'blue' : 'black' }}
-                        onClick={(e) => { e.stopPropagation();  handleViewGuestInfoClick(CampaignDetail, item); }}
-                        onMouseEnter={() => setHoveredd(item.id)}
-                        onMouseLeave={() => setHoveredd(null)}
-                      >
-                        Xem hồ sơ {'-->'}
-                      </Text>
-                      </Space>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </div>
-          </TabPane>
+                      <Button type="danger">Delete</Button>
+                    </Popconfirm>,
+                  ]}
+                >
+                  <Image
+                    className="rounded-lg mb-3"
+                    preview={false}
+                    width="100%"
+                    height={200}
+                    src={item.imagePath}
+                    alt={item.name}
+                  />
+                  <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    Developer {item.name}
+                  </Title>
+                  <p><strong>Duration:</strong> {item.duration} months</p>
+                  <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
+                  <Space direction="vertical">
+                  <Text
+                    style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
+                    onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                    onMouseEnter={() => setHovered(item.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    View Details {'-->'}
+                  </Text>
+                  <Text
+                    style={{ width: "fit-content", cursor: 'pointer', color: hoveredd === item.id ? 'blue' : 'black' }}
+                    onClick={(e) => { e.stopPropagation();  handleViewGuestInfoClick(CampaignDetail, item); }}
+                    onMouseEnter={() => setHoveredd(item.id)}
+                    onMouseLeave={() => setHoveredd(null)}
+                  >
+                    Xem hồ sơ {'-->'}
+                  </Text>
+                  </Space>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+      </TabPane>
+       )}
+          
         </Tabs>
         <div className="mt-8">
           <Title level={3}>ỨNG TUYỂN</Title>

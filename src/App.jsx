@@ -47,6 +47,7 @@ import KPIList from "./components/ICComponent/ICComponent1/KPIList";
 import Traininglistt from "./components/ICComponent/ICComponent1/TrainingListt";
 import TrainingProgramDetailOJobs from "./components/ICComponent/ICComponent1/TrainingProgramDetailOJobs";
 import KPIListt from "./components/ICComponent/ICComponent1/KPIListt";
+import MentorList from "./components/ICComponent/ICComponent1/MentorList";
 
 
 import ScheduleDetails from "./components/MentorComponent/scheduleDetail";
@@ -107,7 +108,8 @@ function App() {
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="TrainingProgramsofjob/:id" element={<TrainingProgramDetailOJobs />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
-              <Route path="class" element={<Jobs/>}/>
+              <Route path="class" element={<HRCampaings/>}/>
+              <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
               <Route path="students/:className" element={<StudentList />} />
               <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="ResourceList/:id" element={<ResourceList />} />
@@ -119,6 +121,8 @@ function App() {
               <Route path="KPISListt/:id" element={<KPIListt />} />
               <Route path="taskDetail/:id" element={<TaskDetails/>}/>
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
+              <Route path="MentorList" element={<MentorList />} />
+
           
 
             </Route>

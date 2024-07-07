@@ -33,6 +33,8 @@ import { MdOutlineCampaign, MdEngineering } from "react-icons/md";
 import { GrResources } from "react-icons/gr";
 import { getComment } from "../../api/index";
 import Logo from "../Logo/Logo";
+import { LiaChalkboardTeacherSolid } from "react-icons/lia";
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -67,7 +69,7 @@ const CustomMenu = ({ userRole }) => {
 
   const items = {
     mentor: [
-      { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
+      { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
       // { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
       { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
@@ -77,11 +79,11 @@ const CustomMenu = ({ userRole }) => {
       { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
-      { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
+      { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
 
     ],
     internshipcoordinators: [
-      { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
+      { key: "/internshipcoordinators/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
       {
         key: "/internshipcoordinators/training-program",
         icon: <ProjectOutlined />,
@@ -94,10 +96,11 @@ const CustomMenu = ({ userRole }) => {
       { key: "/internshipcoordinators/class", icon: < MdClass />, label: "Class jobs" },
       { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource" },
       { key: "/internshipcoordinators/KPIList", icon: <GrResources />, label: "KPIList" },
+      { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
     ],
     intern: [
       { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },
-      { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Schedule" },
+      { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
       { key: "/intern/Trainingprogram", icon: <ProjectOutlined />, label: "Training Program" },
       { key: "/intern/taskboard", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },

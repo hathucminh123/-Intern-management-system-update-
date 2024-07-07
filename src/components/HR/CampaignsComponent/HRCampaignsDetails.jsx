@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Typography, Button, Image, Tag, Tabs, Layout, Table, Menu, Space, Dropdown } from "antd";
 import "tailwindcss/tailwind.css";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { DownOutlined } from "@ant-design/icons";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
@@ -17,6 +17,7 @@ const HRCampaignsDetails = () => {
   const [pageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const userRole = localStorage.getItem('role');
+  const navigate= useNavigate();
 
   console.log('Job Detail:', jobDetail);
 
@@ -38,6 +39,11 @@ const HRCampaignsDetails = () => {
   const handleDeleteResource = (id) => {
     // Handle delete resource logic
   };
+
+
+  const handleAddMentorJobCampaign =()=>{
+    navigate('/internshipcoordinators/MentorList')
+  }
 
   const menu = (record) => (
     <Menu>
@@ -99,7 +105,7 @@ const HRCampaignsDetails = () => {
 
         {userRole === "internshipcoordinators" && (
           <Tabs defaultActiveKey="1">
-            <TabPane tab="Campaign Details" key="1">
+            <TabPane tab="Jobs Details" key="1">
               <Title className="mt-8" level={3}>MÔ TẢ CÔNG VIỆC</Title>
               <Paragraph>
                 <ul className="list-disc list-inside">
@@ -124,8 +130,8 @@ const HRCampaignsDetails = () => {
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
-                    <Button type="primary" onClick={() => { handleAddJobCampaign(jobDetail) }}>
-                      Add Student to Class jobs
+                    <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
+                      Assign mentor to Manage this class
                     </Button>
                   </div>
                 </Header>
