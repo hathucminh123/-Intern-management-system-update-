@@ -25,6 +25,7 @@ const TaskDetails = () => {
   const popoverRef = useRef(null);
 
   console.log("asdasd",taskDetail);
+  const userRole =localStorage.getItem('role')
 
   const handleDescription = (value) => {
     setDescription(value);
@@ -88,24 +89,24 @@ const TaskDetails = () => {
       key: 'cvPath',
       render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (text, record) => (
-        <span>
-          {record.status.toUpperCase() === "DONE" && (
-            <Tag color='green'>{record.status.toUpperCase()}</Tag>
-          )}
-          {record.status.toUpperCase() === "ON-PROGRESS" && (
-            <Tag color='geekblue'>{record.status.toUpperCase()}</Tag>
-          )}
-          {record.status.toUpperCase() === "TODOS" && (
-            <Tag color='blue'>{record.status.toUpperCase()}</Tag>
-          )}
-        </span>
-      ),
-    },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (text, record) => (
+    //     <span>
+    //       {record.status.toUpperCase() === "DONE" && (
+    //         <Tag color='green'>{record.status.toUpperCase()}</Tag>
+    //       )}
+    //       {record.status.toUpperCase() === "ON-PROGRESS" && (
+    //         <Tag color='geekblue'>{record.status.toUpperCase()}</Tag>
+    //       )}
+    //       {record.status.toUpperCase() === "TODOS" && (
+    //         <Tag color='blue'>{record.status.toUpperCase()}</Tag>
+    //       )}
+    //     </span>
+    //   ),
+    // },
     {
       title: 'Action',
       key: 'action',
@@ -259,33 +260,39 @@ const TaskDetails = () => {
                       </Col>
                       <Col>
                         <Space direction='horizontal'>
-                          <ButtonComponent
-                            styleButton={{ background: "#06701c", border: "none" }}
-                            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                            size="middle"
-                            textbutton="Post Task"
-                            onClick={handlePostTask}
-                          />
-                          <Popover
-                            content={content}
-                            trigger="click"
-                            open={isOpenPopup}
-                            onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                            getPopupContainer={() => popoverRef.current}
-                          >
-                            <div
-                              ref={popoverRef}
-                              onClick={() => setIsOpenPopup(!isOpenPopup)}
-                              style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                            >
-                              <ButtonComponent
+                          {userRole ==='intern' &&(
+                                <ButtonComponent
                                 styleButton={{ background: "#06701c", border: "none" }}
                                 styleTextButton={{ color: "#fff", fontWeight: "bold" }}
                                 size="middle"
-                                textbutton="Review"
+                                textbutton="Post Task"
+                                onClick={handlePostTask}
                               />
-                            </div>
-                          </Popover>
+                          )}
+                      
+                      {userRole ==="mentor" && (
+                         <Popover
+                         content={content}
+                         trigger="click"
+                         open={isOpenPopup}
+                         onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                         getPopupContainer={() => popoverRef.current}
+                       >
+                         <div
+                           ref={popoverRef}
+                           onClick={() => setIsOpenPopup(!isOpenPopup)}
+                           style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                         >
+                           <ButtonComponent
+                             styleButton={{ background: "#06701c", border: "none" }}
+                             styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                             size="middle"
+                             textbutton="Review"
+                           />
+                         </div>
+                       </Popover>
+                      )}
+                         
                         </Space>
                       </Col>
                     </Row>

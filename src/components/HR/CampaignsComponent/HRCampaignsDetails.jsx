@@ -32,6 +32,14 @@ const HRCampaignsDetails = () => {
     { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' }
   ];
 
+  const dataReport = [
+    { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' },
+    { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
+    { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
+    { id: 4, name: "Tâm",  Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' }
+  ];
+
+
   const handleOpenDetailModal = (record) => {
     // Handle open detail modal logic
   };
@@ -76,6 +84,16 @@ const HRCampaignsDetails = () => {
       ),
     },
   ];
+
+  const columnsReport = [
+    { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
+    { title: "Logical thinking", dataIndex: "Logicalthinking", key: "Logicalthinking", responsive: ['md'] },
+    { title: "Attitude", dataIndex: "attitude", key: "attitude", responsive: ['md'] },
+    { title: "skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
+    { title: "Total", dataIndex: "total", key: "total", responsive: ['md'] },
+   
+  ];
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -139,6 +157,27 @@ const HRCampaignsDetails = () => {
                   <Table
                     columns={columns}
                     dataSource={data}
+                    rowKey="id"
+                    style={{ marginTop: "20px" }}
+                    pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
+                  />
+                </Content>
+              </Layout>
+            </TabPane>
+            <TabPane tab="Student List Report in jobs" key="3">
+              <Layout>
+                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
+                  <div className="mt-8 flex justify-between items-center">
+                    <Title level={3}>Student Report List</Title>
+                    {/* <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
+                      Assign mentor to Manage this class
+                    </Button> */}
+                  </div>
+                </Header>
+                <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
+                  <Table
+                    columns={columnsReport}
+                    dataSource={dataReport}
                     rowKey="id"
                     style={{ marginTop: "20px" }}
                     pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}

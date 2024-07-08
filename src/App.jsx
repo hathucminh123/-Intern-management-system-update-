@@ -48,9 +48,19 @@ import Traininglistt from "./components/ICComponent/ICComponent1/TrainingListt";
 import TrainingProgramDetailOJobs from "./components/ICComponent/ICComponent1/TrainingProgramDetailOJobs";
 import KPIListt from "./components/ICComponent/ICComponent1/KPIListt";
 import MentorList from "./components/ICComponent/ICComponent1/MentorList";
+import NewUser from "./components/HR/CampaignsComponent/NewUser";
+import ListUser from "./components/HR/CampaignsComponent/ListUser";
+import UserDetails from "./components/HR/CampaignsComponent/UserDetails";
 
 
 import ScheduleDetails from "./components/MentorComponent/scheduleDetail";
+import EditIntern from "./components/HR/CampaignsComponent/EditIntern";
+import EditUserRole from "./components/HR/CampaignsComponent/EditUserRole";
+import UserDetailsRole from "./components/HR/CampaignsComponent/UserDetailsRole";
+import NewReport from "./components/MentorComponent/NewReport";
+import UserListReport from "./components/MentorComponent/UserListReport";
+import StudentListClass from "./components/MentorComponent/StudentListClass";
+import InternReport from "./components/InternComponent/InternReport";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -72,11 +82,14 @@ function App() {
               <Route path="chat" element={<Chat />} />
               <Route path="taskboard" element={<TaskBoard />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
-              <Route path="class" element={<ClassList/>}/>
+              {/* <Route path="class" element={<ClassList/>}/> */}
+              <Route path="class" element={<StudentListClass/>}/>
               <Route path="students/:className" element={<StudentList />} />
               <Route path="ClassAttendance/:className" element={<StudentAttendanceRecord/>} />
               <Route path="StudentAttendance/:className" element={<ClassAttendanceRecord/>} />
-              <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
+              <Route path="NewReport" element={<NewReport />} />
+              <Route path="UserListReport" element={<UserListReport />} />
+
             </Route>
             
             {/* HR Manager Routes */}
@@ -97,6 +110,15 @@ function App() {
               <Route path="ListJobs/:id" element={<ListJobs/>} />
               <Route path="EditCampaign/:id" element={<EditCampaign/>} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
+              <Route path="NewUser" element={<NewUser/>}/>
+              <Route path="UserList" element={<ListUser/>}/> 
+              <Route path="UserDetails/:id" element={<UserDetails/>}/>
+              <Route path="EditUserIntern/:id" element={<EditIntern/>}/>
+              <Route path="EditUserRole/:id" element={<EditUserRole/>}/>
+              <Route path="UserDetailsRole/:id" element={<UserDetailsRole/>}/>
+            
+
+
 
             </Route>
 
@@ -138,6 +160,8 @@ function App() {
               <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="chat" element={<Chat />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
+              <Route path="internReport" element={< InternReport/>} />
+
             </Route>
 
 

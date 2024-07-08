@@ -241,6 +241,7 @@ const HRCampaignsDetailss = () => {
              </TabPane>
             
           )}
+          
        
        {userRole === "hrmanager" && (
         <TabPane tab="Xem danh sách hồ sơ" key="3">

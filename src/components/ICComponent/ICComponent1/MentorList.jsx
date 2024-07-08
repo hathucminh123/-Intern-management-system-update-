@@ -161,11 +161,14 @@ const  handleAddTrainingProgram =(item)=>{
           style={{ marginTop: "20px" }}
           pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
         />
-        {/* <div style={{ marginTop: "20px" }}>
-          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
+        <div style={{ marginTop: "20px" }}>
+          {/* <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
             Add to Training Program
+          </Button> */}
+          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} >
+            Add to Class Campaign jobs
           </Button>
-        </div> */}
+        </div>
       </Content>
       {selectedResource && (
         <DetailKPIModal
