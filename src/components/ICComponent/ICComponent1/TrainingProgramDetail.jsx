@@ -269,12 +269,12 @@ const TrainingProgramDetail = () => {
       dataIndex: 'name',
       key: 'name',
     },
-    {
-      title: 'Assigned To',
-      dataIndex: 'owner',
-      key: 'owner',
-      render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
-    },
+    // {
+    //   title: 'Assigned To',
+    //   dataIndex: 'owner',
+    //   key: 'owner',
+    //   render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
+    // },
     {
       title: 'Start Date',
       dataIndex: 'startDate',
@@ -444,11 +444,11 @@ const TrainingProgramDetail = () => {
               {(userRole === "internshipcoordinators" || userRole === "intern") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                    <Row gutter={1000}>
-                      <Col>
+                    <Row gutter={100}>
+                      <Col span={12}>
                         <Title level={4}>KPI LIST in {CampaignDetail.name}</Title>
                       </Col>
-                      <Col>
+                      <Col span={12}>
                 {userRole ==="internshipcoordinators" &&(
                   <ButtonComponent
                   styleButton={{ background: "#06701c", border: "none" }}
