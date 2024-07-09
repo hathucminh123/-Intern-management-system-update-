@@ -51,21 +51,15 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI,fetchList }) => {
       <Form form={form} layout="vertical">
         <Form.Item
           name="name"
-          label="Name"
+          label="Grade Category"
           rules={[{ required: true, message: 'Please enter the name' }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="value"
-          label="Value"
-          rules={[{ required: true, message: 'Please enter the value' }]}
-        >
-          <Input />
-        </Form.Item>
+      
         <Form.Item
           name="descition"
-          label="Description"
+          label="Grade Item"
           rules={[{ required: true, message: 'Please enter the description' }]}
         >
           <Input />
@@ -74,6 +68,13 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI,fetchList }) => {
           name="type"
           label="Weight"
           rules={[{ required: true, message: 'Please enter the type' }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="value"
+          label="Value"
+          rules={[{ required: true, message: 'Please enter the value' }]}
         >
           <Input />
         </Form.Item>
