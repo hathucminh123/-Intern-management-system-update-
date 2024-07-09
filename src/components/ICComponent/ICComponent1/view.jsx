@@ -37,6 +37,7 @@ const ViewCampaigns = () => {
     },
   ];
 
+  const userRole =localStorage.getItem('role')
   const onSearch = (value) => {
     setSearchQuery(value);
   };
@@ -74,13 +75,13 @@ const ViewCampaigns = () => {
     navigate(`/internshipcoordinators/Details/${campaign.id}`, { state: { campaign } })
   }
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (campaign) => {
     try {
-      await Training.DeleteNewTraining(id)
+      await Training.DeleteNewTraining(campaign.id)
       message.success("Complete Delete Training")
       fetchCampaigns();
     } catch (error) {
-      message.error("Failed to delete Training")
+      message.error(`Failed to delete Training Resource still in ${campaign.name}`)
     }
   }
 
@@ -119,7 +120,7 @@ const ViewCampaigns = () => {
                     <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
                     <Popconfirm
                       title="Are you sure to delete this campaign?"
-                      onConfirm={() => handleDelete(campaign.id)}
+                      onConfirm={() => handleDelete(campaign)}
                       okText="Yes"
                       cancelText="No"
                     >
@@ -157,15 +158,18 @@ const ViewCampaigns = () => {
                         <Col span={12}>
                           <Title level={5}>Resources</Title>
                         </Col>
+                       {userRole ==="internshipcoordinators" &&(
                         <Col span={12} style={{ textAlign: 'right' }}>
-                          <ButtonComponent
-                            styleButton={{ background: "#06701c", border: "none" }}
-                            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                            size="middle"
-                            textbutton="Add Resource"
-                            onClick={(e) => { e.stopPropagation(); handleAddResourceList(campaign); }}
-                          />
-                        </Col>
+                        <ButtonComponent
+                         styleButton={{ background: "#06701c", border: "none" }}
+                         styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                         size="middle"
+                         textbutton="Add Resource"
+                         onClick={(e) => { e.stopPropagation(); handleAddResourceList(campaign); }}
+                         />
+                         </Col>
+                       )} 
+                       
                       </Row>
                       <Table
                         dataSource={campaign.resources}

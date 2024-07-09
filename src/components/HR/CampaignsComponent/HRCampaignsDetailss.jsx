@@ -4,6 +4,7 @@ import "tailwindcss/tailwind.css";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import * as Campaign from "../../../service/Campaign";
+import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -17,6 +18,7 @@ const HRCampaignsDetailss = () => {
   const [hovered, setHovered] = useState(null);
   const [hoveredd,setHoveredd]=useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectJob, setSelectJob] = useState(null);
   const [form] = Form.useForm();
 
 
@@ -74,10 +76,20 @@ const HRCampaignsDetailss = () => {
      navigate(`/hrmanager/ListJobs/${item.id}`,{state:{item}})
   }
 
+  const handleSelect = (jobId, e) => {
+    e.stopPropagation();
+    setSelectJob(selectJob === jobId ? null : jobId);
+  };
+
+  const handleAddTrainingProgram = (item) => {
+    navigate(`/${userRole}/ListTraining/${item.id}`, { state: { item } });
+  };
+
 
   return (
     <div className="flex justify-center items-center py-12 bg-gray-100">
-      <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg">
+      <div className=" w-full bg-white p-8 shadow-lg rounded-lg">
+      {/* <div className="max-w-4xl w-full bg-white p-8 shadow-lg rounded-lg"> */}
         <div className="flex flex-col md:flex-row mb-8">
           <Image
             width={250}
@@ -198,6 +210,7 @@ const HRCampaignsDetailss = () => {
                    {CampaignDetail.jobs.map((item) => (
                      <Col key={item.id} xs={24} sm={12} md={8}>
                        <Card
+                         onClick={(e) => handleSelect(item.id, e)}
                          hoverable
                          className="shadow-lg"
                          style={{ borderRadius: '8px', backgroundColor: 'white' }}
@@ -233,6 +246,55 @@ const HRCampaignsDetailss = () => {
                          >
                            View Details {'-->'}
                          </Text>
+                    {/* {userRole === "internshipcoordinators" && selectJob === item.id && (
+                    <div className="mt-4">
+                      <Space size={100}>
+                        <Title level={5}>Danh sách Training Program</Title>
+                        <ButtonComponent
+                          styleButton={{ background: "#06701c", border: "none" }}
+                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                          size="middle"
+                          textbutton="Add training program"
+                          onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(item); }}
+                        />
+                      </Space>
+                      {item.trainingPrograms && item.trainingPrograms.map((trainingProgram) => (
+                        <Space direction="vertical" style={{ width: '100%' }} key={trainingProgram.id}>
+                          <Card
+                            hoverable
+                            className="shadow-lg"
+                            style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
+                            actions={[
+                              <Button
+                                onClick={(e) => { e.stopPropagation(); handleDeleteTraining(item.id, trainingProgram.id); }}
+                                style={{ width: 'fit-content' }}
+                                type="danger"
+                              >
+                                Delete
+                              </Button>
+                            ]}
+                          >
+                            <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              Training Program: {trainingProgram.name}
+                            </Title>
+                            <Space direction="vertical">
+                              <Text>
+                                <strong>Duration:</strong> {trainingProgram.duration} months
+                              </Text>
+                              <Text
+                                style={{ width: "fit-content", cursor: 'pointer', color: hovered === trainingProgram.id ? 'blue' : 'black' }}
+                                onClick={(e) => { e.stopPropagation(); handleTrainingDetails(trainingProgram); }}
+                                onMouseEnter={() => setHovered(trainingProgram.id)}
+                                onMouseLeave={() => setHovered(null)}
+                              >
+                                View Details {'-->'}
+                              </Text>
+                            </Space>
+                          </Card>
+                        </Space>
+                      ))}
+                    </div>
+                  )} */}
                        </Card>
                      </Col>
                    ))}

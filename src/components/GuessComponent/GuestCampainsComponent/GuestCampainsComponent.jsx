@@ -4,6 +4,8 @@ import { ClockCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import * as Campaign from "../../../service/Campaign";
 import CategoryListComponent from "../CategoryListComponent/CategoryListComponent";
+import moment from "moment";
+import { GrSchedule } from "react-icons/gr";
 
 const { Title } = Typography;
 
@@ -106,8 +108,8 @@ const GuestCampainsComponent = ({ searchQuery }) => {
             
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
-              <Row gutter={[16, 16]}>
-                <Col span={16}>
+              <Row gutter={200}>
+                <Col >
                   <Title level={3}>{internship.name}</Title>
                   <div className="mt-4">
                     <div className="font-bold">Vị trí:</div>
@@ -128,14 +130,24 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                     <div className="ml-3">Thời gian thực tập:</div>
                     <div className="ml-3 font-bold">{internship.duration} months</div>
                   </div>
+                  <div className="flex mt-4">
+                    <GrSchedule />
+                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
+                    <div className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</div>
+                  </div>
+                  <div className="flex mt-4">
+                    <GrSchedule />
+                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
+                    <div className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</div>
+                  </div>
                 </Col>
-                <Col span={8}>
+                <Col >
                   {internship?.imagePath ? (
                     <Image
                       preview={false}
                       src={internship.imagePath}
-                      width={200}
-                      height={150}
+                      width={500}
+                      height={250}
                       style={{ objectFit: 'cover' }}
                     />
                   ) : (

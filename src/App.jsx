@@ -89,7 +89,13 @@ function App() {
               <Route path="StudentAttendance/:className" element={<ClassAttendanceRecord/>} />
               <Route path="NewReport" element={<NewReport />} />
               <Route path="UserListReport" element={<UserListReport />} />
+              <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
 
+
+              <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
+              <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
+
+                  
             </Route>
             
             {/* HR Manager Routes */}
@@ -116,6 +122,8 @@ function App() {
               <Route path="EditUserIntern/:id" element={<EditIntern/>}/>
               <Route path="EditUserRole/:id" element={<EditUserRole/>}/>
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole/>}/>
+
+              
             
 
 
@@ -131,6 +139,7 @@ function App() {
               <Route path="TrainingProgramsofjob/:id" element={<TrainingProgramDetailOJobs />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="class" element={<HRCampaings/>}/>
+              <Route path="TrainingJobs" element={<Jobs/>}/>
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
               <Route path="students/:className" element={<StudentList />} />
               <Route path="ListTraining/:id" element={<ListTraining/>} />
@@ -150,8 +159,8 @@ function App() {
             </Route>
                 {/* Internship Routes */}
                 <Route path="/intern" element={<CustomMenu userRole="intern" />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<InternPage />} />
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<InternPage />} /> */}
               <Route path="schedule" element={<Schedule />} />
               <Route path="taskboard" element={<TaskPerformance />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />

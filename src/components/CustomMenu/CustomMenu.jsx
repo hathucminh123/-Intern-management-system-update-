@@ -76,6 +76,7 @@ const CustomMenu = ({ userRole }) => {
       { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
       { key: "/mentor/class", icon: <FaUsers/>, label: "student list" },
+      { key: "/mentor/ViewTrainingProgram", icon: <ProjectOutlined />, label: "Training Program" },
       { key: "/mentor/Report", icon: <FaSquarePollVertical />, label: "Manage Report",
 
         children:[
@@ -112,6 +113,7 @@ const CustomMenu = ({ userRole }) => {
         ],
       },
       { key: "/internshipcoordinators/class", icon: < MdClass />, label: "Class jobs" },
+      { key: "/internshipcoordinators/TrainingJobs", icon: < MdClass />, label: "Jobs training" },
       { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource" },
       { key: "/internshipcoordinators/KPIList", icon: <GrResources />, label: "KPIList" },
       { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
