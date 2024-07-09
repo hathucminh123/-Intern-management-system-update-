@@ -8,6 +8,7 @@ const { Panel } = Collapse;
 const TrainingList = () => {
     const calculateTotal = (gradeCategories) => {
         const totalWeights = gradeCategories.reduce((total, category) => {
+            console.log("sadsad")
             return total + category.gradeItem.reduce((catTotal, item) => {
                 return catTotal + parseFloat(item.weight);
             }, 0);
