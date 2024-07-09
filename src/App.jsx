@@ -61,18 +61,17 @@ import NewReport from "./components/MentorComponent/NewReport";
 import UserListReport from "./components/MentorComponent/UserListReport";
 import StudentListClass from "./components/MentorComponent/StudentListClass";
 import InternReport from "./components/InternComponent/InternReport";
-import KpiTracking from "./components/InternComponent/KpiTracking";
 function App() {
   const userRole = localStorage.getItem("role");
 
-  console.log('asd', userRole)
+    console.log('asd',userRole) 
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
-
+          
           <Route element={<ProtectedRoute />}>
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
@@ -84,10 +83,10 @@ function App() {
               <Route path="taskboard" element={<TaskBoard />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               {/* <Route path="class" element={<ClassList/>}/> */}
-              <Route path="class" element={<StudentListClass />} />
+              <Route path="class" element={<StudentListClass/>}/>
               <Route path="students/:className" element={<StudentList />} />
-              <Route path="ClassAttendance/:className" element={<StudentAttendanceRecord />} />
-              <Route path="StudentAttendance/:className" element={<ClassAttendanceRecord />} />
+              <Route path="ClassAttendance/:className" element={<StudentAttendanceRecord/>} />
+              <Route path="StudentAttendance/:className" element={<ClassAttendanceRecord/>} />
               <Route path="NewReport" element={<NewReport />} />
               <Route path="UserListReport" element={<UserListReport />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
@@ -96,13 +95,13 @@ function App() {
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
 
-
+                  
             </Route>
-
+            
             {/* HR Manager Routes */}
             <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<HRPage />} />
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<HRPage />} /> */}
               <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
@@ -112,20 +111,20 @@ function App() {
               <Route path="Jobs" element={<Jobs />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
-              <Route path="EditJob/:id" element={<EditJob />} />
-              <Route path="ListTraining/:id" element={<ListTraining />} />
-              <Route path="ListJobs/:id" element={<ListJobs />} />
-              <Route path="EditCampaign/:id" element={<EditCampaign />} />
+              <Route path="EditJob/:id" element={<EditJob/>} />
+              <Route path="ListTraining/:id" element={<ListTraining/>} />
+              <Route path="ListJobs/:id" element={<ListJobs/>} />
+              <Route path="EditCampaign/:id" element={<EditCampaign/>} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
-              <Route path="NewUser" element={<NewUser />} />
-              <Route path="UserList" element={<ListUser />} />
-              <Route path="UserDetails/:id" element={<UserDetails />} />
-              <Route path="EditUserIntern/:id" element={<EditIntern />} />
-              <Route path="EditUserRole/:id" element={<EditUserRole />} />
-              <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
+              <Route path="NewUser" element={<NewUser/>}/>
+              <Route path="UserList" element={<ListUser/>}/> 
+              <Route path="UserDetails/:id" element={<UserDetails/>}/>
+              <Route path="EditUserIntern/:id" element={<EditIntern/>}/>
+              <Route path="EditUserRole/:id" element={<EditUserRole/>}/>
+              <Route path="UserDetailsRole/:id" element={<UserDetailsRole/>}/>
 
-
-
+              
+            
 
 
 
@@ -139,11 +138,11 @@ function App() {
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="TrainingProgramsofjob/:id" element={<TrainingProgramDetailOJobs />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
-              <Route path="class" element={<HRCampaings />} />
-              <Route path="TrainingJobs" element={<Jobs />} />
+              <Route path="class" element={<HRCampaings/>}/>
+              <Route path="TrainingJobs" element={<Jobs/>}/>
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
               <Route path="students/:className" element={<StudentList />} />
-              <Route path="ListTraining/:id" element={<ListTraining />} />
+              <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="ResourceList/:id" element={<ResourceList />} />
               <Route path="ResourceList" element={<ResourceListt />} />
               <Route path="Details/:id" element={<EditTraining />} />
@@ -151,15 +150,15 @@ function App() {
               <Route path="KPIList" element={<KPIList />} />
               <Route path="TrainingListt/:id" element={<Traininglistt />} />
               <Route path="KPISListt/:id" element={<KPIListt />} />
-              <Route path="taskDetail/:id" element={<TaskDetails />} />
+              <Route path="taskDetail/:id" element={<TaskDetails/>}/>
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="MentorList" element={<MentorList />} />
 
-
+          
 
             </Route>
-            {/* Internship Routes */}
-            <Route path="/intern" element={<CustomMenu userRole="intern" />}>
+                {/* Internship Routes */}
+                <Route path="/intern" element={<CustomMenu userRole="intern" />}>
               <Route index element={<Navigate to="schedule" replace />} />
               {/* <Route path="home" element={<InternPage />} /> */}
               <Route path="schedule" element={<Schedule />} />
@@ -167,11 +166,11 @@ function App() {
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="Trainingprogram" element={<ViewCampaigns />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
-              <Route path="ListTraining/:id" element={<ListTraining />} />
+              <Route path="ListTraining/:id" element={<ListTraining/>} />
               <Route path="chat" element={<Chat />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
-              <Route path="internReport" element={< InternReport />} />
-              <Route path="markReport" element={< KpiTracking />} />
+              <Route path="internReport" element={< InternReport/>} />
+
             </Route>
 
 
