@@ -342,6 +342,7 @@ const TrainingProgramDetail = () => {
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
         <div className="container mx-auto bg-white p-8 shadow-lg rounded-lg">
           <Tabs defaultActiveKey="1" className="w-full">
+          
             <TabPane tab="Training Details" key="1">
               <div className="mb-8">
                 <Title level={2}>{CampaignDetail.name}</Title>
@@ -392,7 +393,7 @@ const TrainingProgramDetail = () => {
               </div>
             </TabPane>
             <TabPane tab="Resources" key="2">
-              {userRole === "internshipcoordinators" && (
+              {userRole === "internshipcoordinators" || userRole ==="mentor" && (
                 <Form form={form} layout="vertical" onFinish={handleAddResource}>
                   <Form.Item
                     name="name"

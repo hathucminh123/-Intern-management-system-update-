@@ -72,7 +72,7 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI,fetchList }) => {
         </Form.Item>
         <Form.Item
           name="type"
-          label="Type"
+          label="Weight"
           rules={[{ required: true, message: 'Please enter the type' }]}
         >
           <Input />
