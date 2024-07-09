@@ -473,12 +473,25 @@ const TrainingProgramDetail = () => {
               )}
             </TabPane>
             <TabPane tab="Assessments" key="4">
-              {(userRole === "internshipcoordinators" || userRole === "intern") && (
+              {(userRole === "internshipcoordinators" || userRole === "intern" || userRole === "mentor") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                    <Row gutter={1000}>
+                    <Row gutter={500}>
                       <Col>
                         <Title level={4}>Assessment LIST in {CampaignDetail.name}</Title>
+                      </Col>
+                      <Col>
+                  {userRole ==="mentor" &&(
+                  <ButtonComponent
+                  styleButton={{ background: "#06701c", border: "none" }}
+                  styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                  size="middle"
+                  textbutton="Add Assessment"
+                  onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
+                />
+                )}        
+                           
+                      
                       </Col>
                     </Row>
                   </Header>

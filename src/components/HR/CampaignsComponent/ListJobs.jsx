@@ -112,7 +112,7 @@ const ListJobs = () => {
               styleButton={{ background: "#06701c", border: "none" }}
               styleTextButton={{ color: "#fff", fontWeight: "bold" }}
               size="middle"
-              textbutton="Add jobs to training program"
+              textbutton={`Add jobs to ${CampaignDetail.name} Campaign`}
               onClick={handleAddNewJobs}
               // disabled={selectedJobs.length === 2}
             />
