@@ -34,6 +34,7 @@ const TrainingProgramDetail = () => {
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  console.log('metquadi',kpis)
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -222,28 +223,64 @@ const TrainingProgramDetail = () => {
       ),
     });
   }
+  const calculateTotal = (items) => {
+    const totalWeights = items.reduce((total, item) => {
+      return total + parseFloat(item.type);
+    }, 0);
+
+    if (totalWeights !== 100) {
+      return null;
+    }
+
+    return items.reduce((sum, item) => {
+      const weight = parseFloat(item.type) / 100;
+      const value = parseFloat(item.value);
+      return sum + (weight * value);
+    }, 0).toFixed(2);
+  };
+
 
   const kpiColumns = [
     {
-      title: 'Name',
+      title: 'Grade Category',
       dataIndex: 'name',
       key: 'name',
+    },
+    {
+      title: 'Grade Item',
+      dataIndex: 'descition',
+      key: 'description',
+      render: (text, record) => (
+        <>
+          <div>{record.descition}</div>
+          <div><strong>Total</strong></div> 
+        </>
+      ),
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'type',
+      key: 'type',
+      render: (text, record) => (
+        <>
+        {console.log("concac1",record)}
+        
+          <div>{record.type}</div>
+          <div><strong> {parseFloat(record.type)}%</strong></div>
+        </>
+      ),
     },
     {
       title: 'Value',
       dataIndex: 'value',
       key: 'value',
+      render: (text, record) => (
+        <>
+          <div>{record.value}</div>
+        </>
+      ),
     },
-    {
-      title: 'Description',
-      dataIndex: 'descition',
-      key: 'description',
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
-    },
+   
   
   ];
 
@@ -464,11 +501,40 @@ const TrainingProgramDetail = () => {
                   </Header>
                   <Content>
                     <Table
+                    bordered
+                    pagination={false}
                       columns={kpiColumns}
                       dataSource={kpis}
                       rowKey="id"
-                      pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-                    />
+                      // pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
+                      summary={() => {
+                        const total = calculateTotal(kpis || []);
+                        const rating = total >= 5 ? 'Passed' : 'Failed';
+                        const ratingStyle = {
+                            backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
+                            color: rating === 'Passed' ? '#155724' : '#721c24',
+                            fontWeight: 'bold',
+                        };
+                        return (
+                            <>
+                                <Table.Summary.Row>
+                                    <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                                    <Table.Summary.Cell>
+                                        <strong >{total !== null ? total : <span style={{color:'red'}}>'Weights do not add up to 100%' </span> }</strong>
+                                    </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                                {total !== null && (
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
+                                        <Table.Summary.Cell>
+                                            <span style={ratingStyle}>{rating}</span>
+                                        </Table.Summary.Cell>
+                                    </Table.Summary.Row>
+                                )}
+                            </>
+                        );
+                      }}
+                     />
                   </Content>
                 </Layout>
               )}
