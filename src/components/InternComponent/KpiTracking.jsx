@@ -87,7 +87,7 @@ const TrainingList = () => {
                 <Search placeholder="Search campaigns" enterButton style={{ marginBottom: '20px' }} />
                 <Row gutter={[16, 16]}>
                     {kpi.map(training => (
-                        <Col key={training.TrainingProgramID} span={24}>
+                        <Col key={training.TrainingProgramID} span={12}>
                             <Collapse>
                                 <Panel
                                     header={`${training.TrainingProgramName} (${training.startDate} to ${training.endDate})`}
@@ -118,10 +118,6 @@ const TrainingList = () => {
                                                         </Table.Summary.Row>
                                                         {total !== null && (
                                                             <>
-                                                                <Table.Summary.Row>
-                                                                    <Table.Summary.Cell colSpan={3}><strong>AVERAGE</strong></Table.Summary.Cell>
-                                                                    <Table.Summary.Cell><strong>{total}</strong></Table.Summary.Cell>
-                                                                </Table.Summary.Row>
                                                                 <Table.Summary.Row>
                                                                     <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
                                                                     <Table.Summary.Cell>
