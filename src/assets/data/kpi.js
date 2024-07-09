@@ -5,85 +5,171 @@ export const kpi = [
         startDate: "25/06/2021",
         endDate: "25/07/2021",
         internID: "1",
-        point: [
+        GradeCatagory: [
             {
-                gradeItem: "Project",
-                weight: "30%",
-                value: "8",
+                CatagoryName: "Participation",
+                gradeItem: [
+                    {
+                        gradeItem: "Participation",
+                        weight: "10%",
+                        value: "10",
+                    }
+                ]
             },
             {
-                gradeItem: "Participation",
-                weight: "10%",
-                value: "10",
+                CatagoryName: "Project",
+                gradeItem: [
+                    {
+                        gradeItem: "Project",
+                        weight: "30%",
+                        value: "10",
+                    }
+                ]
             },
             {
-                gradeItem: "Quiz 1",
-                weight: "15%",
-                value: "8",
+                CatagoryName: "Quiz",
+                gradeItem: [
+                    {
+                        gradeItem: "Quiz 1",
+                        weight: "15%",
+                        value: "10",
+                    },
+                    {
+                        gradeItem: "Quiz 2",
+                        weight: "15%",
+                        value: "10",
+                    }
+                ]
             },
             {
-                gradeItem: "Quiz 2",
-                weight: "15%",
-                value: "7",
+                CatagoryName: "Presentation",
+                gradeItem: [
+                    {
+                        gradeItem: "Presentation 1",
+                        weight: "15%",
+                        value: "9",
+                    },
+                    {
+                        gradeItem: "Presentation 2",
+                        weight: "15%",
+                        value: "8",
+                    }
+                ]
             }
         ]
     },
     {
         TrainingProgramID: "2",
+        TrainingProgramName: ".Net Basic",
+        startDate: "25/06/2021",
+        endDate: "25/07/2021",
+        internID: "1",
+        GradeCatagory: [
+            {
+                CatagoryName: "Participation",
+                gradeItem: [
+                    {
+                        gradeItem: "Participation",
+                        weight: "10%",
+                        value: "5",
+                    }
+                ]
+            },
+            {
+                CatagoryName: "Project",
+                gradeItem: [
+                    {
+                        gradeItem: "Project",
+                        weight: "30%",
+                        value: "4",
+                    }
+                ]
+            },
+            {
+                CatagoryName: "Quiz",
+                gradeItem: [
+                    {
+                        gradeItem: "Quiz 1",
+                        weight: "15%",
+                        value: "7",
+                    },
+                    {
+                        gradeItem: "Quiz 2",
+                        weight: "15%",
+                        value: "7",
+                    }
+                ]
+            },
+            {
+                CatagoryName: "Presentation",
+                gradeItem: [
+                    {
+                        gradeItem: "Presentation 1",
+                        weight: "15%",
+                        value: "4",
+                    },
+                    {
+                        gradeItem: "Presentation 2",
+                        weight: "15%",
+                        value: "3",
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        TrainingProgramID: "3",
         TrainingProgramName: "Java Basic",
-        startDate: "25/06/2022",
-        endDate: "25/07/2022",
+        startDate: "25/06/2021",
+        endDate: "25/07/2021",
         internID: "1",
-        point: [
+        GradeCatagory: [
             {
-                gradeItem: "Project",
-                weight: "30%",
-                value: "10",
+                CatagoryName: "Participation",
+                gradeItem: [
+                    {
+                        gradeItem: "Participation",
+                        weight: "10%",
+                        value: "5",
+                    }
+                ]
             },
             {
-                gradeItem: "Participation",
-                weight: "10%",
-                value: "9",
+                CatagoryName: "Project",
+                gradeItem: [
+                    {
+                        gradeItem: "Project",
+                        weight: "30%",
+                        value: "4",
+                    }
+                ]
             },
             {
-                gradeItem: "Quiz 1",
-                weight: "15%",
-                value: "10",
+                CatagoryName: "Quiz",
+                gradeItem: [
+                    {
+                        gradeItem: "Quiz 1",
+                        weight: "15%",
+                        value: "7",
+                    },
+                    {
+                        gradeItem: "Quiz 2",
+                        weight: "15%",
+                        value: "7",
+                    }
+                ]
             },
             {
-                gradeItem: "Quiz 2",
-                weight: "15%",
-                value: "10",
+                CatagoryName: "Presentation",
+                gradeItem: [
+                    {
+                        gradeItem: "Presentation 1",
+                        weight: "15%",
+                        value: "4",
+                    },
+
+                ]
             }
         ]
     },
-    {
-        TrainingProgramID: "2",
-        TrainingProgramName: ".NET Basic",
-        startDate: "25/06/2022",
-        endDate: "25/07/2022",
-        internID: "1",
-        point: [
-            {
-                gradeItem: "Project",
-                weight: "30%",
-                value: "0",
-            },
-            {
-                gradeItem: "Participation",
-                weight: "10%",
-                value: "4",
-            },
-            {
-                gradeItem: "Quiz 1",
-                weight: "15%",
-                value: "14",
-            },
-            {
-                gradeItem: "Quiz 2",
-                weight: "15%",
-                value: "5",
-            }
-        ]
-    }
 ]
