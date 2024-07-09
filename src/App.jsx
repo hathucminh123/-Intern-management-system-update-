@@ -61,7 +61,7 @@ import NewReport from "./components/MentorComponent/NewReport";
 import UserListReport from "./components/MentorComponent/UserListReport";
 import StudentListClass from "./components/MentorComponent/StudentListClass";
 import InternReport from "./components/InternComponent/InternReport";
-import KpiTracking from "./components/InternComponent/KpiTracking";
+import KpiTracking from "./components/InternComponent/KPITracking";
 function App() {
   const userRole = localStorage.getItem("role");
 
