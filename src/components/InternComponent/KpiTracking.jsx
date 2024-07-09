@@ -1,80 +1,34 @@
 import React from 'react';
-import { Layout, Row, Col, Card, Input, Collapse, Table } from 'antd';
+import { Layout, Row, Col, Card, Button, Input, Collapse, Table } from 'antd';
 import { kpi } from '../../assets/data/kpi'; // Importing the data from kpi.js
+import { isFunction } from 'lodash';
 const { Header, Content } = Layout;
 const { Search } = Input;
 const { Panel } = Collapse;
-
 const TrainingList = () => {
-    const calculateTotal = (gradeCategories) => {
-        const totalWeights = gradeCategories.reduce((total, category) => {
-            return total + category.gradeItem.reduce((catTotal, item) => {
-                return catTotal + parseFloat(item.weight);
-            }, 0);
-        }, 0);
-
-        if (totalWeights !== 100) {
-            return null; // Weights do not add up to 100%, do not calculate the total
-        }
-
-        const total = gradeCategories.reduce((total, category) => {
-            const categoryTotal = category.gradeItem.reduce((catTotal, item) => {
-                const weight = parseFloat(item.weight) / 100;
-                const value = parseFloat(item.value);
-                return catTotal + weight * value;
-            }, 0);
-            return total + categoryTotal;
-        }, 0);
-        return total.toFixed(2);
+    const calculateTotal = (points) => {
+        return points.reduce((total, point) => {
+            const weight = parseFloat(point.weight) / 100;
+            const value = parseFloat(point.value);
+            return total + weight * value;
+        }, 0).toFixed(2);
     };
 
     const columns = [
         {
-            title: 'Grade Category',
-            dataIndex: 'CatagoryName',
-            key: 'CatagoryName',
-        },
-        {
             title: 'Grade Item',
             dataIndex: 'gradeItem',
             key: 'gradeItem',
-            render: (text, record) => (
-                <>
-                    {record.gradeItem.map(item => (
-                        <div key={item.gradeItem}>{item.gradeItem}</div>
-                    ))}
-                    <div><strong>Total</strong></div>
-                </>
-            ),
         },
         {
             title: 'Weight',
             dataIndex: 'weight',
             key: 'weight',
-            render: (text, record) => (
-                <>
-                    {record.gradeItem.map(item => (
-                        <div key={item.gradeItem}>{item.weight}</div>
-                    ))}
-                    <div><strong>{record.gradeItem.reduce((total, item) => total + parseFloat(item.weight), 0)} %</strong></div>
-                </>
-            ),
         },
         {
             title: 'Value',
             dataIndex: 'value',
             key: 'value',
-            render: (text, record) => {
-                const averageValue = (record.gradeItem.reduce((total, item) => total + parseFloat(item.value), 0) / record.gradeItem.length).toFixed(2);
-                return (
-                    <>
-                        {record.gradeItem.map(item => (
-                            <div key={item.gradeItem}>{item.value}</div>
-                        ))}
-                        <div><strong>{averageValue}</strong></div>
-                    </>
-                );
-            },
         },
     ];
 
@@ -95,13 +49,12 @@ const TrainingList = () => {
                                 >
                                     <Card>
                                         <Table
-                                            bordered
                                             columns={columns}
-                                            dataSource={training.GradeCatagory}
+                                            dataSource={training.point}
                                             pagination={false}
-                                            rowKey="CatagoryName"
+                                            rowKey="gradeItem"
                                             summary={() => {
-                                                const total = calculateTotal(training.GradeCatagory);
+                                                const total = calculateTotal(training.point);
                                                 const rating = total >= 5 ? 'Passed' : 'Failed';
                                                 const ratingStyle = {
                                                     backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
@@ -111,24 +64,19 @@ const TrainingList = () => {
                                                 return (
                                                     <>
                                                         <Table.Summary.Row>
-                                                            <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                                                            <Table.Summary.Cell colSpan={2}><strong>Total</strong></Table.Summary.Cell>
+                                                            <Table.Summary.Cell>{total}</Table.Summary.Cell>
+                                                        </Table.Summary.Row>
+                                                        <Table.Summary.Row>
+                                                            <Table.Summary.Cell colSpan={2}><strong>Rating</strong></Table.Summary.Cell>
                                                             <Table.Summary.Cell>
-                                                                {total !== null ? <strong>{total}</strong> : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}
+                                                                <text style={ratingStyle}>{rating}</text>
                                                             </Table.Summary.Cell>
                                                         </Table.Summary.Row>
-                                                        {total !== null && (
-                                                            <>
-                                                                <Table.Summary.Row>
-                                                                    <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-                                                                    <Table.Summary.Cell>
-                                                                        <span style={ratingStyle}>{rating}</span>
-                                                                    </Table.Summary.Cell>
-                                                                </Table.Summary.Row>
-                                                            </>
-                                                        )}
                                                     </>
                                                 );
                                             }}
+                                            bordered
                                         />
                                     </Card>
                                 </Panel>
@@ -137,7 +85,7 @@ const TrainingList = () => {
                     ))}
                 </Row>
             </Content>
-        </Layout>
+        </Layout >
     );
 };
 
