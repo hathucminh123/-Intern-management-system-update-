@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Typography, Form, Input, Layout, Select, Button ,Table} from 'antd';
+import { Typography, Form, Input, Layout, Select, Button ,Table,Menu,Space,Dropdown} from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const UserListReport = () => {
 
@@ -7,26 +9,55 @@ const {Text,Title}=Typography;
 const {Header,Content}=Layout
 const [pageSize] = useState(6);
 const [currentPage, setCurrentPage] = useState(1);
+const navigate =useNavigate();
+const useRole =localStorage.getItem('role')
 
+
+const menu = (record) => (
+  <Menu>
+    <Menu.Item key="1">
+      <Button onClick={() => handleOpenDetailModal(record)}>View</Button>
+    </Menu.Item>
+    {/* <Menu.Item key="2">
+      <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
+    </Menu.Item>
+    <Menu.Item key="3">
+      <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
+    </Menu.Item> */}
+  </Menu>
+);
+const   handleNavigateReport =(record)=>{
+  navigate(`/mentor/markReport/${record.id}`,{state:{record}})
+}
 
 
     const dataReport = [
-        { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' },
-        { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
-        { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
-        { id: 4, name: "Tâm",  Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' }
+      { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
+      { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
+      { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
+      { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' }
       ];
     
     
-
-    const columnsReport = [
-        { title: "Name Intern", dataIndex: "name", key: "name", responsive: ['md'] },
-        { title: "Logical thinking", dataIndex: "Logicalthinking", key: "Logicalthinking", responsive: ['md'] },
-        { title: "Attitude", dataIndex: "attitude", key: "attitude", responsive: ['md'] },
-        { title: "skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
-        { title: "Total", dataIndex: "total", key: "total", responsive: ['md'] },
-       
+      const columnsReport = [
+        { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
+        { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
+        { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
+        { title: "Education", dataIndex: "education", key: "education", responsive: ['md'] },
+        {
+          title: "Actions", key: "actions", responsive: ['md'], render: (text, record) => (
+            <Space size="middle">
+              <Dropdown overlay={menu(record)}>
+                <Button>
+                  More <DownOutlined />
+                </Button>
+              </Dropdown>
+              <Button onClick={()=>{handleNavigateReport(record)}}>View Report</Button>
+            </Space>
+          ),
+        },
       ];
+     
     
   return (
     <Layout>

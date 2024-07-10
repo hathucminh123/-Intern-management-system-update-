@@ -53,6 +53,11 @@ const HRCampaignsDetails = () => {
     navigate('/internshipcoordinators/MentorList')
   }
 
+
+const   handleNavigateReport =(record)=>{
+  navigate(`/internshipcoordinators/markReport/${record.id}`,{state:{record}})
+}
+
   const menu = (record) => (
     <Menu>
       <Menu.Item key="1">
@@ -80,6 +85,7 @@ const HRCampaignsDetails = () => {
               More <DownOutlined />
             </Button>
           </Dropdown>
+          <Button onClick={()=>{handleNavigateReport(record)}}>View Report</Button>
         </Space>
       ),
     },
@@ -164,14 +170,14 @@ const HRCampaignsDetails = () => {
                 </Content>
               </Layout>
             </TabPane>
-            <TabPane tab="Student List Report in jobs" key="3">
+            {/* <TabPane tab="Student List Report in jobs" key="3">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student Report List</Title>
-                    {/* <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
+                    <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
                       Assign mentor to Manage this class
-                    </Button> */}
+                    </Button>
                   </div>
                 </Header>
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
@@ -184,8 +190,8 @@ const HRCampaignsDetails = () => {
                   />
                 </Content>
               </Layout>
-            </TabPane>
-          </Tabs>
+            </TabPane> */}
+          </Tabs> 
         )}
 
         {userRole === "hrmanager" && (

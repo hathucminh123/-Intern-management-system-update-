@@ -284,7 +284,7 @@ const TrainingProgramDetail = () => {
   
   ];
 
-  if (userRole === "internshipcoordinators") {
+  if (userRole === "internshipcoordinators" || userRole ==="mentor") {
     kpiColumns.push({
       title: 'Actions',
       key: 'actions',
@@ -479,7 +479,7 @@ const TrainingProgramDetail = () => {
               />
             </TabPane>
             <TabPane tab="KPIS" key="3">
-              {(userRole === "internshipcoordinators" || userRole === "intern") && (
+              {(userRole === "internshipcoordinators" || userRole === "intern" || userRole ==="mentor") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Row gutter={100}>
@@ -487,7 +487,7 @@ const TrainingProgramDetail = () => {
                         <Title level={4}>KPI LIST in {CampaignDetail.name}</Title>
                       </Col>
                       <Col span={12}>
-                {userRole ==="internshipcoordinators" &&(
+                {userRole ==="internshipcoordinators"  &&(
                   <ButtonComponent
                   styleButton={{ background: "#06701c", border: "none" }}
                   styleTextButton={{ color: "#fff", fontWeight: "bold" }}
