@@ -111,7 +111,8 @@ const ViewCampaigns = () => {
 
           <Row gutter={[16, 16]}>
             {filteredCampaigns.map((campaign) => (
-              <Col key={campaign.id} xs={24} sm={12} md={8}>
+              // <Col key={campaign.id} xs={24} sm={12} md={8}>
+                <Col key={campaign.id} span={24}>
                 <Card
                   hoverable
                   className="shadow-lg"

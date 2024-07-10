@@ -81,7 +81,7 @@ const CustomMenu = ({ userRole }) => {
         key: "/mentor/Report", icon: <FaSquarePollVertical />, label: "Manage Report",
 
         children: [
-          { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
+          // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
           { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
 
         ]
@@ -127,8 +127,8 @@ const CustomMenu = ({ userRole }) => {
       { key: "/intern/Trainingprogram", icon: <ProjectOutlined />, label: "Training Program" },
       { key: "/intern/taskboard", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },
-      { key: "/intern/internReport", icon: <FaSquarePollVertical />, label: "Intern Report" },
-      { key: "/intern/markReport", icon: <FaSquarePollVertical />, label: "Mark Report" },
+      // { key: "/intern/internReport", icon: <FaSquarePollVertical />, label: "Intern Report" },
+      { key: "/intern/markReport", icon: <FaSquarePollVertical />, label: "Intern Mark Report" },
     ],
   };
   const userRolle = localStorage.getItem('role');

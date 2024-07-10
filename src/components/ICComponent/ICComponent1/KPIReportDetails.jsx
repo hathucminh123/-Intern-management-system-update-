@@ -1,12 +1,22 @@
 import React, { useState,useEffect } from 'react';
-import { Layout, Row, Col, Card, Input, Collapse, Table } from 'antd';
-import { kpi } from '../../assets/data/kpi'; // Importing the data from kpi.js
+import { Layout, Row, Col, Card, Input, Collapse, Table ,Space,Dropdown,Menu,Button} from 'antd';
+
 const { Header, Content } = Layout;
 const { Search } = Input;
 const { Panel } = Collapse;
-import * as KPI from "../../service/KPIService";
-const TrainingList = () => {
+import * as KPI from "../../../service/KPIService";
+import { useLocation } from 'react-router-dom';
+import { DownOutlined } from '@ant-design/icons';
+import DetailKPIModal from './DetailKPIModal';
+const KPIReportDetails = () => {
+
+    const {state}=useLocation();
+    const Details = state?.record
     const [resource, setResource] = useState([]);
+    console.log('dassad',Details)
+    const [selectedKPI, setSelectedKPI] = useState(null);
+    const [openDetailModal, setOpenDetailModal] = useState(false);
+    const userRole =localStorage.getItem('role')
 
     const fetchAllKPI = async () => {
         try {
@@ -16,10 +26,41 @@ const TrainingList = () => {
           message.error("Error fetching content: " + error.message);
         }
       };
+
+
+
     
       useEffect(() => {
        fetchAllKPI();
       }, []);
+
+      const handleUpdateTask = (updatedTask) => {
+        setResource((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
+      };
+    
+      const handleOpenDetailKPIModal = (kpi) => {
+        setSelectedKPI(kpi);
+        setOpenDetailModal(true);
+      };
+      const handleDeleteKPIS = async (id) => {
+        try {
+          await KPI.deleteKPI(id);
+          message.success("Delete complete");
+          setResource((prev) => prev.filter(item => item.id !== id));
+        } catch (error) {
+          message.error("Error deleting KPI " + error.message);
+        }
+      };
+      const kpiMenu = (record) => (
+        <Menu>
+          <Menu.Item key="1">
+            <Button onClick={() => handleOpenDetailKPIModal(record)}>View/Edit</Button>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Button onClick={() => handleDeleteKPIS(record.id)}>Delete</Button>
+          </Menu.Item>
+        </Menu>
+      );
       const calculateTotal = (items) => {
         const totalWeights = items.reduce((total, item) => {
           return total + parseFloat(item.type);
@@ -79,11 +120,26 @@ const TrainingList = () => {
        
       
       ];
+      if (userRole === "internshipcoordinators" || userRole ==="mentor") {
+    kpiColumns.push({
+          title: 'Actions',
+          key: 'actions',
+          render: (text, record) => (
+            <Space size="middle">
+              <Dropdown overlay={kpiMenu(record)}>
+                <Button>
+                  More <DownOutlined />
+                </Button>
+              </Dropdown>
+            </Space>
+          ),
+        });
+      }
     
     return (
         <Layout>
             <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-               Student report  name:  <strong> Minh</strong>
+               Student report  name:  <strong> {Details.name}</strong>
             </Header>
             <Content style={{ padding: '20px' }}>
                 {/* <Search  placeholder="Search campaigns" enterButton style={{ marginBottom: '20px' }} /> */}
@@ -122,9 +178,17 @@ const TrainingList = () => {
                         );
                       }}
                       />
+                       {selectedKPI && (
+        <DetailKPIModal
+          isVisible={openDetailModal}
+          onClose={() => setOpenDetailModal(false)}
+          task={selectedKPI}
+          onUpdateTask={handleUpdateTask}
+        />
+      )}
             </Content>
         </Layout>
     );
 };
 
-export default TrainingList;
+export default KPIReportDetails;
