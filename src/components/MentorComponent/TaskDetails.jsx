@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import {
   Card, Row, Col, Typography, Layout, Space, Tag, Table, Button,
-  Dropdown, Menu, Form, Modal, Input, Upload, Popover, Checkbox, Avatar
+  Dropdown, Menu, Form, Modal, Input, Upload, Popover, Checkbox, Avatar,
+  DatePicker,Divider
 } from "antd";
 import "tailwindcss/tailwind.css";
 import { useLocation } from "react-router-dom";
@@ -46,9 +47,9 @@ const TaskDetails = () => {
       : (<Tag color='blue'>{taskDetail.status.toUpperCase()}</Tag>);
 
   const taskData = [
-    { key: 1, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "ON-PROGRESS" },
-    { key: 2, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "DONE" },
-    { key: 3, firstName: "Minh", email: "minhhtse150913@fpt.edu.vn", status: "TODOS" },
+    { key: 1, filePath: "Tải file bài", description: "minhhtse150913@fpt.edu.vn", when: "yesterday" },
+    { key: 2, filePath: "Tải file bài", description: "minhhtse150913@fpt.edu.vn", when: "yesterday" },
+    { key: 3, filePath: "Tải file bài", description: "minhhtse150913@fpt.edu.vn", when: "JUL7" },
   ];
 
   const menu = (record) => (
@@ -74,21 +75,27 @@ const TaskDetails = () => {
 
   const columns = [
     {
-      title: 'Full Name',
-      dataIndex: 'firstName',
-      key: 'firstName',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'File Bài',
-      dataIndex: 'cvPath',
-      key: 'cvPath',
+      title: ' Name',
+      dataIndex: 'filePath',
+      key: 'filePath',
       render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
     },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: 'When',
+      dataIndex: 'when',
+      key: 'when',
+    },
+    // {
+    //   title: 'File Bài',
+    //   dataIndex: 'cvPath',
+    //   key: 'cvPath',
+    //   render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
+    // },
     // {
     //   title: 'Status',
     //   dataIndex: 'status',
@@ -182,55 +189,83 @@ const TaskDetails = () => {
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Space direction='vertical' style={{ width: '100%' }}>
-            <Card style={{ width: "100%", marginBottom: '20px' }} hoverable className="shadow-lg">
-              <Row justify="space-between" align="middle">
-                <Col span={12}>
-                  <Space direction='vertical'>
-                    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      Task name:
-                    </Title>
-                    <p><strong>{taskDetail.name}</strong></p>
-                    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      Description:
-                    </Title>
-                    <Paragraph>
-                      <div dangerouslySetInnerHTML={{ __html: taskDetail.description }} />
-                    </Paragraph>
-                  </Space>
-                </Col>
-                <Col span={12}>
-                  <Space direction='vertical'>
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Start Date
-                      </Title>
-                      <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
-                    </div>
-                    <div style={{ marginTop: '10px' }}>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        End Date
-                      </Title>
-                      <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
-                    </div>
-                    <div style={{ marginTop: '10px' }}>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Status
-                      </Title>
-                      <p><strong>{ColorStatus}</strong></p>
-                    </div>
-                    <div style={{ marginTop: '10px' }}>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Mentor
-                      </Title>
-                      <p><strong>Thúc Minh</strong></p>
-                    </div>
-                  </Space>
-                </Col>
-              </Row>
-            </Card>
+          <Card
+      style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }}
+      hoverable
+      className="shadow-lg"
+    >
+      <Row justify="space-between" align="top">
+        <Col span={14}>
+          <Space direction="vertical" size="large">
+            <div>
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Task name:
+              </Title>
+              <p><strong>{taskDetail.name}</strong></p>
+            </div>
+            <div>
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Description:
+              </Title>
+              <Paragraph ellipsis={{ rows: 3, expandable: true }}>
+                <div dangerouslySetInnerHTML={{ __html: taskDetail.description }} />
+              </Paragraph>
+            </div>
+            <Card
+  hoverable
+  className="shadow-lg"
+  style={{ borderRadius: '8px', height: '230px', width: '500px' }}
+>
+  <div style={{ padding: '20px' }}>
+    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      Owner
+    </Title>
+    <Divider />
+    <Title level={5} style={{ margin: 0 }}>
+      userName:
+    </Title>
+    <Text>{taskDetail.owner.userName}</Text>
+    <Title level={5} style={{ margin: 0 }}>
+      Email:
+    </Title>
+    <Text>{taskDetail.owner.email}</Text>
+  </div>
+</Card>
+          </Space>
+        </Col>
+        <Col span={8}>
+          <Space direction="vertical" size="large">
+            <div>
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Start Date
+              </Title>
+              <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+            </div>
+            <div>
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                End Date
+              </Title>
+              <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+            </div>
+            <div>
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Status
+              </Title>
+              <p><strong>{ColorStatus}</strong></p>
+            </div>
+            <div>
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Mentor
+              </Title>
+              <p><strong>Thúc Minh</strong></p>
+            </div>
+          </Space>
+        </Col>
+      </Row>
+    </Card>
 
             <Row gutter={16} justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <Card hoverable className="shadow-lg" style={{ height: "100%" }}>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -248,8 +283,8 @@ const TaskDetails = () => {
                     <Text>{taskDetail.owner.email}</Text>
                   </div>
                 </Card>
-              </Col>
-              <Col span={12}>
+              </Col> */}
+              <Col span={24}>
                 <Card hoverable className="shadow-lg">
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Row justify="space-between" align="middle">
@@ -362,58 +397,57 @@ const TaskDetails = () => {
         </div>
 
         <Modal
-          title="Nộp task"
-          open={isModalVisible}
-          onCancel={handleCancel}
-          footer={null}
-          width={800}
+      title="Nộp task"
+      open={isModalVisible}
+      onCancel={handleCancel}
+      footer={null}
+      style={{ minWidth: '600px', maxWidth: '90%', top: '20px' }}
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item
+          name="cvUrl"
+          label={
+            <div>
+              <Text strong>Nộp file đính kèm</Text>
+              <div>Bạn chỉ có thể upload 1 file</div>
+            </div>
+          }
+          rules={[{ required: true, message: 'Vui lòng tải lên file của bạn!' }]}
         >
-        {/* <Form form={form} onFinish={}></Form> */}
-          <Form form={form}>
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[{ required: true, message: "Please enter the name" }]}
-            >
-              <Input placeholder="Nhập tên " />
-            </Form.Item>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[{ required: true, message: "Please enter email" }]}
-            >
-              <Input placeholder="Enter the Email" />
-            </Form.Item>
-            <Form.Item
-              name="cvUrl"
-              label={
-                <div>
-                  <Text strong>CV đính kèm</Text>
-                  <div>Bạn chỉ có thể upload 1 file</div>
-                </div>
-              }
-              rules={[{ required: true, message: 'Please upload your CV!' }]}
-            >
-              <Upload.Dragger
-                name="files"
-                multiple={false}
-                accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-                beforeUpload={handleUpload}
-              >
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined />
-                </p>
-                <p className="ant-upload-text">Kéo thả file vào đây hoặc tải lên</p>
-                <p className="ant-upload-hint">(PDF, DOC, PNG, JPEG)</p>
-              </Upload.Dragger>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Gửi
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+          <Upload.Dragger
+            name="files"
+            multiple={false}
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            beforeUpload={handleUpload}
+          >
+            <p className="ant-upload-drag-icon">
+              <UploadOutlined />
+            </p>
+            <p className="ant-upload-text">Kéo thả file vào đây hoặc tải lên</p>
+            <p className="ant-upload-hint">(PDF, DOC, PNG, JPEG)</p>
+          </Upload.Dragger>
+        </Form.Item>
+        <Form.Item
+          name="description"
+          label="Mô tả"
+          rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
+        >
+          <Input placeholder="Nhập mô tả" />
+        </Form.Item>
+        <Form.Item
+          name="date"
+          label="Ngày"
+          rules={[{ required: true, message: "Vui lòng chọn ngày" }]}
+        >
+          <DatePicker style={{ width: '100%' }} />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+            Gửi
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
       </Content>
     </Layout>
   );
