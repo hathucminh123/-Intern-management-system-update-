@@ -20,8 +20,8 @@ const Traininglistt = () => {
   const [pageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectTraining, setSelectTraining] = useState(null);
+  const [selectTrainingName, setSelectTrainingName] = useState(null);
   const KPIS = state?.item;
-  console.log('concac',selectTraining)
 
   const columns = [
     {
@@ -71,27 +71,29 @@ const Traininglistt = () => {
     console.log(`checked = ${e.target.checked}`);
     if (e.target.checked) {
       setSelectTraining(campaign.id);
+      setSelectTrainingName(campaign.name);
     } else {
       setSelectTraining(null);
+      setSelectTrainingName(null);
     }
   }
-const userRole =localStorage.getItem('role')
+  const userRole = localStorage.getItem('role')
   const handleAddTraining = async () => {
-   try{
-    const newTraining = {
-    kpiId:KPIS.id,
-    trainingProgramId:selectTraining
-    };
+    try {
+      const newTraining = {
+        kpiId: KPIS.id,
+        trainingProgramId: selectTraining
+      };
 
-    await AddTraining.AddKPISNewTraining(newTraining);
-    message.success("Training program added successfully");
-    navigate(`/${userRole}/ViewTrainingProgram`)
+      await AddTraining.AddKPISNewTraining(newTraining);
+      message.success("Training program added successfully");
+      navigate(`/${userRole}/ViewTrainingProgram`)
 
 
-   }catch (error) {
-      message.error(" training program exist in this "+Trainingprogram.name +" Job" );
+    } catch (error) {
+      message.error("KPI is already exist in " + selectTrainingName);
       console.error("Error deleting training program:", error);
-  }
+    }
   }
   const handleJobs = (item) => {
     const userRole = localStorage.getItem('role').toLowerCase();

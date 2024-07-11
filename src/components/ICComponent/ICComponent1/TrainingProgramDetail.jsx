@@ -17,7 +17,6 @@ import moment from "moment";
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
-
 const TrainingProgramDetail = () => {
   const { id } = useParams();
   const { state } = useLocation();
@@ -34,7 +33,8 @@ const TrainingProgramDetail = () => {
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  console.log('metquadi',kpis)
+  console.log('metquadi', kpis)
+
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -207,7 +207,7 @@ const TrainingProgramDetail = () => {
       ),
     },
   ];
-  
+
   if (userRole === "internshipcoordinators") {
     resourceColumns.push({
       title: 'Actions',
@@ -253,7 +253,7 @@ const TrainingProgramDetail = () => {
       render: (text, record) => (
         <>
           <div>{record.descition}</div>
-          <div><strong>Total</strong></div> 
+          {/* <div><strong>Total</strong></div> */}
         </>
       ),
     },
@@ -263,28 +263,26 @@ const TrainingProgramDetail = () => {
       key: 'type',
       render: (text, record) => (
         <>
-        {console.log("concac1",record)}
-        
           <div>{record.type}</div>
-          <div><strong> {parseFloat(record.type)}%</strong></div>
+          {/* <div><strong> {parseFloat(record.type)}%</strong></div> */}
         </>
       ),
     },
-    {
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text, record) => (
-        <>
-          <div>{record.value}</div>
-        </>
-      ),
-    },
-   
-  
+    // {
+    //   title: 'Value',
+    //   dataIndex: 'value',
+    //   key: 'value',
+    //   render: (text, record) => (
+    //     <>
+    //       <div>{record.value}</div>
+    //     </>
+    //   ),
+    // },
+
+
   ];
 
-  if (userRole === "internshipcoordinators" || userRole ==="mentor") {
+  if (userRole === "internshipcoordinators" || userRole === "mentor") {
     kpiColumns.push({
       title: 'Actions',
       key: 'actions',
@@ -299,6 +297,20 @@ const TrainingProgramDetail = () => {
       ),
     });
   }
+  if (userRole === "mentor") {
+    kpiColumns.push({
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      render: (text, record) => (
+        <>
+          <div>{record.value}</div>
+        </>
+      ),
+    },
+    );
+  }
+
 
   const Takscolumns = [
     {
@@ -348,7 +360,7 @@ const TrainingProgramDetail = () => {
         </span>
       ),
     },
-   
+
   ];
 
   if (userRole === "internshipcoordinators") {
@@ -379,7 +391,7 @@ const TrainingProgramDetail = () => {
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
         <div className="container mx-auto bg-white p-8 shadow-lg rounded-lg">
           <Tabs defaultActiveKey="1" className="w-full">
-          
+
             <TabPane tab="Training Details" key="1">
               <div className="mb-8">
                 <Title level={2}>{CampaignDetail.name}</Title>
@@ -430,7 +442,7 @@ const TrainingProgramDetail = () => {
               </div>
             </TabPane>
             <TabPane tab="Resources" key="2">
-              {userRole === "internshipcoordinators" || userRole ==="mentor" && (
+              {userRole === "internshipcoordinators" || userRole === "mentor" && (
                 <Form form={form} layout="vertical" onFinish={handleAddResource}>
                   <Form.Item
                     name="name"
@@ -479,7 +491,7 @@ const TrainingProgramDetail = () => {
               />
             </TabPane>
             <TabPane tab="KPIS" key="3">
-              {(userRole === "internshipcoordinators" || userRole === "intern" || userRole ==="mentor") && (
+              {(userRole === "internshipcoordinators" || userRole === "intern" || userRole === "mentor") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Row gutter={100}>
@@ -487,54 +499,54 @@ const TrainingProgramDetail = () => {
                         <Title level={4}>KPI LIST in {CampaignDetail.name}</Title>
                       </Col>
                       <Col span={12}>
-                {userRole ==="internshipcoordinators"  &&(
-                  <ButtonComponent
-                  styleButton={{ background: "#06701c", border: "none" }}
-                  styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                  size="middle"
-                  textbutton="Add KPI"
-                  onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
-                />
-                )}        
+                        {userRole === "internshipcoordinators" && (
+                          <ButtonComponent
+                            styleButton={{ background: "#06701c", border: "none" }}
+                            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                            size="middle"
+                            textbutton="Add KPI"
+                            onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
+                          />
+                        )}
                       </Col>
                     </Row>
                   </Header>
                   <Content>
                     <Table
-                    bordered
-                    pagination={false}
+                      bordered
+                      pagination={false}
                       columns={kpiColumns}
                       dataSource={kpis}
                       rowKey="id"
-                      // pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-                      summary={() => {
-                        const total = calculateTotal(kpis || []);
-                        const rating = total >= 5 ? 'Passed' : 'Failed';
-                        const ratingStyle = {
-                            backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
-                            color: rating === 'Passed' ? '#155724' : '#721c24',
-                            fontWeight: 'bold',
-                        };
-                        return (
-                            <>
-                                <Table.Summary.Row>
-                                    <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-                                    <Table.Summary.Cell>
-                                        <strong >{total !== null ? total : <span style={{color:'red'}}>'Weights do not add up to 100%' </span> }</strong>
-                                    </Table.Summary.Cell>
-                                </Table.Summary.Row>
-                                {total !== null && (
-                                    <Table.Summary.Row>
-                                        <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-                                        <Table.Summary.Cell>
-                                            <span style={ratingStyle}>{rating}</span>
-                                        </Table.Summary.Cell>
-                                    </Table.Summary.Row>
-                                )}
-                            </>
-                        );
-                      }}
-                     />
+                    // pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
+                    // summary={() => {
+                    //   const total = calculateTotal(kpis || []);
+                    //   const rating = total >= 5 ? 'Passed' : 'Failed';
+                    //   const ratingStyle = {
+                    //     backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
+                    //     color: rating === 'Passed' ? '#155724' : '#721c24',
+                    //     fontWeight: 'bold',
+                    //   };
+                    //   return (
+                    //     <>
+                    //       <Table.Summary.Row>
+                    //         <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                    //         <Table.Summary.Cell>
+                    //           <strong >{total !== null ? total : <span style={{ color: 'red' }}>'Weights do not add up to 100%' </span>}</strong>
+                    //         </Table.Summary.Cell>
+                    //       </Table.Summary.Row>
+                    //       {total !== null && (
+                    //         <Table.Summary.Row>
+                    //           <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
+                    //           <Table.Summary.Cell>
+                    //             <span style={ratingStyle}>{rating}</span>
+                    //           </Table.Summary.Cell>
+                    //         </Table.Summary.Row>
+                    //       )}
+                    //     </>
+                    //   );
+                    // }}
+                    />
                   </Content>
                 </Layout>
               )}
@@ -548,17 +560,17 @@ const TrainingProgramDetail = () => {
                         <Title level={4}>Assessment LIST in {CampaignDetail.name}</Title>
                       </Col>
                       <Col>
-                  {userRole ==="mentor" &&(
-                  <ButtonComponent
-                  styleButton={{ background: "#06701c", border: "none" }}
-                  styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                  size="middle"
-                  textbutton="Add Assessment"
-                  onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
-                />
-                )}        
-                           
-                      
+                        {userRole === "mentor" && (
+                          <ButtonComponent
+                            styleButton={{ background: "#06701c", border: "none" }}
+                            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                            size="middle"
+                            textbutton="Add Assessment"
+                            onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
+                          />
+                        )}
+
+
                       </Col>
                     </Row>
                   </Header>

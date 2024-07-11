@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import * as KPI from '../../../service/KPIService';
 
-const CreateKPIModal = ({ isVisible, onClose, onAddKPI,fetchList }) => {
+const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -56,7 +56,7 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI,fetchList }) => {
         >
           <Input />
         </Form.Item>
-      
+
         <Form.Item
           name="descition"
           label="Grade Item"
@@ -73,10 +73,10 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI,fetchList }) => {
         </Form.Item>
         <Form.Item
           name="value"
-          label="Value"
-          rules={[{ required: true, message: 'Please enter the value' }]}
+        // label="Value"
+
         >
-          <Input />
+          <Input value="0" type="hidden" />
         </Form.Item>
       </Form>
     </Modal>

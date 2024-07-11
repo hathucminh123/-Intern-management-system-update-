@@ -20,7 +20,7 @@ const KPIList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false); 
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const navigate = useNavigate();
 
   const fetchAllKPI = async () => {
@@ -90,7 +90,7 @@ const KPIList = () => {
       render: (text, record) => (
         <>
           <div>{record.descition}</div>
-          <div><strong>Total</strong></div>
+          {/* <div><strong>Total</strong></div> */}
         </>
       ),
     },
@@ -101,19 +101,20 @@ const KPIList = () => {
       render: (text, record) => (
         <>
           <div>{record.type}</div>
+          {/* <div><strong>{record.type}</strong></div> */}
         </>
       ),
     },
-    {
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text, record) => (
-        <>
-          <div>{record.value}</div>
-        </>
-      ),
-    },
+    // {
+    //   title: 'Value',
+    //   dataIndex: 'value',
+    //   key: 'value',
+    //   render: (text, record) => (
+    //     <>
+    //       <div>{record.value}</div>
+    //     </>
+    //   ),
+    // },
     {
       title: 'Actions',
       key: 'actions',

@@ -7,7 +7,7 @@ import * as Training from "../../../service/TrainingPrograms";
 import { useLocation, useNavigate } from 'react-router-dom';
 import DetailKPIModal from './DetailKPIModal';
 
-import CreateKPIModal from './CreateKPIModal'; 
+import CreateKPIModal from './CreateKPIModal';
 
 const { Text, Title } = Typography;
 const { Header, Content } = Layout;
@@ -21,7 +21,7 @@ const KPIListt = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false); 
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const navigate = useNavigate();
 
   const fetchAllKPI = async () => {
@@ -34,7 +34,7 @@ const KPIListt = () => {
   };
 
   useEffect(() => {
-   fetchAllKPI();
+    fetchAllKPI();
   }, []);
 
   const handleCheckboxChange = (record, checked) => {
@@ -49,20 +49,20 @@ const KPIListt = () => {
   const handleSubmit = async () => {
     try {
       const selectedResourceIds = Object.keys(checkedKeys).filter(key => checkedKeys[key]).map(key => parseInt(key, 10));
-      
+
       for (const resourceId of selectedResourceIds) {
         const dataResource = {
           trainingProgramId: TrainingProgram.id,
           kpiId: resourceId,
         };
-        
+
         await Training.AddKPISNewTraining(dataResource);
       }
 
       message.success("Resources added to training program successfully!");
       navigate('/internshipcoordinators/ViewTrainingProgram')
     } catch (error) {
-      message.error("Resource already exists in training: " );
+      message.error("KPI is already exist in this training program");
     }
   };
 
@@ -76,10 +76,10 @@ const KPIListt = () => {
     }
   };
 
-const  handleAddTrainingProgram =(item)=>{
-  navigate(`/internshipcoordinators/TrainingListt/${item.id}`,{state:{item}})
-  
-}
+  const handleAddTrainingProgram = (item) => {
+    navigate(`/internshipcoordinators/TrainingListt/${item.id}`, { state: { item } })
+
+  }
 
   const menu = (record) => (
     <Menu>
@@ -116,18 +116,18 @@ const  handleAddTrainingProgram =(item)=>{
       ),
     },
     { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
-    { title: "Value", dataIndex: "value", key: "value", responsive: ['md'] },
+    // { title: "Value", dataIndex: "value", key: "value", responsive: ['md'] },
     { title: "Description", dataIndex: "descition", key: "description", responsive: ['md'] },
-    { 
-      title: "Type", 
-      dataIndex: "type", 
-      key: "type", 
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
       responsive: ['md'],
     },
-    { 
-      title: "Actions", 
-      key: "actions", 
-      responsive: ['md'], 
+    {
+      title: "Actions",
+      key: "actions",
+      responsive: ['md'],
       render: (text, record) => (
         <Space size="middle">
           <Dropdown overlay={menu(record)}>
@@ -143,7 +143,7 @@ const  handleAddTrainingProgram =(item)=>{
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <div className="mt-8 flex justify-between items-center">
-        <Title level={3}> Add Resource List to {TrainingProgram.name}</Title>
+        <Title level={3}> Add KPI to {TrainingProgram.name}</Title>
         {/* <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button> */}
       </div>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
