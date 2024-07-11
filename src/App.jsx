@@ -63,6 +63,7 @@ import StudentListClass from "./components/MentorComponent/StudentListClass";
 import InternReport from "./components/InternComponent/InternReport";
 import KpiTracking from "./components/InternComponent/KPITracking_temp";
 import KPIReportDetails from "./components/ICComponent/ICComponent1/KPIReportDetails";
+import UserDetailss from "./components/MentorComponent/UserDetails";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -98,6 +99,7 @@ function App() {
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="markReport/:id" element={< KPIReportDetails />} />
+              <Route path="UserDetailsRole/:id" element={<UserDetailss />} />
 
 
 

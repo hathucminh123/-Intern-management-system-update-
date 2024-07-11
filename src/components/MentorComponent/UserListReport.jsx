@@ -10,8 +10,12 @@ const {Header,Content}=Layout
 const [pageSize] = useState(6);
 const [currentPage, setCurrentPage] = useState(1);
 const navigate =useNavigate();
-const useRole =localStorage.getItem('role')
+const userRole =localStorage.getItem('role')
 
+
+ const handleOpenDetailModal =(item)=>{
+  navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
+ }
 
 const menu = (record) => (
   <Menu>
@@ -32,10 +36,10 @@ const   handleNavigateReport =(record)=>{
 
 
     const dataReport = [
-      { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
-      { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
-      { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
-      { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' }
+      { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University',role:'intern' },
+      { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University',role:'intern' },
+      { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University',role:'intern' },
+      { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University',role:'intern' }
       ];
     
     
