@@ -1,30 +1,27 @@
 import React, { useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
-import * as KPI from '../../../service/KPIService';
+import * as KPI from '../../service/KPIService';
 
-const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
+const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask ,fetchAllTraining,kpiss}) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+  const userRole = localStorage.getItem('role')?.toLocaleLowerCase()
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
 
-      const newKPI = {
-        ...values,
-        value:"0"
-      };
 
-      const createdKPI = await KPI.createNewKPI(newKPI);
+      const updatedTask = { ...task, ...values };
+      await KPI.editKPI(updatedTask);
 
-      message.success('KPI created successfully!');
-      onAddKPI(createdKPI);
-      form.resetFields();
-      fetchList();
+      message.success('KPI updated successfully!');
+      onUpdateTask(updatedTask);
+      fetchAllTraining();
+     
       onClose();
     } catch (error) {
-      message.error('Error creating KPI: ' + error.message);
+      message.error('Error updating KPI: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -34,10 +31,11 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
     onClose();
   };
 
+
   return (
     <Modal
       visible={isVisible}
-      title="Create KPI"
+      title="KPI Detail"
       onOk={handleOk}
       onCancel={handleCancel}
       footer={[
@@ -49,18 +47,32 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
         </Button>,
       ]}
     >
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" initialValues={task}>
         <Form.Item
           name="name"
-          label="Grade Category"
+          label="Name"
           rules={[{ required: true, message: 'Please enter the name' }]}
         >
           <Input />
         </Form.Item>
+        {userRole === "mentor" && (<Form.Item
+          name="value"
+          label="Value"
+          rules={[{ required: true, message: 'Please enter the value' }]}
+        >
+          <Input />
+        </Form.Item>)}
 
+        {/* <Form.Item
+          name="value"
+          label="Value"
+          rules={[{ required: true, message: 'Please enter the value' }]}
+        >
+          <Input />
+        </Form.Item> */}
         <Form.Item
           name="descition"
-          label="Grade Item"
+          label="Description"
           rules={[{ required: true, message: 'Please enter the description' }]}
         >
           <Input />
@@ -68,20 +80,13 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
         <Form.Item
           name="type"
           label="Weight"
-          rules={[{ required: true, message: 'Please enter the type' }]}
+          rules={[{ required: true, message: 'Please enter the weight(%)' }]}
         >
           <Input />
-        </Form.Item>
-        <Form.Item
-          name="value"
-        // label="Value"
-
-        >
-          <Input value="0" type="hidden" />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default CreateKPIModal;
+export default DetailKPIModal;

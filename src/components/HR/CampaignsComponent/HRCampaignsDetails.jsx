@@ -151,12 +151,17 @@ const   handleNavigateReport =(record)=>{
             </TabPane>
             <TabPane tab="Student List in jobs" key="2">
               <Layout>
-                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
+                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" ,height:'100px'}}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
+                    <div style={{gap:"100px"}}>
+                    <Button  style={{marginRight:"20px"}}  type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
+                      Assign intern to Manage this class
+                    </Button>
                     <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
                       Assign mentor to Manage this class
                     </Button>
+                    </div>
                   </div>
                 </Header>
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>

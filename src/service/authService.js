@@ -81,7 +81,7 @@ export const login = async (user) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Login request failed", error);
+    console.error("Login request failed", error.errorMessage);
     throw error;
   }
 };

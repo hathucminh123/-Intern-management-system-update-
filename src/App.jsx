@@ -159,6 +159,7 @@ function App() {
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="MentorList" element={<MentorList />} />
               <Route path="markReport/:id" element={< KPIReportDetails />} />
+              <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
 
 
 

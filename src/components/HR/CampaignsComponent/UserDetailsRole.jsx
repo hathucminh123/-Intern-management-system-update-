@@ -10,6 +10,7 @@ const UserDetailsRole = () => {
   const { Header, Content } = Layout;
   const { state } = useLocation();
   const User = state?.item;
+  console.log("sad",User)
 
   return (
     <Layout>

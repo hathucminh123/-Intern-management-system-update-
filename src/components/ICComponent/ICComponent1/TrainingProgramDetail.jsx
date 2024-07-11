@@ -31,10 +31,11 @@ const TrainingProgramDetail = () => {
   const [selectedKPI, setSelectedKPI] = useState(null);
   const [task, setTask] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [training,setTraining]=useState([])
   const [form] = Form.useForm();
   const navigate = useNavigate();
   console.log('metquadi', kpis)
-
+ 
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -42,11 +43,16 @@ const TrainingProgramDetail = () => {
     }
   }, [CampaignDetail]);
 
-  useEffect(() => {
-    if (CampaignDetail?.kpIs) {
-      setKpis(CampaignDetail.kpIs);
-    }
-  }, [CampaignDetail]);
+// const fetchkpi =()=>{
+//   setKpis(ca)
+// }
+const kpiss  = CampaignDetail?.kpIs;
+
+useEffect(() => {
+  if (kpiss) {
+    setKpis(kpiss);
+  }
+}, [CampaignDetail, kpiss])
 
   useEffect(() => {
     if (CampaignDetail?.assessments) {
@@ -282,6 +288,19 @@ const TrainingProgramDetail = () => {
 
   ];
 
+  if (userRole === "mentor" || userRole ==="intern") {
+    kpiColumns.push({
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      render: (text, record) => (
+        <>
+          <div>{record.value}</div>
+        </>
+      ),
+    },
+    );
+  }
   if (userRole === "internshipcoordinators" || userRole === "mentor") {
     kpiColumns.push({
       title: 'Actions',
@@ -297,19 +316,7 @@ const TrainingProgramDetail = () => {
       ),
     });
   }
-  if (userRole === "mentor") {
-    kpiColumns.push({
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text, record) => (
-        <>
-          <div>{record.value}</div>
-        </>
-      ),
-    },
-    );
-  }
+
 
 
   const Takscolumns = [
@@ -519,33 +526,40 @@ const TrainingProgramDetail = () => {
                       dataSource={kpis}
                       rowKey="id"
                     // pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-                    // summary={() => {
-                    //   const total = calculateTotal(kpis || []);
-                    //   const rating = total >= 5 ? 'Passed' : 'Failed';
-                    //   const ratingStyle = {
-                    //     backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
-                    //     color: rating === 'Passed' ? '#155724' : '#721c24',
-                    //     fontWeight: 'bold',
-                    //   };
-                    //   return (
-                    //     <>
-                    //       <Table.Summary.Row>
-                    //         <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-                    //         <Table.Summary.Cell>
-                    //           <strong >{total !== null ? total : <span style={{ color: 'red' }}>'Weights do not add up to 100%' </span>}</strong>
-                    //         </Table.Summary.Cell>
-                    //       </Table.Summary.Row>
-                    //       {total !== null && (
-                    //         <Table.Summary.Row>
-                    //           <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-                    //           <Table.Summary.Cell>
-                    //             <span style={ratingStyle}>{rating}</span>
-                    //           </Table.Summary.Cell>
-                    //         </Table.Summary.Row>
-                    //       )}
-                    //     </>
-                    //   );
-                    // }}
+                    summary={() => {
+                      const total = calculateTotal(kpis || []);
+                      const rating = total >= 5 ? 'Passed' : 'Failed';
+                      const ratingStyle = {
+                        backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
+                        color: rating === 'Passed' ? '#155724' : '#721c24',
+                        fontWeight: 'bold',
+                      };
+                      return (
+                        <>
+                          {userRole === "intern" && (
+                            <>
+                              <Table.Summary.Row>
+                                <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                                <Table.Summary.Cell>
+                                  <strong>
+                                    {total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}
+                                  </strong>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                              {total !== null && (
+                                <Table.Summary.Row>
+                                  <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
+                                  <Table.Summary.Cell>
+                                    <span style={ratingStyle}>{rating}</span>
+                                  </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                              )}
+                            </>
+                          )}
+                        </>
+                      );
+                    }}
+                    
                     />
                   </Content>
                 </Layout>
@@ -602,6 +616,7 @@ const TrainingProgramDetail = () => {
           onClose={() => setOpenDetailModal(false)}
           task={selectedKPI}
           onUpdateTask={handleUpdateTask}
+    
         />
       )}
     </Layout>

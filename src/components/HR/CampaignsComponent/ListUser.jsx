@@ -9,12 +9,18 @@ const ListUser = () => {
   const navigate = useNavigate();
   const userRole = localStorage.getItem('role');
 
+  // const handleOpenDetailModal = (item) => {
+  //   if (item.role === "Intern") {
+  //   navigate(`/${userRole}/UserDetails/${item.id}`, { state: { item } });
+  //   }else{
+  //   navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
+  //   }
+  // };
+
   const handleOpenDetailModal = (item) => {
-    if (item.role === "Intern") {
-    navigate(`/${userRole}/UserDetails/${item.id}`, { state: { item } });
-    }else{
+   
     navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
-    }
+   
   };
 
   const handleDeleteResource = (id) => {

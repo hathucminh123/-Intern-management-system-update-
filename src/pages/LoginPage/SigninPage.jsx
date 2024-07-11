@@ -6,12 +6,14 @@ import InputFormComponent from '../../components/InputFormComponent/InputFormCom
 import './SigninPage.css';
 import { login } from '../../service/authService';
 import {jwtDecode} from "jwt-decode";
+import { message, Spin } from 'antd';
 
 const SigninPage = () => {
   const navigate = useNavigate();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleNavigateSignUp = () => {
     navigate('/sign-up');
@@ -26,9 +28,11 @@ const SigninPage = () => {
   };
 
   const handleSignIn = async () => {
-    const result = await login({ userName: email, password: password });
-    console.log(result);
-    if (result.isSuccess) {
+    setIsLoading(true); 
+    try {
+      const result = await login({ userName: email, password: password });
+      console.log(result);
+      message.success("Login successfully", 3);
       const userInfo = jwtDecode(result.result);
       const userRole = userInfo.Role.toLowerCase();
       console.log('userRole', userRole);
@@ -36,14 +40,11 @@ const SigninPage = () => {
       localStorage.setItem("Auth", 'true');
       localStorage.setItem("role", userRole);
       localStorage.setItem("token", result.result);
-      
-
       navigate(`/${userRole}`, { replace: true });
-      
-    
-   
-        // window.location.reload();
-  
+    } catch (error) {
+      message.error("Login failed, please check your account", 3);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
@@ -94,6 +95,22 @@ const SigninPage = () => {
           <h4>Chào mừng đến với Intern management system</h4>
         </div>
       </div>
+      {isLoading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Spin size="large" />
+        </div>
+      )}
     </div>
   );
 };

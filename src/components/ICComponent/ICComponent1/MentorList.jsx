@@ -36,21 +36,27 @@ const MentorList = () => {
 //    fetchAllKPI();
 //   }, []);
 
-
+const userRole = localStorage.getItem('role')
 
 const data = [
     { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'mentor' },
     { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'mentor' },
     { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', role: 'mentor' },
-    { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'mentor' }
+    { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'mentor' },
+    { id: 5, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'intern' },
+    { id: 6, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'intern' },
+    { id: 7, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', role: 'intern' },
+    { id: 8, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', role: 'intern' },
   ];
   const handleCheckboxChange = (record, checked) => {
     setCheckedKeys((prev) => ({ ...prev, [record.id]: checked }));
   };
 
-  const handleOpenDetailModal = (task) => {
-    setSelectedResource(task);
-    setOpenDetailModal(true);
+  const handleOpenDetailModal = (item) => {
+    // setSelectedResource(task);
+    // setOpenDetailModal(true);
+
+    navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
   };
 
 //   const handleSubmit = async () => {
@@ -159,7 +165,7 @@ const  handleAddTrainingProgram =(item)=>{
           columns={columns}
           rowKey="id"
           style={{ marginTop: "20px" }}
-          pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
+          // pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
         />
         <div style={{ marginTop: "20px" }}>
           {/* <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
