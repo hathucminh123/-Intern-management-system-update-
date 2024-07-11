@@ -56,7 +56,7 @@ const TrainingList = () => {
                     {record.gradeItem.map(item => (
                         <div key={item.gradeItem}>{item.weight}</div>
                     ))}
-                    <div><strong>{record.gradeItem.reduce((total, item) => total + parseFloat(item.weight), 0)} %</strong></div>
+                    <div><strong>{record.gradeItem.reduce((total, item) => total + parseFloat(item.weight), 0)}%</strong></div>
                 </>
             ),
         },
@@ -81,10 +81,10 @@ const TrainingList = () => {
     return (
         <Layout>
             <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                Training List
+                Mark Report
             </Header>
             <Content style={{ padding: '20px' }}>
-                <Search placeholder="Search campaigns" enterButton style={{ marginBottom: '20px' }} />
+                <Search placeholder="Search training programs" enterButton style={{ marginBottom: '20px' }} />
                 <Row gutter={[16, 16]}>
                     {kpi.map(training => (
                         <Col key={training.TrainingProgramID} span={12}>
