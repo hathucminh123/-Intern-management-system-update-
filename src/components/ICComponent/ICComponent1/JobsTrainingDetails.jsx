@@ -12,7 +12,7 @@ const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
-const HRCampaignsDetails = () => {
+const JobsTrainingDetails = () => {
   let { id } = useParams();
   const { state } = useLocation();
   const jobDetail = state?.item;
@@ -186,7 +186,7 @@ const handleAddTrainingProgram = (item) => {
                 </ul>
               </Paragraph>
             </TabPane>
-            <TabPane tab="Student List in jobs" key="2">
+            {/* <TabPane tab="Student List in jobs" key="2">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" ,height:'100px'}}>
                   <div className="mt-8 flex justify-between items-center">
@@ -211,15 +211,15 @@ const handleAddTrainingProgram = (item) => {
                   />
                 </Content>
               </Layout>
-            </TabPane>
-            {/* <TabPane tab="Training Program Lists in jobs" key="3">
+            </TabPane> */}
+            <TabPane tab="Training Program Lists in jobs" key="3">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student Report List</Title>
-                    <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
+                    {/* <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
                       Assign mentor to Manage this class
-                    </Button>
+                    </Button> */}
                         <ButtonComponent
                           styleButton={{ background: "#06701c", border: "none" }}
                           styleTextButton={{ color: "#fff", fontWeight: "bold" }}
@@ -230,13 +230,13 @@ const handleAddTrainingProgram = (item) => {
                   </div>
                 </Header>
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-                  <Table
+                  {/* <Table
                     columns={columnsReport}
                     dataSource={dataReport}
                     rowKey="id"
                     style={{ marginTop: "20px" }}
                     pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-                  />
+                  /> */}
                  
                   <Row gutter={[16,16]} >
                     {training.map((trainingProgram)=>(
@@ -282,7 +282,7 @@ const handleAddTrainingProgram = (item) => {
                   </Row>
                 </Content>
               </Layout>
-            </TabPane> */}
+            </TabPane>
           </Tabs> 
         )}
 
@@ -321,4 +321,4 @@ const handleAddTrainingProgram = (item) => {
   );
 };
 
-export default HRCampaignsDetails;
+export default JobsTrainingDetails;

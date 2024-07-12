@@ -10,7 +10,7 @@ const HeaderComponent = () => {
   return (
     <div className="flex items-center justify-center bg-sub-header text-neutral-6 h-20">
       <div className="flex w-[1200px] items-center justify-between">
-        <a href="/">
+        <a href="/guest">
           <img
             alt="Intern management"
             className="h-10 w-auto"

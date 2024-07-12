@@ -85,7 +85,7 @@ const userRole =localStorage.getItem('role')
 
     await AddTraining.createTrainingNewJobs(newTraining);
     message.success("Training program added successfully");
-    navigate(`/${userRole}/class`)
+    navigate(`/${userRole}/TrainingJobs`)
 
 
    }catch (error) {

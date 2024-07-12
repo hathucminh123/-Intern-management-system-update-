@@ -8,6 +8,8 @@ import './GuessDetailsComponent.css';
 import image1 from '../../../assets/javaImage.jpg';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
 import * as Campaign from '../../../service/Campaign';
+import { GrSchedule } from 'react-icons/gr';
+import moment from 'moment';
 
 const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
@@ -139,6 +141,7 @@ const GuessDetailsComponent = ({ id }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectJobs, setSelectJobs] = useState(null)
   const [selectCampaigns, setSelectCampaigns] = useState(null)
+  const [hovered, setHovered] = useState(null);
   useEffect(() => {
     const fetchCampaignsData = async () => {
       try {
@@ -159,6 +162,10 @@ const GuessDetailsComponent = ({ id }) => {
     setSelectCampaigns(campaigns)
     setIsModalVisible(true);
   };
+  const handleNavigateJobs =(job,campaign)=>{
+    navigate(`/guest/JobDetails/${job.id}`,{state:{itemJob:job , itemCampaign:campaign}})
+
+  }
   const showModall = (campaigns) => {
     setSelectJobs(campaigns);
     setIsModalVisible(true);
@@ -267,30 +274,95 @@ const GuessDetailsComponent = ({ id }) => {
    
       <Typography.Title className="job-description-title mb-[64px] text-center font-bold text-neutral-10"> 
       Những vị trí ứng tuyển <strong style={{ color: 'rgb(0, 164, 153)' }}>lập trình viên </strong>  </Typography.Title>
-     <Card className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
-     <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
-     <Panel
-                header={
-                  <label className="flex cursor-pointer items-center p-10">
-                    <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" alt="Icon" width={64} height={64} className="mr-4" />
-                    <Title level={3} className="flex-1 text-neutral-10">Những vị trí ứng tuyển</Title>
-                  </label>
-                }
-             
-                className="collapse-title"
-              >
-      {internship.jobs.map((list, index) => (
-        <Space direction="vertical" size={20} className="recruitment" key={index}>
-          <Typography.Title level={10} > Vị trí ứng tuyển: {list.name}</Typography.Title>
-          <Space direction='horizontal' size={400} >
-            <Button type="primary" className="rounded-full customButton" onClick={() => showModal(list, internship)} >Ứng tuyển ngay</Button>
-            <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectJobs} campaigns={selectCampaigns} />
-            <Image preview={false} src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90" width={300} />
-          </Space>
-        </Space>))}
+      {/* <Card className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
+      <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
+        <Panel
+          header={
+            <label className="flex cursor-pointer items-center p-10">
+              <Image
+                preview={false}
+                src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90"
+                alt="Icon"
+                width={64}
+                height={64}
+                className="mr-4"
+              />
+              <Title level={3} className="flex-1 text-neutral-10">Những vị trí ứng tuyển</Title>
+            </label>
+          }
+          className="collapse-title"
+        >
+          {internship.jobs.map((list, index) => (
+            <Space direction="vertical" size={20} className="recruitment" key={index}>
+              <Title level={4}>Vị trí ứng tuyển: {list.name}</Title>
+              <Row gutter={[16, 16]}>
+                <Col span={15}>
+                  <div className="flex mt-4">
+                    <GrSchedule />
+                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
+                    <div className="ml-3 font-bold">{moment(list.startDate).format("DD-MM-YYYY")}</div>
+                  </div>
+                  <div className="flex mt-4">
+                    <ClockCircleOutlined />
+                    <div className="ml-3">Thời gian thực tập:</div>
+                    <div className="ml-3 font-bold">{list.duration} months</div>
+                  </div>
+                  <Space direction="horizontal" size={10} style={{ marginTop: '20px' }}>
+                    <Button type="primary" className="rounded-full customButton" onClick={() => showModal(list, internship)}>Ứng tuyển ngay</Button>
+                    <Button type="default" className="rounded-full customButton" onClick={() => handleNavigateJobs(list, internship)}>Xem chi tiết</Button>
+                  </Space>
+                </Col>
+                <Col span={9}>
+                  <Image
+                    preview={false}
+                    src="https://geekadventure.vn/_next/image?url=%2Fimages%2Fopportunity%2Fappropriate-opportunity%2Fdecoration-main.png&w=828&q=90"
+                    width={300}
+                  />
+                </Col>
+              </Row>
+            </Space>
+          ))}
         </Panel>
-        </Collapse>
-        </Card>
+      </Collapse>
+      <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectJobs} campaigns={selectCampaigns} />
+    </Card> */}
+
+
+    <Row gutter={[16,16]}>
+    {internship.jobs.map((list, index) => (
+    <Col key={list.id} xs={24} sm={12} md={8}>
+         <Card
+          hoverable
+                  className="shadow-lg"
+         
+         >
+           <Image
+                    className="rounded-lg mb-3"
+                    preview={false}
+                    width="100%"
+                    height={200}
+                    src={list.imagePath}
+                    alt={list.name}
+                  />
+                    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    Developer {list.name}
+                  </Title>
+                  <p><strong>Duration:</strong> {list.duration} months</p>
+                  <p><strong>Start Date:</strong> {moment(list.startDate).format('DD-MM-YYYY')}</p>
+                  <Text
+                    style={{ width: "fit-content", cursor: 'pointer', color: hovered === list.id ? 'blue' : 'black' }}
+                    onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list,internship); }}
+                    onMouseEnter={() => setHovered(list.id)}
+                    onMouseLeave={() => setHovered(null)}
+                  >
+                    View Details {'-->'}
+                  </Text>
+
+          </Card>
+      </Col>
+         
+    ))}
+    </Row>
       <div className="flex w-full justify-center mt-20">
         <div className="w-[1200px]">
           <Title level={2} className="title-hero-banner text-center font-bold">
@@ -320,11 +392,16 @@ const GuessDetailsComponent = ({ id }) => {
                     <div className="ml-3">Kỳ thực tập:</div>
                     <div className="ml-3 font-bold">{internship.duration} months</div>
                   </div>
-                  {/* <div className="flex mt-4">
-                    <ScheduleOutlined />
+                  <div className="flex mt-4">
+                    <GrSchedule />
                     <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-                    <div className="ml-3 font-bold">{internship.startDate}</div>
-                  </div> */}
+                    <div className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</div>
+                  </div>
+                  <div className="flex mt-4">
+                    <GrSchedule />
+                    <div className="ml-3">Ngày kết thúc dự kiến:</div>
+                    <div className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</div>
+                  </div>
                 </div>
                 <Image preview={false} src={internship.imagePath} height={200} width="auto" />
               </Space>

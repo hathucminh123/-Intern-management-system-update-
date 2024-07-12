@@ -100,10 +100,26 @@ const HRCampaignsDetailss = () => {
           <div className="ml-0 mt-6 md:ml-8 md:mt-0">
             <Title level={2}>{CampaignDetail.name}</Title>
             <div className="flex items-center mt-3">
-              <div>Thời gian:</div>
+              <div>Duration:</div>
               <Tag className="ml-3" color="#87d068">
                 {CampaignDetail.duration} months
               </Tag>
+            </div>
+            <div className="flex items-center mt-3">
+              <div>Start Date:</div>
+           
+              <div className="ml-3 text-red-500">
+
+              {moment(CampaignDetail.estimateStartDate).format('DD-MM-YYYY')}
+              </div>
+            
+            </div>
+            <div className="flex items-center mt-3">
+              <div>End Date:</div>
+          
+              <div className="ml-3 text-red-500">
+              {moment(CampaignDetail.estimateEndDate).format('DD-MM-YYYY')}
+              </div>
             </div>
             <div className="flex flex-wrap mt-3">
               <div>Vị trí ứng tuyển lập trình viên:</div>
@@ -123,19 +139,19 @@ const HRCampaignsDetailss = () => {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Thông tin Campaign" key="1">
             <div className="mt-8">
-              <Title level={3}>MÔ TẢ CÔNG VIỆC</Title>
+              <Title level={3}>Scope Of Work</Title>
               <Paragraph>
                 <div dangerouslySetInnerHTML={{ __html: CampaignDetail.scopeOfWork }} />
               </Paragraph>
             </div>
             <div className="mt-8">
-              <Title level={3}>YÊU CẦU CÔNG VIỆC</Title>
+              <Title level={3}>Requirements</Title>
               <Paragraph>
                 <div dangerouslySetInnerHTML={{ __html: CampaignDetail.requirements }} />
               </Paragraph>
             </div>
             <div className="mt-8">
-              <Title level={3}>QUYỀN LỢI</Title>
+              <Title level={3}>Benefits</Title>
               <Paragraph>
                 <div dangerouslySetInnerHTML={{ __html: CampaignDetail.benefits }} />
               </Paragraph>
@@ -367,7 +383,7 @@ const HRCampaignsDetailss = () => {
           
         </Tabs>
         <div className="mt-8">
-          <Title level={3}>ỨNG TUYỂN</Title>
+          <Title level={3}>Recruitment</Title>
           <Paragraph>
             Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail:{" "}
             <Text strong>[Fresher React Developer - Họ tên]</Text> đến địa chỉ

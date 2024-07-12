@@ -33,7 +33,7 @@ const internships = [
       "Data Analyst",
       "Marketing Intern",
     ],
-    duration: "12 weeks",
+    duration: "12 weeks", 
     startDate: "06/07/2024",
     imgurl: 'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
   },
@@ -137,7 +137,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                   </div>
                   <div className="flex mt-4">
                     <GrSchedule />
-                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
+                    <div className="ml-3">Ngày kết thúc dự kiến:</div>
                     <div className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</div>
                   </div>
                 </Col>

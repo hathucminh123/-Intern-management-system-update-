@@ -64,6 +64,9 @@ import InternReport from "./components/InternComponent/InternReport";
 import KpiTracking from "./components/InternComponent/KPITracking_temp";
 import KPIReportDetails from "./components/ICComponent/ICComponent1/KPIReportDetails";
 import UserDetailss from "./components/MentorComponent/UserDetails";
+import GuessJobDetailsComponent from "./components/GuessComponent/GuessJobDetailsComponent/GuessJobDetailsComponent";
+import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrainingDetails";
+import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -146,7 +149,7 @@ function App() {
               <Route path="TrainingProgramsofjob/:id" element={<TrainingProgramDetailOJobs />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="class" element={<HRCampaings />} />
-              <Route path="TrainingJobs" element={<Jobs />} />
+              <Route path="TrainingJobs" element={<JobsIC />} />
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
               <Route path="students/:className" element={<StudentList />} />
               <Route path="ListTraining/:id" element={<ListTraining />} />
@@ -154,6 +157,7 @@ function App() {
               <Route path="ResourceList" element={<ResourceListt />} />
               <Route path="Details/:id" element={<EditTraining />} />
               <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+              <Route path="Detailll/:id" element={<JobsTrainingDetails />} />
               <Route path="KPIList" element={<KPIList />} />
               <Route path="TrainingListt/:id" element={<Traininglistt />} />
               <Route path="KPISListt/:id" element={<KPIListt />} />
@@ -190,6 +194,8 @@ function App() {
               <Route index element={<Navigate to="info" replace />} />
               <Route path="info" element={<GuestInfo />} />
               <Route path="Detail/:id" element={<GuessDetailPage />} />
+              <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
+
             </Route>
           </Route>
         </Routes>

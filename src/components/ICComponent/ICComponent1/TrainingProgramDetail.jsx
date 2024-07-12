@@ -288,7 +288,7 @@ useEffect(() => {
 
   ];
 
-  if (userRole === "mentor" || userRole ==="intern") {
+  if ( userRole ==="intern") {
     kpiColumns.push({
       title: 'Value',
       dataIndex: 'value',
