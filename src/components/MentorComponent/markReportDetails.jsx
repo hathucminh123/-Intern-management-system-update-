@@ -32,6 +32,7 @@ const UserReportView = () => {
         if (response && response.events && response.events.userResultDetails) {
           const formattedData = response.events.userResultDetails.map(detail => ({
             name: response.events.name,
+            name:detail.name,
             total: response.events.total,
             weight: detail.weight,
             value: detail.value,

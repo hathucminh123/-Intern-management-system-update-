@@ -301,7 +301,7 @@ useEffect(() => {
   //   },
   //   );
   // }
-  if (userRole === "internshipcoordinators" || userRole === "mentor") {
+  if (userRole === "internshipcoordinators" ) {
     kpiColumns.push({
       title: 'Actions',
       key: 'actions',

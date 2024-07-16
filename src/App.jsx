@@ -68,7 +68,7 @@ import GuessJobDetailsComponent from "./components/GuessComponent/GuessJobDetail
 import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrainingDetails";
 import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
 import UserReportView from "./components/MentorComponent/markReportDetails";
-
+import HRCampaignsDetailsss from "./components/ICComponent/ICComponent1/HRCampaignsDetailsss";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -159,7 +159,7 @@ function App() {
               <Route path="ResourceList/:id" element={<ResourceList />} />
               <Route path="ResourceList" element={<ResourceListt />} />
               <Route path="Details/:id" element={<EditTraining />} />
-              <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+              <Route path="Detail/:id" element={<HRCampaignsDetailsss />} />
               <Route path="Detailll/:id" element={<JobsTrainingDetails />} />
               <Route path="KPIList" element={<KPIList />} />
               <Route path="TrainingListt/:id" element={<Traininglistt />} />

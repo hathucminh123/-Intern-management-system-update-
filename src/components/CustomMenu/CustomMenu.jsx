@@ -96,16 +96,25 @@ const CustomMenu = ({ userRole }) => {
       // { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
       { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Task" },
       { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
-      { key: "/mentor/class", icon: <FaUsers />, label: "student list" },
+      // { key: "/mentor/class", icon: <FaUsers />, label: "student list" },
       { key: "/mentor/ViewTrainingProgram", icon: <ProjectOutlined />, label: "Training Program" },
-      {
-        key: "/mentor/Report", icon: <FaSquarePollVertical />, label: "Manage Report",
+      // {
+      //   key: "/mentor/Report", icon: <FaSquarePollVertical />, label: "Manage Report List",
 
-        children: [
-          // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
-          { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
+      //   children: [
+      //     // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
+      //     { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
 
-        ]
+      //   ]
+      // },
+          {
+        key: "/mentor/UserListReport", icon: <FaSquarePollVertical />, label: "Manage Report List",
+
+        // children: [
+        //   // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
+        //   { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
+
+        // ]
       },
     ],
     hrmanager: [

@@ -44,7 +44,7 @@ const JobDescriptionComponent = ({ data }) => {
     },
     {
       key: '3',
-      title: 'Điều kiện ứng tuyển',
+      title: 'Benefits',
       content: (
         <ul>
           <li>Grasp the product concept within a business context which aligns with business objective</li>
@@ -121,7 +121,7 @@ const JobDescriptionComponent = ({ data }) => {
               >
                 <div className="p-10">
                   <Space direction="horizontal">
-                    <div dangerouslySetInnerHTML={{ __html: data.requirements }} />
+                    <div dangerouslySetInnerHTML={{ __html: data.benefits }} />
                     <Image preview={false} src={panels[2].imgSrc} alt="Decoration" width={200} />
                   </Space>
                 </div>

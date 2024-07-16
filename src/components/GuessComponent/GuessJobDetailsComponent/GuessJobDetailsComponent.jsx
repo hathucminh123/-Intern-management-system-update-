@@ -64,6 +64,14 @@ const GuessJobDetailsComponent = () => {
                   </div>
                 </div>
               </Col>
+              <Col span={8}>
+                <div className="detail-item">
+                  <CiLocationOn />
+                  <div className="detail-text">
+                    tổng số thành viên: <span className="bold">10 members</span>
+                  </div>
+                </div>
+              </Col>
             </Row>
             <Button
               style={{ marginTop: '20px' }}
