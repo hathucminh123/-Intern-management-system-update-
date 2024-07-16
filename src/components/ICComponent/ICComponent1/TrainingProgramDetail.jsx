@@ -288,19 +288,19 @@ useEffect(() => {
 
   ];
 
-  if ( userRole ==="intern") {
-    kpiColumns.push({
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text, record) => (
-        <>
-          <div>{record.value}</div>
-        </>
-      ),
-    },
-    );
-  }
+  // if ( userRole ==="intern") {
+  //   kpiColumns.push({
+  //     title: 'Value',
+  //     dataIndex: 'value',
+  //     key: 'value',
+  //     render: (text, record) => (
+  //       <>
+  //         <div>{record.value}</div>
+  //       </>
+  //     ),
+  //   },
+  //   );
+  // }
   if (userRole === "internshipcoordinators" || userRole === "mentor") {
     kpiColumns.push({
       title: 'Actions',
@@ -526,39 +526,39 @@ useEffect(() => {
                       dataSource={kpis}
                       rowKey="id"
                     // pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-                    summary={() => {
-                      const total = calculateTotal(kpis || []);
-                      const rating = total >= 5 ? 'Passed' : 'Failed';
-                      const ratingStyle = {
-                        backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
-                        color: rating === 'Passed' ? '#155724' : '#721c24',
-                        fontWeight: 'bold',
-                      };
-                      return (
-                        <>
-                          {userRole === "intern" && (
-                            <>
-                              <Table.Summary.Row>
-                                <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-                                <Table.Summary.Cell>
-                                  <strong>
-                                    {total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}
-                                  </strong>
-                                </Table.Summary.Cell>
-                              </Table.Summary.Row>
-                              {total !== null && (
-                                <Table.Summary.Row>
-                                  <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-                                  <Table.Summary.Cell>
-                                    <span style={ratingStyle}>{rating}</span>
-                                  </Table.Summary.Cell>
-                                </Table.Summary.Row>
-                              )}
-                            </>
-                          )}
-                        </>
-                      );
-                    }}
+                    // summary={() => {
+                    //   const total = calculateTotal(kpis || []);
+                    //   const rating = total >= 5 ? 'Passed' : 'Failed';
+                    //   const ratingStyle = {
+                    //     backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
+                    //     color: rating === 'Passed' ? '#155724' : '#721c24',
+                    //     fontWeight: 'bold',
+                    //   };
+                    //   return (
+                    //     <>
+                    //       {userRole === "intern" && (
+                    //         <>
+                    //           <Table.Summary.Row>
+                    //             <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                    //             <Table.Summary.Cell>
+                    //               <strong>
+                    //                 {total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}
+                    //               </strong>
+                    //             </Table.Summary.Cell>
+                    //           </Table.Summary.Row>
+                    //           {total !== null && (
+                    //             <Table.Summary.Row>
+                    //               <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
+                    //               <Table.Summary.Cell>
+                    //                 <span style={ratingStyle}>{rating}</span>
+                    //               </Table.Summary.Cell>
+                    //             </Table.Summary.Row>
+                    //           )}
+                    //         </>
+                    //       )}
+                    //     </>
+                    //   );
+                    // }}
                     
                     />
                   </Content>

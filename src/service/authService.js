@@ -70,6 +70,7 @@ export const apiLinks = {
     postUserCampainJob:`${baseURL}/User/CampaginJob`,
     postUserResult:`${baseURL}/User/UserResult`,
     getUserResult:`${baseURL}/User/UserResult`,
+    getUserProfile:`${baseURL}/User/getProfile`,
 
 
   },
@@ -136,3 +137,29 @@ export const fetchUser = async (params) => {
     throw error;
   }
 };
+
+
+export const fetchUserProfile = async (id) => {
+  try {
+    const response = await httpClient.get({
+      url: apiLinks.User.getUserProfile,
+      params: { id },
+    });
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the users profile');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    const user = response.data;
+    return {
+      events: user.result,
+    };
+  } catch (error) {
+    console.error("Fetching users failed", error);
+    throw error;
+  }
+};
+
+

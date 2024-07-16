@@ -5,7 +5,7 @@ import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 import InputFormComponent from '../../components/InputFormComponent/InputFormComponent';
 import './SigninPage.css';
 import { login } from '../../service/authService';
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
 import { message, Spin } from 'antd';
 
 const SigninPage = () => {
@@ -31,15 +31,14 @@ const SigninPage = () => {
     setIsLoading(true); 
     try {
       const result = await login({ userName: email, password: password });
-      console.log(result);
       message.success("Login successfully", 3);
       const userInfo = jwtDecode(result.result);
       const userRole = userInfo.Role.toLowerCase();
-      console.log('userRole', userRole);
-      console.log('userInfo', userInfo);
+      const userId = userInfo.UserId.toLowerCase();
       localStorage.setItem("Auth", 'true');
       localStorage.setItem("role", userRole);
       localStorage.setItem("token", result.result);
+      localStorage.setItem("userId", userId);
       navigate(`/${userRole}`, { replace: true });
     } catch (error) {
       message.error("Login failed, please check your account", 3);

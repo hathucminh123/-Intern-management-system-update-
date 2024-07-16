@@ -25,6 +25,7 @@ import {
   Space,
   Typography,
   Popover,
+  message,
 } from "antd";
 import { MdClass } from "react-icons/md";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
@@ -36,6 +37,7 @@ import Logo from "../Logo/Logo";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { FaUsers, FaChevronRight } from "react-icons/fa";
 import { FaSquarePollVertical } from "react-icons/fa6";
+import * as UserProfile from "../../service/authService"
 
 
 const { Header, Sider, Content } = Layout;
@@ -49,6 +51,8 @@ const CustomMenu = ({ userRole }) => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
+  const [userProfile,setUserProfile]=useState({})
+  console.log('wtf',userProfile)
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -68,6 +72,23 @@ const CustomMenu = ({ userRole }) => {
     }
     setSelectedKey(location.pathname);
   }, [location.pathname]);
+
+ const fetchUserProfile =async()=>{
+  try{
+     const res=await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+     setUserProfile(res.events)
+  }catch(error){
+    message.error('fectch User Profile failed')
+  }
+
+ }
+
+
+ useEffect(()=>{
+    fetchUserProfile()
+
+
+ },[])
 
   const items = {
     mentor: [
@@ -211,7 +232,7 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>internshipcoordinators</Typography.Text>
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
                   <Badge count={comments.length} dot>
@@ -239,7 +260,7 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>hrmanager </Typography.Text>
+                      <Typography.Text>{userProfile.userName} </Typography.Text>
                     </div>
                   </Popover>
                   <Badge count={comments.length} dot>
@@ -267,7 +288,7 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>mentor</Typography.Text>
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
                   <Badge count={comments.length} dot>
@@ -295,7 +316,7 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>intern</Typography.Text>
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
                   <Badge count={comments.length} dot>

@@ -69,6 +69,7 @@ import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrain
 import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
 import UserReportView from "./components/MentorComponent/markReportDetails";
 
+
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -185,7 +186,7 @@ function App() {
               <Route path="chat" element={<Chat />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="internReport" element={< InternReport />} />
-              <Route path="markReport" element={< KpiTracking />} />
+              <Route path="markReport" element={< InternReport />} />
             </Route>
 
 

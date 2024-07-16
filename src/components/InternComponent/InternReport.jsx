@@ -1,54 +1,184 @@
-import React, { useState } from 'react';
-import { Typography, Layout, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Layout, Row, Col, Card, Table, message, Collapse } from 'antd';
+import { useLocation, useParams } from 'react-router-dom';
+import * as User from '../../service/User';
+import * as Training from '../../service/TrainingPrograms';
+import { data } from 'autoprefixer';
+import * as UserProfile from '../../service/authService'
+const { Header, Content } = Layout;
 
 const InternReport = () => {
-  const { Text, Title, Paragraph } = Typography;
-  const { Header, Content } = Layout;
-  const [pageSize] = useState(6);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { state } = useLocation();
+  const user = state?.record;
+ 
+  const [training, setTraining] = useState([]);
+  const [selectedPrograms, setSelectedPrograms] = useState([]);
+  const [reportData, setReportData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [userProfile,setUserProfile]=useState({})
 
-  const dataReport = [
-    { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
-    { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
-    { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
-    { id: 4, name: "Tâm", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' }
+
+  const fetchUserProfile =async()=>{
+    try{
+       const res=await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+       setUserProfile(res.events)
+    }catch(error){
+      message.error('fectch User Profile failed')
+    }
+  
+   }
+  
+  
+   useEffect(()=>{
+      fetchUserProfile()
+  
+  
+   },[])
+
+  const userId=localStorage.getItem('userId')
+  const fetchAllTraining = async () => {
+    try {
+      const res = await Training.fetchTraining();
+      setTraining(res.events);
+    } catch (error) {
+      message.error('Error fetching Training: ' + error.message);
+    }
+  };
+
+  const fetchReportData = async (programId) => {
+    setLoading(true);
+    try {
+      if (userId && programId) {
+        const response = await User.fetchUserListReport(userId, programId);
+        if (response && response.events && response.events.userResultDetails) {
+          const formattedData = response.events.userResultDetails.map(detail => ({
+            name: response.events.name,
+            name:detail.name,
+            total: response.events.total,
+            weight: detail.weight,
+            value: detail.value,
+          }));
+          setReportData(prevData => ({
+            ...prevData,
+            [programId]: formattedData,
+          }));
+        } else {
+          message.error('Unexpected response format');
+        }
+      }
+    } catch (error) {
+      message.error('Error fetching report data: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllTraining();
+  }, []);
+
+  useEffect(() => {
+    selectedPrograms.forEach(programId => {
+      fetchReportData(programId);
+    });
+  }, [userId, selectedPrograms]);
+
+  const kpiColumns = [
+    {
+      title: 'Grade Category',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'weight',
+      key: 'weight',
+      render: (text, record) => (
+        <>
+          <div>{record.weight}</div>
+          <div><strong>{parseFloat(record.weight)}%</strong></div>
+        </>
+      ),
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      key: 'value',
+      render: (text, record) => (
+        <div>{record.value}</div>
+      ),
+    },
   ];
 
-  const columnsReport = [
-    { title: "Name Intern", dataIndex: "name", key: "name", responsive: ['md'] },
-    { title: "Logical Thinking", dataIndex: "Logicalthinking", key: "Logicalthinking", responsive: ['md'] },
-    { title: "Attitude", dataIndex: "attitude", key: "attitude", responsive: ['md'] },
-    { title: "Skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
-    { title: "Total", dataIndex: "total", key: "total", responsive: ['md'] },
-  ];
-
+  const handleSelected = (programId) => {
+    setSelectedPrograms(prevSelected => {
+      if (prevSelected.includes(programId)) {
+        return prevSelected.filter(id => id !== programId);
+      } else {
+        return [...prevSelected, programId];
+      }
+    });
+  };
+console.log('asdasd',reportData)
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0',minHeight:'100px' }}>
-        <Title level={3} style={{ margin: 0 }}>Intern Report List</Title>
-        {/* <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-          <Text strong>Intern Name:</Text>
-          <Paragraph style={{ marginLeft: '10px', marginBottom: 0 }}>Minh</Paragraph>
-        </div> */}
-        <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-          <Text strong>Class:</Text>
-          <Paragraph style={{ marginLeft: '10px', marginBottom: 0 }}>Reactjs</Paragraph>
-        </div>
-        {/* <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-          <Text strong>Grade:</Text>
-          <Paragraph style={{ marginLeft: '10px', marginBottom: 0 }}>A</Paragraph>
-        </div> */}
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+        User Report: <strong>{userProfile?.userName}</strong>
       </Header>
-      <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
-        <div className="container mx-auto">
-          <Table
-            columns={columnsReport}
-            dataSource={dataReport}
-            rowKey="id"
-            style={{ marginTop: "20px" }}
-            pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-          />
-        </div>
+      <Content style={{ padding: '20px' }}>
+        <Row gutter={[16, 16]}>
+          {training.map((training) => (
+            <Col key={training.id} span={12}>
+              <Collapse>
+                <Collapse.Panel
+                  header={`${training.name} (${training.duration} months)`}
+                  key={training.id}
+                  onClick={() => handleSelected(training.id)}
+                >
+                  <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                    <Table
+                      bordered
+                      pagination={false}
+                      columns={kpiColumns}
+                      dataSource={reportData[training.id] || []}
+                      rowKey="id"
+                      loading={loading}
+                      style={{ minWidth: '600px' }}
+                      summary={() => {
+                        const data = reportData[training.id] || [];
+                        const total = data.length > 0 ? data[0].total : null;
+                        const rating = total > 5 ? 'Passed' : 'Not Passed';
+                        const ratingStyle = {
+                          backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
+                          color: rating === 'Passed' ? '#155724' : '#721c24',
+                          fontWeight: 'bold',
+                        };
+                        return (
+                          <>
+                            <Table.Summary.Row>
+                              <Table.Summary.Cell colSpan={2}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                              <Table.Summary.Cell>
+                                <strong>{total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}</strong>
+                              </Table.Summary.Cell>
+                            </Table.Summary.Row>
+                            {total !== null && (
+                              <Table.Summary.Row>
+                                <Table.Summary.Cell colSpan={2}><strong>STATUS</strong></Table.Summary.Cell>
+                                <Table.Summary.Cell>
+                                  <span style={ratingStyle}>{rating}</span>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                            )}
+                          </>
+                        );
+                      }}
+                    />
+                  </Card>
+                </Collapse.Panel>
+              </Collapse>
+            </Col>
+          ))}
+        </Row>
       </Content>
     </Layout>
   );
