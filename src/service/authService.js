@@ -5,7 +5,11 @@ const baseURL = "https://intern-management-35fd3e77666d.herokuapp.com/api";
 export const apiLinks = {
   auth: {
     login: `${baseURL}/Auth/login`,
+    register:`${baseURL}/Auth/register`,
   },
+
+
+
   Jobs: {
     get: `${baseURL}/Job`,
     post: `${baseURL}/Job`,
@@ -48,6 +52,8 @@ export const apiLinks = {
   Assessment: {
     get: `${baseURL}/Assessment`,
     post: `${baseURL}/Assessment`,
+    InternPost: `${baseURL}/AssessmentSubmition`,
+    InternDelete:`${baseURL}/AssessmentSubmition`,
     put: `${baseURL}/Assessment`,
     delete: `${baseURL}/Assessment`,
   },
@@ -59,6 +65,13 @@ export const apiLinks = {
   },
   User:{
     get: `${baseURL}/User`,
+    put:`${baseURL}/User`,
+    getUserCampainJob:`${baseURL}/User/CampaginJob`,
+    postUserCampainJob:`${baseURL}/User/CampaginJob`,
+    postUserResult:`${baseURL}/User/UserResult`,
+    getUserResult:`${baseURL}/User/UserResult`,
+
+
   },
    Meetings:{
     get: `${baseURL}/Meetings`,
@@ -77,6 +90,21 @@ export const login = async (user) => {
   try {
     const response = await httpClient.post({
       url: apiLinks.auth.login,
+      data: user,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Login request failed", error.errorMessage);
+    throw error;
+  }
+};
+
+
+
+export const registerUser = async (user) => {
+  try {
+    const response = await httpClient.post({
+      url: apiLinks.auth.register,
       data: user,
     });
     return response.data;

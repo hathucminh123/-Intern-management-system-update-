@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import * as KPI from '../../service/KPIService';
 
-const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask ,fetchAllTraining,kpiss}) => {
+const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask ,fetchAllTraining,kpissz}) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const userRole = localStorage.getItem('role')?.toLocaleLowerCase()
@@ -71,14 +71,14 @@ const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask ,fetchAllTraini
           <Input />
         </Form.Item> */}
         <Form.Item
-          name="descition"
-          label="Description"
+          name="type"
+          label="Grade Item"
           rules={[{ required: true, message: 'Please enter the description' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name="type"
+          name="weight"
           label="Weight"
           rules={[{ required: true, message: 'Please enter the weight(%)' }]}
         >

@@ -29,6 +29,58 @@ export const  AddAssessment =async(data) =>{
 }
 
 
+export const  InternAddAssessment =async(data) =>{
+  try {
+     const response = await httpClient.post({
+        url: `${apiLinks.Assessment.InternPost}`,
+        data:data,
+ 
+ 
+     });
+ 
+     if (response.status !== 200 && response.status !== 201) {
+         const error = new Error('An error occurred while Post Task');
+         error.code = response.status;
+         error.info = await response.data;
+         console.error('Server response:', response.data); // Log the server response
+         throw error;
+       }
+ 
+     
+       return response.data;
+  }
+  catch (error) {
+     console.error('Error Post task:', error.response ? error.response.data : error.message);
+     throw new Error(`Error: ${error.message}`);
+   }
+ }
+ export const  InternDeleteAssessment =async (id) =>{
+  try {
+     const response = await httpClient.delete({
+        url: `${apiLinks.Assessment.InternDelete}`,
+        params:{ id},
+ 
+ 
+     });
+ 
+     if (response.status !== 200 && response.status !== 201) {
+         const error = new Error('An error occurred deleteAssesment');
+         error.code = response.status;
+         error.info = await response.data;
+         console.error('Server response:', response.data); // Log the server response
+         throw error;
+       }
+ 
+     
+       return response.data;
+  }
+  catch (error) {
+     console.error('Error creating job:', error.response ? error.response.data : error.message);
+     throw new Error(`Error: ${error.message}`);
+   }
+ }
+
+
 export const  DeleteAssessment =async (id) =>{
   try {
      const response = await httpClient.delete({

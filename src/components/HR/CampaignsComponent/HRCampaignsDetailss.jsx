@@ -49,10 +49,10 @@ const HRCampaignsDetailss = () => {
     setShowJobs(!showJobs);
   };
 
-  const handleDetails = (item) => {
-    navigate(`/${userRole}/Detail/${item.id}`, { state: { item } });
+  const handleDetails = (item, CampaignDetail) => {
+    navigate(`/${userRole}/Detail/${item.id}`, { state: { item, CampaignDetail } });
   };
-
+  
   const handleDelete = async (id) => {
     try {
       const deleteJobCampaign = {
@@ -199,7 +199,7 @@ const HRCampaignsDetailss = () => {
                          <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
                          <Text
                            style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
-                           onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                           onClick={(e) => { e.stopPropagation(); handleDetails(item,CampaignDetail); }}
                            onMouseEnter={() => setHovered(item.id)}
                            onMouseLeave={() => setHovered(null)}
                          >
@@ -256,7 +256,7 @@ const HRCampaignsDetailss = () => {
                          <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
                          <Text
                            style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
-                           onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                           onClick={(e) => { e.stopPropagation(); handleDetails(item,CampaignDetail); }}
                            onMouseEnter={() => setHovered(item.id)}
                            onMouseLeave={() => setHovered(null)}
                          >
@@ -358,7 +358,7 @@ const HRCampaignsDetailss = () => {
                   <Space direction="vertical">
                   <Text
                     style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
-                    onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
+                    onClick={(e) => { e.stopPropagation(); handleDetails(item,CampaignDetail); }}
                     onMouseEnter={() => setHovered(item.id)}
                     onMouseLeave={() => setHovered(null)}
                   >

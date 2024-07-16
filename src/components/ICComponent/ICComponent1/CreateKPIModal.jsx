@@ -13,7 +13,7 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
 
       const newKPI = {
         ...values,
-        value:"0"
+       
       };
 
       const createdKPI = await KPI.createNewKPI(newKPI);
@@ -59,26 +59,26 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
         </Form.Item>
 
         <Form.Item
-          name="descition"
-          label="Grade Item"
-          rules={[{ required: true, message: 'Please enter the description' }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           name="type"
-          label="Weight"
+          label="Grade Item"
           rules={[{ required: true, message: 'Please enter the type' }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
+          name="weight"
+          label="Weight"
+          rules={[{ required: true, message: 'Please enter the weight' }]}
+        >
+          <Input />
+        </Form.Item>
+        {/* <Form.Item
           name="value"
-        // label="Value"
+        label="Value"
 
         >
           <Input value="0" type="hidden" />
-        </Form.Item>
+        </Form.Item> */}
       </Form>
     </Modal>
   );

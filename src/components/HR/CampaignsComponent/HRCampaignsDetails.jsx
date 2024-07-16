@@ -1,32 +1,64 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Button, Image, Tag, Tabs, Layout, Table, Menu, Space, Dropdown, Row ,Col,Card,message} from "antd";
+import { Typography, Button, Image, Tag, Tabs, Layout, Table, Space, Dropdown, Row, Col, Card, message, Menu } from "antd";
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { DownOutlined } from "@ant-design/icons";
-import ButtonComponent from "../../ButtonComponent/ButtonComponent";
-import { IoMdTime } from "react-icons/io";
-import * as Jobss from "../../../service/JobsService"
+import * as Jobss from "../../../service/JobsService";
+import * as User from "../../../service/User"
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
+const userRoles = {
+  0: 'Intern',
+  3: 'HR Manager',
+  2: 'Internship Coordinators',
+  1: 'Mentor',
+  4: 'Admin'
+};
+
 const HRCampaignsDetails = () => {
   let { id } = useParams();
   const { state } = useLocation();
   const jobDetail = state?.item;
+  const campaignDetail = state?.CampaignDetail;
   const [pageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
-  const [training,setTraining]=useState([]);
+  const [training, setTraining] = useState([]);
+  const [user,setUser]=useState([])
   const userRole = localStorage.getItem('role');
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState(null);
-  console.log('Job Detail:', jobDetail);
+  console.log('Campain Details',campaignDetail)
+  console.log('Jobs Details',jobDetail)
 
   if (!jobDetail) {
     return <div>Job detail not found</div>;
   }
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await User.fetchUserListCampaignJob(campaignDetail.id,jobDetail.id)
+        setUser(response.events);
+      } catch (error) {
+        message.error('Error fetching data from API');
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (campaignDetail.id && jobDetail.id) {
+      fetchData();
+    } else {
+      message.error('Campaign ID or Job ID not found');
+      setLoading(false);
+    }
+  }, [campaignDetail.id , jobDetail.id]);
 
   const data = [
     { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
@@ -36,30 +68,29 @@ const HRCampaignsDetails = () => {
   ];
 
   const dataReport = [
-    { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' },
-    { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
-    { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
-    { id: 4, name: "Tâm",  Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' }
+    { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
+    { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
+    { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
+    { id: 4, name: "Tâm", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' }
   ];
 
-
-  const handleOpenDetailModal = (record) => {
-    // Handle open detail modal logic
+  const handleOpenDetailModal = (item) => {
+    navigate(`/${localStorage.getItem('role')}/UserDetailsRole/${item.id}`, { state: { item } });
   };
-
   const handleDeleteResource = (id) => {
     // Handle delete resource logic
   };
+
   useEffect(() => {
     if (jobDetail?.trainingPrograms) {
       setTraining(jobDetail.trainingPrograms);
     }
   }, [jobDetail]);
 
+  const handleAddMentorJobCampaign = (jobDetail,campaignDetail) => {
+    navigate('/internshipcoordinators/MentorList',{state:{jobDetail,campaignDetail}});
+  };
 
-  const handleAddMentorJobCampaign =()=>{
-    navigate('/internshipcoordinators/MentorList')
-  }
   const handleDeleteTraining = async (jobId, trainingProgramId) => {
     try {
       const dataDeleteTraining = {
@@ -71,43 +102,50 @@ const HRCampaignsDetails = () => {
       message.success("Training program deleted successfully");
       setTraining((prev) => prev.filter(resource => resource.id !== trainingProgramId));
     } catch (error) {
-      message.error("Error Training is already deleting training program: " );
+      message.error("Error Training is already deleting training program: ");
       console.error("Error deleting training program:", error);
     }
   };
 
+  const handleNavigateReport = (record) => {
+    navigate(`/internshipcoordinators/markReport/${record.id}`, { state: { record } });
+  };
 
-const   handleNavigateReport =(record)=>{
-  navigate(`/internshipcoordinators/markReport/${record.id}`,{state:{record}})
-}
-const handleTrainingDetails = (item) => {
-  navigate(`/${userRole}/TrainingProgramsofjob/${item.id}`, {
-    state: { item },
-  });
-};
-const handleAddTrainingProgram = (item) => {
-  navigate(`/${userRole}/ListTraining/${item.id}`, { state: { item } });
-};
+  const handleTrainingDetails = (item) => {
+    navigate(`/${userRole}/TrainingProgramsofjob/${item.id}`, {
+      state: { item },
+    });
+  };
+
+  const handleAddTrainingProgram = (item) => {
+    navigate(`/${userRole}/ListTraining/${item.id}`, { state: { item } });
+  };
 
   const menu = (record) => (
     <Menu>
       <Menu.Item key="1">
         <Button onClick={() => handleOpenDetailModal(record)}>View</Button>
       </Menu.Item>
-      <Menu.Item key="2">
+      {/* <Menu.Item key="2">
         <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
-      </Menu.Item>
-      <Menu.Item key="3">
+      </Menu.Item> */}
+      {/* <Menu.Item key="3">
         <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
 
   const columns = [
-    { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
+    { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
     { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
-    { title: "Education", dataIndex: "education", key: "education", responsive: ['md'] },
+    { 
+      title: "Role", 
+      dataIndex: "role", 
+      key: "role", 
+      responsive: ['md'],
+      render: (key) => <span><strong>{userRoles[key]}</strong></span>
+    },
     {
       title: "Actions", key: "actions", responsive: ['md'], render: (text, record) => (
         <Space size="middle">
@@ -116,7 +154,7 @@ const handleAddTrainingProgram = (item) => {
               More <DownOutlined />
             </Button>
           </Dropdown>
-          <Button onClick={()=>{handleNavigateReport(record)}}>View Report</Button>
+          <Button onClick={() => { handleNavigateReport(record) }}>View Report</Button>
         </Space>
       ),
     },
@@ -126,15 +164,13 @@ const handleAddTrainingProgram = (item) => {
     { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
     { title: "Logical thinking", dataIndex: "Logicalthinking", key: "Logicalthinking", responsive: ['md'] },
     { title: "Attitude", dataIndex: "attitude", key: "attitude", responsive: ['md'] },
-    { title: "skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
+    { title: "Skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
     { title: "Total", dataIndex: "total", key: "total", responsive: ['md'] },
-   
   ];
-
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-    <div className=" w-full bg-white p-8 shadow-lg rounded-lg">
+      <div className="w-full bg-white p-8 shadow-lg rounded-lg">
         <div className="flex mb-8">
           <Image
             width={250}
@@ -145,9 +181,7 @@ const handleAddTrainingProgram = (item) => {
           <div className="ml-8">
             <Title level={2}>{jobDetail.name}</Title>
             <div className="flex mt-3">
-            
               <div>Duration :</div>
-         
               <Tag className="ml-3" color="#87d068">
                 {jobDetail.duration} months
               </Tag>
@@ -157,7 +191,7 @@ const handleAddTrainingProgram = (item) => {
               <div className="ml-3 text-red-500">{moment(jobDetail.startDate).format('DD-MM-YYYY')}</div>
             </div>
             <div className="flex mt-3">
-              <div>location: </div>
+              <div>Location: </div>
               <div className="ml-3 text-red-500">Thành Phố Hồ Chí Minh</div>
             </div>
           </div>
@@ -186,25 +220,25 @@ const handleAddTrainingProgram = (item) => {
                 </ul>
               </Paragraph>
             </TabPane>
-            <TabPane tab="Student List in jobs" key="2">
+            <TabPane tab="Student List in Jobs" key="2">
               <Layout>
-                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" ,height:'100px'}}>
+                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0", height: '100px' }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
-                    <div style={{gap:"100px"}}>
-                    <Button  style={{marginRight:"20px"}}  type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
-                      Assign intern to Manage this class
-                    </Button>
-                    <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
-                      Assign mentor to Manage this class
-                    </Button>
+                    <div style={{ gap: "20px" }}>
+                      <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>
+                        Assign Intern to Manage this Class
+                      </Button>
+                      <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>
+                        Assign Mentor to Manage this Class
+                      </Button>
                     </div>
                   </div>
                 </Header>
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
                   <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={user}
                     rowKey="id"
                     style={{ marginTop: "20px" }}
                     pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
@@ -212,21 +246,22 @@ const handleAddTrainingProgram = (item) => {
                 </Content>
               </Layout>
             </TabPane>
-            {/* <TabPane tab="Training Program Lists in jobs" key="3">
+            {/* Uncomment and modify the following TabPane if needed
+            <TabPane tab="Training Program Lists in Jobs" key="3">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student Report List</Title>
                     <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
-                      Assign mentor to Manage this class
+                      Assign Mentor to Manage this Class
                     </Button>
-                        <ButtonComponent
-                          styleButton={{ background: "#06701c", border: "none" }}
-                          styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                          size="middle"
-                          textbutton="Add training program"
-                          onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(jobDetail); }}
-                        />
+                    <ButtonComponent
+                      styleButton={{ background: "#06701c", border: "none" }}
+                      styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                      size="middle"
+                      textbutton="Add Training Program"
+                      onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(jobDetail); }}
+                    />
                   </div>
                 </Header>
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
@@ -237,53 +272,48 @@ const handleAddTrainingProgram = (item) => {
                     style={{ marginTop: "20px" }}
                     pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
                   />
-                 
-                  <Row gutter={[16,16]} >
-                    {training.map((trainingProgram)=>(
-                        <Col key={trainingProgram.id} xs={24} sm={12} md={8}>
-                                 <Card
-                            hoverable
-                            className="shadow-lg"
-                            style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
-                            actions={[
-                              <Button
-                                onClick={(e) => { e.stopPropagation(); handleDeleteTraining(jobDetail.id, trainingProgram.id); }}
-                                style={{ width: 'fit-content' }}
-                                type="danger"
-                              >
-                                Delete
-                              </Button>
-                            ]}
-                          >
-                            <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              Training Program: {trainingProgram.name}
-                            </Title>
-                            <Space direction="vertical">
-                              <Text>
-                                <strong>Duration:</strong> {trainingProgram.duration} months
-                              </Text>
-                              <Text
-                                style={{ width: "fit-content", cursor: 'pointer', color: hovered === trainingProgram.id ? 'blue' : 'black' }}
-                                onClick={(e) => { e.stopPropagation(); handleTrainingDetails(trainingProgram); }}
-                                onMouseEnter={() => setHovered(trainingProgram.id)}
-                                onMouseLeave={() => setHovered(null)}
-                              >
-                                View Details {'-->'}
-                              </Text>
-                            </Space>
-                          </Card>
-
-
-                        </Col>
-
-
-
+                  <Row gutter={[16, 16]}>
+                    {training.map((trainingProgram) => (
+                      <Col key={trainingProgram.id} xs={24} sm={12} md={8}>
+                        <Card
+                          hoverable
+                          className="shadow-lg"
+                          style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
+                          actions={[
+                            <Button
+                              onClick={(e) => { e.stopPropagation(); handleDeleteTraining(jobDetail.id, trainingProgram.id); }}
+                              style={{ width: 'fit-content' }}
+                              type="danger"
+                            >
+                              Delete
+                            </Button>
+                          ]}
+                        >
+                          <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            Training Program: {trainingProgram.name}
+                          </Title>
+                          <Space direction="vertical">
+                            <Text>
+                              <strong>Duration:</strong> {trainingProgram.duration} months
+                            </Text>
+                            <Text
+                              style={{ width: "fit-content", cursor: 'pointer', color: hovered === trainingProgram.id ? 'blue' : 'black' }}
+                              onClick={(e) => { e.stopPropagation(); handleTrainingDetails(trainingProgram); }}
+                              onMouseEnter={() => setHovered(trainingProgram.id)}
+                              onMouseLeave={() => setHovered(null)}
+                            >
+                              View Details {'-->'}
+                            </Text>
+                          </Space>
+                        </Card>
+                      </Col>
                     ))}
                   </Row>
                 </Content>
               </Layout>
-            </TabPane> */}
-          </Tabs> 
+            </TabPane>
+            */}
+          </Tabs>
         )}
 
         {userRole === "hrmanager" && (

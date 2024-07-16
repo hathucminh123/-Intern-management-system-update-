@@ -1,37 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import * as User from '../../../service/authService';
 
 const ListUser = () => {
   const { Header, Content } = Layout;
   const { Title } = Typography;
   const navigate = useNavigate();
   const userRole = localStorage.getItem('role');
+  const [users, setUsers] = useState([]);
 
-  // const handleOpenDetailModal = (item) => {
-  //   if (item.role === "Intern") {
-  //   navigate(`/${userRole}/UserDetails/${item.id}`, { state: { item } });
-  //   }else{
-  //   navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
-  //   }
-  // };
+  const fetchUsers = async () => {
+    try {
+      const res = await User.fetchUser();
+      setUsers(res.events);
+    } catch (error) {
+      message.error('Fetch User Error: ' + error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleOpenDetailModal = (item) => {
-   
     navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
-   
   };
 
-  const handleDeleteResource = (id) => {
-    message.info(`Delete User ID: ${id}`);
+  const handleDeleteUser = async (id) => {
+    try {
+      await User.deleteUser(id);
+      message.success('User deleted successfully');
+      setUsers(users.filter(user => user.id !== id));
+    } catch (error) {
+      message.error('Delete User Error: ' + error.message);
+    }
   };
 
-  const handleAddTrainingProgram = (record) => {
-    message.info(`Add to Training Program: ${record.name}`);
-  };
-
-  const handleOpenDetailModall = (item) => {
+  const handleOpenEditModal = (item) => {
     if (item.role === "Intern") {
       navigate(`/${userRole}/EditUserIntern/${item.id}`, { state: { item } });
     } else {
@@ -45,46 +52,19 @@ const ListUser = () => {
         <Button type="text" onClick={() => handleOpenDetailModal(record)}>View</Button>
       </Menu.Item>
       <Menu.Item key="2">
-        <Button type="text" onClick={() => handleOpenDetailModall(record)}>Edit</Button>
+        <Button type="text" onClick={() => handleOpenEditModal(record)}>Edit</Button>
       </Menu.Item>
       <Menu.Item key="3">
-        <Button type="text" onClick={() => handleDeleteResource(record.id)}>Delete</Button>
+        <Button type="text" onClick={() => handleDeleteUser(record.id)}>Delete</Button>
       </Menu.Item>
     </Menu>
   );
 
-  const data = [
-    {
-      id: 1,
-      name: 'Hà Thúc Minh',
-      email: 'minhhtse150913@fpt.edu.vn',
-      role: 'HRManager',
-    },
-    {
-      id: 2,
-      name: 'Tâm',
-      email: 'minhhtse150913@fpt.edu.vn',
-      role: 'internshipcoordinators',
-    },
-    {
-      id: 3,
-      name: 'Hiệp',
-      email: 'minhhtse150913@fpt.edu.vn',
-      role: 'Mentor',
-    },
-    {
-      id: 4,
-      name: 'Trí',
-      email: 'minhhtse150913@fpt.edu.vn',
-      role: 'Intern',
-    },
-  ];
-
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'User Name',
+      dataIndex: 'userName',
+      key: 'userName',
       responsive: ['md'],
     },
     {
@@ -98,6 +78,15 @@ const ListUser = () => {
       dataIndex: 'role',
       key: 'role',
       responsive: ['md'],
+      render: (text) => (
+        <strong>
+          {text === 0 && 'Intern'}
+          {text === 1 && 'Mentor'}
+          {text === 2 && 'Internship Coordinators'}
+          {text === 3 && 'HR Manager'}
+          {text === 4 && 'Admin'}
+        </strong>
+      ),
     },
     {
       title: 'Action',
@@ -122,11 +111,12 @@ const ListUser = () => {
         style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0', padding: '0 20px' }}
       >
         <Title level={3} style={{ margin: 0 }}>User List</Title>
-        {/* <Button type="primary" onClick={() => message.info('Create User clicked')}>Create User</Button> */}
+        {/* Uncomment and modify the following line if needed */}
+        {/* <Button type="primary" onClick={() => navigate(`/${userRole}/CreateUser`)}>Create User</Button> */}
       </Header>
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5' }}>
-        <div className="">
-          <Table dataSource={data} columns={columns} pagination={{ pageSize: 5 }} />
+        <div>
+          <Table dataSource={users} columns={columns} pagination={{ pageSize: 5 }} rowKey="id" />
         </div>
       </Content>
     </Layout>

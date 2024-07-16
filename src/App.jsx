@@ -67,6 +67,7 @@ import UserDetailss from "./components/MentorComponent/UserDetails";
 import GuessJobDetailsComponent from "./components/GuessComponent/GuessJobDetailsComponent/GuessJobDetailsComponent";
 import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrainingDetails";
 import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
+import UserReportView from "./components/MentorComponent/markReportDetails";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -102,7 +103,8 @@ function App() {
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="markReport/:id" element={< KPIReportDetails />} />
-              <Route path="UserDetailsRole/:id" element={<UserDetailss />} />
+              <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
+              <Route path="kpiReport/:id" element={<UserReportView />} />
 
 
 
@@ -164,7 +166,7 @@ function App() {
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="MentorList" element={<MentorList />} />
-              <Route path="markReport/:id" element={< KPIReportDetails />} />
+              <Route path="markReport/:id" element={<UserReportView />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
 
 

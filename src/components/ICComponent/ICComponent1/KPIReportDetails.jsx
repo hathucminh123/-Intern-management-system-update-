@@ -1,81 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Col, Card, Input, Collapse, Table, Space, Dropdown, Menu, Button } from 'antd';
-
-const { Header, Content } = Layout;
-const { Search } = Input;
-const { Panel } = Collapse;
-import * as KPI from "../../../service/KPIService";
-import * as Training  from "../../../service/TrainingPrograms"
+import { Layout, Row, Col, Card, Table, Space, Dropdown, Menu, Button, message, Collapse, Input, Form } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
-import DetailKPIModal from '../../MentorComponent/DetailKPIModal';
-const KPIReportDetails = () => {
+import * as KPI from '../../../service/KPIService';
+import * as Training from '../../../service/TrainingPrograms';
+import * as User from '../../../service/User'
 
+const { Header, Content } = Layout;
+
+const KPIReportDetails = () => {
   const { state } = useLocation();
-  const Details = state?.record
-  const [resource, setResource] = useState([]);
-  const [training,setTraining]=useState([])
-  const [kpis, setKpis] = useState([]);
-  console.log('dassad', Details)
-  const [selectedKPI, setSelectedKPI] = useState(null);
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const userRole = localStorage.getItem('role')
-   console.log("sadsad",training)
-   const fetchAllTraining =async()=>{
-    try{
+  const Details = state?.record;
+  const [training, setTraining] = useState([]);
+  
+  const [form] = Form.useForm();
+
+  const userRole = localStorage.getItem('role');
+
+  const fetchAllTraining = async () => {
+    try {
       const res = await Training.fetchTraining();
       setTraining(res.events);
-     
-
-    }catch(error){
-      message.error("Error fetching Training" + error.message)
-    }
-   }
-
-  
-
-   useEffect(()=>{
-    fetchAllTraining();
-   },[])
-
-
-  const fetchAllKPI = async () => {
-    try {
-      const res = await KPI.fetchKPI();
-      setResource(res.events);
     } catch (error) {
-      message.error("Error fetching content: " + error.message);
+      message.error('Error fetching Training: ' + error.message);
     }
   };
 
-
-
-
   useEffect(() => {
-    fetchAllKPI();
+    fetchAllTraining();
   }, []);
 
   // const handleUpdateTask = (updatedTask) => {
-  //   setResource((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
+  //   setTraining((prev) =>
+  //     prev.map((item) =>
+  //       item.id === updatedTask.programId
+  //         ? {
+  //             ...item,
+  //             kpIs: item.kpIs.map((kpi) =>
+  //               kpi.id === updatedTask.userResultDetails[0].kpiId
+  //                 ? { ...kpi, value: updatedTask.userResultDetails[0].value }
+  //                 : kpi
+  //             ),
+  //           }
+  //         : item
+  //     )
+  //   );
   // };
 
-  const handleUpdateTask = (updatedTask) => {
-    setTraining((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
-  };
-
-  const handleOpenDetailKPIModal = (kpi) => {
-    setSelectedKPI(kpi);
-    setOpenDetailModal(true);
-  };
   const handleDeleteKPIS = async (id) => {
     try {
       await KPI.deleteKPI(id);
-      message.success("Delete complete");
-      setResource((prev) => prev.filter(item => item.id !== id));
+      message.success('Delete complete');
+      setTraining((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
-      message.error("Error deleting KPI " + error.message);
+      message.error('Error deleting KPI: ' + error.message);
     }
   };
+
   const kpiMenu = (record) => (
     <Menu>
       <Menu.Item key="1">
@@ -86,21 +67,6 @@ const KPIReportDetails = () => {
       </Menu.Item>
     </Menu>
   );
-  const calculateTotal = (items) => {
-    const totalWeights = items.reduce((total, item) => {
-      return total + parseFloat(item.type);
-    }, 0);
-
-    if (totalWeights !== 100) {
-      return null;
-    }
-
-    return items.reduce((sum, item) => {
-      const weight = parseFloat(item.type) / 100;
-      const value = parseFloat(item.value);
-      return sum + (weight * value);
-    }, 0).toFixed(2);
-  };
 
   const kpiColumns = [
     {
@@ -110,25 +76,23 @@ const KPIReportDetails = () => {
     },
     {
       title: 'Grade Item',
-      dataIndex: 'descition',
-      key: 'description',
+      dataIndex: 'type',
+      key: 'type',
       render: (text, record) => (
         <>
-          <div>{record.descition}</div>
+          <div>{record.type}</div>
           <div><strong>Total</strong></div>
         </>
       ),
     },
     {
       title: 'Weight',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'weight',
+      key: 'weight',
       render: (text, record) => (
         <>
-          {console.log("concac1", record)}
-
-          <div>{record.type}</div>
-          <div><strong> {parseFloat(record.type)}%</strong></div>
+          <div>{record.weight}</div>
+          <div><strong>{parseFloat(record.weight)}%</strong></div>
         </>
       ),
     },
@@ -137,148 +101,89 @@ const KPIReportDetails = () => {
       dataIndex: 'value',
       key: 'value',
       render: (text, record) => (
-        <>
-          <div>{record.value}</div>
-        </>
+        <Form.Item
+          name={['kpis', record.id, 'value']}
+          rules={[{ required: true, message: 'Please enter the value' }]}
+        >
+          <Input defaultValue={record.value} />
+        </Form.Item>
       ),
     },
-
-
   ];
-  if (userRole === "internshipcoordinators" || userRole === "mentor") {
-    kpiColumns.push({
-      title: 'Actions',
-      key: 'actions',
-      render: (text, record) => (
-        <Space size="middle">
-          <Dropdown overlay={kpiMenu(record)}>
-            <Button>
-              More <DownOutlined />
-            </Button>
-          </Dropdown>
-        </Space>
-      ),
-    });
-  }
+
+  // if (userRole === 'internshipcoordinators' || userRole === 'mentor') {
+  //   kpiColumns.push({
+  //     title: 'Actions',
+  //     key: 'actions',
+  //     render: (text, record) => (
+  //       <Space size="middle">
+  //         <Dropdown overlay={kpiMenu(record)}>
+  //           <Button>
+  //             More <DownOutlined />
+  //           </Button>
+  //         </Dropdown>
+  //       </Space>
+  //     ),
+  //   });
+  // }
+
+  const handlePostTask = async (training) => {
+    try {
+      const values = await form.validateFields();
+      const updatedKpis = training.kpIs.map((kpi) => ({
+        kpiId: kpi.id,
+        value: values.kpis[kpi.id].value,
+      }));
+
+      const newReport = {
+        userId: Details.id,
+        programId: training.id,
+        userResultDetails: updatedKpis,
+      };
+
+      await User.PostReportStudent(newReport);
+
+      message.success('KPI updated successfully!');
+      fetchAllTraining();
+    } catch (error) {
+      message.error('Error updating KPI: ' + error.message);
+    }
+  };
 
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Student report  name:  <strong> {Details.name}</strong>
+        Student report name: <strong>{Details.userName}</strong>
       </Header>
       <Content style={{ padding: '20px' }}>
-        {/* <Search  placeholder="Search campaigns" enterButton style={{ marginBottom: '20px' }} /> */}
-        
-        <Row gutter={[16,16]}>
-        {training.map((training)=>(
+        <Row gutter={[16, 16]}>
+          {training.map((training) => (
             <Col key={training.id} span={12}>
-              <Collapse
-               >
-              <Panel
-               header={`${training.name} (${training.duration} months)`}
-               key={training.id}
-              >
-                <Card>
-                <Table
-          bordered
-          pagination={false}
-          columns={kpiColumns}
-          dataSource={training.kpIs}
-          rowKey="id"
-
-        //    summary={() => {
-        //   const total = calculateTotal(training.kpIs || []);
-        //   const rating = total >= 5 ? 'Passed' : 'Failed';
-        //   const ratingStyle = {
-        //     backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
-        //     color: rating === 'Passed' ? '#155724' : '#721c24',
-        //     fontWeight: 'bold',
-        //   };
-        // return (
-        //     <>
-        //         <Table.Summary.Row>
-        //             <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-        //             <Table.Summary.Cell>
-        //                 <strong >{total !== null ? total : <span style={{color:'red'}}>'Weights do not add up to 100%' </span> }</strong>
-        //             </Table.Summary.Cell>
-        //         </Table.Summary.Row>
-        //         {total !== null && (
-        //             <Table.Summary.Row>
-        //                 <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-        //                 <Table.Summary.Cell>
-        //                     <span style={ratingStyle}>{rating}</span>
-        //                 </Table.Summary.Cell>
-        //             </Table.Summary.Row>
-        //         )}
-        //     </>
-        // );
-        // }}
-          />
-
-
-                    
-                </Card>
-
-              </Panel>
-              
-              
+              <Collapse>
+                <Collapse.Panel
+                  header={`${training.name} (${training.duration} months)`}
+                  key={training.id}
+                >
+                  <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                    <Form form={form} layout="vertical" initialValues={{ kpis: training.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
+                      <Table
+                        bordered
+                        pagination={false}
+                        columns={kpiColumns}
+                        dataSource={training.kpIs}
+                        rowKey="id"
+                        style={{ minWidth: '600px' }}
+                      />
+                      <Button type="primary" onClick={() => handlePostTask(training)}>
+                        Post Task
+                      </Button>
+                    </Form>
+                  </Card>
+                </Collapse.Panel>
               </Collapse>
-         
-         
-                 </Col>
-
-
-        ))} 
-     
-
-
+            </Col>
+          ))}
         </Row>
-
-
-        {/* <Table
-          bordered
-          pagination={false}
-          columns={kpiColumns}
-          dataSource={resource}
-          rowKey="id"
-       
-        summary={() => {
-          const total = calculateTotal(resource || []);
-          const rating = total >= 5 ? 'Passed' : 'Failed';
-          const ratingStyle = {
-            backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
-            color: rating === 'Passed' ? '#155724' : '#721c24',
-            fontWeight: 'bold',
-          };
-        return (
-            <>
-                <Table.Summary.Row>
-                    <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-                    <Table.Summary.Cell>
-                        <strong >{total !== null ? total : <span style={{color:'red'}}>'Weights do not add up to 100%' </span> }</strong>
-                    </Table.Summary.Cell>
-                </Table.Summary.Row>
-                {total !== null && (
-                    <Table.Summary.Row>
-                        <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-                        <Table.Summary.Cell>
-                            <span style={ratingStyle}>{rating}</span>
-                        </Table.Summary.Cell>
-                    </Table.Summary.Row>
-                )}
-            </>
-        );
-        }}
-        /> */}
-        {selectedKPI && (
-          <DetailKPIModal
-            isVisible={openDetailModal}
-            onClose={() => setOpenDetailModal(false)}
-            task={selectedKPI}
-            onUpdateTask={handleUpdateTask}
-            fetchAllTraining={fetchAllTraining}
-          />
-        )}
       </Content>
     </Layout>
   );

@@ -85,22 +85,22 @@ const KPIList = () => {
     },
     {
       title: 'Grade Item',
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'type',
+      key: 'type',
       render: (text, record) => (
         <>
-          <div>{record.descition}</div>
+          <div>{record.type}</div>
           {/* <div><strong>Total</strong></div> */}
         </>
       ),
     },
     {
       title: 'Weight',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'weight',
+      key: 'weight',
       render: (text, record) => (
         <>
-          <div>{record.type}</div>
+          <div>{record.weight}% </div>
           {/* <div><strong>{record.type}</strong></div> */}
         </>
       ),

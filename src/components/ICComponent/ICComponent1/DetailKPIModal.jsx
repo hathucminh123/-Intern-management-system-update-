@@ -69,14 +69,21 @@ const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask }) => {
           <Input />
         </Form.Item> */}
         <Form.Item
-          name="descition"
-          label="Description"
+          name="type"
+          label="Grade Item"
           rules={[{ required: true, message: 'Please enter the description' }]}
         >
           <Input />
         </Form.Item>
+        {/* <Form.Item
+          name="descition"
+          label="Grade Item"
+          rules={[{ required: true, message: 'Please enter the description' }]}
+        >
+          <Input />
+        </Form.Item> */}
         <Form.Item
-          name="type"
+          name="weight"
           label="Weight"
           rules={[{ required: true, message: 'Please enter the weight(%)' }]}
         >

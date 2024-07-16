@@ -2,14 +2,17 @@ import React, { useState, useRef } from 'react';
 import {
   Card, Row, Col, Typography, Layout, Space, Tag, Table, Button,
   Dropdown, Menu, Form, Modal, Input, Upload, Popover, Checkbox, Avatar,
-  DatePicker,Divider
+  DatePicker, Divider, message
 } from "antd";
 import "tailwindcss/tailwind.css";
 import { useLocation } from "react-router-dom";
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { DownOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase/config';
 import ReactQuill from 'react-quill';
 import moment from 'moment';
+import * as Assessment from '../../service/Assessment'
 
 const { Title, Text, Paragraph } = Typography;
 const { Header, Content } = Layout;
@@ -24,9 +27,10 @@ const TaskDetails = () => {
   const taskDetail = state?.task;
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
+  const [cvFile, setCvFile] = useState(null);
+  const [submissions, setSubmissions] = useState(taskDetail.assessmentSubmitions || []);
 
-  console.log("asdasd",taskDetail);
-  const userRole =localStorage.getItem('role')
+  const userRole = localStorage.getItem('role');
 
   const handleDescription = (value) => {
     setDescription(value);
@@ -46,39 +50,60 @@ const TaskDetails = () => {
       ? (<Tag color='geekblue'>{taskDetail.status.toUpperCase()}</Tag>)
       : (<Tag color='blue'>{taskDetail.status.toUpperCase()}</Tag>);
 
-  const taskData = [
-    { key: 1, filePath: "Tải file bài", description: "minhhtse150913@fpt.edu.vn", when: "yesterday" },
-    { key: 2, filePath: "Tải file bài", description: "minhhtse150913@fpt.edu.vn", when: "yesterday" },
-    { key: 3, filePath: "Tải file bài", description: "minhhtse150913@fpt.edu.vn", when: "JUL7" },
-  ];
+  const handleBeforeUpload = (file) => {
+    setCvFile(file);
+    return false;
+  };
 
-  const menu = (record) => (
-    <Menu>
-      <Menu.Item key="1">
-        <Button onClick={() => handleDetails(record)}>View/Edit</Button>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <Button onClick={() => handleDeleteTask(record.key)}>Delete</Button>
-      </Menu.Item>
-      {record.completed && (
-        <Menu.Item key="3">
-          <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>
-        </Menu.Item>
-      )}
-    </Menu>
-  );
+  const handleFormSubmit = async (values) => {
+    try {
+      if (!cvFile) {
+        message.error('Please upload your file');
+        return;
+      }
 
-  const handleUpload = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
+      // Upload file to Firebase Storage
+      const fileRef = ref(storage, cvFile.name);
+      await uploadBytes(fileRef, cvFile);
+      const fileUrl = await getDownloadURL(fileRef);
+
+      // Create a new assessment submission
+      const submission = {
+        name: values.name,
+        description: values.description,
+        submitDate: values.submitDate.toISOString(),
+        filePath: fileUrl,
+        assessmentId: taskDetail.id
+      };
+
+      await Assessment.InternAddAssessment(submission);
+
+      message.success('Form submitted successfully!');
+      setSubmissions([...submissions, submission]);
+      form.resetFields();
+      setCvFile(null);
+      setIsModalVisible(false);
+    } catch (error) {
+      message.error('Error submitting form. Please try again.');
+      console.error('Error submitting form:', error);
+    }
+  };
+
+  const handleDeleteTask = async (id) => {
+    try {
+      await Assessment.InternDeleteAssessment(id);
+      setSubmissions(submissions.filter(submission => submission.id !== id));
+      message.success('Task deleted successfully');
+    } catch (error) {
+      message.error('Failed to delete task', error.message);
+    }
   };
 
   const columns = [
     {
-      title: ' Name',
-      dataIndex: 'filePath',
-      key: 'filePath',
-      render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Description',
@@ -86,34 +111,17 @@ const TaskDetails = () => {
       key: 'description',
     },
     {
-      title: 'When',
-      dataIndex: 'when',
-      key: 'when',
+      title: 'File',
+      dataIndex: 'filePath',
+      key: 'filePath',
+      render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
     },
-    // {
-    //   title: 'File Bài',
-    //   dataIndex: 'cvPath',
-    //   key: 'cvPath',
-    //   render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
-    // },
-    // {
-    //   title: 'Status',
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   render: (text, record) => (
-    //     <span>
-    //       {record.status.toUpperCase() === "DONE" && (
-    //         <Tag color='green'>{record.status.toUpperCase()}</Tag>
-    //       )}
-    //       {record.status.toUpperCase() === "ON-PROGRESS" && (
-    //         <Tag color='geekblue'>{record.status.toUpperCase()}</Tag>
-    //       )}
-    //       {record.status.toUpperCase() === "TODOS" && (
-    //         <Tag color='blue'>{record.status.toUpperCase()}</Tag>
-    //       )}
-    //     </span>
-    //   ),
-    // },
+    {
+      title: 'When',
+      dataIndex: 'submitDate',
+      key: 'submitDate',
+      render: (text) => moment(text).format('DD-MM-YYYY HH:mm'),
+    },
     {
       title: 'Action',
       key: 'action',
@@ -128,6 +136,14 @@ const TaskDetails = () => {
       ),
     },
   ];
+
+  const menu = (record) => (
+    <Menu>
+      <Menu.Item key="2">
+        <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
+      </Menu.Item>
+    </Menu>
+  );
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -172,12 +188,6 @@ const TaskDetails = () => {
           </Button>
         </Form.Item>
       </Form>
-          {/* <div className="WrapperContentPopup" onClick={() => handleClickNavigate("profile")}>
-        User Information
-      </div>
-      <div className="WrapperContentPopup" onClick={() => handleClickNavigate("logout")}>
-        Logout
-      </div> */}
     </div>
   );
 
@@ -189,101 +199,82 @@ const TaskDetails = () => {
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Space direction='vertical' style={{ width: '100%' }}>
-          <Card
-      style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }}
-      hoverable
-      className="shadow-lg"
-    >
-      <Row justify="space-between" align="top">
-        <Col span={14}>
-          <Space direction="vertical" size="large">
-            <div>
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Task name:
-              </Title>
-              <p><strong>{taskDetail.name}</strong></p>
-            </div>
-            <div>
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Description:
-              </Title>
-              <Paragraph ellipsis={{ rows: 3, expandable: true }}>
-                <div dangerouslySetInnerHTML={{ __html: taskDetail.description }} />
-              </Paragraph>
-            </div>
             <Card
-  hoverable
-  className="shadow-lg"
-  style={{ borderRadius: '8px', height: '230px', width: '500px' }}
->
-  <div style={{ padding: '20px' }}>
-    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-      Owner
-    </Title>
-    <Divider />
-    <Title level={5} style={{ margin: 0 }}>
-      userName:
-    </Title>
-    <Text>{taskDetail.owner.userName}</Text>
-    <Title level={5} style={{ margin: 0 }}>
-      Email:
-    </Title>
-    <Text>{taskDetail.owner.email}</Text>
-  </div>
-</Card>
-          </Space>
-        </Col>
-        <Col span={8}>
-          <Space direction="vertical" size="large">
-            <div>
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Start Date
-              </Title>
-              <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
-            </div>
-            <div>
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                End Date
-              </Title>
-              <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
-            </div>
-            <div>
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Status
-              </Title>
-              <p><strong>{ColorStatus}</strong></p>
-            </div>
-            <div>
-              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                Mentor
-              </Title>
-              <p><strong>Thúc Minh</strong></p>
-            </div>
-          </Space>
-        </Col>
-      </Row>
-    </Card>
+              style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }}
+              hoverable
+              className="shadow-lg"
+            >
+              <Row justify="space-between" align="top">
+                <Col span={14}>
+                  <Space direction="vertical" size="large">
+                    <div>
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Task name:
+                      </Title>
+                      <p><strong>{taskDetail.name}</strong></p>
+                    </div>
+                    <div>
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Description:
+                      </Title>
+                      <Paragraph ellipsis={{ rows: 3, expandable: true }}>
+                        <div dangerouslySetInnerHTML={{ __html: taskDetail.description }} />
+                      </Paragraph>
+                    </div>
+                    <Card
+                      hoverable
+                      className="shadow-lg"
+                      style={{ borderRadius: '8px', height: '230px', width: '500px' }}
+                    >
+                      <div style={{ padding: '20px' }}>
+                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          Owner
+                        </Title>
+                        <Divider />
+                        <Title level={5} style={{ margin: 0 }}>
+                          userName:
+                        </Title>
+                        <Text>{taskDetail.owner.userName}</Text>
+                        <Title level={5} style={{ margin: 0 }}>
+                          Email:
+                        </Title>
+                        <Text>{taskDetail.owner.email}</Text>
+                      </div>
+                    </Card>
+                  </Space>
+                </Col>
+                <Col span={8}>
+                  <Space direction="vertical" size="large">
+                    <div>
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Start Date
+                      </Title>
+                      <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                    </div>
+                    <div>
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        End Date
+                      </Title>
+                      <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                    </div>
+                    <div>
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Status
+                      </Title>
+                      <p><strong>{ColorStatus}</strong></p>
+                    </div>
+                    <div>
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Mentor
+                      </Title>
+                      <p><strong>Thúc Minh</strong></p>
+                    </div>
+                  </Space>
+                </Col>
+              </Row>
+            </Card>
 
             <Row gutter={16} justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
-              {/* <Col span={12}>
-                <Card hoverable className="shadow-lg" style={{ height: "100%" }}>
-                  <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      Owner
-                    </Title>
-                  </Header>
-                  <div style={{ padding: '20px' }}>
-                    <Title level={5} style={{ margin: 0 }}>
-                      userName:
-                    </Title>
-                    <Text>{taskDetail.owner.userName}</Text>
-                    <Title level={5} style={{ margin: 0 }}>
-                      Email:
-                    </Title>
-                    <Text>{taskDetail.owner.email}</Text>
-                  </div>
-                </Card>
-              </Col> */}
               <Col span={24}>
                 <Card hoverable className="shadow-lg">
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -295,50 +286,48 @@ const TaskDetails = () => {
                       </Col>
                       <Col>
                         <Space direction='horizontal'>
-                          {userRole ==='intern' &&(
-                                <ButtonComponent
-                                styleButton={{ background: "#06701c", border: "none" }}
-                                styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                                size="middle"
-                                textbutton="Post Task"
-                                onClick={handlePostTask}
-                              />
+                          {userRole === 'intern' && (
+                            <ButtonComponent
+                              styleButton={{ background: "#06701c", border: "none" }}
+                              styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                              size="middle"
+                              textbutton="Post Task"
+                              onClick={handlePostTask}
+                            />
                           )}
-                      
-                      {userRole ==="mentor" && (
-                         <Popover
-                         content={content}
-                         trigger="click"
-                         open={isOpenPopup}
-                         onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                         getPopupContainer={() => popoverRef.current}
-                       >
-                         <div
-                           ref={popoverRef}
-                           onClick={() => setIsOpenPopup(!isOpenPopup)}
-                           style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                         >
-                           <ButtonComponent
-                             styleButton={{ background: "#06701c", border: "none" }}
-                             styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                             size="middle"
-                             textbutton="Review"
-                           />
-                         </div>
-                       </Popover>
-                      )}
-                         
+                          {userRole === "mentor" && (
+                            <Popover
+                              content={content}
+                              trigger="click"
+                              open={isOpenPopup}
+                              onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                              getPopupContainer={() => popoverRef.current}
+                            >
+                              <div
+                                ref={popoverRef}
+                                onClick={() => setIsOpenPopup(!isOpenPopup)}
+                                style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                              >
+                                <ButtonComponent
+                                  styleButton={{ background: "#06701c", border: "none" }}
+                                  styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                                  size="middle"
+                                  textbutton="Review"
+                                />
+                              </div>
+                            </Popover>
+                          )}
                         </Space>
                       </Col>
                     </Row>
                   </Header>
                   <div style={{ padding: '20px' }}>
-                    <Table dataSource={taskData} columns={columns} pagination={false} />
+                    <Table dataSource={submissions} columns={columns} pagination={false} />
                   </div>
                 </Card>
               </Col>
             </Row>
-
+{/* 
             <Card hoverable className="shadow-lg" style={{ marginBottom: '20px' }}>
               <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                 <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -369,85 +358,91 @@ const TaskDetails = () => {
                   </Button>
                 </Form.Item>
               </Form>
-            </Card>
+            </Card> */}
 
-      <Card style={{ maxWidth: 800, backgroundColor: '#f0f8ff', borderRadius: 8 }} className="shadow-lg">
-      <Row align="middle" gutter={16}>
-        <Col>
-          <Avatar icon={<UserOutlined />} />
-        </Col>
-        <Col flex="auto">
-          <Space direction="vertical">
-            <Space>
-              <Text strong>hathucminh123</Text>
-              <Text type="secondary">commented 12 hours ago</Text>
-            </Space>
-            <Card style={{ backgroundColor: '#e6f7ff', borderRadius: 8 }}>
-              <Space direction="vertical">
-                <Text strong>hathucminh123 left a comment</Text>
-                <Text>sadasdasdasdasd</Text>
-              </Space>
-            </Card>
+            {/* <Card style={{ maxWidth: 800, backgroundColor: '#f0f8ff', borderRadius: 8 }} className="shadow-lg">
+              <Row align="middle" gutter={16}>
+                <Col>
+                  <Avatar icon={<UserOutlined />} />
+                </Col>
+                <Col flex="auto">
+                  <Space direction="vertical">
+                    <Space>
+                      <Text strong>hathucminh123</Text>
+                      <Text type="secondary">commented 12 hours ago</Text>
+                    </Space>
+                    <Card style={{ backgroundColor: '#e6f7ff', borderRadius: 8 }}>
+                      <Space direction="vertical">
+                        <Text strong>hathucminh123 left a comment</Text>
+                        <Text>sadasdasdasdasd</Text>
+                      </Space>
+                    </Card>
+                  </Space>
+                </Col>
+              </Row>
+            </Card> */}
           </Space>
-        </Col>
-      </Row>
-    </Card>
-          </Space>
-
         </div>
 
         <Modal
-      title="Nộp task"
-      open={isModalVisible}
-      onCancel={handleCancel}
-      footer={null}
-      style={{ minWidth: '600px', maxWidth: '90%', top: '20px' }}
-    >
-      <Form form={form} layout="vertical">
-        <Form.Item
-          name="cvUrl"
-          label={
-            <div>
-              <Text strong>Nộp file đính kèm</Text>
-              <div>Bạn chỉ có thể upload 1 file</div>
-            </div>
-          }
-          rules={[{ required: true, message: 'Vui lòng tải lên file của bạn!' }]}
+          title="Nộp task"
+          open={isModalVisible}
+          onCancel={handleCancel}
+          footer={null}
+          style={{ minWidth: '600px', maxWidth: '90%', top: '20px' }}
         >
-          <Upload.Dragger
-            name="files"
-            multiple={false}
-            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-            beforeUpload={handleUpload}
-          >
-            <p className="ant-upload-drag-icon">
-              <UploadOutlined />
-            </p>
-            <p className="ant-upload-text">Kéo thả file vào đây hoặc tải lên</p>
-            <p className="ant-upload-hint">(PDF, DOC, PNG, JPEG)</p>
-          </Upload.Dragger>
-        </Form.Item>
-        <Form.Item
-          name="description"
-          label="Mô tả"
-          rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
-        >
-          <Input placeholder="Nhập mô tả" />
-        </Form.Item>
-        <Form.Item
-          name="date"
-          label="Ngày"
-          rules={[{ required: true, message: "Vui lòng chọn ngày" }]}
-        >
-          <DatePicker style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-            Gửi
-          </Button>
-        </Form.Item>
-      </Form>
-    </Modal>
+          <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
+            <Form.Item
+              name="name"
+              label="Task Name"
+              rules={[{ required: true, message: 'Please enter the task name!' }]}
+            >
+              <Input placeholder="Enter task name" />
+            </Form.Item>
+            <Form.Item
+              name="filePath"
+              label={
+                <div>
+                  <Text strong>Nộp file đính kèm</Text>
+                  <div>Bạn chỉ có thể upload 1 file</div>
+                </div>
+              }
+              rules={[{ required: true, message: 'Vui lòng tải lên file của bạn!' }]}
+            >
+              <Upload.Dragger
+                name="filePath"
+                multiple={false}
+                accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                beforeUpload={handleBeforeUpload}
+              >
+                <p className="ant-upload-drag-icon">
+                  <UploadOutlined />
+                </p>
+                <p className="ant-upload-text">Kéo thả file vào đây hoặc tải lên</p>
+                <p className="ant-upload-hint">(PDF, DOC, PNG, JPEG)</p>
+              </Upload.Dragger>
+            </Form.Item>
+            <Form.Item
+              name="description"
+              label="Mô tả"
+              rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
+            >
+              <Input placeholder="Nhập mô tả" />
+            </Form.Item>
+            <Form.Item
+              name="submitDate"
+              label="Date Submit"
+              rules={[{ required: true, message: "Vui lòng chọn ngày" }]}
+            >
+              <DatePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" style={{ width: '100%' }} />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                Gửi
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </Content>
     </Layout>
   );

@@ -177,9 +177,9 @@ useEffect(() => {
 
   const kpiMenu = (record) => (
     <Menu>
-      <Menu.Item key="1">
+      {/* <Menu.Item key="1">
         <Button onClick={() => handleOpenDetailKPIModal(record)}>View/Edit</Button>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="2">
         <Button onClick={() => handleDeleteKPIS(record.id)}>Delete</Button>
       </Menu.Item>
@@ -254,22 +254,22 @@ useEffect(() => {
     },
     {
       title: 'Grade Item',
-      dataIndex: 'descition',
-      key: 'description',
+      dataIndex: 'type',
+      key: 'type',
       render: (text, record) => (
         <>
-          <div>{record.descition}</div>
+          <div>{record.type}</div>
           {/* <div><strong>Total</strong></div> */}
         </>
       ),
     },
     {
       title: 'Weight',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'weight',
+      key: 'weight',
       render: (text, record) => (
         <>
-          <div>{record.type}</div>
+          <div>{record.weight}%</div>
           {/* <div><strong> {parseFloat(record.type)}%</strong></div> */}
         </>
       ),
