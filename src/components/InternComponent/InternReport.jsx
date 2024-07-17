@@ -147,6 +147,7 @@ console.log('asdasd',reportData)
                       summary={() => {
                         const data = reportData[training.id] || [];
                         const total = data.length > 0 ? data[0].total : null;
+                        const roundedTotal = total !== null ? parseFloat(total).toFixed(2) : null;
                         const rating = total > 5 ? 'Passed' : 'Not Passed';
                         const ratingStyle = {
                           backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
@@ -158,10 +159,10 @@ console.log('asdasd',reportData)
                             <Table.Summary.Row>
                               <Table.Summary.Cell colSpan={2}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
                               <Table.Summary.Cell>
-                                <strong>{total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}</strong>
+                                <strong>{roundedTotal !== null ? roundedTotal : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}</strong>
                               </Table.Summary.Cell>
                             </Table.Summary.Row>
-                            {total !== null && (
+                            {roundedTotal !== null && (
                               <Table.Summary.Row>
                                 <Table.Summary.Cell colSpan={2}><strong>STATUS</strong></Table.Summary.Cell>
                                 <Table.Summary.Cell>

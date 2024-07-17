@@ -48,11 +48,11 @@ const TaskPerformance = () => {
         <TaskCompleted tasks={tasks} onAddTask={handleAddTask} onUpdateTask={handleUpdateTask} fetchAssessment={fetchAssessment} />
       ),
     },
-    {
-      key: '2',
-      label: 'Task Board',
-      children: <Boards />,
-    },
+    // {
+    //   key: '2',
+    //   label: 'Task Board',
+    //   children: <Boards />,
+    // },
   ];
 
   return (

@@ -179,14 +179,14 @@ const JobsIC = () => {
                   </Title>
                   <p><strong>Duration:</strong> {item.duration} months</p>
                   <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
-                  <Text
+                  <Button
                     style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
                     onClick={(e) => { e.stopPropagation(); handleDetails(item); }}
                     onMouseEnter={() => setHovered(item.id)}
                     onMouseLeave={() => setHovered(null)}
                   >
                     View Details {'-->'}
-                  </Text>
+                  </Button>
                   {userRole === "internshipcoordinators" && selectJob === item.id && (
                     <div className="mt-4">
                       <Space size={100}>

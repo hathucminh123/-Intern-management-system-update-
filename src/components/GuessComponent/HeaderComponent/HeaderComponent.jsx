@@ -17,10 +17,10 @@ const HeaderComponent = () => {
   return (
     <div className="flex items-center justify-center bg-sub-header text-neutral-6 h-20 px-4">
       <div className="flex w-full max-w-[1200px] items-center justify-between">
-        <a href="/guest">
+        {/* <a href="/guest">
           <img alt="Intern management" className="h-10 w-auto" src={image1} />
-        </a>
-        <div className="hidden md:flex">
+        </a> */}
+        {/* <div className="hidden md:flex">
           <a href="/guest">
             <ButtonComponent
               size={40}
@@ -36,7 +36,7 @@ const HeaderComponent = () => {
               styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
             />
           </a>
-        </div>
+        </div> */}
         <div className="md:hidden">
           <Dropdown overlay={menu} trigger={['click']}>
             <Button icon={<MenuOutlined />} />

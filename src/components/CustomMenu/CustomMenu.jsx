@@ -245,12 +245,12 @@ const CustomMenu = ({ userRole }) => {
                       <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
               {userRolle == "hrmanager" && (
@@ -273,12 +273,12 @@ const CustomMenu = ({ userRole }) => {
                       <Typography.Text>{userProfile.userName} </Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
               {userRolle == "mentor" && (
@@ -301,12 +301,12 @@ const CustomMenu = ({ userRole }) => {
                       <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
               {userRolle == "intern" && (
@@ -329,12 +329,12 @@ const CustomMenu = ({ userRole }) => {
                       <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
 

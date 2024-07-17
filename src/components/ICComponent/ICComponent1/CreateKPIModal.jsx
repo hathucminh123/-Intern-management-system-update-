@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import * as KPI from '../../../service/KPIService';
+import { useNavigate } from 'react-router-dom';
 
 const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+const navigate =useNavigate();
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
@@ -22,6 +23,7 @@ const CreateKPIModal = ({ isVisible, onClose, onAddKPI, fetchList }) => {
       onAddKPI(createdKPI);
       form.resetFields();
       fetchList();
+      navigate('/internshipcoordinators/KPIList')
       onClose();
     } catch (error) {
       message.error('Error creating KPI: ' + error.message);

@@ -323,21 +323,21 @@ const TrainingProgramDetail = () => {
     },
   ];
 
-  if ( userRole==="mentor") {
-    Takscolumns.push({
-      title: 'Actions',
-      key: 'actions',
-      render: (text, record) => (
-        <Space size="middle">
-          <Dropdown overlay={TaskMenu(record)}>
-            <Button>
-              More <DownOutlined />
-            </Button>
-          </Dropdown>
-        </Space>
-      ),
-    });
-  }
+  // if ( userRole==="mentor") {
+  //   Takscolumns.push({
+  //     title: 'Actions',
+  //     key: 'actions',
+  //     render: (text, record) => (
+  //       <Space size="middle">
+  //         <Dropdown overlay={TaskMenu(record)}>
+  //           <Button>
+  //             More <DownOutlined />
+  //           </Button>
+  //         </Dropdown>
+  //       </Space>
+  //     ),
+  //   });
+  // }
 
   const handleBeforeUpload = (file) => {
     setCvFile(file);
@@ -481,16 +481,16 @@ const TrainingProgramDetail = () => {
                 </Layout>
               )}
             </TabPane>
-            <TabPane tab="Assessments" key="4">
+            <TabPane tab="Task" key="4">
               {(userRole === "internshipcoordinators" || userRole === "intern" || userRole === "mentor") && (
                 <Layout>
                   <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
                     <Row gutter={500}>
                       <Col>
-                        <Title level={4}>Assessment LIST in {CampaignDetail.name}</Title>
+                        <Title level={4}>Task LIST in {CampaignDetail.name}</Title>
                       </Col>
                       <Col>
-                        {userRole === "mentor" && (
+                        {/* {userRole === "mentor" && (
                           <ButtonComponent
                             styleButton={{ background: "#06701c", border: "none" }}
                             styleTextButton={{ color: "#fff", fontWeight: "bold" }}
@@ -498,7 +498,7 @@ const TrainingProgramDetail = () => {
                             textbutton="Add Assessment"
                             onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
                           />
-                        )}
+                        )} */}
                       </Col>
                     </Row>
                   </Header>

@@ -19,7 +19,7 @@ const GuessDetailPage = () => {
                     >
                         Trang chủ Chương Trình thực tập
                     </span>
-                    {' '} - Chi tiết chương trình thực tập
+                    {/* {' '} - Chi tiết chương trình thực tập */}
                 </h5>
                 <GuessDetailsComponent id={id} />
             </div>

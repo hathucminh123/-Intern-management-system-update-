@@ -87,7 +87,7 @@ const Traininglistt = () => {
 
       await AddTraining.AddKPISNewTraining(newTraining);
       message.success("Training program added successfully");
-      navigate(`/${userRole}/ViewTrainingProgram`)
+      navigate(`/${userRole}/KPIList`)
 
 
     } catch (error) {

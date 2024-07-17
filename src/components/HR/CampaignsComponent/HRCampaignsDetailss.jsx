@@ -260,14 +260,14 @@ const HRCampaignsDetailss = () => {
                          </Title>
                          <p><strong>Duration:</strong> {item.duration} months</p>
                          <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
-                         <Text
+                         <Button
                            style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
                            onClick={(e) => { e.stopPropagation(); handleDetails(item,CampaignDetail); }}
                            onMouseEnter={() => setHovered(item.id)}
                            onMouseLeave={() => setHovered(null)}
                          >
                            View List Intern {'-->'}
-                         </Text>
+                         </Button>
                     {/* {userRole === "internshipcoordinators" && selectJob === item.id && (
                     <div className="mt-4">
                       <Space size={100}>
@@ -362,22 +362,22 @@ const HRCampaignsDetailss = () => {
                   <p><strong>Duration:</strong> {item.duration} months</p>
                   <p><strong>Start Date:</strong> {moment(item.startDate).format('DD-MM-YYYY')}</p>
                   <Space direction="vertical">
-                  <Text
+                  {/* <Text
                     style={{ width: "fit-content", cursor: 'pointer', color: hovered === item.id ? 'blue' : 'black' }}
                     onClick={(e) => { e.stopPropagation(); handleDetails(item,CampaignDetail); }}
                     onMouseEnter={() => setHovered(item.id)}
                     onMouseLeave={() => setHovered(null)}
                   >
                     View Details {'-->'}
-                  </Text>
-                  <Text
+                  </Text> */}
+                  <Button
                     style={{ width: "fit-content", cursor: 'pointer', color: hoveredd === item.id ? 'blue' : 'black' }}
                     onClick={(e) => { e.stopPropagation();  handleViewGuestInfoClick(CampaignDetail, item); }}
                     onMouseEnter={() => setHoveredd(item.id)}
                     onMouseLeave={() => setHoveredd(null)}
                   >
                     View Candidates {'-->'}
-                  </Text>
+                  </Button>
                   </Space>
                 </Card>
               </Col>

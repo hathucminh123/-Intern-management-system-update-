@@ -23,6 +23,8 @@ const InternList = () => {
   const campaignDetail = state?.campaignDetail;
   const [users, setUsers] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState({});
+ 
+
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
@@ -50,7 +52,7 @@ const InternList = () => {
       for (const userId of selectedUserIds) {
         const newUser = {
           userId: userId,
-          campaignId: campaignDetail.id,
+          campaginId: campaignDetail.id,
           jobId: jobDetail.id
         };
         await Userr.AddNewStudentinCampaignJob(newUser);
@@ -61,6 +63,7 @@ const InternList = () => {
       message.error('Add user failed: ' + error.message);
     }
   };
+  console.log('user',checkedKeys)
 
   const handleOpenDetailModal = (item) => {
     navigate(`/${localStorage.getItem('role')}/UserDetailsRole/${item.id}`, { state: { item } });

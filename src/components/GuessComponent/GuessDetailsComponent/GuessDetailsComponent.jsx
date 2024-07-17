@@ -116,7 +116,7 @@ const GuessDetailsComponent = ({ id }) => {
   return (
     <Space className="container" direction="vertical" size="large" style={{ padding: '20px' }}>
       <Card style={{ width: '100%', backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px' }}>
-        <Title level={1} className="customTitle">Tên chiến dịch thực tập: {internship.name}</Title>
+        <Title level={1} className="customTitle">{internship.name}</Title>
         <Text style={{ fontSize: '20px' }}>Những vị trí có thể ứng tuyển trong chiến dịch:</Text>
         <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
           {internship.jobs.map((position, index) => (
@@ -185,7 +185,7 @@ const GuessDetailsComponent = ({ id }) => {
       <div className="flex justify-center w-full mt-20">
         <div className="w-full max-w-6xl">
           <Title level={2} className="text-center font-bold">
-            Tại sao nên chọn <strong style={{ color: 'rgb(0, 164, 153)' }}>Dịch vụ chúng tôi</strong>
+            Tại sao nên chọn <strong style={{ color: 'rgb(0, 164, 153)' }}>chúng tôi</strong>
           </Title>
           <Row gutter={[24, 24]} className="mt-16">
             {[
@@ -217,7 +217,7 @@ const GuessDetailsComponent = ({ id }) => {
             ))}
           </Row>
 
-          <Row gutter={[24, 24]} className="mt-10">
+          {/* <Row gutter={[24, 24]} className="mt-10">
             {[
               { value: '6000+', description: 'CV đã gửi về từ năm 2016' },
               { value: '40+', description: 'Thực tập sinh trở thành thành viên chính thức' },
@@ -230,7 +230,7 @@ const GuessDetailsComponent = ({ id }) => {
                 </Card>
               </Col>
             ))}
-          </Row>
+          </Row> */}
         </div>
       </div>
 
@@ -243,21 +243,23 @@ const GuessDetailsComponent = ({ id }) => {
       <Row gutter={[16, 16]}>
         {internship.jobs.map((list, index) => (
           <Col key={list.id} xs={24} sm={12} md={8}>
-            <Card hoverable className="shadow-lg">
+            <Card hoverable className="shadow-lg"
+              onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list, internship); }}
+            >
               <Image className="rounded-lg mb-3" preview={false} width="100%" height={200} src={list.imagePath} alt={list.name} />
               <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Developer {list.name}
               </Title>
               <p><strong>Duration:</strong> {list.duration} months</p>
               <p><strong>Start Date:</strong> {moment(list.startDate).format('DD-MM-YYYY')}</p>
-              <Text
+              {/* <Text
                 style={{ width: "fit-content", cursor: 'pointer', color: hovered === list.id ? 'blue' : 'black' }}
-                onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list, internship); }}
+              
                 onMouseEnter={() => setHovered(list.id)}
                 onMouseLeave={() => setHovered(null)}
               >
                 View Details {'-->'}
-              </Text>
+              </Text> */}
             </Card>
           </Col>
         ))}
@@ -279,12 +281,15 @@ const GuessDetailsComponent = ({ id }) => {
               <Space direction="horizontal" size={24}>
                 <div>
                   <Title level={3}>{internship.name}</Title>
+                  <div className="mt-4">
+                  <Text strong>Vị trí có thể ứng tuyển trong chiến dịch:</Text>
                   <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
                     {internship.jobs.map((position, index) => (
                       <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
                         Lập trình viên {position.name}
                       </Button>
                     ))}
+                  </div>
                   </div>
                   <div className="flex mt-4">
                     <ClockCircleOutlined />

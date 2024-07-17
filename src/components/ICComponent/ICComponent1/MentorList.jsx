@@ -50,7 +50,7 @@ const MentorList = () => {
       for (const userId of selectedUserIds) {
         const newUser = {
           userId: userId,
-          campaignId: campaignDetail.id,
+          campaginId: campaignDetail.id,
           jobId: jobDetail.id
         };
         await Userr.AddNewStudentinCampaignJob(newUser);

@@ -106,7 +106,7 @@ const GuessJobDetailsComponent = () => {
               <MdGroup style={{ color: 'blue' }} />
               <div>
                 <p><strong>Hoạt động nhóm</strong></p>
-                <p>Professional, dynamic working environment</p>
+                <p>Được đào tạo trong môi trường chuyên nghiệp và năng động</p>
               </div>
             </Space>
           </Card>
@@ -115,7 +115,7 @@ const GuessJobDetailsComponent = () => {
               <CiHeart style={{ color: 'blue' }} />
               <div>
                 <p><strong>Chăm sóc sức khoẻ</strong></p>
-                <p>Health insurance and Social insurance regulated by Vietnam Labor Law</p>
+                <p>Bảo hiểm sức khỏe và  bảo hiểm xã hội</p>
               </div>
             </Space>
           </Card>
@@ -123,8 +123,8 @@ const GuessJobDetailsComponent = () => {
             <Space>
               <MdOutlineMonetizationOn style={{ color: 'blue' }} />
               <div>
-                <p><strong>Thưởng</strong></p>
-                <p>Attractive salary and bonus</p>
+                <p><strong>Trợ cấp</strong></p>
+                <p>2-5 triệu/tháng</p>
               </div>
             </Space>
           </Card>

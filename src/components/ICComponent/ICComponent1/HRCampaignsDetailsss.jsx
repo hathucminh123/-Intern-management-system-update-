@@ -233,7 +233,7 @@ const HRCampaignsDetailsss = () => {
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
                     <div style={{ gap: "20px" }}>
-                      <Button type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail,campaignDetail) }}>
+                      <Button style={{marginRight:'20px'}} type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail,campaignDetail) }}>
                         Assign Intern to Manage this Class
                       </Button>
                       <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>

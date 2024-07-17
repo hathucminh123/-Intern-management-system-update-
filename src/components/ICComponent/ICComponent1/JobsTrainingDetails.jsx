@@ -160,6 +160,10 @@ const handleAddTrainingProgram = (item) => {
               <div>location: </div>
               <div className="ml-3 text-red-500">Thành Phố Hồ Chí Minh</div>
             </div>
+            <div className="flex mt-3">
+              <div>totalMember: </div>
+              <div className="ml-3 text-red-500">10 members</div>
+            </div>
           </div>
         </div>
         <hr />
@@ -309,13 +313,13 @@ const handleAddTrainingProgram = (item) => {
           </>
         )}
 
-        <Title level={3} className="mt-8">Recruitment</Title>
+        {/* <Title level={3} className="mt-8">Recruitment</Title>
         <Paragraph>
           Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail: <Text strong>[Fresher React Developer - Họ tên]</Text> đến địa chỉ email <Text strong>FA.HCM@fpt.com</Text>
         </Paragraph>
         <Paragraph>Email: <a href="mailto:FA.HCM@fpt.com">FA.HCM@fpt.com</a></Paragraph>
         <Paragraph>Fanpage: <a href="https://www.facebook.com/fsoft.academy" target="_blank" rel="noopener noreferrer">FPT Software Academy</a></Paragraph>
-        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph>
+        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph> */}
       </div>
     </div>
   );

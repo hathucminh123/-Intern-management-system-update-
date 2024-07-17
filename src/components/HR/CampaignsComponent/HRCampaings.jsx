@@ -54,7 +54,7 @@ const HRCampaigns = () => {
       message.success("Campaign deleted successfully");
       fetchCampaignsData();
     } catch (error) {
-      message.error("Error deleting campaign: " + error.message);
+      message.error("Intern still exist in campaign jobs " );
       console.error("Error deleting campaign:", error);
     }
   };
@@ -122,7 +122,7 @@ const HRCampaigns = () => {
                     alt={campaign.name}
                   />
                   <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    Internship Campaign: {campaign.name}
+                   {campaign.name}
                   </Title>
                   <p><strong>Available Positions Jobs in campaign:</strong> 
                   {campaign.jobs.map((job, index) => (
@@ -134,14 +134,14 @@ const HRCampaigns = () => {
                   <p><strong>Duration:</strong> {campaign.duration} months</p>
                   <p><strong>Start Date:</strong> {moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
                   <p><strong>End Date:</strong> {moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
-                  <Text
+                  <Button
                     style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
                     onClick={(e) => { e.stopPropagation(); handleDetails(campaign); }}
                     onMouseEnter={() => setHovered(campaign.id)}
                     onMouseLeave={() => setHovered(null)}
                   >
                     View Details {'-->'}
-                  </Text>
+                  </Button>
                 </Card>
               </Col>
             ))}
