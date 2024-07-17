@@ -176,7 +176,7 @@ const GuessDetailsComponent = ({ id }) => {
   };
 
   if (!internship) {
-    return <div>Internship not found</div>;
+    return <div> not found</div >;
   }
 
   return (
@@ -223,7 +223,7 @@ const GuessDetailsComponent = ({ id }) => {
       <div className="flex w-full justify-center mt-20">
         <div className="w-[1200px]">
           <Title level={2} className="title-hero-banner text-center font-bold">
-            Tại sao nên chọn <strong style={{ color: 'rgb(0, 164, 153)' }}>Dịch vụ chúng tôi</strong>
+            Tại sao nên chọn <strong style={{ color: 'rgb(0, 164, 153)' }}> chúng tôi</strong>
           </Title>
           <Row gutter={[24, 24]} className="mt-[64px]">
             {[

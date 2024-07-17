@@ -81,13 +81,7 @@ const GuestInfo = () => {
         </Title>
       </div>
       <div className="flex mt-4 items-center">
-        <Button
-          size="large"
-          className={`mr-4 ${activeTab === "recruiting" ? "bg-blue-500 text-white" : ""}`}
-          onClick={() => setActiveTab("recruiting")}
-        >
-          Đang tuyển dụng
-        </Button>
+
         {/* <Button
           size="large"
           className={`mr-4 ${activeTab === "upcoming" ? "bg-blue-500 text-white" : ""}`}

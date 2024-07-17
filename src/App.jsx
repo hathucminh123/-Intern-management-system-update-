@@ -82,6 +82,12 @@ function App() {
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
 
+          <Route path="/guest" element={<GuestPage />}>
+            <Route index element={<Navigate to="info" replace />} />
+            <Route path="info" element={<GuestInfo />} />
+            <Route path="Detail/:id" element={<GuessDetailPage />} />
+            <Route path="JobDetails/:id" element={<GuessJobDetailsComponent />} />
+          </Route>
           <Route element={<ProtectedRoute />}>
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
@@ -114,8 +120,8 @@ function App() {
 
             {/* HR Manager Routes */}
             <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<HRPage />} />
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<HRPage />} /> */}
               <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
@@ -194,13 +200,7 @@ function App() {
 
 
             {/* Guest Routes */}
-            <Route path="/guest" element={<GuestPage />}>
-              <Route index element={<Navigate to="info" replace />} />
-              <Route path="info" element={<GuestInfo />} />
-              <Route path="Detail/:id" element={<GuessDetailPage />} />
-              <Route path="JobDetails/:id" element={<GuessJobDetailsComponent />} />
 
-            </Route>
 
             <Route path="/admin" element={<CustomMenu userRole="admin" />}>
               <Route index element={<Navigate to="info" replace />} />

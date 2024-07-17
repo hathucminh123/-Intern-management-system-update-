@@ -33,7 +33,7 @@ const internships = [
       "Data Analyst",
       "Marketing Intern",
     ],
-    duration: "12 weeks", 
+    duration: "12 weeks",
     startDate: "06/07/2024",
     imgurl: 'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
   },
@@ -105,12 +105,12 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                 borderWidth: 3,
                 marginBottom: 20,
               }}
-            
+
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
               <Row gutter={200}>
                 <Col >
-                  <Title level={3}>{internship.name}</Title>
+                  <Title level={3}>Kỳ tuyển thực tập sinh hè 2024 -   {internship.name}</Title>
                   <div className="mt-4">
                     <div className="font-bold">Vị trí:</div>
                     <div className="ml-3" style={{ display: "flex", flexWrap: "wrap" }}>

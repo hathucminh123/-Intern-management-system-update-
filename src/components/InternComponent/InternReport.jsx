@@ -1,41 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Row, Col, Card, Table, message, Collapse } from 'antd';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import * as User from '../../service/User';
 import * as Training from '../../service/TrainingPrograms';
-import { data } from 'autoprefixer';
-import * as UserProfile from '../../service/authService'
+import * as UserProfile from '../../service/authService';
+
 const { Header, Content } = Layout;
 
 const InternReport = () => {
   const { state } = useLocation();
   const user = state?.record;
- 
+
   const [training, setTraining] = useState([]);
   const [selectedPrograms, setSelectedPrograms] = useState([]);
   const [reportData, setReportData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [userProfile,setUserProfile]=useState({})
+  const [userProfile, setUserProfile] = useState({});
 
-
-  const fetchUserProfile =async()=>{
-    try{
-       const res=await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
-       setUserProfile(res.events)
-    }catch(error){
-      message.error('fectch User Profile failed')
+  const fetchUserProfile = async () => {
+    try {
+      const res = await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+      setUserProfile(res.events);
+    } catch (error) {
+      message.error('Fetch User Profile failed');
     }
-  
-   }
-  
-  
-   useEffect(()=>{
-      fetchUserProfile()
-  
-  
-   },[])
+  };
 
-  const userId=localStorage.getItem('userId')
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const userId = localStorage.getItem('userId');
   const fetchAllTraining = async () => {
     try {
       const res = await Training.fetchTraining();
@@ -53,7 +48,7 @@ const InternReport = () => {
         if (response && response.events && response.events.userResultDetails) {
           const formattedData = response.events.userResultDetails.map(detail => ({
             name: response.events.name,
-            name:detail.name,
+            name: detail.name,
             total: response.events.total,
             weight: detail.weight,
             value: detail.value,
@@ -119,7 +114,7 @@ const InternReport = () => {
       }
     });
   };
-console.log('asdasd',reportData)
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -146,6 +141,7 @@ console.log('asdasd',reportData)
                       style={{ minWidth: '600px' }}
                       summary={() => {
                         const data = reportData[training.id] || [];
+                        const totalWeight = data.reduce((sum, item) => sum + parseFloat(item.weight), 0);
                         const total = data.length > 0 ? data[0].total : null;
                         const rating = total > 5 ? 'Passed' : 'Not Passed';
                         const ratingStyle = {
@@ -155,17 +151,26 @@ console.log('asdasd',reportData)
                         };
                         return (
                           <>
-                            <Table.Summary.Row>
-                              <Table.Summary.Cell colSpan={2}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-                              <Table.Summary.Cell>
-                                <strong>{total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}</strong>
-                              </Table.Summary.Cell>
-                            </Table.Summary.Row>
-                            {total !== null && (
+                            {totalWeight === 100 && (
+                              <Table.Summary.Row>
+                                <Table.Summary.Cell colSpan={2}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
+                                <Table.Summary.Cell>
+                                  <strong>{total}</strong>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                            )}
+                            {totalWeight === 100 && (
                               <Table.Summary.Row>
                                 <Table.Summary.Cell colSpan={2}><strong>STATUS</strong></Table.Summary.Cell>
                                 <Table.Summary.Cell>
                                   <span style={ratingStyle}>{rating}</span>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                            )}
+                            {totalWeight !== 100 && (
+                              <Table.Summary.Row>
+                                <Table.Summary.Cell colSpan={3} >
+                                  <span style={{ color: 'red' }}>Weights do not add up to 100%</span>
                                 </Table.Summary.Cell>
                               </Table.Summary.Row>
                             )}

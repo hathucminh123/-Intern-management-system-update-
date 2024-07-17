@@ -27,7 +27,7 @@ const MentorList = () => {
   const fetchUsers = async () => {
     try {
       const res = await User.fetchUser();
-      const filteredUsers = res.events.filter(user => user.role === 0 || user.role === 1); 
+      const filteredUsers = res.events.filter(user => user.role === 0 || user.role === 1);
       setUsers(filteredUsers);
     } catch (error) {
       message.error('Error fetching users: ' + error.message);
@@ -45,11 +45,13 @@ const MentorList = () => {
   const handleAddUser = async () => {
     try {
       const selectedUserIds = Object.keys(checkedKeys).filter(key => checkedKeys[key]).map(key => parseInt(key, 10));
+      console.log("user", selectedUserIds[0]);
       for (const userId of selectedUserIds) {
         const newUser = {
-          userId: userId,
+
           campaignId: campaignDetail.id,
-          jobId: jobDetail.id
+          jobId: jobDetail.id,
+          userId: userId
         };
         await Userr.AddNewStudentinCampaignJob(newUser);
       }
@@ -59,7 +61,6 @@ const MentorList = () => {
       message.error('Add user failed: ' + error.message);
     }
   };
-
   const handleOpenDetailModal = (item) => {
     navigate(`/${localStorage.getItem('role')}/UserDetailsRole/${item.id}`, { state: { item } });
   };
@@ -87,17 +88,17 @@ const MentorList = () => {
     { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
     { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
-    { 
-      title: "Role", 
-      dataIndex: "role", 
-      key: "role", 
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
       responsive: ['md'],
       render: (key) => <span><strong>{userRoles[key]}</strong></span>
     },
-    { 
-      title: "Actions", 
-      key: "actions", 
-      responsive: ['md'], 
+    {
+      title: "Actions",
+      key: "actions",
+      responsive: ['md'],
       render: (text, record) => (
         <Space size="middle">
           <Dropdown overlay={menu(record)}>
