@@ -63,7 +63,7 @@ const NewUser = () => {
                   <Input placeholder="Enter user name" />
                 </Form.Item>
                 <Form.Item
-                  name="firstName"
+                  name="fistName"
                   label="First Name"
                   rules={[{ required: true, message: 'Please enter the first name' }]}
                 >
