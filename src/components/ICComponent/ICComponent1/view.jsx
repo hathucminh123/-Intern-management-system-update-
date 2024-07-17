@@ -18,6 +18,7 @@ const ViewCampaigns = () => {
   const [pageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
 
+
   const columns = [
     {
       title: 'Name',
@@ -37,7 +38,7 @@ const ViewCampaigns = () => {
     },
   ];
 
-  const userRole =localStorage.getItem('role')
+  const userRole = localStorage.getItem('role')
   const onSearch = (value) => {
     setSearchQuery(value);
   };
@@ -66,6 +67,11 @@ const ViewCampaigns = () => {
 
   const handleJobs = (item) => {
     const userRole = localStorage.getItem('role').toLowerCase();
+    if (userRole === "admin") {
+      navigate(`/internshipcoordinators/TrainingPrograms/${item.id}`, {
+        state: { item },
+      });
+    }
     navigate(`/${userRole}/TrainingPrograms/${item.id}`, {
       state: { item },
     });
@@ -112,12 +118,12 @@ const ViewCampaigns = () => {
           <Row gutter={[16, 16]}>
             {filteredCampaigns.map((campaign) => (
               // <Col key={campaign.id} xs={24} sm={12} md={8}>
-                <Col key={campaign.id} span={24}>
+              <Col key={campaign.id} span={24}>
                 <Card
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  actions={[
+                  actions={userRole === "internshipcoordinators" ? [
                     <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
                     <Popconfirm
                       title="Are you sure to delete this campaign?"
@@ -127,7 +133,7 @@ const ViewCampaigns = () => {
                     >
                       <Button type="danger">Delete</Button>
                     </Popconfirm>
-                  ]}
+                  ] : []}
                 >
                   <Collapse>
                     <Panel
@@ -159,18 +165,18 @@ const ViewCampaigns = () => {
                         <Col span={12}>
                           <Title level={5}>Resources</Title>
                         </Col>
-                       {userRole ==="internshipcoordinators" &&(
-                        <Col span={12} style={{ textAlign: 'right' }}>
-                        <ButtonComponent
-                         styleButton={{ background: "#06701c", border: "none" }}
-                         styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                         size="middle"
-                         textbutton="Add Resource"
-                         onClick={(e) => { e.stopPropagation(); handleAddResourceList(campaign); }}
-                         />
-                         </Col>
-                       )} 
-                       
+                        {userRole === "internshipcoordinators" && (
+                          <Col span={12} style={{ textAlign: 'right' }}>
+                            <ButtonComponent
+                              styleButton={{ background: "#06701c", border: "none" }}
+                              styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                              size="middle"
+                              textbutton="Add Resource"
+                              onClick={(e) => { e.stopPropagation(); handleAddResourceList(campaign); }}
+                            />
+                          </Col>
+                        )}
+
                       </Row>
                       <Table
                         dataSource={campaign.resources}

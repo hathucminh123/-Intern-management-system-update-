@@ -28,15 +28,15 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       const fileUrl = await getDownloadURL(fileRef);
 
       // Save form data to Firestore
-  
+
       // Create a new candidate using the provided API
       const candidateData = {
         ...values,
-        firstName: values.fullName.split(' ')[0], 
+        firstName: values.fullName.split(' ')[0],
         lastName: values.fullName.split(' ').slice(1).join(' '),
         id: uuidv4(),
         cvPath: fileUrl,
-     
+
       };
 
       await createNewCandidate(candidateData);
@@ -55,7 +55,6 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
     setCvFile(file);
     return false;
   };
-
   return (
     <Modal
       visible={visible}
@@ -144,6 +143,8 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             name="campaignId"
             label="vị trí  campaign muốn ứng tuyển"
             rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+            initialValue={intern?.id}
+            hidden={true}
           >
             <Select placeholder="chọn vị trí ứng tuyển" allowClear>
               {intern && (
@@ -157,6 +158,8 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             name="jobId"
             label="vị trí muốn ứng tuyển"
             rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+            initialValue={job?.id}
+            hidden={true}
           >
             <Select placeholder="chọn vị trí ứng tuyển" allowClear>
               {job && (

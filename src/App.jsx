@@ -69,11 +69,12 @@ import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrain
 import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
 import UserReportView from "./components/MentorComponent/markReportDetails";
 import HRCampaignsDetailsss from "./components/ICComponent/ICComponent1/HRCampaignsDetailsss";
+import AdminPage from "./pages/AdminPage/Admin";
 
 function App() {
   const userRole = localStorage.getItem("role");
 
-  console.log('asd', userRole)
+  // console.log('asd', userRole)
   return (
     <div className="App">
       <Router>
@@ -197,13 +198,18 @@ function App() {
               <Route index element={<Navigate to="info" replace />} />
               <Route path="info" element={<GuestInfo />} />
               <Route path="Detail/:id" element={<GuessDetailPage />} />
-              <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
+              <Route path="JobDetails/:id" element={<GuessJobDetailsComponent />} />
 
+            </Route>
+
+            <Route path="/admin" element={<CustomMenu userRole="admin" />}>
+              <Route index element={<Navigate to="info" replace />} />
+              <Route path="info" element={<AdminPage />} />
             </Route>
           </Route>
         </Routes>
       </Router>
-    </div>
+    </div >
   );
 }
 

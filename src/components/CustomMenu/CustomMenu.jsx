@@ -51,8 +51,8 @@ const CustomMenu = ({ userRole }) => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
-  const [userProfile,setUserProfile]=useState({})
-  console.log('wtf',userProfile)
+  const [userProfile, setUserProfile] = useState({})
+  // console.log('wtf',userProfile)
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -67,28 +67,42 @@ const CustomMenu = ({ userRole }) => {
   }, []);
 
   useEffect(() => {
-    if (localStorage.getItem("role").toLowerCase() !== userRole.toLowerCase()) {
-      navigate(`/${localStorage.getItem("role").toLowerCase()}`, { replace: true });
+    const storedRole = localStorage.getItem("role").toLowerCase()
+    const isAdmin = storedRole === 'admin';
+    if (!isAdmin) {
+      if (storedRole !== userRole.toLowerCase()) {
+        navigate(`/${localStorage.getItem("role").toLowerCase()}`, { replace: true });
+      }
     }
+
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
- const fetchUserProfile =async()=>{
-  try{
-     const res=await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
-     setUserProfile(res.events)
-  }catch(error){
-    message.error('fectch User Profile failed')
+  // useEffect(() => {
+  //   const storedRole = localStorage.getItem("role").toLowerCase();
+  //   const isAdmin = storedRole === 'admin';
+
+  //   if (!isAdmin && storedRole !== userRole.toLowerCase()) {
+  //     navigate(`/${storedRole}`, { replace: true });
+  //   }
+
+  //   setSelectedKey(location.pathname);
+  // }, [location.pathname]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const res = await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+      setUserProfile(res.events)
+    } catch (error) {
+      message.error('fectch User Profile failed')
+    }
+
   }
 
- }
 
-
- useEffect(()=>{
+  useEffect(() => {
     fetchUserProfile()
-
-
- },[])
+  }, [])
 
   const items = {
     mentor: [
@@ -107,7 +121,7 @@ const CustomMenu = ({ userRole }) => {
 
       //   ]
       // },
-          {
+      {
         key: "/mentor/UserListReport", icon: <FaSquarePollVertical />, label: "Manage Report List",
 
         // children: [
@@ -169,6 +183,9 @@ const CustomMenu = ({ userRole }) => {
       localStorage.clear();
       navigate("/sign-in");
     }
+    if (type === "admin") {
+      navigate("/admin");
+    }
   };
 
   const content = (
@@ -179,6 +196,11 @@ const CustomMenu = ({ userRole }) => {
       <div className="WrapperContentPopup" onClick={() => handleClickNavigate("logout")}>
         Logout
       </div>
+      {localStorage.getItem("role").toLowerCase() === "admin" && (
+        <div className="WrapperContentPopup" onClick={() => handleClickNavigate("admin")}>
+          Admin Panel
+        </div>
+      )}
     </div>
   );
 
@@ -309,6 +331,34 @@ const CustomMenu = ({ userRole }) => {
                 </Space>
               )}
               {userRolle == "intern" && (
+                <Space size={10} align="center" style={{ marginRight: "30px" }}>
+
+
+                  <Popover
+                    content={content}
+                    trigger="click"
+                    open={isOpenPopup}
+                    onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                    getPopupContainer={() => popoverRef.current}
+                  >
+                    <div
+                      ref={popoverRef}
+                      onClick={() => setIsOpenPopup(!isOpenPopup)}
+                      style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                    >
+                      <Avatar size="default" icon={<UserOutlined />} />
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
+                    </div>
+                  </Popover>
+                  <Badge count={comments.length} dot>
+                    <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
+                  </Badge>
+                  <Badge count={comments.length}>
+                    <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
+                  </Badge>
+                </Space>
+              )}
+              {userRolle == "admin" && (
                 <Space size={10} align="center" style={{ marginRight: "30px" }}>
 
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message } from 'antd';
+import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message, Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import * as User from '../../../service/authService';
 
+const { Search } = Input;
 const ListUser = () => {
   const { Header, Content } = Layout;
+  const [searchQuery, setSearchQuery] = useState("");
   const { Title } = Typography;
   const navigate = useNavigate();
   const userRole = localStorage.getItem('role');
@@ -19,6 +21,14 @@ const ListUser = () => {
       message.error('Fetch User Error: ' + error.message);
     }
   };
+
+  const onSearch = (value) => {
+    setSearchQuery(value);
+  };
+
+  const filteredUser = users.filter((train) =>
+    train.userName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     fetchUsers();
@@ -115,8 +125,18 @@ const ListUser = () => {
         {/* <Button type="primary" onClick={() => navigate(`/${userRole}/CreateUser`)}>Create User</Button> */}
       </Header>
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5' }}>
+
         <div>
-          <Table dataSource={users} columns={columns} pagination={{ pageSize: 5 }} rowKey="id" />
+          <Space direction="vertical" className="flex flex-row items-center mb-5">
+            <Search
+              size="large"
+              placeholder="Search"
+              onSearch={onSearch}
+              enterButton
+              className="w-full"
+            />
+          </Space>
+          <Table dataSource={filteredUser} columns={columns} pagination={{ pageSize: 10 }} rowKey="id" />
         </div>
       </Content>
     </Layout>

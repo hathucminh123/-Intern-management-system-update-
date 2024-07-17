@@ -129,7 +129,7 @@ const GuessJobDetailsComponent = () => {
             </Space>
           </Card>
         </Space>
-        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={campaign.name} intern={campaign} job={selectJobs} campaigns={selectCampaigns} />
+        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={jobs.name} intern={campaign} job={jobs} campaigns={campaign} />
       </div>
     </Space>
   );

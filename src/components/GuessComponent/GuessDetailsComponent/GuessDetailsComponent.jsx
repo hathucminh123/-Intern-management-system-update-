@@ -162,8 +162,8 @@ const GuessDetailsComponent = ({ id }) => {
     setSelectCampaigns(campaigns)
     setIsModalVisible(true);
   };
-  const handleNavigateJobs =(job,campaign)=>{
-    navigate(`/guest/JobDetails/${job.id}`,{state:{itemJob:job , itemCampaign:campaign}})
+  const handleNavigateJobs = (job, campaign) => {
+    navigate(`/guest/JobDetails/${job.id}`, { state: { itemJob: job, itemCampaign: campaign } })
 
   }
   const showModall = (campaigns) => {
@@ -271,9 +271,9 @@ const GuessDetailsComponent = ({ id }) => {
         </div>
       </div>
       <JobDescriptionComponent data={internship} />
-   
-      <Typography.Title className="job-description-title mb-[64px] text-center font-bold text-neutral-10"> 
-      Những vị trí ứng tuyển <strong style={{ color: 'rgb(0, 164, 153)' }}>lập trình viên </strong>  </Typography.Title>
+
+      <Typography.Title className="job-description-title mb-[64px] text-center font-bold text-neutral-10">
+        Những vị trí ứng tuyển <strong style={{ color: 'rgb(0, 164, 153)' }}>lập trình viên </strong>  </Typography.Title>
       {/* <Card className="mb-10 rounded-32 bg-neutral-1 shadow-level-1">
       <Collapse defaultActiveKey={['1']} expandIconPosition="end" className="collapse-wrapper">
         <Panel
@@ -328,41 +328,34 @@ const GuessDetailsComponent = ({ id }) => {
     </Card> */}
 
 
-    <Row gutter={[16,16]}>
-    {internship.jobs.map((list, index) => (
-    <Col key={list.id} xs={24} sm={12} md={8}>
-         <Card
-          hoverable
-                  className="shadow-lg"
-         
-         >
-           <Image
-                    className="rounded-lg mb-3"
-                    preview={false}
-                    width="100%"
-                    height={200}
-                    src={list.imagePath}
-                    alt={list.name}
-                  />
-                    <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    Developer {list.name}
-                  </Title>
-                  <p><strong>Duration:</strong> {list.duration} months</p>
-                  <p><strong>Start Date:</strong> {moment(list.startDate).format('DD-MM-YYYY')}</p>
-                  <Text
-                    style={{ width: "fit-content", cursor: 'pointer', color: hovered === list.id ? 'blue' : 'black' }}
-                    onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list,internship); }}
-                    onMouseEnter={() => setHovered(list.id)}
-                    onMouseLeave={() => setHovered(null)}
-                  >
-                    View Details {'-->'}
-                  </Text>
+      <Row gutter={[16, 16]}>
+        {internship.jobs.map((list, index) => (
+          <Col key={list.id} xs={24} sm={12} md={8}>
+            <Card
+              hoverable
+              className="shadow-lg"
+              onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list, internship); }}
+            >
+              <Image
+                className="rounded-lg mb-3"
+                preview={false}
+                width="100%"
+                height={200}
+                src={list.imagePath}
+                alt={list.name}
+              />
+              <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Developer {list.name}
+              </Title>
+              <p><strong>Duration:</strong> {list.duration} months</p>
+              <p><strong>Start Date:</strong> {moment(list.startDate).format('DD-MM-YYYY')}</p>
 
-          </Card>
-      </Col>
-         
-    ))}
-    </Row>
+
+            </Card>
+          </Col>
+
+        ))}
+      </Row>
       <div className="flex w-full justify-center mt-20">
         <div className="w-[1200px]">
           <Title level={2} className="title-hero-banner text-center font-bold">
