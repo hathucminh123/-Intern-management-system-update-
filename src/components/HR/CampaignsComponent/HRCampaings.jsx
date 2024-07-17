@@ -17,9 +17,8 @@ const HRCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [hovered, setHovered] = useState(null);
 
+  const userRole = localStorage.getItem('role');
 
-
-  const userRole =localStorage.getItem('role')
   useEffect(() => {
     fetchCampaignsData();
   }, []);
@@ -55,8 +54,8 @@ const HRCampaigns = () => {
       message.success("Campaign deleted successfully");
       fetchCampaignsData();
     } catch (error) {
-      message.error("Error deleting job: " + error.message);
-      console.error("Error deleting job:", error);
+      message.error("Error deleting campaign: " + error.message);
+      console.error("Error deleting campaign:", error);
     }
   };
 
@@ -69,33 +68,31 @@ const HRCampaigns = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Campaign Listings
+        <Title level={3} style={{ margin: 0 }}>Campaign Listings</Title>
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Title className="text-center mb-5" level={2}>
             List Campaigns
           </Title>
-          <Space direction="vertical" className="flex flex-row items-center mb-5">
+          <Space direction="vertical" className="flex flex-row items-center mb-5" style={{ width: '100%' }}>
             <Search
               size="large"
               placeholder="Search"
               onSearch={setSearchQuery}
               enterButton
               className="w-full"
+              style={{ maxWidth: '600px' }}
             />
-
-            {userRole ==="hrmanager" && (
-
-<ButtonComponent
-styleButton={{ background: "#06701c", border: "none" }}
-styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-size="middle"
-textbutton="Create New"
-onClick={handleAddNewCampaign}
-/>
+            {userRole === "hrmanager" && (
+              <ButtonComponent
+                styleButton={{ background: "#06701c", border: "none" }}
+                styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                size="middle"
+                textbutton="Create New Campaign"
+                onClick={handleAddNewCampaign}
+              />
             )}
-           
           </Space>
           <Row gutter={[16, 16]}>
             {currentCampaigns.map((campaign) => (
@@ -107,7 +104,7 @@ onClick={handleAddNewCampaign}
                   actions={[
                     <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
                     <Popconfirm
-                      title="Are you sure to delete this job?"
+                      title="Are you sure to delete this campaign?"
                       onConfirm={() => handleDelete(campaign.id)}
                       okText="Yes"
                       cancelText="No"
@@ -125,12 +122,18 @@ onClick={handleAddNewCampaign}
                     alt={campaign.name}
                   />
                   <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {campaign.name}
+                    Internship Campaign: {campaign.name}
                   </Title>
-                  <p><strong>Jobs:</strong> {campaign.jobs.map((job) => job.name).join(", ")}</p>
+                  <p><strong>Available Positions Jobs in campaign:</strong> 
+                  {campaign.jobs.map((job, index) => (
+      <span key={index}>{job.name}{index < campaign.jobs.length - 1 && ', '}</span>
+    ))}
+                  
+                  
+                  </p>
                   <p><strong>Duration:</strong> {campaign.duration} months</p>
-                  <p><strong>Start Date:</strong>{moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
-                  <p><strong>End Date:</strong>{moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
+                  <p><strong>Start Date:</strong> {moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
+                  <p><strong>End Date:</strong> {moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
                   <Text
                     style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
                     onClick={(e) => { e.stopPropagation(); handleDetails(campaign); }}
@@ -149,6 +152,7 @@ onClick={handleAddNewCampaign}
             total={filteredCampaigns.length}
             pageSize={pageSize}
             onChange={handlePageChange}
+            style={{ textAlign: 'center', marginTop: '20px' }}
           />
         </div>
       </Content>

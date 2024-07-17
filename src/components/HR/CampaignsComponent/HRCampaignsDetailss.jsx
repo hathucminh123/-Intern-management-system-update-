@@ -137,30 +137,36 @@ const HRCampaignsDetailss = () => {
         </div>
         <hr />
         <Tabs defaultActiveKey="1">
-          <TabPane tab="Thông tin Campaign" key="1">
-            <div className="mt-8">
-              <Title level={3}>Scope Of Work</Title>
-              <Paragraph>
-                <div dangerouslySetInnerHTML={{ __html: CampaignDetail.scopeOfWork }} />
-              </Paragraph>
-            </div>
-            <div className="mt-8">
-              <Title level={3}>Requirements</Title>
-              <Paragraph>
-                <div dangerouslySetInnerHTML={{ __html: CampaignDetail.requirements }} />
-              </Paragraph>
-            </div>
-            <div className="mt-8">
-              <Title level={3}>Benefits</Title>
-              <Paragraph>
-                <div dangerouslySetInnerHTML={{ __html: CampaignDetail.benefits }} />
-              </Paragraph>
-            </div>
-          </TabPane>
+    {userRole ==='hrmanager' &&(
+
+<TabPane tab="Campaign Details" key="1">
+<div className="mt-8">
+  <Title level={3}>Scope Of Work</Title>
+  <Paragraph>
+    <div dangerouslySetInnerHTML={{ __html: CampaignDetail.scopeOfWork }} />
+  </Paragraph>
+</div>
+<div className="mt-8">
+  <Title level={3}>Requirements</Title>
+  <Paragraph>
+    <div dangerouslySetInnerHTML={{ __html: CampaignDetail.requirements }} />
+  </Paragraph>
+</div>
+<div className="mt-8">
+  <Title level={3}>Benefits</Title>
+  <Paragraph>
+    <div dangerouslySetInnerHTML={{ __html: CampaignDetail.benefits }} />
+  </Paragraph>
+</div>
+</TabPane>
+    )}
+
+         
           {userRole=== 'hrmanager' && (
-               <TabPane tab="Các Jobs có trong Campaign" key="2">
+               <TabPane tab="List jobs in Campaign" key="2">
                <div className="mt-8 flex justify-between items-center">
                  <Title level={3}>Danh sách Jobs</Title>
+
                  <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>
                    Add Job to Campaign
                  </Button>
@@ -217,9 +223,9 @@ const HRCampaignsDetailss = () => {
                <TabPane tab=" class Jobs in Campaign" key="2">
                <div className="mt-8 flex justify-between items-center">
                  <Title level={3}>Danh sách Jobs</Title>
-                 <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>
+                 {/* <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>
                    Add Job to Campaign
-                 </Button>
+                 </Button> */}
                </div>
                <div className="mt-8">
                  <Row gutter={[16, 16]}>
@@ -260,7 +266,7 @@ const HRCampaignsDetailss = () => {
                            onMouseEnter={() => setHovered(item.id)}
                            onMouseLeave={() => setHovered(null)}
                          >
-                           View Details {'-->'}
+                           View List Intern {'-->'}
                          </Text>
                     {/* {userRole === "internshipcoordinators" && selectJob === item.id && (
                     <div className="mt-4">
@@ -322,7 +328,7 @@ const HRCampaignsDetailss = () => {
           
        
        {userRole === "hrmanager" && (
-        <TabPane tab="Xem danh sách hồ sơ" key="3">
+        <TabPane tab="View Candidates" key="3">
         <div className="mt-8">
         <Row gutter={[16, 16]}>
             {CampaignDetail.jobs.map((item) => (
@@ -370,7 +376,7 @@ const HRCampaignsDetailss = () => {
                     onMouseEnter={() => setHoveredd(item.id)}
                     onMouseLeave={() => setHoveredd(null)}
                   >
-                    Xem hồ sơ {'-->'}
+                    View Candidates {'-->'}
                   </Text>
                   </Space>
                 </Card>
@@ -382,7 +388,7 @@ const HRCampaignsDetailss = () => {
        )}
           
         </Tabs>
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <Title level={3}>Recruitment</Title>
           <Paragraph>
             Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail:{" "}
@@ -411,7 +417,7 @@ const HRCampaignsDetailss = () => {
             </a>
           </Paragraph>
         </div>
-       
+        */}
        
       </div>
     </div>

@@ -11,7 +11,7 @@ import moment from 'moment';
 import { GrSchedule } from 'react-icons/gr';
 import { MdOutlineMonetizationOn, MdGroup } from "react-icons/md";
 import FormCVModal from '../FormCVComponent/FormCVModal';
-
+import { MdGroups } from "react-icons/md";
 const GuessJobDetailsComponent = () => {
   const { Title, Text } = Typography;
   const { state } = useLocation();
@@ -66,7 +66,7 @@ const GuessJobDetailsComponent = () => {
               </Col>
               <Col span={8}>
                 <div className="detail-item">
-                  <CiLocationOn />
+                <MdGroups />
                   <div className="detail-text">
                     tổng số thành viên: <span className="bold">10 members</span>
                   </div>

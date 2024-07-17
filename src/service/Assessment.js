@@ -158,3 +158,32 @@ const Assessment=response.data
 
 
 }
+
+
+export const GetAssessmentSubmissions =async (id)=>{
+  try{
+    const response =await httpClient.get({
+        url: `${apiLinks.Assessment.getIntern}`,
+        params: {id},
+    })
+
+    if (response.status !== 200 && response.status !== 201) {
+        const error = new Error('An error occurred while creating the job');
+        error.code = response.status;
+        error.info = await response.data;
+        console.error('Server response:', response.data); // Log the server response
+        throw error;
+      }
+const Assessment=response.data
+    return {
+      events:Assessment.result,
+
+    }
+        
+    
+  }catch(error){
+
+  }
+
+
+}

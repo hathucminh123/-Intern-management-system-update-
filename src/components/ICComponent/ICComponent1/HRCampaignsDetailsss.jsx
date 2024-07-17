@@ -90,6 +90,9 @@ const HRCampaignsDetailsss = () => {
   const handleAddMentorJobCampaign = (jobDetail,campaignDetail) => {
     navigate('/internshipcoordinators/MentorList',{state:{jobDetail,campaignDetail}});
   };
+  const handleAddInternJobCampaign = (jobDetail,campaignDetail) => {
+    navigate('/internshipcoordinators/InternList',{state:{jobDetail,campaignDetail}});
+  };
 
   const handleDeleteTraining = async (jobId, trainingProgramId) => {
     try {
@@ -204,7 +207,7 @@ const HRCampaignsDetailsss = () => {
 
         {userRole === "internshipcoordinators" && (
           <Tabs defaultActiveKey="1">
-            <TabPane tab="Jobs Details" key="1">
+            {/* <TabPane tab="Jobs Details" key="1">
               <Title className="mt-8" level={3}>Scope Of Work</Title>
               <Paragraph>
                 <ul className="list-disc list-inside">
@@ -223,14 +226,14 @@ const HRCampaignsDetailsss = () => {
                   <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
                 </ul>
               </Paragraph>
-            </TabPane>
-            <TabPane tab="Student List in Jobs" key="2">
+            </TabPane> */}
+            <TabPane tab="Student List in Jobs" key="1">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0", height: '100px' }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
                     <div style={{ gap: "20px" }}>
-                      <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>
+                      <Button type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail,campaignDetail) }}>
                         Assign Intern to Manage this Class
                       </Button>
                       <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>
@@ -343,13 +346,13 @@ const HRCampaignsDetailsss = () => {
           </>
         )}
 
-        <Title level={3} className="mt-8">Recruitment</Title>
+        {/* <Title level={3} className="mt-8">Recruitment</Title>
         <Paragraph>
           Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail: <Text strong>[Fresher React Developer - Họ tên]</Text> đến địa chỉ email <Text strong>FA.HCM@fpt.com</Text>
         </Paragraph>
         <Paragraph>Email: <a href="mailto:FA.HCM@fpt.com">FA.HCM@fpt.com</a></Paragraph>
         <Paragraph>Fanpage: <a href="https://www.facebook.com/fsoft.academy" target="_blank" rel="noopener noreferrer">FPT Software Academy</a></Paragraph>
-        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph>
+        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph> */}
       </div>
     </div>
   );

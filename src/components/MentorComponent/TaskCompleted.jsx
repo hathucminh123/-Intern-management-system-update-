@@ -53,11 +53,11 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
     setSelectedTask(task);
     setOpenDetailModal(true);
   };
-
   const handleDetails = (task) => {
+    fetchAssessment(); // Call fetchAssessment before navigating
     navigate(`/${userRole}/taskDetail/${task.id}`, { state: { task } });
   };
-
+  
   const handleOpenReviewModal = (task) => {
     setTaskToReview(task);
     setOpenReviewModal(true);

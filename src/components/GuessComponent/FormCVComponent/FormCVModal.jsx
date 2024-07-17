@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Modal, Form, Input, Button, Upload, Typography, Select, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
-import { storage, firestore } from '../../../firebase/config';
+import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc } from 'firebase/firestore';
 import { createNewCandidate } from '../../../service/Candidate';
 import { v4 as uuidv4 } from 'uuid';
+
 const { Title, Text } = Typography;
 
 const FormCVModal = ({ visible, onClose, title, intern, job }) => {
@@ -27,18 +27,16 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
 
-      // Save form data to Firestore
-  
-      // Create a new candidate using the provided API
+      // Prepare candidate data
       const candidateData = {
         ...values,
-        firstName: values.fullName.split(' ')[0], 
+        firstName: values.fullName.split(' ')[0],
         lastName: values.fullName.split(' ').slice(1).join(' '),
         id: uuidv4(),
         cvPath: fileUrl,
-     
       };
 
+      // Create a new candidate using the provided API
       await createNewCandidate(candidateData);
 
       message.success('Form submitted successfully!');
@@ -68,11 +66,10 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
-        className="max-h-[calc(1000vh-48px)] overflow-hidden"
         initialValues={{ name: job?.name || '', list: intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
-          <Title level={3}>{title}</Title>
+          <Title level={3}>chiến dịch thực tập: {title}</Title>
         </div>
 
         <div className="px-8 pt-4">
@@ -126,52 +123,27 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
           <Form.Item
             name="education"
             label="Trường bạn đang học"
-            rules={[{ required: true, message: 'Please select the school' }]}
+            rules={[{ required: true, message: 'Please enter your school!' }]}
           >
-            {/* <Select placeholder="chọn training program" allowClear>
-              {intern.map((item) => (
-                <Select.Option key={item.id} value={item.name}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select> */}
-
-
-            {/* <Input value={intern.id} placeholder={ intern.name}/> */}
-            <Input placeholder='nhập trường bạn đang học' />
+            <Input placeholder="Nhập trường bạn đang học" />
           </Form.Item>
           <Form.Item
             name="campaignId"
-            label="vị trí  campaign muốn ứng tuyển"
-            rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+            initialValue={intern?.id}
+            hidden
           >
-            <Select placeholder="chọn vị trí ứng tuyển" allowClear>
-              {intern && (
-                <Select.Option value={intern.id}>
-                  {intern.name}
-                </Select.Option>
-              )}
-            </Select>
+            <Input />
           </Form.Item>
           <Form.Item
             name="jobId"
-            label="vị trí muốn ứng tuyển"
-            rules={[{ required: true, message: 'Please select the program to assign the task to!' }]}
+            initialValue={job?.id}
+            hidden
           >
-            <Select placeholder="chọn vị trí ứng tuyển" allowClear>
-              {job && (
-                <Select.Option value={job.id}>
-                  Lập trình viên {job.name}
-                </Select.Option>
-              )}
-            </Select>
+            <Input />
           </Form.Item>
-          {/* <Form.Item name="note" label="Khác (nếu có)">
-            <Input placeholder="Lời nhắn nhủ bạn muốn gửi tới" />
-          </Form.Item> */}
         </div>
         <div className="px-8 pt-4">
-          <Text strong>Địa chỉ làm việc tại GEEK Up</Text>
+          <Text strong>Địa chỉ làm việc tại FPT University</Text>
           <div className="pt-2">
             <div className="flex items-center">
               <CiLocationOn />
@@ -196,5 +168,3 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
 };
 
 export default FormCVModal;
-
-

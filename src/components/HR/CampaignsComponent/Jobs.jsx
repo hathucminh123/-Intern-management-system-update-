@@ -140,7 +140,7 @@ const Jobs = () => {
             styleButton={{ background: "#06701c", border: "none" }}
             styleTextButton={{ color: "#fff", fontWeight: "bold" }}
             size="middle"
-            textbutton="Create New"
+            textbutton="Create New Job"
             onClick={handleNewJobs}
           />
         )}

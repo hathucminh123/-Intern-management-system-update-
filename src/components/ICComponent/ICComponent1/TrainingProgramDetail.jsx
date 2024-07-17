@@ -17,6 +17,7 @@ import moment from "moment";
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
+
 const TrainingProgramDetail = () => {
   const { id } = useParams();
   const { state } = useLocation();
@@ -30,12 +31,12 @@ const TrainingProgramDetail = () => {
   const [selectedResource, setSelectedResource] = useState(null);
   const [selectedKPI, setSelectedKPI] = useState(null);
   const [task, setTask] = useState(null);
-  const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [training,setTraining]=useState([])
+  const [openResourceModal, setOpenResourceModal] = useState(false);
+  const [openKPIModal, setOpenKPIModal] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  console.log('metquadi', kpis)
- 
+  
+  const userRole = localStorage.getItem('role')?.toLowerCase();
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -43,16 +44,12 @@ const TrainingProgramDetail = () => {
     }
   }, [CampaignDetail]);
 
-// const fetchkpi =()=>{
-//   setKpis(ca)
-// }
-const kpiss  = CampaignDetail?.kpIs;
-
-useEffect(() => {
-  if (kpiss) {
-    setKpis(kpiss);
-  }
-}, [CampaignDetail, kpiss])
+  const kpiss = CampaignDetail?.kpIs;
+  useEffect(() => {
+    if (kpiss) {
+      setKpis(kpiss);
+    }
+  }, [CampaignDetail, kpiss]);
 
   useEffect(() => {
     if (CampaignDetail?.assessments) {
@@ -63,8 +60,6 @@ useEffect(() => {
   if (!CampaignDetail) {
     return <div>Training program detail not found</div>;
   }
-  const userRole = localStorage.getItem('role')?.toLowerCase();
-
 
   const fetchResources = async () => {
     const q = query(collection(firestore, 'resources'), where('trainingProgramIds', 'array-contains', CampaignDetail.id));
@@ -144,12 +139,12 @@ useEffect(() => {
 
   const handleOpenDetailModal = (resource) => {
     setSelectedResource(resource);
-    setOpenDetailModal(true);
+    setOpenResourceModal(true);
   };
 
   const handleOpenDetailKPIModal = (kpi) => {
     setSelectedKPI(kpi);
-    setOpenDetailModal(true);
+    setOpenKPIModal(true);
   };
 
   const handleUpdateTask = (updatedTask) => {
@@ -177,10 +172,7 @@ useEffect(() => {
 
   const kpiMenu = (record) => (
     <Menu>
-      {/* <Menu.Item key="1">
-        <Button onClick={() => handleOpenDetailKPIModal(record)}>View/Edit</Button>
-      </Menu.Item> */}
-      <Menu.Item key="2">
+      <Menu.Item key="1">
         <Button onClick={() => handleDeleteKPIS(record.id)}>Delete</Button>
       </Menu.Item>
     </Menu>
@@ -189,10 +181,11 @@ useEffect(() => {
   const TaskMenu = (record) => (
     <Menu>
       <Menu.Item key="1">
-        <Button onClick={() => handleDetails(record)}>View</Button>
+        <Button onClick={() => handleDetails(record)}>Delete</Button>
       </Menu.Item>
     </Menu>
   );
+
   const resourceColumns = [
     {
       title: 'Name',
@@ -229,6 +222,7 @@ useEffect(() => {
       ),
     });
   }
+
   const calculateTotal = (items) => {
     const totalWeights = items.reduce((total, item) => {
       return total + parseFloat(item.type);
@@ -245,7 +239,6 @@ useEffect(() => {
     }, 0).toFixed(2);
   };
 
-
   const kpiColumns = [
     {
       title: 'Grade Category',
@@ -257,10 +250,7 @@ useEffect(() => {
       dataIndex: 'type',
       key: 'type',
       render: (text, record) => (
-        <>
-          <div>{record.type}</div>
-          {/* <div><strong>Total</strong></div> */}
-        </>
+        <div>{record.type}</div>
       ),
     },
     {
@@ -268,40 +258,12 @@ useEffect(() => {
       dataIndex: 'weight',
       key: 'weight',
       render: (text, record) => (
-        <>
-          <div>{record.weight}%</div>
-          {/* <div><strong> {parseFloat(record.type)}%</strong></div> */}
-        </>
+        <div>{record.weight}%</div>
       ),
     },
-    // {
-    //   title: 'Value',
-    //   dataIndex: 'value',
-    //   key: 'value',
-    //   render: (text, record) => (
-    //     <>
-    //       <div>{record.value}</div>
-    //     </>
-    //   ),
-    // },
-
-
   ];
 
-  // if ( userRole ==="intern") {
-  //   kpiColumns.push({
-  //     title: 'Value',
-  //     dataIndex: 'value',
-  //     key: 'value',
-  //     render: (text, record) => (
-  //       <>
-  //         <div>{record.value}</div>
-  //       </>
-  //     ),
-  //   },
-  //   );
-  // }
-  if (userRole === "internshipcoordinators" ) {
+  if (userRole === "internshipcoordinators") {
     kpiColumns.push({
       title: 'Actions',
       key: 'actions',
@@ -317,20 +279,12 @@ useEffect(() => {
     });
   }
 
-
-
   const Takscolumns = [
     {
       title: 'Task Name',
       dataIndex: 'name',
       key: 'name',
     },
-    // {
-    //   title: 'Assigned To',
-    //   dataIndex: 'owner',
-    //   key: 'owner',
-    //   render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
-    // },
     {
       title: 'Start Date',
       dataIndex: 'startDate',
@@ -367,16 +321,15 @@ useEffect(() => {
         </span>
       ),
     },
-
   ];
 
-  if (userRole === "internshipcoordinators") {
+  if ( userRole==="mentor") {
     Takscolumns.push({
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
         <Space size="middle">
-          <Dropdown overlay={resourceMenu(record)}>
+          <Dropdown overlay={TaskMenu(record)}>
             <Button>
               More <DownOutlined />
             </Button>
@@ -385,7 +338,6 @@ useEffect(() => {
       ),
     });
   }
-
 
   const handleBeforeUpload = (file) => {
     setCvFile(file);
@@ -398,7 +350,6 @@ useEffect(() => {
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
         <div className="container mx-auto bg-white p-8 shadow-lg rounded-lg">
           <Tabs defaultActiveKey="1" className="w-full">
-
             <TabPane tab="Training Details" key="1">
               <div className="mb-8">
                 <Title level={2}>{CampaignDetail.name}</Title>
@@ -417,7 +368,7 @@ useEffect(() => {
                 <Paragraph>
                   <div dangerouslySetInnerHTML={{ __html: CampaignDetail.outputObject }} />
                 </Paragraph>
-                <Title level={3}>Application</Title>
+                {/* <Title level={3}>Application</Title>
                 <Paragraph>
                   Interested candidates, please send your CV with the email subject:{" "}
                   <Text strong>[Fresher React Developer - Full Name]</Text> to the email address
@@ -445,11 +396,11 @@ useEffect(() => {
                   >
                     https://fsoft-academy.edu.vn/
                   </a>
-                </Paragraph>
+                </Paragraph> */}
               </div>
             </TabPane>
             <TabPane tab="Resources" key="2">
-              {userRole === "internshipcoordinators" || userRole === "mentor" && (
+              {(userRole === "internshipcoordinators" || userRole === "mentor") && (
                 <Form form={form} layout="vertical" onFinish={handleAddResource}>
                   <Form.Item
                     name="name"
@@ -525,41 +476,6 @@ useEffect(() => {
                       columns={kpiColumns}
                       dataSource={kpis}
                       rowKey="id"
-                    // pagination={{ pageSize: pageSize, current: currentPage, onChange: setCurrentPage }}
-                    // summary={() => {
-                    //   const total = calculateTotal(kpis || []);
-                    //   const rating = total >= 5 ? 'Passed' : 'Failed';
-                    //   const ratingStyle = {
-                    //     backgroundColor: rating === 'Passed' ? '#d4edda' : '#f8d7da',
-                    //     color: rating === 'Passed' ? '#155724' : '#721c24',
-                    //     fontWeight: 'bold',
-                    //   };
-                    //   return (
-                    //     <>
-                    //       {userRole === "intern" && (
-                    //         <>
-                    //           <Table.Summary.Row>
-                    //             <Table.Summary.Cell colSpan={3}><strong>COURSE TOTAL</strong></Table.Summary.Cell>
-                    //             <Table.Summary.Cell>
-                    //               <strong>
-                    //                 {total !== null ? total : <span style={{ color: 'red' }}>Weights do not add up to 100%</span>}
-                    //               </strong>
-                    //             </Table.Summary.Cell>
-                    //           </Table.Summary.Row>
-                    //           {total !== null && (
-                    //             <Table.Summary.Row>
-                    //               <Table.Summary.Cell colSpan={3}><strong>STATUS</strong></Table.Summary.Cell>
-                    //               <Table.Summary.Cell>
-                    //                 <span style={ratingStyle}>{rating}</span>
-                    //               </Table.Summary.Cell>
-                    //             </Table.Summary.Row>
-                    //           )}
-                    //         </>
-                    //       )}
-                    //     </>
-                    //   );
-                    // }}
-                    
                     />
                   </Content>
                 </Layout>
@@ -583,8 +499,6 @@ useEffect(() => {
                             onClick={(e) => { e.stopPropagation(); handleAddKPIStoProgram(CampaignDetail) }}
                           />
                         )}
-
-
                       </Col>
                     </Row>
                   </Header>
@@ -604,19 +518,18 @@ useEffect(() => {
       </Content>
       {selectedResource && (
         <DetailModall
-          isVisible={openDetailModal}
-          onClose={() => setOpenDetailModal(false)}
+          isVisible={openResourceModal}
+          onClose={() => setOpenResourceModal(false)}
           task={selectedResource}
           onUpdateTask={handleUpdateResource}
         />
       )}
       {selectedKPI && (
         <DetailKPIModal
-          isVisible={openDetailModal}
-          onClose={() => setOpenDetailModal(false)}
+          isVisible={openKPIModal}
+          onClose={() => setOpenKPIModal(false)}
           task={selectedKPI}
           onUpdateTask={handleUpdateTask}
-    
         />
       )}
     </Layout>

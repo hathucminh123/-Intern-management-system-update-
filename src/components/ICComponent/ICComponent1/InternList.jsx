@@ -17,7 +17,7 @@ const userRoles = {
   4: 'Admin'
 };
 
-const MentorList = () => {
+const InternList = () => {
   const { state } = useLocation();
   const jobDetail = state?.jobDetail;
   const campaignDetail = state?.campaignDetail;
@@ -29,7 +29,7 @@ const MentorList = () => {
   const fetchUsers = async () => {
     try {
       const res = await User.fetchUser();
-      const filteredUsers = res.events.filter(user => user.role === 1); 
+      const filteredUsers = res.events.filter(user => user.role === 0 ); 
       setUsers(filteredUsers);
     } catch (error) {
       message.error('Error fetching users: ' + error.message);
@@ -148,4 +148,4 @@ const MentorList = () => {
   );
 }
 
-export default MentorList;
+export default InternList;

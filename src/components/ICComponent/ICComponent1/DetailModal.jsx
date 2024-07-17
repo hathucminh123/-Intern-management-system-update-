@@ -5,7 +5,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../../firebase/config';
 import * as Resource from "../../../service/Resource";
 
-const DetailModall = ({ isVisible, onClose, task, onUpdateTask }) => {
+const DetailModal = ({ isVisible, onClose, task, onUpdateTask }) => {
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -111,4 +111,4 @@ const DetailModall = ({ isVisible, onClose, task, onUpdateTask }) => {
   );
 };
 
-export default DetailModall;
+export default DetailModal;

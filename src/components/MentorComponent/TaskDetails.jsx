@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Card, Row, Col, Typography, Layout, Space, Tag, Table, Button,
   Dropdown, Menu, Form, Modal, Input, Upload, Popover, Checkbox, Avatar,
   DatePicker, Divider, message
 } from "antd";
 import "tailwindcss/tailwind.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import { DownOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -14,24 +14,44 @@ import ReactQuill from 'react-quill';
 import moment from 'moment';
 import * as Assessment from '../../service/Assessment'
 
+
 const { Title, Text, Paragraph } = Typography;
 const { Header, Content } = Layout;
 
-const TaskDetails = () => {
+const TaskDetails = ({ fetchAssessment }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
   const [check, setCheck] = useState(false);
   const [form] = Form.useForm();
   const { state } = useLocation();
+  const navigate = useNavigate();
   const taskDetail = state?.task;
+  const fetch =state?.fetch
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
   const [cvFile, setCvFile] = useState(null);
-  const [submissions, setSubmissions] = useState(taskDetail.assessmentSubmitions || []);
-
+  const [submissions, setSubmissions] = useState(taskDetail?.assessmentSubmitions || []);
+  
   const userRole = localStorage.getItem('role');
 
+  // useEffect(() => {
+  
+  //     fetchAssessmentSubmissions(taskDetail.id);
+    
+  // }, []);
+
+  // const fetchAssessmentSubmissions = async (taskId) => {
+  //   try {
+  //     const res = await Assessment.GetAssessmentSubmissions(taskId);
+  //     setSubmissions(res.events);
+  //   } catch (error) {
+  //     message.error('Failed to fetch assessment submissions');
+  //   }
+  // };
+
+
+  
   const handleDescription = (value) => {
     setDescription(value);
   };
@@ -79,10 +99,12 @@ const TaskDetails = () => {
       await Assessment.InternAddAssessment(submission);
 
       message.success('Form submitted successfully!');
-      setSubmissions([...submissions, submission]);
+      setSubmissions(prev => [...prev, submission]);
       form.resetFields();
       setCvFile(null);
       setIsModalVisible(false);
+      // fetchAssessmentSubmissions(taskDetail.id);
+      navigate('/intern/taskboard')
     } catch (error) {
       message.error('Error submitting form. Please try again.');
       console.error('Error submitting form:', error);
@@ -94,8 +116,12 @@ const TaskDetails = () => {
       await Assessment.InternDeleteAssessment(id);
       setSubmissions(submissions.filter(submission => submission.id !== id));
       message.success('Task deleted successfully');
+      // fetchAssessmentSubmissions(taskDetail.id);
     } catch (error) {
-      message.error('Failed to delete task', error.message);
+      message.error({
+        content: 'Failed to delete task: ' + error.message,
+        duration: 3,
+      });
     }
   };
 
@@ -114,7 +140,7 @@ const TaskDetails = () => {
       title: 'File',
       dataIndex: 'filePath',
       key: 'filePath',
-      render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Tải file bài</a>,
+      render: (text) => <a href={text} target="_blank" rel="noopener noreferrer">Download File</a>,
     },
     {
       title: 'When',
@@ -327,65 +353,11 @@ const TaskDetails = () => {
                 </Card>
               </Col>
             </Row>
-{/* 
-            <Card hoverable className="shadow-lg" style={{ marginBottom: '20px' }}>
-              <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  Evidence
-                </Title>
-              </Header>
-              <Form form={form} layout="vertical" style={{ padding: '20px' }}>
-                <Form.Item
-                  label="Description"
-                  name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter the description of the work',
-                    },
-                  ]}
-                >
-                  <ReactQuill
-                    style={{ height: '200px', width: "100%" }}
-                    value={description}
-                    onChange={handleDescription}
-                    placeholder="Enter the Description"
-                  />
-                </Form.Item>
-                <Form.Item>
-                  <Button style={{ marginTop: "20px" }} type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Card> */}
-
-            {/* <Card style={{ maxWidth: 800, backgroundColor: '#f0f8ff', borderRadius: 8 }} className="shadow-lg">
-              <Row align="middle" gutter={16}>
-                <Col>
-                  <Avatar icon={<UserOutlined />} />
-                </Col>
-                <Col flex="auto">
-                  <Space direction="vertical">
-                    <Space>
-                      <Text strong>hathucminh123</Text>
-                      <Text type="secondary">commented 12 hours ago</Text>
-                    </Space>
-                    <Card style={{ backgroundColor: '#e6f7ff', borderRadius: 8 }}>
-                      <Space direction="vertical">
-                        <Text strong>hathucminh123 left a comment</Text>
-                        <Text>sadasdasdasdasd</Text>
-                      </Space>
-                    </Card>
-                  </Space>
-                </Col>
-              </Row>
-            </Card> */}
           </Space>
         </div>
 
         <Modal
-          title="Nộp task"
+          title="Submit Task"
           open={isModalVisible}
           onCancel={handleCancel}
           footer={null}
@@ -403,11 +375,11 @@ const TaskDetails = () => {
               name="filePath"
               label={
                 <div>
-                  <Text strong>Nộp file đính kèm</Text>
-                  <div>Bạn chỉ có thể upload 1 file</div>
+                  <Text strong>Attach File</Text>
+                  <div>You can upload only one file</div>
                 </div>
               }
-              rules={[{ required: true, message: 'Vui lòng tải lên file của bạn!' }]}
+              rules={[{ required: true, message: 'Please upload your file!' }]}
             >
               <Upload.Dragger
                 name="filePath"
@@ -418,27 +390,27 @@ const TaskDetails = () => {
                 <p className="ant-upload-drag-icon">
                   <UploadOutlined />
                 </p>
-                <p className="ant-upload-text">Kéo thả file vào đây hoặc tải lên</p>
+                <p className="ant-upload-text">Drag and drop file here or click to upload</p>
                 <p className="ant-upload-hint">(PDF, DOC, PNG, JPEG)</p>
               </Upload.Dragger>
             </Form.Item>
             <Form.Item
               name="description"
-              label="Mô tả"
-              rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
+              label="Description"
+              rules={[{ required: true, message: "Please enter a description" }]}
             >
-              <Input placeholder="Nhập mô tả" />
+              <Input placeholder="Enter description" />
             </Form.Item>
             <Form.Item
               name="submitDate"
-              label="Date Submit"
-              rules={[{ required: true, message: "Vui lòng chọn ngày" }]}
+              label="Submit Date"
+              rules={[{ required: true, message: "Please select a date" }]}
             >
               <DatePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-                Gửi
+                Submit
               </Button>
             </Form.Item>
           </Form>

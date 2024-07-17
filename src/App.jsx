@@ -69,6 +69,7 @@ import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrain
 import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
 import UserReportView from "./components/MentorComponent/markReportDetails";
 import HRCampaignsDetailsss from "./components/ICComponent/ICComponent1/HRCampaignsDetailsss";
+import InternList from "./components/ICComponent/ICComponent1/InternList";
 
 function App() {
   const userRole = localStorage.getItem("role");
@@ -113,8 +114,8 @@ function App() {
 
             {/* HR Manager Routes */}
             <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<HRPage />} />
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<HRPage />} /> */}
               <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
@@ -167,6 +168,7 @@ function App() {
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="MentorList" element={<MentorList />} />
+              <Route path="InternList" element={<InternList />} />
               <Route path="markReport/:id" element={<UserReportView />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
 

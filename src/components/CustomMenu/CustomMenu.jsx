@@ -118,7 +118,7 @@ const CustomMenu = ({ userRole }) => {
       },
     ],
     hrmanager: [
-      { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
+      // { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
       { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
@@ -149,7 +149,8 @@ const CustomMenu = ({ userRole }) => {
       { key: "/internshipcoordinators/TrainingJobs", icon: < MdClass />, label: "Jobs training" },
       { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource" },
       { key: "/internshipcoordinators/KPIList", icon: <GrResources />, label: "KPIList" },
-      { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "UserList" },
+      { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
+      { key: "/internshipcoordinators/InternList", icon: <LiaChalkboardTeacherSolid />, label: "InternList" },
     ],
     intern: [
       // { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },

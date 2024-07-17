@@ -54,6 +54,7 @@ export const apiLinks = {
     post: `${baseURL}/Assessment`,
     InternPost: `${baseURL}/AssessmentSubmition`,
     InternDelete:`${baseURL}/AssessmentSubmition`,
+    getIntern:`${baseURL}/AssessmentSubmition`,
     put: `${baseURL}/Assessment`,
     delete: `${baseURL}/Assessment`,
   },

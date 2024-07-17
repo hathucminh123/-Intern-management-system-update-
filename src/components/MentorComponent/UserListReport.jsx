@@ -17,7 +17,8 @@ const [users, setUsers] = useState([]);
 const fetchUsers = async () => {
   try {
     const res = await User.fetchUser();
-    setUsers(res.events);
+    const filteredUsers = res.events.filter(user => user.role === 0); 
+    setUsers(filteredUsers);
   } catch (error) {
     message.error('Fetch User Error: ' + error.message);
   }

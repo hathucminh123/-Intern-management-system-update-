@@ -117,7 +117,7 @@ const ViewCampaigns = () => {
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  actions={[
+                  actions={ userRole ==="internshipcoordinators" && ([
                     <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
                     <Popconfirm
                       title="Are you sure to delete this campaign?"
@@ -127,7 +127,7 @@ const ViewCampaigns = () => {
                     >
                       <Button type="danger">Delete</Button>
                     </Popconfirm>
-                  ]}
+                  ])}
                 >
                   <Collapse>
                     <Panel
