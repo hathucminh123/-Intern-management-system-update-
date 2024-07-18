@@ -136,7 +136,7 @@ const GuessDetailsComponent = ({ id }) => {
             <div className="detail-item" style={{ display: 'flex', alignItems: 'center' }}>
               <GrSchedule style={{ marginRight: '8px', fontSize: '16px' }} />
               <Text style={{ fontSize: '16px' }}>
-                Ngày bắt đầu dự kiến: <span className="bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</span>
+                Ngày bắt đầu: <span className="bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</span>
               </Text>
             </div>
           </Col>
@@ -144,7 +144,7 @@ const GuessDetailsComponent = ({ id }) => {
             <div className="detail-item" style={{ display: 'flex', alignItems: 'center' }}>
               <GrSchedule style={{ marginRight: '8px', fontSize: '16px' }} />
               <Text style={{ fontSize: '16px' }}>
-                Ngày kết thúc dự kiến: <span className="bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</span>
+                Ngày kết thúc: <span className="bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</span>
               </Text>
             </div>
           </Col>
@@ -274,7 +274,7 @@ const GuessDetailsComponent = ({ id }) => {
         ))}
       </Row>
 
-      <div className="flex justify-center w-full mt-20">
+      {/* <div className="flex justify-center w-full mt-20">
         <div className="w-full max-w-6xl">
           <Title level={2} className="text-center font-bold">
             Khám phá những <strong style={{ color: 'rgb(0, 164, 153)' }}>Chương trình thực tập khác</strong>
@@ -321,7 +321,7 @@ const GuessDetailsComponent = ({ id }) => {
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectedJob} campaigns={selectedCampaign} />
     </Space>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Button, Upload, Typography, Select, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
@@ -6,12 +6,32 @@ import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createNewCandidate } from '../../../service/Candidate';
 import { v4 as uuidv4 } from 'uuid';
+import * as UserProfile from "../../../service/authService"
 
 const { Title, Text } = Typography;
 
 const FormCVModal = ({ visible, onClose, title, intern, job }) => {
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
+  const [userProfile, setUserProfile] = useState({})
+
+
+
+
+  const fetchUserProfile = async () => {
+    try {
+      const res = await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+      setUserProfile(res.events)
+    } catch (error) {
+      message.error('fectch User Profile failed')
+    }
+  }
+  console.log("UserProfile", userProfile)
+  useEffect(() => {
+    fetchUserProfile()
+
+
+  }, [])
 
   const handleSubmit = async (values) => {
     console.log('Form values:', values);
@@ -99,6 +119,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             name="fullName"
             label="Họ và tên"
             rules={[{ required: true, message: 'Please enter your full name!' }]}
+            initialValue={`${userProfile.firstName} ${userProfile.lastName}`}
           >
             <Input placeholder="Họ và tên" />
           </Form.Item>
@@ -108,7 +129,9 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             rules={[
               { required: true, message: 'Please enter your email!' },
               { type: 'email', message: 'Please enter a valid email!' },
+
             ]}
+            initialValue={userProfile.email}
           >
             <Input placeholder="Email liên hệ" />
           </Form.Item>
@@ -116,6 +139,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             name="phoneNumber"
             label="Số điện thoại"
             rules={[{ required: true, message: 'Please enter your phone number!' }]}
+            initialValue={userProfile.phoneNumber}
           >
             <Input placeholder="Số điện thoại liên hệ" />
           </Form.Item>
@@ -158,7 +182,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         </div>
         <div className="px-8 pt-4">
           <Button type="primary" htmlType="submit">
-            Nộp đơn
+            Ứng tuyển
           </Button>
         </div>
       </Form>
