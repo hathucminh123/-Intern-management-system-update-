@@ -80,7 +80,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
             >
               <Row gutter={[16, 16]}>
                 <Col span={14}>
-                  <Title level={3}>Chiến dịch thực tập: {internship.name}</Title>
+                  <Title level={3}>{internship.name}</Title>
                   <div className="mt-4">
                     <Text strong>Vị trí có thể ứng tuyển trong chiến dịch:</Text>
                     <div className="ml-3" style={{ display: "flex", flexWrap: "wrap" }}>

@@ -69,7 +69,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         initialValues={{ name: job?.name || '', list: intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
-          <Title level={3}>chiến dịch thực tập: {title}</Title>
+          <Title level={3}>{title}</Title>
         </div>
 
         <div className="px-8 pt-4">
