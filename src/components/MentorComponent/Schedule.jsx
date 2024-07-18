@@ -75,7 +75,7 @@ const Schedule = () => {
             events={events}
             startAccessor="startTime"
             endAccessor="endTime"
-            style={{ height: 500, backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}
+            style={{ height: 750, backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}

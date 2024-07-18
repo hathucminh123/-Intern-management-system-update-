@@ -110,7 +110,7 @@ const GuessDetailsComponent = ({ id }) => {
   };
 
   if (!internship) {
-    return <div>Internship not found</div>;
+    return <div>Chiến dịch tuyển thực tập sinh không tồn tại</div>;
   }
 
   return (
@@ -133,7 +133,7 @@ const GuessDetailsComponent = ({ id }) => {
         <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
           <Col span={8}>
             <div className="detail-item" style={{ display: 'flex', alignItems: 'center' }}>
-            <GrSchedule style={{ marginRight: '8px', fontSize: '16px' }} />
+              <GrSchedule style={{ marginRight: '8px', fontSize: '16px' }} />
               <Text style={{ fontSize: '16px' }}>
                 Ngày bắt đầu dự kiến: <span className="bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</span>
               </Text>
@@ -149,7 +149,7 @@ const GuessDetailsComponent = ({ id }) => {
           </Col>
           <Col span={8}>
             <div className="detail-item" style={{ display: 'flex', alignItems: 'center' }}>
-            <IoMdTime style={{ marginRight: '8px', fontSize: '16px' }} />
+              <IoMdTime style={{ marginRight: '8px', fontSize: '16px' }} />
               <Text style={{ fontSize: '16px' }}>
                 Thời gian thực tập: <span className="bold">{internship.duration} months</span>
               </Text>
@@ -282,14 +282,14 @@ const GuessDetailsComponent = ({ id }) => {
                 <div>
                   <Title level={3}>{internship.name}</Title>
                   <div className="mt-4">
-                  <Text strong>Vị trí có thể ứng tuyển trong chiến dịch:</Text>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
-                    {internship.jobs.map((position, index) => (
-                      <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
-                        Lập trình viên {position.name}
-                      </Button>
-                    ))}
-                  </div>
+                    <Text strong>Vị trí có thể ứng tuyển trong chiến dịch:</Text>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
+                      {internship.jobs.map((position, index) => (
+                        <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
+                          Lập trình viên {position.name}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex mt-4">
                     <ClockCircleOutlined />
@@ -311,7 +311,7 @@ const GuessDetailsComponent = ({ id }) => {
               </Space>
             </Card>
           ))}
-        </div>  
+        </div>
       </div>
 
       <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectedJob} campaigns={selectedCampaign} />
