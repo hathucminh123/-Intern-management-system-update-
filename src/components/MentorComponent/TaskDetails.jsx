@@ -27,18 +27,18 @@ const TaskDetails = ({ fetchAssessment }) => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const taskDetail = state?.task;
-  const fetch =state?.fetch
+  const fetch = state?.fetch
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
   const [cvFile, setCvFile] = useState(null);
   const [submissions, setSubmissions] = useState(taskDetail?.assessmentSubmitions || []);
-  
+
   const userRole = localStorage.getItem('role');
 
   // useEffect(() => {
-  
+
   //     fetchAssessmentSubmissions(taskDetail.id);
-    
+
   // }, []);
 
   // const fetchAssessmentSubmissions = async (taskId) => {
@@ -51,7 +51,7 @@ const TaskDetails = ({ fetchAssessment }) => {
   // };
 
 
-  
+
   const handleDescription = (value) => {
     setDescription(value);
   };
@@ -204,7 +204,7 @@ const TaskDetails = ({ fetchAssessment }) => {
             placeholder="Enter the Comment"
           />
         </Form.Item>
-        <Form.Item style={{ marginTop: "50px" }} label="Check" name="check">
+        <Form.Item style={{ marginTop: "50px" }} name="check">
           <Checkbox onChange={handleCheck} checked={check}>Approve</Checkbox>
         </Form.Item>
 

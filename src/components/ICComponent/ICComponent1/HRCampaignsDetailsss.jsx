@@ -19,6 +19,7 @@ const userRoles = {
   4: 'Admin'
 };
 
+
 const HRCampaignsDetailsss = () => {
   let { id } = useParams();
   const { state } = useLocation();
@@ -137,6 +138,9 @@ const HRCampaignsDetailsss = () => {
       </Menu.Item> */}
     </Menu>
   );
+  const mentor = user.filter(user => user.role === 1);
+  console.log('mentor', mentor);
+  const filteredUsers = user.filter(user => user.role === 0);
 
   const columns = [
     { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
@@ -147,6 +151,7 @@ const HRCampaignsDetailsss = () => {
       dataIndex: "role",
       key: "role",
       responsive: ['md'],
+
       render: (key) => <span><strong>{userRoles[key]}</strong></span>
     },
     {
@@ -201,6 +206,12 @@ const HRCampaignsDetailsss = () => {
               <div>totalMember: </div>
               <div className="ml-3 text-red-500">10</div>
             </div>
+            <div className="flex mt-3">
+              <div>This job's mentor: </div>
+              <div className="ml-3 bold">
+                {mentor.map((mentor) => (mentor.userName))}
+              </div>
+            </div>
           </div>
         </div>
         <hr />
@@ -227,11 +238,11 @@ const HRCampaignsDetailsss = () => {
                 </ul>
               </Paragraph>
             </TabPane> */}
-            <TabPane tab="Student List in Jobs" key="1">
+            <TabPane tab="Interns List in Jobs" key="1">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0", height: '100px' }}>
                   <div className="mt-8 flex justify-between items-center">
-                    <Title level={3}>Student List</Title>
+                    <Title level={3}>Interns List</Title>
                     <div style={{ gap: "20px" }}>
                       <Button style={{ marginRight: '20px' }} type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail, campaignDetail) }}>
                         Assign Intern to this job
@@ -245,7 +256,7 @@ const HRCampaignsDetailsss = () => {
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
                   <Table
                     columns={columns}
-                    dataSource={user}
+                    dataSource={filteredUsers}
                     rowKey="id"
                     style={{ marginTop: "20px" }}
                     pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
