@@ -106,7 +106,7 @@ const HRCampaigns = () => {
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  actions={userRole ==="hrmanager"&& ([
+                  actions={userRole === "hrmanager" && ([
                     <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
                     <Popconfirm
                       title="Are you sure to delete this campaign?"
@@ -131,7 +131,7 @@ const HRCampaigns = () => {
                   <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {campaign.name}
                   </Title>
-                  <p><strong>Available Positions Jobs in campaign:</strong>
+                  <p><strong>Available jobs in campaign: </strong>
                     {campaign.jobs.map((job, index) => (
                       <span key={index}>{job.name}{index < campaign.jobs.length - 1 && ', '}</span>
                     ))}

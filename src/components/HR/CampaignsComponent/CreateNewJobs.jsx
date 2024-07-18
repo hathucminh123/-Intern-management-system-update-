@@ -39,7 +39,7 @@ const CreateNewJobs = () => {
         return;
       }
 
-      
+
       const fileRef = ref(storage, cvFile.name);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
@@ -143,7 +143,7 @@ const CreateNewJobs = () => {
                   label="Duration (in months)"
                   rules={[{ required: true, message: "Please enter the job duration" }]}
                 >
-                  <Input placeholder="Enter the duration of the job" type="number" />
+                  <Input placeholder="Enter the duration of the job in months" type="number" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -181,7 +181,7 @@ const CreateNewJobs = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                Create new job
               </Button>
             </Form.Item>
           </Form>

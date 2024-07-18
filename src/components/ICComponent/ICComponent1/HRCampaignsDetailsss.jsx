@@ -27,22 +27,22 @@ const HRCampaignsDetailsss = () => {
   const [pageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [training, setTraining] = useState([]);
-  const [user,setUser]=useState([])
+  const [user, setUser] = useState([])
   const userRole = localStorage.getItem('role');
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(null);
-  console.log('Campain Details',campaignDetail)
-  console.log('Jobs Details',jobDetail)
+  console.log('Campain Details', campaignDetail)
+  console.log('Jobs Details', jobDetail)
 
   if (!jobDetail) {
     return <div>Job detail not found</div>;
   }
 
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await User.fetchUserListCampaignJob(campaignDetail.id,jobDetail.id)
+        const response = await User.fetchUserListCampaignJob(campaignDetail.id, jobDetail.id)
         setUser(response.events);
       } catch (error) {
         message.error('Error fetching data from API');
@@ -58,7 +58,7 @@ const HRCampaignsDetailsss = () => {
       message.error('Campaign ID or Job ID not found');
       setLoading(false);
     }
-  }, [campaignDetail.id , jobDetail.id]);
+  }, [campaignDetail.id, jobDetail.id]);
 
   const data = [
     { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
@@ -87,11 +87,11 @@ const HRCampaignsDetailsss = () => {
     }
   }, [jobDetail]);
 
-  const handleAddMentorJobCampaign = (jobDetail,campaignDetail) => {
-    navigate('/internshipcoordinators/MentorList',{state:{jobDetail,campaignDetail}});
+  const handleAddMentorJobCampaign = (jobDetail, campaignDetail) => {
+    navigate('/internshipcoordinators/MentorList', { state: { jobDetail, campaignDetail } });
   };
-  const handleAddInternJobCampaign = (jobDetail,campaignDetail) => {
-    navigate('/internshipcoordinators/InternList',{state:{jobDetail,campaignDetail}});
+  const handleAddInternJobCampaign = (jobDetail, campaignDetail) => {
+    navigate('/internshipcoordinators/InternList', { state: { jobDetail, campaignDetail } });
   };
 
   const handleDeleteTraining = async (jobId, trainingProgramId) => {
@@ -142,10 +142,10 @@ const HRCampaignsDetailsss = () => {
     { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
     { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
-    { 
-      title: "Role", 
-      dataIndex: "role", 
-      key: "role", 
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
       responsive: ['md'],
       render: (key) => <span><strong>{userRoles[key]}</strong></span>
     },
@@ -233,11 +233,11 @@ const HRCampaignsDetailsss = () => {
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
                     <div style={{ gap: "20px" }}>
-                      <Button style={{marginRight:'20px'}} type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail,campaignDetail) }}>
-                        Assign Intern to this Jobs
+                      <Button style={{ marginRight: '20px' }} type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail, campaignDetail) }}>
+                        Assign Intern to this job
                       </Button>
-                      <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>
-                        Assign Mentor to Manage this jobs
+                      <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail, campaignDetail) }}>
+                        Assign Mentor to manage this job
                       </Button>
                     </div>
                   </div>

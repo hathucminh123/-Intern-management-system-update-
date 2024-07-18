@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col ,Upload} from "antd";
+import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col, Upload } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -10,14 +10,14 @@ import moment from 'moment';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { UploadOutlined } from "@ant-design/icons";
-const { Title,Text } = Typography;
+const { Title, Text } = Typography;
 
 const { Option } = Select;
 const { Header, Content } = Layout;
 
 const EditCampaign = () => {
-  const {state} =useLocation(); 
-  const CampaignDetail =state?.item;
+  const { state } = useLocation();
+  const CampaignDetail = state?.item;
   const [form] = Form.useForm();
   const [requirement, setRequirement] = useState("");
   const [description, setDescription] = useState("");
@@ -25,7 +25,7 @@ const EditCampaign = () => {
   const [jobs, setJobs] = useState([]);
   const [cvFile, setCvFile] = useState(null);
   const navigate = useNavigate();
-console.log("asdasd",CampaignDetail)
+  console.log("asdasd", CampaignDetail)
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
@@ -65,19 +65,19 @@ console.log("asdasd",CampaignDetail)
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
 
-    const NewCampaigns = {
-      id: CampaignDetail.id,
-      ...values,
-      scopeOfWork: description,
-      requirements: requirement,
-      benefits: benefits,
-      duration: parseInt(values.duration),
-      imagePath:fileUrl
+      const NewCampaigns = {
+        id: CampaignDetail.id,
+        ...values,
+        scopeOfWork: description,
+        requirements: requirement,
+        benefits: benefits,
+        duration: parseInt(values.duration),
+        imagePath: fileUrl
 
-    //   estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
-    };
+        //   estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+      };
 
-  
+
       const response = await Campaign.EditNewCampaign(NewCampaigns);
       message.success("Campaign edit successfully!");
       form.resetFields();
@@ -111,7 +111,7 @@ console.log("asdasd",CampaignDetail)
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-      {CampaignDetail?.id ? "Edit Campaign" : "Create New Campaign"}
+        {CampaignDetail?.id ? "Edit Campaign" : "Create New Campaign"}
       </Header>
       <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div className="container flex flex-col">
@@ -121,7 +121,7 @@ console.log("asdasd",CampaignDetail)
               layout="vertical"
               onFinish={onFinish}
               style={{ maxWidth: 800, margin: "0 auto" }}
-              
+
             >
               <Row gutter={16}>
                 <Col span={12}>
@@ -146,9 +146,9 @@ console.log("asdasd",CampaignDetail)
                   <Form.Item
                     name="duration"
                     label="Internship Duration"
-                    rules={[{ required: true, message: "Please enter the duration in weeks" }]}
+                    rules={[{ required: true, message: "Please enter the duration in months" }]}
                   >
-                    <Input placeholder="Enter the duration, e.g., 10 weeks" />
+                    <Input placeholder="Enter the duration, e.g., 10 months" />
                   </Form.Item>
                 </Col>
               </Row>
@@ -216,28 +216,28 @@ console.log("asdasd",CampaignDetail)
                 />
               </Form.Item>
               <Form.Item
-              name="imagePath"
-              label={
-                <div>
-                  <Text strong>Upload Image</Text>
-                  <div>You can only upload one file</div>
-                </div>
-              }
-              rules={[{ required: true, message: 'Please upload an image!' }]}
-            >
-              <Upload.Dragger
                 name="imagePath"
-                multiple={false}
-                accept=".jpg,.jpeg,.png"
-                beforeUpload={handleBeforeUpload}
+                label={
+                  <div>
+                    <Text strong>Upload Image</Text>
+                    <div>You can only upload one file</div>
+                  </div>
+                }
+                rules={[{ required: true, message: 'Please upload an image!' }]}
               >
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined />
-                </p>
-                <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
-                <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
-              </Upload.Dragger>
-            </Form.Item>
+                <Upload.Dragger
+                  name="imagePath"
+                  multiple={false}
+                  accept=".jpg,.jpeg,.png"
+                  beforeUpload={handleBeforeUpload}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <UploadOutlined />
+                  </p>
+                  <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
+                  <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
+                </Upload.Dragger>
+              </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
                   Submit

@@ -60,7 +60,6 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       footer={null}
       onCancel={onClose}
       width={1200}
-      title={`Ứng tuyển cho vị trí ${job?.name || 'the job'}`}
     >
       <Form
         form={form}
@@ -69,7 +68,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
         initialValues={{ name: job?.name || '', list: intern?.name }}
       >
         <div className="flex items-center justify-between bg-neutral-1 px-10 pt-8">
-          <Title level={3}>{title}</Title>
+          <Title level={3}>{`Ứng tuyển cho vị trí ${job?.name || 'the job'} trong ${title}`} </Title>
         </div>
 
         <div className="px-8 pt-4">
@@ -147,12 +146,12 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
           <div className="pt-2">
             <div className="flex items-center">
               <CiLocationOn />
-              <Text className="ml-1 text-neutral-10">CN1: Đại học quốc gia</Text>
+              <Text className="ml-1 text-neutral-10">Chi nhánh 1: Đại học quốc gia</Text>
             </div>
             <div className="flex items-center">
               <CiLocationOn />
               <Text className="ml-1 text-neutral-10">
-                CN2: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000
+                Chi nhánh 2: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000
               </Text>
             </div>
           </div>

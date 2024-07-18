@@ -66,9 +66,9 @@ const GuessJobDetailsComponent = () => {
               </Col>
               <Col span={8}>
                 <div className="detail-item">
-                <MdGroups />
+                  <MdGroups />
                   <div className="detail-text">
-                    tổng số thành viên: <span className="bold">10 members</span>
+                    Tổng số thành viên: <span className="bold">10 members</span>
                   </div>
                 </div>
               </Col>

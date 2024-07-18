@@ -29,7 +29,7 @@ const MentorList = () => {
   const fetchUsers = async () => {
     try {
       const res = await User.fetchUser();
-      const filteredUsers = res.events.filter(user => user.role === 1); 
+      const filteredUsers = res.events.filter(user => user.role === 1);
       setUsers(filteredUsers);
     } catch (error) {
       message.error('Error fetching users: ' + error.message);
@@ -78,7 +78,7 @@ const MentorList = () => {
     setSearchQuery(value.toLowerCase());
   };
 
-  const filteredUsers = users.filter(user => 
+  const filteredUsers = users.filter(user =>
     user.userName.toLowerCase().includes(searchQuery)
   );
 
@@ -97,17 +97,17 @@ const MentorList = () => {
     { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
     { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
-    { 
-      title: "Role", 
-      dataIndex: "role", 
-      key: "role", 
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
       responsive: ['md'],
       render: (key) => <span><strong>{userRoles[key]}</strong></span>
     },
-    { 
-      title: "Actions", 
-      key: "actions", 
-      responsive: ['md'], 
+    {
+      title: "Actions",
+      key: "actions",
+      responsive: ['md'],
       render: (text, record) => (
         <Space size="middle">
           <Dropdown overlay={menu(record)}>
@@ -126,11 +126,11 @@ const MentorList = () => {
         <Title level={3} style={{ margin: 0 }}>Mentor List</Title>
       </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-        <Search 
-          placeholder="Search by Name" 
-          enterButton 
-          onSearch={handleSearch} 
-          style={{ marginBottom: '20px' }} 
+        <Search
+          placeholder="Search by Name"
+          enterButton
+          onSearch={handleSearch}
+          style={{ marginBottom: '20px' }}
         />
         <Table
           dataSource={filteredUsers}
@@ -140,7 +140,7 @@ const MentorList = () => {
         />
         <div style={{ marginTop: "20px", textAlign: "right" }}>
           <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleAddUser}>
-            Add to Class Campaign Jobs
+            Assign to manage jobs
           </Button>
         </div>
       </Content>

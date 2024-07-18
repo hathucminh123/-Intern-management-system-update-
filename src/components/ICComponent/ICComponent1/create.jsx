@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message,Layout } from "antd";
+import { Form, Input, Button, Select, Typography, message, Layout } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -12,11 +12,11 @@ const { Option } = Select;
 const { Header, Content, Footer } = Layout;
 const Create = () => {
   const [form] = Form.useForm();
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const [courseObject, setCourseObject] = useState("");
   const [outputObject, setOutputObject] = useState("");
   const [jobs, setJobs] = useState([]);
-  
+
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
@@ -66,95 +66,95 @@ const Create = () => {
         Create Training Programs
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
-    <div className="container flex flex-col">
-      {/* <Title className="text-center mt-5" level={2}>
+        <div className="container flex flex-col">
+          {/* <Title className="text-center mt-5" level={2}>
         Create New Campaign
       </Title> */}
-      <div className="mt-5">
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          style={{ maxWidth: 600, margin: "0 auto" }}
-        >
-          <Form.Item
-            name="name"
-            label="Training Program name"
-            rules={[
-              { required: true, message: "Please enter the Training title" },
-            ]}
-          >
-            <Input placeholder="Enter the campaign title" />
-          </Form.Item>
-          
-          <Form.Item
-            name="jobIds"
-            label="Vị trí các jobs"
-            rules={[{ required: true, message: "Please select the positions" }]}
-          >
-            <Select
-              mode="multiple"
-              placeholder="Select positions"
-              style={{ width: "100%" }}
+          <div className="mt-5">
+            <Form
+              form={form}
+              layout="vertical"
+              onFinish={onFinish}
+              style={{ maxWidth: 600, margin: "0 auto" }}
             >
-              {jobs.map(program => (
-                <Option key={program.id} value={program.id}>
-                  {program.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              <Form.Item
+                name="name"
+                label="Training Program name"
+                rules={[
+                  { required: true, message: "Please enter the Training title" },
+                ]}
+              >
+                <Input placeholder="Enter the campaign title" />
+              </Form.Item>
 
-          <Form.Item
-            name="duration"
-            label="Internship Duration"
-            rules={[{ required: true, message: "Please enter the duration" }]}
-          >
-            <Input placeholder="Enter the duration, e.g., 10 weeks" />
-          </Form.Item>
+              <Form.Item
+                name="jobIds"
+                label="Vị trí các jobs"
+                rules={[{ required: true, message: "Please select the positions" }]}
+              >
+                <Select
+                  mode="multiple"
+                  placeholder="Select positions"
+                  style={{ width: "100%" }}
+                >
+                  {jobs.map(program => (
+                    <Option key={program.id} value={program.id}>
+                      {program.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
 
-          <Form.Item
-            name="courseObject"
-            label="Course Object"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the course object",
-              },
-            ]}
-          >
-            <ReactQuill
-              value={courseObject}
-              onChange={handleCourseObjectChange}
-              placeholder="Enter the course object"
-            />
-          </Form.Item>
-          <Form.Item
-            name="outputObject"
-            label="Output Object"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the output object",
-              },
-            ]}
-          >
-            <ReactQuill
-              value={outputObject}
-              onChange={handleOutputObjectChange}
-              placeholder="Enter the output object"
-            />
-          </Form.Item>
-          
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </div>
-    </Content>
+              <Form.Item
+                name="duration"
+                label="Internship Duration"
+                rules={[{ required: true, message: "Please enter the duration in months" }]}
+              >
+                <Input placeholder="Enter the duration, e.g., 10 months" />
+              </Form.Item>
+
+              <Form.Item
+                name="courseObject"
+                label="Course Object"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the course object",
+                  },
+                ]}
+              >
+                <ReactQuill
+                  value={courseObject}
+                  onChange={handleCourseObjectChange}
+                  placeholder="Enter the course object"
+                />
+              </Form.Item>
+              <Form.Item
+                name="outputObject"
+                label="Output Object"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the output object",
+                  },
+                ]}
+              >
+                <ReactQuill
+                  value={outputObject}
+                  onChange={handleOutputObjectChange}
+                  placeholder="Enter the output object"
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Create new training program
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </div>
+      </Content>
     </Layout>
   );
 };

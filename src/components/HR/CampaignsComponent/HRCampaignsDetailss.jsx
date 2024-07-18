@@ -226,7 +226,7 @@ const HRCampaignsDetailss = () => {
 
           )}
           {userRole === 'internshipcoordinators' && (
-            <TabPane tab=" class Jobs in Campaign" key="2">
+            <TabPane tab="Jobs list in Campaign" key="2">
               <div className="mt-8 flex justify-between items-center">
                 <Title level={3}>Danh sách Jobs</Title>
                 {/* <Button type="primary" onClick={()=>{handleAddJobCampaign(CampaignDetail)}}>

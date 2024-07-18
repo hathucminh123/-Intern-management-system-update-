@@ -57,7 +57,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
     fetchAssessment(); // Call fetchAssessment before navigating
     navigate(`/${userRole}/taskDetail/${task.id}`, { state: { task } });
   };
-  
+
   const handleOpenReviewModal = (task) => {
     setTaskToReview(task);
     setOpenReviewModal(true);
@@ -114,24 +114,24 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
 
   const menu = (record) => (
     <Menu>
-     
 
-          <Menu.Item key="1">
+
+      <Menu.Item key="1">
         <Button onClick={() => handleDetails(record)}>View</Button>
       </Menu.Item>
-       
 
-       {userRole==="mentor" &&(
+
+      {userRole === "mentor" && (
         <Menu.Item key="2">
-        <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
-      </Menu.Item>
-       )}
-      
-      {userRole==="mentor" &&(
-      <Menu.Item key="3">
-        <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
-      </Menu.Item>
-         )}
+          <Button onClick={() => handleOpenDetailModal(record)}>Edit</Button>
+        </Menu.Item>
+      )}
+
+      {userRole === "mentor" && (
+        <Menu.Item key="3">
+          <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
+        </Menu.Item>
+      )}
       {record.completed && (
         <Menu.Item key="4">
           <Button onClick={() => handleOpenReviewModal(record)}>Review</Button>
@@ -235,17 +235,18 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
         isVisible={openAddModal}
         onClose={() => {
           setOpenAddModal(false);
-          fetchAssessment();  
+          fetchAssessment();
         }}
         onAddTask={(newTask) => {
           onAddTask(newTask);
-          fetchAssessment();  
+          fetchAssessment();
         }}
       />
       {selectedTask && (
         <DetailModal
           isVisible={openDetailModal}
-          onClose={() => {setOpenDetailModal(false);
+          onClose={() => {
+            setOpenDetailModal(false);
             fetchAssessment();
           }}
           task={selectedTask}
@@ -267,12 +268,13 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
           onChange={handleSearch}
           style={{ width: '300px', marginRight: '30px' }}
         />
-        {userRole === "mentor" && (
-          <Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
-        )}
+
         <Popover content={content}>
           <Button style={{ marginRight: '30px' }} icon={<FilterOutlined />} />
         </Popover>
+        {userRole === "mentor" && (
+          <Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
+        )}
       </div>
       <Table className="shadow-lg" dataSource={filteredTasks} columns={columns} />
     </>
