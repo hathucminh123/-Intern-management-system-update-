@@ -128,13 +128,13 @@ const HRCampaignsDetailss = () => {
             <div className="flex flex-wrap mt-3">
               <div>Vị trí ứng tuyển lập trình viên:</div>
               {CampaignDetail.jobs.map((job, index) => (
-                <Button
-                  onClick={() => handleViewGuestInfoClick(CampaignDetail, job)}
+                <Tag
+                  // onClick={() => handleViewGuestInfoClick(CampaignDetail, job)}
                   className="ml-3 mt-0 text-blue-500"
                   key={index}
                 >
                   {job.name}
-                </Button>
+                </Tag>
               ))}
             </div>
           </div>

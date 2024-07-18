@@ -9,6 +9,7 @@ import * as Campaign from '../../../service/Campaign';
 import { GrSchedule } from 'react-icons/gr';
 import moment from 'moment';
 import { IoMdTime } from 'react-icons/io';
+import { CiLocationOn, CiHeart } from "react-icons/ci";
 
 const { Title, Text, Paragraph } = Typography;
 const { Panel } = Collapse;
@@ -145,6 +146,14 @@ const GuessDetailsComponent = ({ id }) => {
               <Text style={{ fontSize: '16px' }}>
                 Ngày kết thúc dự kiến: <span className="bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</span>
               </Text>
+            </div>
+          </Col>
+          <Col span={8}>
+            <div className="detail-item">
+              <CiLocationOn />
+              <div className="detail-text">
+                Vị trí: <span className="bold">Thành phố Hồ Chí Minh</span>
+              </div>
             </div>
           </Col>
           <Col span={8}>
