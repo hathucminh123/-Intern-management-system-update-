@@ -54,7 +54,7 @@ const HRCampaigns = () => {
       message.success("Campaign deleted successfully");
       fetchCampaignsData();
     } catch (error) {
-      message.error("Intern still exist in campaign jobs " );
+      message.error("Intern still exist in campaign jobs ");
       console.error("Error deleting campaign:", error);
     }
   };
@@ -62,6 +62,11 @@ const HRCampaigns = () => {
   const filteredCampaigns = campaigns.filter((campaign) =>
     campaign.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const ratingStyle = {
+    color: '#Ff0000',
+    fontWeight: 'bold',
+  };
 
   const currentCampaigns = filteredCampaigns.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
@@ -109,7 +114,9 @@ const HRCampaigns = () => {
                       okText="Yes"
                       cancelText="No"
                     >
-                      <Button type="danger">Delete</Button>
+                      <Button >
+                        <span style={ratingStyle}>Delete</span>
+                      </Button>
                     </Popconfirm>
                   ]}
                 >
@@ -122,14 +129,14 @@ const HRCampaigns = () => {
                     alt={campaign.name}
                   />
                   <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                   {campaign.name}
+                    {campaign.name}
                   </Title>
-                  <p><strong>Available Positions Jobs in campaign:</strong> 
-                  {campaign.jobs.map((job, index) => (
-      <span key={index}>{job.name}{index < campaign.jobs.length - 1 && ', '}</span>
-    ))}
-                  
-                  
+                  <p><strong>Available Positions Jobs in campaign:</strong>
+                    {campaign.jobs.map((job, index) => (
+                      <span key={index}>{job.name}{index < campaign.jobs.length - 1 && ', '}</span>
+                    ))}
+
+
                   </p>
                   <p><strong>Duration:</strong> {campaign.duration} months</p>
                   <p><strong>Start Date:</strong> {moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>

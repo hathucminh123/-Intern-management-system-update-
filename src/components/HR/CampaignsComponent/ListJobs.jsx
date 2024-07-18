@@ -66,7 +66,7 @@ const ListJobs = () => {
 
   const onChange = (e, item) => {
     const { checked } = e.target;
-    console.log('asdasd',checked)
+    console.log('asdasd', checked)
     if (checked) {
       setSelectedJobs(item.id);
     } else {
@@ -84,11 +84,16 @@ const ListJobs = () => {
       message.success("Jobs added successfully");
       navigate("/hrmanager/campaigns");
     } catch (error) {
-      message.error("Error  jobs is exsit in campaign: " + CampaignDetail.name );
+      message.error("Error  jobs is exsit in campaign: " + CampaignDetail.name);
     }
   };
 
   const currentJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const ratingStyle = {
+    color: '#Ff0000',
+    fontWeight: 'bold',
+  };
 
   return (
     <Layout>
@@ -114,7 +119,7 @@ const ListJobs = () => {
               size="middle"
               textbutton={`Add jobs to "${CampaignDetail.name}" Campaign`}
               onClick={handleAddNewJobs}
-              // disabled={selectedJobs.length === 2}
+            // disabled={selectedJobs.length === 2}
             />
           </Space>
           <Row gutter={[16, 16]}>
@@ -132,7 +137,9 @@ const ListJobs = () => {
                       okText="Yes"
                       cancelText="No"
                     >
-                      <Button type="danger">Delete</Button>
+                      <Button >
+                        <span style={ratingStyle}>Delete</span>
+                      </Button>
                     </Popconfirm>
                   ]}
                 >

@@ -73,6 +73,11 @@ const JobsIC = () => {
     }
   };
 
+  const ratingStyle = {
+    color: '#Ff0000',
+    fontWeight: 'bold',
+  };
+
   const handleDeleteTraining = async (jobId, trainingProgramId) => {
     try {
       const dataDeleteTraining = {
@@ -102,30 +107,30 @@ const JobsIC = () => {
 
   return (
     <Layout>
-         { userRole ==="internshipcoordinators" &&(
-            <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-              Job Class List
-            </Header>)
-      
-          }
-           { userRole ==="hrmanager" &&(
-            <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-              Job  List
-            </Header>)
-      
-          }
+      {userRole === "internshipcoordinators" && (
+        <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+          Job Class List
+        </Header>)
+
+      }
+      {userRole === "hrmanager" && (
+        <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+          Job  List
+        </Header>)
+
+      }
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
-        { userRole ==="internshipcoordinators" &&(
-          <Title className="text-center mb-5" level={2}>
-            List class jobs Training
-          </Title>
-        )}
-            { userRole ==="hrmanager" &&(
-          <Title className="text-center mb-5" level={2}>
-            List Jobs
-          </Title>
-        )}
+          {userRole === "internshipcoordinators" && (
+            <Title className="text-center mb-5" level={2}>
+              List class jobs Training
+            </Title>
+          )}
+          {userRole === "hrmanager" && (
+            <Title className="text-center mb-5" level={2}>
+              List Jobs
+            </Title>
+          )}
           <Space direction="vertical" className="flex flex-row items-center mb-5">
             <Search
               size="large"
@@ -135,16 +140,16 @@ const JobsIC = () => {
               className="w-full"
             />
 
-{ userRole ==="hrmanager" &&(
-            <ButtonComponent
-            styleButton={{ background: "#06701c", border: "none" }}
-            styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-            size="middle"
-            textbutton="Create New"
-            onClick={handleNewJobs}
-          />
-        )}
-         
+            {userRole === "hrmanager" && (
+              <ButtonComponent
+                styleButton={{ background: "#06701c", border: "none" }}
+                styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                size="middle"
+                textbutton="Create New"
+                onClick={handleNewJobs}
+              />
+            )}
+
           </Space>
           <Row gutter={[16, 16]}>
             {currentJobs.map((item) => (
@@ -162,7 +167,9 @@ const JobsIC = () => {
                       okText="Yes"
                       cancelText="No"
                     >
-                      <Button type="danger">Delete</Button>
+                      <Button >
+                        <span style={ratingStyle}>Delete</span>
+                      </Button>
                     </Popconfirm>
                   ] : []}
                 >
