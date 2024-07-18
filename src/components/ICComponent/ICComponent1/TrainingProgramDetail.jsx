@@ -13,6 +13,7 @@ import '../../../index.css';
 import DetailKPIModal from "./DetailKPIModal";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 import moment from "moment";
+import * as User from "../../../service/authService"
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -35,8 +36,25 @@ const TrainingProgramDetail = () => {
   const [openKPIModal, setOpenKPIModal] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  
+  console.log("task", task);
   const userRole = localStorage.getItem('role')?.toLowerCase();
+
+  const [users, setUsers] = useState([]);
+  console.log("users", users);
+  const fetchUsers = async () => {
+    try {
+      const res = await User.fetchUser();
+      const filteredUsers = res.events.filter(user => user.role === 0);
+      setUsers(filteredUsers);
+    } catch (error) {
+      message.error('Fetch User Error: ' + error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
 
   useEffect(() => {
     if (CampaignDetail?.resources) {
@@ -284,6 +302,17 @@ const TrainingProgramDetail = () => {
       title: 'Task Name',
       dataIndex: 'name',
       key: 'name',
+    },
+    {
+      title: 'Assigned To',
+      dataIndex: 'userId',
+      key: 'userId',
+      render: (userId) => {
+        const user = users.find(users => users.id === userId);
+        const userName = user.userName;
+        console.log("alo123", userName);
+        return userName;
+      },
     },
     {
       title: 'Start Date',
