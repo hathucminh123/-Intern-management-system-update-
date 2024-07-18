@@ -109,7 +109,7 @@ const JobsIC = () => {
     <Layout>
       {userRole === "internshipcoordinators" && (
         <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-          Job Class List
+         Assign Training program to jobs
         </Header>)
 
       }
@@ -123,7 +123,7 @@ const JobsIC = () => {
         <div className="container mx-auto">
           {userRole === "internshipcoordinators" && (
             <Title className="text-center mb-5" level={2}>
-              List class jobs Training
+             Assign Training Program to jobs
             </Title>
           )}
           {userRole === "hrmanager" && (

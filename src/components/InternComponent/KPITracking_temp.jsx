@@ -112,7 +112,7 @@ const TrainingList = () => {
               <Collapse
                >
               <Panel
-               header={`${training.name} (${training.duration} months)`}
+               header={`Training program: ${training.name} | Duration: ${training.duration} months`}
                key={training.id}
               >
                 <Card>

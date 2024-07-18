@@ -234,10 +234,10 @@ const HRCampaignsDetailsss = () => {
                     <Title level={3}>Student List</Title>
                     <div style={{ gap: "20px" }}>
                       <Button style={{marginRight:'20px'}} type="primary" onClick={() => { handleAddInternJobCampaign(jobDetail,campaignDetail) }}>
-                        Assign Intern to Manage this Class
+                        Assign Intern to this Jobs
                       </Button>
                       <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail,campaignDetail) }}>
-                        Assign Mentor to Manage this Class
+                        Assign Mentor to Manage this jobs
                       </Button>
                     </div>
                   </div>

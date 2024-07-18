@@ -123,7 +123,7 @@ const Jobs = () => {
         <div className="container mx-auto">
           {userRole === "internshipcoordinators" && (
             <Title className="text-center mb-5" level={2}>
-              List class jobs Training
+              Assign  Training program to jobs
             </Title>
           )}
           {userRole === "hrmanager" && (

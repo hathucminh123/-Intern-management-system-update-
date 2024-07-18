@@ -106,7 +106,7 @@ const HRCampaigns = () => {
                   hoverable
                   className="shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  actions={[
+                  actions={userRole ==="hrmanager"&& ([
                     <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
                     <Popconfirm
                       title="Are you sure to delete this campaign?"
@@ -118,7 +118,7 @@ const HRCampaigns = () => {
                         <span style={ratingStyle}>Delete</span>
                       </Button>
                     </Popconfirm>
-                  ]}
+                  ])}
                 >
                   <Image
                     className="rounded-lg mb-3"

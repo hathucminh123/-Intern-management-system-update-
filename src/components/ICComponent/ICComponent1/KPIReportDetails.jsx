@@ -91,7 +91,7 @@ const KPIReportDetails = () => {
       key: 'weight',
       render: (text, record) => (
         <>
-          <div>{record.weight}</div>
+          <div>{record.weight}%</div>
           <div><strong>{parseFloat(record.weight)}%</strong></div>
         </>
       ),
@@ -161,7 +161,7 @@ const KPIReportDetails = () => {
             <Col key={training.id} span={12}>
               <Collapse>
                 <Collapse.Panel
-                  header={`${training.name} (${training.duration} months)`}
+                  header={`Training program: ${training.name} | Duration: ${training.duration} months`}
                   key={training.id}
                 >
                   <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>

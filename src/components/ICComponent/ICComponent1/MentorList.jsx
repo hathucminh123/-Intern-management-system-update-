@@ -123,7 +123,7 @@ const MentorList = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ backgroundColor: '#fff', padding: '0 20px', borderBottom: '1px solid #f0f0f0' }}>
-        <Title level={3} style={{ margin: 0 }}>Mentor and Intern List</Title>
+        <Title level={3} style={{ margin: 0 }}>Mentor List</Title>
       </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
         <Search 

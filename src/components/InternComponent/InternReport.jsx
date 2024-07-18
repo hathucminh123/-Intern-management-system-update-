@@ -95,7 +95,7 @@ const InternReport = () => {
       key: 'weight',
       render: (text, record) => (
         <>
-          <div>{record.weight}</div>
+          <div>{record.weight}%</div>
           <div><strong>{parseFloat(record.weight)}%</strong></div>
         </>
       ),
@@ -131,7 +131,7 @@ console.log('asdasd',reportData)
             <Col key={training.id} span={12}>
               <Collapse>
                 <Collapse.Panel
-                  header={`${training.name} (${training.duration} months)`}
+                 header={`Training program: ${training.name} | Duration: ${training.duration} months`}
                   key={training.id}
                   onClick={() => handleSelected(training.id)}
                 >
