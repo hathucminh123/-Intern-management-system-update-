@@ -70,7 +70,9 @@ import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
 import UserReportView from "./components/MentorComponent/markReportDetails";
 import HRCampaignsDetailsss from "./components/ICComponent/ICComponent1/HRCampaignsDetailsss";
 import InternList from "./components/ICComponent/ICComponent1/InternList";
-
+import GuessSignin from "./components/GuessComponent/GuessSignin/GuessSignin";
+import GuessSignup from "./components/GuessComponent/GuessSignup/GuessSignup";
+import JobApply from "./components/GuessComponent/JobApply/JobApply";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -81,9 +83,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
+          <Route path="/login" element={<GuessSignin />} />
+          <Route path="/sign-up" element={<GuessSignup />} />
+
           <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
+          
               <Route path="info" element={<GuestInfo />} />
+              <Route path="JobApply" element={<JobApply />} />
               <Route path="Detail/:id" element={<GuessDetailPage />} />
               <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
 

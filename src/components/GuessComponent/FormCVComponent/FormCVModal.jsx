@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Button, Upload, Typography, Select, message } from 'antd';
+import { Modal, Form, Input, Button, Upload, Typography, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createNewCandidate } from '../../../service/Candidate';
 import { v4 as uuidv4 } from 'uuid';
-import * as UserProfile from "../../../service/authService"
+import * as UserProfile from "../../../service/authService";
 
 const { Title, Text } = Typography;
 
 const FormCVModal = ({ visible, onClose, title, intern, job }) => {
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
-  const [userProfile, setUserProfile] = useState({})
+  const [userProfile, setUserProfile] = useState({});
 
-
-
-
-  const fetchUserProfile = async () => {
-    try {
-      const res = await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
-      setUserProfile(res.events)
-    } catch (error) {
-      message.error('fectch User Profile failed')
-    }
-  }
-  console.log("UserProfile", userProfile)
   useEffect(() => {
-    fetchUserProfile()
+    const fetchUserProfile = async () => {
+      try {
+        const userId = sessionStorage.getItem('userId');
+        if (userId) {
+          const res = await UserProfile.fetchUserProfile(userId.toLowerCase());
+          setUserProfile(res.events);
+        } else {
+          message.error('User ID not found in session storage');
+        }
+      } catch (error) {
+        message.error('Fetch User Profile failed');
+      }
+    };
 
-
-  }, [])
+    fetchUserProfile();
+  }, []);
 
   const handleSubmit = async (values) => {
     console.log('Form values:', values);
@@ -43,7 +43,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
       }
 
       // Upload file to Firebase Storage
-      const fileRef = ref(storage, cvFile.name);
+      const fileRef = ref(storage, `${uuidv4()}-${cvFile.name}`);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
 
@@ -119,7 +119,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             name="fullName"
             label="Họ và tên"
             rules={[{ required: true, message: 'Please enter your full name!' }]}
-            initialValue={`${userProfile.firstName} ${userProfile.lastName}`}
+            initialValue={userProfile.userName}
           >
             <Input placeholder="Họ và tên" />
           </Form.Item>
@@ -129,7 +129,6 @@ const FormCVModal = ({ visible, onClose, title, intern, job }) => {
             rules={[
               { required: true, message: 'Please enter your email!' },
               { type: 'email', message: 'Please enter a valid email!' },
-
             ]}
             initialValue={userProfile.email}
           >

@@ -102,12 +102,12 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                   </div>
                   <div className="flex mt-4">
                     <GrSchedule />
-                    <Text className="ml-3">Ngày bắt đầu dự kiến:</Text>
+                    <Text className="ml-3">Ngày bắt đầu :</Text>
                     <Text className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</Text>
                   </div>
                   <div className="flex mt-4">
                     <GrSchedule />
-                    <Text className="ml-3">Ngày kết thúc dự kiến:</Text>
+                    <Text className="ml-3">Ngày kết thúc :</Text>
                     <Text className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</Text>
                   </div>
                 </Col>

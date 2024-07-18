@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import './InputFormComponent.css';
 
 const InputFormComponent = (props) => {
-  const { placeholder = 'Nhập text', ...rests } = props;
+  const { placeholder = 'Nhập text', styleButton, ...rests } = props;
 
   const handleOnChangeInput = (e) => {
     props.onChange(e.target.value);
@@ -16,7 +16,7 @@ const InputFormComponent = (props) => {
       value={props.value} 
       {...rests} 
       onChange={handleOnChangeInput} 
-      variant="filled" // Sử dụng variant thay vì bordered
+      style={styleButton}
     />
   );
 };
