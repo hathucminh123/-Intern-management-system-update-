@@ -73,6 +73,7 @@ import InternList from "./components/ICComponent/ICComponent1/InternList";
 import GuessSignin from "./components/GuessComponent/GuessSignin/GuessSignin";
 import GuessSignup from "./components/GuessComponent/GuessSignup/GuessSignup";
 import JobApply from "./components/GuessComponent/JobApply/JobApply";
+import GuessProfile from "./components/GuessComponent/GuessProfile/GuessProfile";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -91,6 +92,8 @@ function App() {
           
               <Route path="info" element={<GuestInfo />} />
               <Route path="JobApply" element={<JobApply />} />
+              <Route path="Profile" element={<GuessProfile />} />
+
               <Route path="Detail/:id" element={<GuessDetailPage />} />
               <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
 

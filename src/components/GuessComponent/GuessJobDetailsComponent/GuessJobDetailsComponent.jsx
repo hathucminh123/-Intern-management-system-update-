@@ -1,25 +1,54 @@
-import React, { useState } from 'react';
-import { Button, Card, Col, Row, Space, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, message, Row, Space, Typography } from 'antd';
 import { useLocation } from 'react-router-dom';
 import "../GuessDetailsComponent/GuessDetailsComponent.css";
 import "../../../pages/GuessDetailPage/GuessDetailPage.css";
-import "./GuessJobDetailsComponent.css"
-import { ClockCircleOutlined } from '@ant-design/icons';
-import { CiLocationOn, CiHeart } from "react-icons/ci";
-import { IoMdTime } from "react-icons/io";
-import moment from 'moment';
+import "./GuessJobDetailsComponent.css";
+import { IoMdTime, IoMdRefresh } from "react-icons/io";
 import { GrSchedule } from 'react-icons/gr';
-import { MdOutlineMonetizationOn, MdGroup } from "react-icons/md";
+import { CiLocationOn, CiHeart } from "react-icons/ci";
+import { MdOutlineMonetizationOn, MdGroups, MdGroup } from "react-icons/md";
+import moment from 'moment';
 import FormCVModal from '../FormCVComponent/FormCVModal';
-import { MdGroups } from "react-icons/md";
-const GuessJobDetailsComponent = () => {
-  const { Title, Text } = Typography;
+import FormCVReapplyModal from '../FormCVComponent/FormCVReapplyModal';
+import * as Candidates from "../../../service/Candidate";
+
+const GuestJobDetailsComponent = () => {
+  const { Title } = Typography;
   const { state } = useLocation();
   const jobs = state?.itemJob;
   const campaign = state?.itemCampaign;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isReapplyModalVisible, setIsReapplyModalVisible] = useState(false);
   const [selectJobs, setSelectJobs] = useState(null);
   const [selectCampaigns, setSelectCampaigns] = useState(null);
+  const [apply, setApply] = useState([]);
+  const [candidate, setCandidate] = useState({});
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const profile = JSON.parse(sessionStorage.getItem('userProfile'));
+    setUserProfile(profile);
+  }, []);
+
+  const fetchCandidate = async () => {
+    try {
+      const res = await Candidates.fetchCandidate(campaign.id, jobs.id);
+      setApply(res.events);
+    } catch (error) {
+      message.error("Fetch Candidate failed: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (campaign?.id && jobs?.id) {
+      fetchCandidate();
+    }
+  }, [campaign?.id, jobs?.id]);
+
+  const filteredCandidates = userProfile ? apply.filter(candidate => candidate.email === userProfile.email) : [];
+
+  const applyDisabled = filteredCandidates.length >= 2;
 
   const showModal = (job, campaigns) => {
     setSelectJobs(job);
@@ -27,15 +56,35 @@ const GuessJobDetailsComponent = () => {
     setIsModalVisible(true);
   };
 
+  const showReapplyModal = (job, campaigns) => {
+    setSelectJobs(job);
+    setSelectCampaigns(campaigns);
+    setIsReapplyModalVisible(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalVisible(false);
+  };
+
+  const handleCloseReapplyModal = () => {
+    setIsReapplyModalVisible(false);
+  };
+
+  const handleApplicationSuccess = () => {
+    fetchCandidate();
+    setIsModalVisible(false);
+  };
+
+  const handleReapplySuccess = () => {
+    fetchCandidate();
+    setIsReapplyModalVisible(false);
   };
 
   return (
     <Space className="Container" direction="vertical">
       <div className='content-wrapper'>
         <Space className='inner-container' direction="vertical">
-          <Card style={{ width: '100%', backgroundColor: '#f9f9f9' }}>
+          <Card style={{ width: '100%', backgroundColor: '#f9f9f9', padding: '20px' }}>
             <Title level={1} className="customTitle">
               Vị trí tuyển dụng: {jobs.name} vào campaign {campaign.name}
             </Title>
@@ -73,14 +122,57 @@ const GuessJobDetailsComponent = () => {
                 </div>
               </Col>
             </Row>
-            <Button
-              style={{ marginTop: '20px' }}
-              type="primary"
-              className="rounded-full customButton"
-              onClick={() => showModal(jobs, campaign)}
-            >
-              Ứng tuyển ngay
-            </Button>
+            {userProfile ? (
+              filteredCandidates.length > 0 ? (
+                <Button
+                  style={{
+                    marginTop: '20px',
+                    backgroundColor: applyDisabled ? 'gray' : '#4CAF50',
+                    color: 'white',
+                    position: 'relative',
+                  }}
+                  type="primary"
+                  className="rounded-full customButton"
+                  onClick={() => showReapplyModal(jobs, campaign)}
+                  disabled={applyDisabled}
+                >
+                  {applyDisabled ? (
+                    "Hết lượt ứng tuyển"
+                  ) : (
+                    <>
+                      <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
+                      ỨNG tuyển lại
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  style={{
+                    marginTop: '20px',
+                    backgroundColor: '#1890ff',
+                    color: 'white',
+                  }}
+                  type="primary"
+                  className="rounded-full customButton"
+                  onClick={() => showModal(jobs, campaign)}
+                >
+                  Ứng tuyển ngay
+                </Button>
+              )
+            ) : (
+              <Button
+                style={{
+                  marginTop: '20px',
+                  backgroundColor: 'gray',
+                  color: 'white',
+                }}
+                type="primary"
+                className="rounded-full customButton"
+                disabled
+              >
+                Bạn cần đăng nhập để ứng tuyển
+              </Button>
+            )}
           </Card>
 
           <Title level={3} className="customTitle">
@@ -115,7 +207,7 @@ const GuessJobDetailsComponent = () => {
               <CiHeart style={{ color: 'blue' }} />
               <div>
                 <p><strong>Chăm sóc sức khoẻ</strong></p>
-                <p>Bảo hiểm sức khỏe và  bảo hiểm xã hội</p>
+                <p>Bảo hiểm sức khỏe và bảo hiểm xã hội</p>
               </div>
             </Space>
           </Card>
@@ -129,10 +221,33 @@ const GuessJobDetailsComponent = () => {
             </Space>
           </Card>
         </Space>
-        <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={campaign.name} intern={campaign} job={selectJobs} campaigns={selectCampaigns} />
+        {userProfile && (
+          <>
+            <FormCVModal
+              visible={isModalVisible}
+              onClose={handleCloseModal}
+              title={campaign.name}
+              intern={campaign}
+              job={selectJobs}
+              campaigns={selectCampaigns}
+              onApplicationSuccess={handleApplicationSuccess}
+            />
+            <FormCVReapplyModal
+              visible={isReapplyModalVisible}
+              onClose={handleCloseReapplyModal}
+              title={campaign.name}
+              intern={campaign}
+              job={selectJobs}
+              campaigns={selectCampaigns}
+              onReapplySuccess={handleReapplySuccess}
+              filteredCandidates={filteredCandidates}
+              fetchCandidate={fetchCandidate}
+            />
+          </>
+        )}
       </div>
     </Space>
   );
 }
 
-export default GuessJobDetailsComponent;
+export default GuestJobDetailsComponent;

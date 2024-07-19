@@ -64,7 +64,7 @@ const HeaderComponent = () => {
 
   const handleNavigate = (type) => {
     if (type === "Profile") {
-      navigate("/profile");
+      navigate("/guest/profile");
     } else if (type === "logout") {
       sessionStorage.clear();
       navigate("/login");
@@ -139,6 +139,7 @@ const HeaderComponent = () => {
           ) : (
             <ButtonComponent
               size={40}
+              onClick={()=>navigate('/login')}
               styleButton={{
                 background: 'rgb(255 184 28)',
                 height: '48px',

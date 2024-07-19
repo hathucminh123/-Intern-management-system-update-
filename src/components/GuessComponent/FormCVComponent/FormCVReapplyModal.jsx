@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Button, Upload, Typography, message } from 'antd';
+import { Modal, Form, Input, Button, Upload, Typography, message, Alert, Card, Space } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
@@ -7,14 +7,15 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createNewCandidate } from '../../../service/Candidate';
 import { v4 as uuidv4 } from 'uuid';
 import * as UserProfile from "../../../service/authService";
-import './formcss.css'
+import './formcss.css';
 
 const { Title, Text } = Typography;
 
-const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSuccess }) => {
+const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuccess, filteredCandidates }) => {
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
   const [userProfile, setUserProfile] = useState({});
+  console.log('fi',filteredCandidates)
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -24,10 +25,10 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
           const res = await UserProfile.fetchUserProfile(userId.toLowerCase());
           setUserProfile(res.events);
         } else {
-          // message.error('User ID not found in session storage');
+        //   message.error('User ID not found in session storage');
         }
       } catch (error) {
-        message.error('Fetch User Profile failed');
+        message.error('Fetch User Profile failed: ' + error.message);
       }
     };
 
@@ -56,13 +57,12 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
       await createNewCandidate(candidateData);
 
       message.success('Form submitted successfully!');
-      onApplicationSuccess();
+      onReapplySuccess();
       form.resetFields();
       setCvFile(null);
       onClose();
     } catch (error) {
-      message.error('Error submitting form. Please try again.');
-      console.error('Error submitting form:', error);
+      message.error('Error submitting form. Please try again: ' + error.message);
     }
   };
 
@@ -85,9 +85,38 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
         </Title>
       </div>
       <div className="modal-body">
+        <Alert
+          style={{ marginTop: '20px', backgroundColor: '#fff7e6', borderColor: '#ffa940' }}
+          message="Lưu ý"
+          description={(
+            <>
+              Việc ứng tuyển nhiều lần sẽ giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn còn <span style={{ color: 'green', fontWeight: 'bold' }}>{2 - filteredCandidates.length} lượt</span> ứng tuyển lại cho công việc này, hãy cân nhắc kỹ!
+            </>
+          )}
+          type="warning"
+          showIcon
+        />
+        {filteredCandidates.map((candidate) => {
+          const filename = candidate.cvPath;
+          console.log(filename)
+          return (
+            <Card
+              title={<span>CV bạn ứng tuyển gần nhất: <a style={{color:'#00b14f'}} href={filename} target="_blank" rel="noopener noreferrer">View your CV</a></span>}
+              key={candidate.id}
+              style={{borderColor:'#00b14f',marginTop:'15px'}}
+            >
+              <Space direction='vertical'>
+              <Text>Họ và Tên: <strong>{`${candidate.firstName} ${candidate.lastName}`}</strong></Text>
+              <Text>Email: <strong>{`${candidate.email}`}</strong></Text>
+              <Text>Số điện thoại: <strong>{`${candidate.phoneNumber}`}</strong></Text>
+              </Space>
+            </Card>
+          );
+        })}
         <Form
           form={form}
           layout="vertical"
+          style={{marginTop:'15px'}}
           onFinish={handleSubmit}
           initialValues={{ name: job?.name || '', list: intern?.name }}
         >
@@ -188,4 +217,4 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
   );
 };
 
-export default FormCVModal;
+export default FormCVReapplyModal;
