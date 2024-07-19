@@ -12,6 +12,7 @@ import moment from 'moment';
 import FormCVModal from '../FormCVComponent/FormCVModal';
 import FormCVReapplyModal from '../FormCVComponent/FormCVReapplyModal';
 import * as Candidates from "../../../service/Candidate";
+import ReviewCVModal from '../FormCVComponent/ReviewCVModal';
 
 const GuestJobDetailsComponent = () => {
   const { Title } = Typography;
@@ -20,10 +21,10 @@ const GuestJobDetailsComponent = () => {
   const campaign = state?.itemCampaign;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isReapplyModalVisible, setIsReapplyModalVisible] = useState(false);
+  const [isViewCVModalVisible, setIsViewCVModalVisible] = useState(false);
   const [selectJobs, setSelectJobs] = useState(null);
   const [selectCampaigns, setSelectCampaigns] = useState(null);
   const [apply, setApply] = useState([]);
-  const [candidate, setCandidate] = useState({});
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
@@ -48,8 +49,6 @@ const GuestJobDetailsComponent = () => {
 
   const filteredCandidates = userProfile ? apply.filter(candidate => candidate.email === userProfile.email) : [];
 
-  const applyDisabled = filteredCandidates.length >= 2;
-
   const showModal = (job, campaigns) => {
     setSelectJobs(job);
     setSelectCampaigns(campaigns);
@@ -62,12 +61,22 @@ const GuestJobDetailsComponent = () => {
     setIsReapplyModalVisible(true);
   };
 
+  const showViewCVModal = (job, campaigns) => {
+    setSelectJobs(job);
+    setSelectCampaigns(campaigns);
+    setIsViewCVModalVisible(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
 
   const handleCloseReapplyModal = () => {
     setIsReapplyModalVisible(false);
+  };
+
+  const handleCloseViewCVModal = () => {
+    setIsViewCVModalVisible(false);
   };
 
   const handleApplicationSuccess = () => {
@@ -86,14 +95,14 @@ const GuestJobDetailsComponent = () => {
         <Space className='inner-container' direction="vertical">
           <Card style={{ width: '100%', backgroundColor: '#f9f9f9', padding: '20px' }}>
             <Title level={1} className="customTitle">
-              Vị trí tuyển dụng: {jobs.name} vào campaign {campaign.name}
+              Vị trí tuyển dụng: {jobs?.name} vào campaign {campaign?.name}
             </Title>
             <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
               <Col span={8}>
                 <div className="detail-item">
                   <IoMdTime style={{ height: '16px' }} />
                   <div className="detail-text">
-                    Ngày bắt đầu: <span className="bold">{moment(jobs.startDate).format("DD-MM-YYYY")}</span>
+                    Ngày bắt đầu: <span className="bold">{moment(jobs?.startDate).format("DD-MM-YYYY")}</span>
                   </div>
                 </div>
               </Col>
@@ -101,7 +110,7 @@ const GuestJobDetailsComponent = () => {
                 <div className="detail-item">
                   <GrSchedule />
                   <div className="detail-text">
-                    Thời gian thực tập: <span className="bold">{jobs.duration} months</span>
+                    Thời gian thực tập: <span className="bold">{jobs?.duration} months</span>
                   </div>
                 </div>
               </Col>
@@ -123,27 +132,35 @@ const GuestJobDetailsComponent = () => {
               </Col>
             </Row>
             {userProfile ? (
-              filteredCandidates.length > 0 ? (
+              filteredCandidates.length >= 2 ? (
                 <Button
                   style={{
                     marginTop: '20px',
-                    backgroundColor: applyDisabled ? 'gray' : '#4CAF50',
+                    backgroundColor: '#1890ff',
+                    color: 'white',
+                  }}
+                  type="primary"
+                  className="rounded-full customButton"
+                  onClick={() => showViewCVModal(jobs, campaign)}
+                >
+                  Xem những hồ sơ bạn đã ứng tuyển
+                </Button>
+              ) : filteredCandidates.length > 0 ? (
+                <Button
+                  style={{
+                    marginTop: '20px',
+                    backgroundColor: '#4CAF50',
                     color: 'white',
                     position: 'relative',
                   }}
                   type="primary"
                   className="rounded-full customButton"
                   onClick={() => showReapplyModal(jobs, campaign)}
-                  disabled={applyDisabled}
                 >
-                  {applyDisabled ? (
-                    "Hết lượt ứng tuyển"
-                  ) : (
-                    <>
-                      <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
-                      ỨNG tuyển lại
-                    </>
-                  )}
+                  <>
+                    <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
+                    ỨNG tuyển lại
+                  </>
                 </Button>
               ) : (
                 <Button
@@ -178,17 +195,17 @@ const GuestJobDetailsComponent = () => {
           <Title level={3} className="customTitle">
             Mô tả công việc:
           </Title>
-          <div dangerouslySetInnerHTML={{ __html: jobs.scopeOfWork }} />
+          <div dangerouslySetInnerHTML={{ __html: jobs?.scopeOfWork }} />
 
           <Title level={3} className="customTitle">
             Yêu cầu công việc:
           </Title>
-          <div dangerouslySetInnerHTML={{ __html: jobs.requirements }} />
+          <div dangerouslySetInnerHTML={{ __html: jobs?.requirements }} />
 
           <Title level={3} className="customTitle">
             Lợi ích công việc:
           </Title>
-          <div dangerouslySetInnerHTML={{ __html: jobs.benefits }} />
+          <div dangerouslySetInnerHTML={{ __html: jobs?.benefits }} />
 
           <Title level={3} className="customTitle">
             Các phúc lợi dành cho bạn:
@@ -235,6 +252,17 @@ const GuestJobDetailsComponent = () => {
             <FormCVReapplyModal
               visible={isReapplyModalVisible}
               onClose={handleCloseReapplyModal}
+              title={campaign.name}
+              intern={campaign}
+              job={selectJobs}
+              campaigns={selectCampaigns}
+              onReapplySuccess={handleReapplySuccess}
+              filteredCandidates={filteredCandidates}
+              fetchCandidate={fetchCandidate}
+            />
+            <ReviewCVModal
+              visible={isViewCVModalVisible}
+              onClose={handleCloseViewCVModal}
               title={campaign.name}
               intern={campaign}
               job={selectJobs}

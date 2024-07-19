@@ -27,7 +27,7 @@ const UserInfoCard = ({ candidate }) => {
   );
 };
 
-const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile,job,campaign}) => {
+const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile }) => {
   return (
     <Form
       form={form}
@@ -96,14 +96,14 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile,jo
         </Form.Item>
         <Form.Item
           name="campaignId"
-          initialValue={campaign?.id}
+          initialValue=""
           hidden
         >
           <Input />
         </Form.Item>
         <Form.Item
           name="jobId"
-          initialValue={job?.id}
+          initialValue=""
           hidden
         >
           <Input />
@@ -132,10 +132,11 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile,jo
   );
 };
 
-const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuccess, filteredCandidates }) => {
+const ReviewCVModal = ({ visible, onClose, title, intern, job, onReapplySuccess, filteredCandidates }) => {
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
   const [userProfile, setUserProfile] = useState({});
+  console.log("wtf",job)
   
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -210,8 +211,8 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
           message="Lưu ý"
           description={(
             <>
-              Việc ứng tuyển nhiều lần sẽ giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn còn <span style={{ color: 'green', fontWeight: 'bold' }}>{2 - filteredCandidates.length} lượt</span> ứng tuyển lại cho công việc này, hãy cân nhắc kỹ!
-            </>
+            Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn đã hết lượt ứng tuyển vào vị trí <span>{job?.name}</span> trong <span>{title}</span>.
+          </>
           )}
           type="warning"
           showIcon
@@ -220,18 +221,16 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
         {filteredCandidates.map((candidate) => (
           <UserInfoCard key={candidate.id} candidate={candidate} />
         ))}
-        <Title level={1}>Nộp CV mới:</Title>
+        {/* <Title level={1}>Nộp CV mới:</Title>
         <UserUploadForm 
           form={form}
           handleSubmit={handleSubmit}
           handleBeforeUpload={handleBeforeUpload}
           userProfile={userProfile}
-          job={job}
-          campaign={intern}
-        />
+        /> */}
       </div>
     </Modal>
   );
 };
 
-export default FormCVReapplyModal;
+export default ReviewCVModal;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Button, Upload, Typography, message } from 'antd';
+import { Modal, Form, Input, Button, Upload, Typography, message ,Alert} from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
@@ -85,6 +85,17 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
         </Title>
       </div>
       <div className="modal-body">
+      <Alert
+          style={{ marginTop: '20px', backgroundColor: '#fff7e6', borderColor: '#ffa940' }}
+          message="Lưu ý"
+          description={(
+            <>
+            Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn chỉ có thể ứng tuyển 2 lần trong 1 vị trí của chiến dịch.
+          </>
+          )}
+          type="warning"
+          showIcon
+        />
         <Form
           form={form}
           layout="vertical"
@@ -164,7 +175,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
               <Input />
             </Form.Item>
           </div>
-          <div className="modal-footer">
+ 
             <Text strong>Địa chỉ làm việc tại FPT University</Text>
             <div className="pt-2">
               <div className="flex items-center">
@@ -178,10 +189,12 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
                 </Text>
               </div>
             </div>
+            <div  style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1'}}>
             <Button type="primary" htmlType="submit" style={{ marginTop: '20px' }}>
               Ứng tuyển
             </Button>
-          </div>
+            </div>  
+ 
         </Form>
       </div>
     </Modal>
