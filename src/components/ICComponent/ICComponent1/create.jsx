@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, Layout } from "antd";
+import { Form, Input, Button, Select, Typography, message, Layout, Spin } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -9,13 +9,15 @@ import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 const { Option } = Select;
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
+
 const Create = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [courseObject, setCourseObject] = useState("");
   const [outputObject, setOutputObject] = useState("");
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -31,6 +33,7 @@ const Create = () => {
   }, []);
 
   const onFinish = async (values) => {
+    setLoading(true);
     const NewTraining = {
       id: uuidv4(),
       ...values,
@@ -44,11 +47,13 @@ const Create = () => {
       form.resetFields();
       setCourseObject("");
       setOutputObject("");
-      navigate('/internshipcoordinators/ViewTrainingProgram')
+      navigate('/internshipcoordinators/ViewTrainingProgram');
       console.log("Form values:", response);
     } catch (error) {
       message.error(`Error: ${error.message}`);
       console.error("Error creating campaign:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,9 +72,6 @@ const Create = () => {
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container flex flex-col">
-          {/* <Title className="text-center mt-5" level={2}>
-        Create New Campaign
-      </Title> */}
           <div className="mt-5">
             <Form
               form={form}
@@ -89,7 +91,7 @@ const Create = () => {
 
               <Form.Item
                 name="jobIds"
-                label="Vị trí các jobs"
+                label="Job Positions"
                 rules={[{ required: true, message: "Please select the positions" }]}
               >
                 <Select
@@ -147,8 +149,8 @@ const Create = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Create new training program
+                <Button type="primary" htmlType="submit" disabled={loading} block>
+                  {loading ? <Spin /> : "Create new training program"}
                 </Button>
               </Form.Item>
             </Form>

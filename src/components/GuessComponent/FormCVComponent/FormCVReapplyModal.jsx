@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Button, Upload, Typography, message, Alert, Card, Space } from 'antd';
+import { Modal, Form, Input, Button, Upload, Typography, message, Alert, Card, Space, Spin } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
@@ -14,9 +14,9 @@ const { Title, Text } = Typography;
 const UserInfoCard = ({ candidate }) => {
   return (
     <Card
-      title={<span>CV bạn ứng tuyển gần nhất: <a style={{color:'#00b14f'}} href={candidate.cvPath} target="_blank" rel="noopener noreferrer">View your CV</a></span>}
+      title={<span>CV bạn ứng tuyển gần nhất: <a style={{ color: '#00b14f' }} href={candidate.cvPath} target="_blank" rel="noopener noreferrer">View your CV</a></span>}
       key={candidate.id}
-      style={{borderColor:'#00b14f',marginTop:'15px'}}
+      style={{ borderColor: '#00b14f', marginTop: '15px' }}
     >
       <Space direction='vertical'>
         <Text>Họ và Tên: <strong>{`${candidate.firstName} ${candidate.lastName}`}</strong></Text>
@@ -27,12 +27,12 @@ const UserInfoCard = ({ candidate }) => {
   );
 };
 
-const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile,job,campaign}) => {
+const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile, job, campaign, loading }) => {
   return (
     <Form
       form={form}
       layout="vertical"
-      style={{marginTop:'15px'}}
+      style={{ marginTop: '15px' }}
       onFinish={handleSubmit}
       initialValues={{ name: '', list: '' }}
     >
@@ -122,11 +122,10 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile,jo
           </Text>
         </div>
       </div>
-      <div  style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1'}}>
-    
-      <Button type="primary" htmlType="submit" style={{ marginTop: '20px'}}>
-        Ứng tuyển
-      </Button>
+      <div style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1' }}>
+        <Button type="primary" htmlType="submit" style={{ marginTop: '20px' }} disabled={loading}>
+          {loading ? <Spin /> : 'Ứng tuyển'}
+        </Button>
       </div>
     </Form>
   );
@@ -136,6 +135,7 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
   const [userProfile, setUserProfile] = useState({});
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -157,8 +157,10 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
 
   const handleSubmit = async (values) => {
     try {
+      setLoading(true);
       if (!cvFile) {
         message.error('Please upload your CV!');
+        setLoading(false);
         return;
       }
 
@@ -183,6 +185,8 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
       onClose();
     } catch (error) {
       message.error('Error submitting form. Please try again: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -228,6 +232,7 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
           userProfile={userProfile}
           job={job}
           campaign={intern}
+          loading={loading}
         />
       </div>
     </Modal>

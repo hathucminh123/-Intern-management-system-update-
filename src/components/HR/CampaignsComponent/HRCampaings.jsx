@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Typography, Layout, Pagination, Input, Space, Image, Button, Popconfirm, message } from "antd";
+import { Card, Row, Col, Typography, Layout, Pagination, Input, Space, Image, Button, Popconfirm, message, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
 import * as Campaign from '../../../service/Campaign';
@@ -16,6 +16,7 @@ const HRCampaigns = () => {
   const [pageSize] = useState(6);
   const [campaigns, setCampaigns] = useState([]);
   const [hovered, setHovered] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const userRole = localStorage.getItem('role');
 
@@ -24,11 +25,14 @@ const HRCampaigns = () => {
   }, []);
 
   const fetchCampaignsData = async () => {
+    setLoading(true);
     try {
       const res = await Campaign.fetchCampaigns();
       setCampaigns(res.events);
     } catch (error) {
       console.error("Error fetching campaigns:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -99,68 +103,74 @@ const HRCampaigns = () => {
               />
             )}
           </Space>
-          <Row gutter={[16, 16]}>
-            {currentCampaigns.map((campaign) => (
-              <Col key={campaign.id} xs={24} sm={12} md={8}>
-                <Card
-                  hoverable
-                  className="shadow-lg"
-                  style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                  actions={userRole === "hrmanager" && ([
-                    <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
-                    <Popconfirm
-                      title="Are you sure to delete this campaign?"
-                      onConfirm={() => handleDelete(campaign.id)}
-                      okText="Yes"
-                      cancelText="No"
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '50px 0' }}>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <>
+              <Row gutter={[16, 16]}>
+                {currentCampaigns.map((campaign) => (
+                  <Col key={campaign.id} xs={24} sm={12} md={8}>
+                    <Card
+                      hoverable
+                      className="shadow-lg"
+                      style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                      actions={userRole === "hrmanager" && ([
+                        <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
+                        <Popconfirm
+                          title="Are you sure to delete this campaign?"
+                          onConfirm={() => handleDelete(campaign.id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button >
+                            <span style={ratingStyle}>Delete</span>
+                          </Button>
+                        </Popconfirm>
+                      ])}
                     >
-                      <Button >
-                        <span style={ratingStyle}>Delete</span>
+                      <Image
+                        className="rounded-lg mb-3"
+                        preview={false}
+                        width="100%"
+                        height={200}
+                        src={campaign.imagePath}
+                        alt={campaign.name}
+                      />
+                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {campaign.name}
+                      </Title>
+                      <p><strong>Available jobs in campaign: </strong>
+                        {campaign.jobs.map((job, index) => (
+                          <span key={index}>{job.name}{index < campaign.jobs.length - 1 && ', '}</span>
+                        ))}
+                      </p>
+                      <p><strong>Duration:</strong> {campaign.duration} months</p>
+                      <p><strong>Start Date:</strong> {moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
+                      <p><strong>End Date:</strong> {moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
+                      <Button
+                        style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
+                        onClick={(e) => { e.stopPropagation(); handleDetails(campaign); }}
+                        onMouseEnter={() => setHovered(campaign.id)}
+                        onMouseLeave={() => setHovered(null)}
+                      >
+                        View Details {'-->'}
                       </Button>
-                    </Popconfirm>
-                  ])}
-                >
-                  <Image
-                    className="rounded-lg mb-3"
-                    preview={false}
-                    width="100%"
-                    height={200}
-                    src={campaign.imagePath}
-                    alt={campaign.name}
-                  />
-                  <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {campaign.name}
-                  </Title>
-                  <p><strong>Available jobs in campaign: </strong>
-                    {campaign.jobs.map((job, index) => (
-                      <span key={index}>{job.name}{index < campaign.jobs.length - 1 && ', '}</span>
-                    ))}
-
-
-                  </p>
-                  <p><strong>Duration:</strong> {campaign.duration} months</p>
-                  <p><strong>Start Date:</strong> {moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
-                  <p><strong>End Date:</strong> {moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
-                  <Button
-                    style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
-                    onClick={(e) => { e.stopPropagation(); handleDetails(campaign); }}
-                    onMouseEnter={() => setHovered(campaign.id)}
-                    onMouseLeave={() => setHovered(null)}
-                  >
-                    View Details {'-->'}
-                  </Button>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-          <Pagination
-            className="mt-6"
-            current={currentPage}
-            total={filteredCampaigns.length}
-            pageSize={pageSize}
-            onChange={handlePageChange}
-            style={{ textAlign: 'center', marginTop: '20px' }}
-          />
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+              <Pagination
+                className="mt-6"
+                current={currentPage}
+                total={filteredCampaigns.length}
+                pageSize={pageSize}
+                onChange={handlePageChange}
+                style={{ textAlign: 'center', marginTop: '20px' }}
+              />
+            </>
+          )}
         </div>
       </Content>
     </Layout>

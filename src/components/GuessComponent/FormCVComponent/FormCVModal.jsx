@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Button, Upload, Typography, message ,Alert} from 'antd';
+import { Modal, Form, Input, Button, Upload, Typography, message, Alert, Spin } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
@@ -7,7 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { createNewCandidate } from '../../../service/Candidate';
 import { v4 as uuidv4 } from 'uuid';
 import * as UserProfile from "../../../service/authService";
-import './formcss.css'
+import './formcss.css';
 
 const { Title, Text } = Typography;
 
@@ -15,6 +15,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
   const [userProfile, setUserProfile] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -36,8 +37,11 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
 
   const handleSubmit = async (values) => {
     try {
+      setLoading(true);
+
       if (!cvFile) {
         message.error('Please upload your CV!');
+        setLoading(false);
         return;
       }
 
@@ -63,6 +67,8 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
     } catch (error) {
       message.error('Error submitting form. Please try again.');
       console.error('Error submitting form:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,13 +91,13 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
         </Title>
       </div>
       <div className="modal-body">
-      <Alert
+        <Alert
           style={{ marginTop: '20px', backgroundColor: '#fff7e6', borderColor: '#ffa940' }}
           message="Lưu ý"
           description={(
             <>
-            Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn chỉ có thể ứng tuyển 2 lần trong 1 vị trí của chiến dịch.
-          </>
+              Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn chỉ có thể ứng tuyển 2 lần trong 1 vị trí của chiến dịch.
+            </>
           )}
           type="warning"
           showIcon
@@ -175,26 +181,24 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
               <Input />
             </Form.Item>
           </div>
- 
-            <Text strong>Địa chỉ làm việc tại FPT University</Text>
-            <div className="pt-2">
-              <div className="flex items-center">
-                <CiLocationOn />
-                <Text className="ml-1 text-neutral-10">Chi nhánh 1: Đại học quốc gia</Text>
-              </div>
-              <div className="flex items-center">
-                <CiLocationOn />
-                <Text className="ml-1 text-neutral-10">
-                  Chi nhánh 2: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000
-                </Text>
-              </div>
+          <Text strong>Địa chỉ làm việc tại FPT University</Text>
+          <div className="pt-2">
+            <div className="flex items-center">
+              <CiLocationOn />
+              <Text className="ml-1 text-neutral-10">Chi nhánh 1: Đại học quốc gia</Text>
             </div>
-            <div  style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1'}}>
-            <Button type="primary" htmlType="submit" style={{ marginTop: '20px' }}>
-              Ứng tuyển
+            <div className="flex items-center">
+              <CiLocationOn />
+              <Text className="ml-1 text-neutral-10">
+                Chi nhánh 2: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000
+              </Text>
+            </div>
+          </div>
+          <div style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1' }}>
+            <Button type="primary" htmlType="submit" style={{ marginTop: '20px' }} disabled={loading}>
+              {loading ? <Spin /> : 'Ứng tuyển'}
             </Button>
-            </div>  
- 
+          </div>
         </Form>
       </div>
     </Modal>

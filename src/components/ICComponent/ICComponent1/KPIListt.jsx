@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu } from 'antd';
+import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Spin } from 'antd';
 import * as KPI from "../../../service/KPIService";
 import DetailModal from './DetailModal';
 import { DownOutlined } from '@ant-design/icons';
 import * as Training from "../../../service/TrainingPrograms";
 import { useLocation, useNavigate } from 'react-router-dom';
 import DetailKPIModal from './DetailKPIModal';
-
 import CreateKPIModal from './CreateKPIModal';
 
 const { Text, Title } = Typography;
@@ -22,14 +21,18 @@ const KPIListt = () => {
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const fetchAllKPI = async () => {
+    setLoading(true);
     try {
       const res = await KPI.fetchKPI();
       setResource(res.events);
     } catch (error) {
       message.error("Error fetching content: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,6 +50,7 @@ const KPIListt = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const selectedResourceIds = Object.keys(checkedKeys).filter(key => checkedKeys[key]).map(key => parseInt(key, 10));
 
@@ -60,26 +64,30 @@ const KPIListt = () => {
       }
 
       message.success("Resources added to training program successfully!");
-      navigate('/internshipcoordinators/ViewTrainingProgram')
+      navigate('/internshipcoordinators/ViewTrainingProgram');
     } catch (error) {
       message.error("KPI is already exist in this training program");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteResource = async (id) => {
+    setLoading(true);
     try {
       await KPI.deleteKPI(id);
       message.success("Delete complete");
       setResource((prev) => prev.filter(item => item.id !== id));
     } catch (error) {
       message.error("Error deleting KPI " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAddTrainingProgram = (item) => {
-    navigate(`/internshipcoordinators/TrainingListt/${item.id}`, { state: { item } })
-
-  }
+    navigate(`/internshipcoordinators/TrainingListt/${item.id}`, { state: { item } });
+  };
 
   const menu = (record) => (
     <Menu>
@@ -116,8 +124,7 @@ const KPIListt = () => {
       ),
     },
     { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
-    // { title: "Value", dataIndex: "value", key: "value", responsive: ['md'] },
-    { title: "Description", dataIndex: "descition", key: "description", responsive: ['md'] },
+    { title: "Description", dataIndex: "description", key: "description", responsive: ['md'] },
     {
       title: "Type",
       dataIndex: "type",
@@ -142,23 +149,30 @@ const KPIListt = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <div className="mt-8 flex justify-between items-center">
-        <Title level={3}> Add KPI to {TrainingProgram.name}</Title>
-        {/* <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button> */}
-      </div>
+      <Header style={{ backgroundColor: 'white', borderBottom: '1px solid #f0f0f0', padding: '0 20px' }}>
+        <Title level={3}>Add KPI to {TrainingProgram.name}</Title>
+      </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-        <Table
-          dataSource={resource}
-          columns={columns}
-          rowKey="id"
-          style={{ marginTop: "20px" }}
-          pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-        />
-        <div style={{ marginTop: "20px" }}>
-          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
-            Add to Training Program
-          </Button>
-        </div>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '50px 0' }}>
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            <Table
+              dataSource={resource}
+              columns={columns}
+              rowKey="id"
+              style={{ marginTop: "20px" }}
+              pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
+            />
+            <div style={{ marginTop: "20px" }}>
+              <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
+                Add to Training Program
+              </Button>
+            </div>
+          </>
+        )}
       </Content>
       {selectedResource && (
         <DetailKPIModal

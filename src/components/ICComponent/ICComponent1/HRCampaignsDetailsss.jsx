@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Button, Image, Tag, Tabs, Layout, Table, Space, Dropdown, Row, Col, Card, message, Menu } from "antd";
+import { Typography, Button, Image, Tag, Tabs, Layout, Table, Space, Dropdown, Row, Col, Card, message, Menu, Spin } from "antd";
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
@@ -19,7 +19,6 @@ const userRoles = {
   4: 'Admin'
 };
 
-
 const HRCampaignsDetailsss = () => {
   let { id } = useParams();
   const { state } = useLocation();
@@ -28,17 +27,15 @@ const HRCampaignsDetailsss = () => {
   const [pageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [training, setTraining] = useState([]);
-  const [user, setUser] = useState([])
+  const [user, setUser] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const userRole = localStorage.getItem('role');
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(null);
-  console.log('Campain Details', campaignDetail)
-  console.log('Jobs Details', jobDetail)
 
   if (!jobDetail) {
     return <div>Job detail not found</div>;
   }
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +46,7 @@ const HRCampaignsDetailsss = () => {
         message.error('Error fetching data from API');
         console.error('Error fetching data:', error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -57,27 +54,14 @@ const HRCampaignsDetailsss = () => {
       fetchData();
     } else {
       message.error('Campaign ID or Job ID not found');
-      setLoading(false);
+      setIsLoading(false);
     }
   }, [campaignDetail.id, jobDetail.id]);
-
-  const data = [
-    { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
-    { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
-    { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' },
-    { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'FPT University' }
-  ];
-
-  const dataReport = [
-    { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
-    { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
-    { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
-    { id: 4, name: "Tâm", Logicalthinking: 'A', attitude: 'B', skill: 'C', total: 'B' }
-  ];
 
   const handleOpenDetailModal = (item) => {
     navigate(`/${localStorage.getItem('role')}/UserDetailsRole/${item.id}`, { state: { item } });
   };
+
   const handleDeleteResource = (id) => {
     // Handle delete resource logic
   };
@@ -91,6 +75,7 @@ const HRCampaignsDetailsss = () => {
   const handleAddMentorJobCampaign = (jobDetail, campaignDetail) => {
     navigate('/internshipcoordinators/MentorList', { state: { jobDetail, campaignDetail } });
   };
+
   const handleAddInternJobCampaign = (jobDetail, campaignDetail) => {
     navigate('/internshipcoordinators/InternList', { state: { jobDetail, campaignDetail } });
   };
@@ -130,16 +115,10 @@ const HRCampaignsDetailsss = () => {
       <Menu.Item key="1">
         <Button onClick={() => handleOpenDetailModal(record)}>View</Button>
       </Menu.Item>
-      {/* <Menu.Item key="2">
-        <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
-      </Menu.Item> */}
-      {/* <Menu.Item key="3">
-        <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
-      </Menu.Item> */}
     </Menu>
   );
+
   const mentor = user.filter(user => user.role === 1);
-  console.log('mentor', mentor);
   const filteredUsers = user.filter(user => user.role === 0);
 
   const columns = [
@@ -151,7 +130,6 @@ const HRCampaignsDetailsss = () => {
       dataIndex: "role",
       key: "role",
       responsive: ['md'],
-
       render: (key) => <span><strong>{userRoles[key]}</strong></span>
     },
     {
@@ -218,26 +196,6 @@ const HRCampaignsDetailsss = () => {
 
         {userRole === "internshipcoordinators" && (
           <Tabs defaultActiveKey="1">
-            {/* <TabPane tab="Jobs Details" key="1">
-              <Title className="mt-8" level={3}>Scope Of Work</Title>
-              <Paragraph>
-                <ul className="list-disc list-inside">
-                  <div dangerouslySetInnerHTML={{ __html: jobDetail.scopeOfWork }} />
-                </ul>
-              </Paragraph>
-              <Title level={3}>Requirements</Title>
-              <Paragraph>
-                <ul className="list-disc list-inside">
-                  <div dangerouslySetInnerHTML={{ __html: jobDetail.requirements }} />
-                </ul>
-              </Paragraph>
-              <Title level={3}>Benefits</Title>
-              <Paragraph>
-                <ul className="list-disc list-inside">
-                  <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
-                </ul>
-              </Paragraph>
-            </TabPane> */}
             <TabPane tab="Interns List in Jobs" key="1">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0", height: '100px' }}>
@@ -254,83 +212,22 @@ const HRCampaignsDetailsss = () => {
                   </div>
                 </Header>
                 <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-                  <Table
-                    columns={columns}
-                    dataSource={filteredUsers}
-                    rowKey="id"
-                    style={{ marginTop: "20px" }}
-                    pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-                  />
-                </Content>
-              </Layout>
-            </TabPane>
-            {/* Uncomment and modify the following TabPane if needed
-            <TabPane tab="Training Program Lists in Jobs" key="3">
-              <Layout>
-                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
-                  <div className="mt-8 flex justify-between items-center">
-                    <Title level={3}>Student Report List</Title>
-                    <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
-                      Assign Mentor to Manage this Class
-                    </Button>
-                    <ButtonComponent
-                      styleButton={{ background: "#06701c", border: "none" }}
-                      styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                      size="middle"
-                      textbutton="Add Training Program"
-                      onClick={(e) => { e.stopPropagation(); handleAddTrainingProgram(jobDetail); }}
+                  {isLoading ? (
+                    <div style={{ textAlign: 'center', padding: '50px 0' }}>
+                      <Spin size="large" />
+                    </div>
+                  ) : (
+                    <Table
+                      columns={columns}
+                      dataSource={filteredUsers}
+                      rowKey="id"
+                      style={{ marginTop: "20px" }}
+                      pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
                     />
-                  </div>
-                </Header>
-                <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-                  <Table
-                    columns={columnsReport}
-                    dataSource={dataReport}
-                    rowKey="id"
-                    style={{ marginTop: "20px" }}
-                    pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-                  />
-                  <Row gutter={[16, 16]}>
-                    {training.map((trainingProgram) => (
-                      <Col key={trainingProgram.id} xs={24} sm={12} md={8}>
-                        <Card
-                          hoverable
-                          className="shadow-lg"
-                          style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
-                          actions={[
-                            <Button
-                              onClick={(e) => { e.stopPropagation(); handleDeleteTraining(jobDetail.id, trainingProgram.id); }}
-                              style={{ width: 'fit-content' }}
-                              type="danger"
-                            >
-                              Delete
-                            </Button>
-                          ]}
-                        >
-                          <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            Training Program: {trainingProgram.name}
-                          </Title>
-                          <Space direction="vertical">
-                            <Text>
-                              <strong>Duration:</strong> {trainingProgram.duration} months
-                            </Text>
-                            <Text
-                              style={{ width: "fit-content", cursor: 'pointer', color: hovered === trainingProgram.id ? 'blue' : 'black' }}
-                              onClick={(e) => { e.stopPropagation(); handleTrainingDetails(trainingProgram); }}
-                              onMouseEnter={() => setHovered(trainingProgram.id)}
-                              onMouseLeave={() => setHovered(null)}
-                            >
-                              View Details {'-->'}
-                            </Text>
-                          </Space>
-                        </Card>
-                      </Col>
-                    ))}
-                  </Row>
+                  )}
                 </Content>
               </Layout>
             </TabPane>
-            */}
           </Tabs>
         )}
 
@@ -356,14 +253,6 @@ const HRCampaignsDetailsss = () => {
             </Paragraph>
           </>
         )}
-
-        {/* <Title level={3} className="mt-8">Recruitment</Title>
-        <Paragraph>
-          Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail: <Text strong>[Fresher React Developer - Họ tên]</Text> đến địa chỉ email <Text strong>FA.HCM@fpt.com</Text>
-        </Paragraph>
-        <Paragraph>Email: <a href="mailto:FA.HCM@fpt.com">FA.HCM@fpt.com</a></Paragraph>
-        <Paragraph>Fanpage: <a href="https://www.facebook.com/fsoft.academy" target="_blank" rel="noopener noreferrer">FPT Software Academy</a></Paragraph>
-        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph> */}
       </div>
     </div>
   );

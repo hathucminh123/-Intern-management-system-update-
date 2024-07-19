@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col, Upload } from "antd";
+import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col, Upload, Spin } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +22,7 @@ const CreateCampaignsHrComponent = () => {
   const [benefits, setBenefits] = useState("");
   const [jobs, setJobs] = useState([]);
   const [cvFile, setCvFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,9 +39,11 @@ const CreateCampaignsHrComponent = () => {
   }, []);
 
   const onFinish = async (values) => {
+    setLoading(true);
     try {
       if (!cvFile) {
         message.error('Please upload an image!');
+        setLoading(false);
         return;
       }
       const fileRef = ref(storage, cvFile.name);
@@ -58,7 +61,6 @@ const CreateCampaignsHrComponent = () => {
         imagePath: fileUrl,
       };
 
-
       const response = await Campaign.createNewCampaign(NewCampaigns);
       message.success("Campaign created successfully!");
       form.resetFields();
@@ -70,6 +72,8 @@ const CreateCampaignsHrComponent = () => {
     } catch (error) {
       message.error(`Error: ${error.message}`);
       console.error("Error creating campaign:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,10 +88,12 @@ const CreateCampaignsHrComponent = () => {
   const handleBenefits = (value) => {
     setBenefits(value);
   };
+
   const handleBeforeUpload = (file) => {
     setCvFile(file);
     return false;
   };
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -185,15 +191,6 @@ const CreateCampaignsHrComponent = () => {
                   placeholder="Enter the benefits"
                 />
               </Form.Item>
-              {/* <Form.Item
-                name="imagePath"
-                label="Campaign Image Path"
-                rules={[{ required: true, message: "Please enter the campaign image path" }]}
-              >
-                <Input placeholder="Enter the image path" />
-              </Form.Item> */}
-
-
               <Form.Item
                 name="imagePath"
                 label={
@@ -218,8 +215,8 @@ const CreateCampaignsHrComponent = () => {
                 </Upload.Dragger>
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Create new campaign
+                <Button type="primary" htmlType="submit" disabled={loading}>
+                  {loading ? <Spin /> : "Create new campaign"}
                 </Button>
               </Form.Item>
             </Form>

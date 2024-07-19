@@ -1,5 +1,5 @@
-import React from 'react';
-import { Typography, Form, Input, Layout, Row, Col, Select, message, Button } from 'antd';
+import React, { useState } from 'react';
+import { Typography, Form, Input, Layout, Row, Col, Select, message, Button, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as User from "../../../service/authService";
@@ -26,8 +26,10 @@ const roleOptions = [
 const NewUser = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
+    setLoading(true);
     try {
       const newUser = {
         ...values,
@@ -38,6 +40,8 @@ const NewUser = () => {
       navigate('/hrmanager/UserList');
     } catch (error) {
       message.error('Create user failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,8 +127,8 @@ const NewUser = () => {
               </Col>
             </Row>
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
-                Create User
+              <Button type="primary" htmlType="submit" block disabled={loading}>
+                {loading ? <Spin /> : "Create User"}
               </Button>
             </Form.Item>
           </Form>

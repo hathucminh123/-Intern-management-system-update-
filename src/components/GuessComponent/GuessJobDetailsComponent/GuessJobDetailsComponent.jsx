@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Col, message, Row, Space, Typography } from 'antd';
+import { Button, Card, Col, message, Row, Space, Typography, Spin } from 'antd';
 import { useLocation } from 'react-router-dom';
 import "../GuessDetailsComponent/GuessDetailsComponent.css";
 import "../../../pages/GuessDetailPage/GuessDetailPage.css";
@@ -26,6 +26,7 @@ const GuestJobDetailsComponent = () => {
   const [selectCampaigns, setSelectCampaigns] = useState(null);
   const [apply, setApply] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const profile = JSON.parse(sessionStorage.getItem('userProfile'));
@@ -38,6 +39,8 @@ const GuestJobDetailsComponent = () => {
       setApply(res.events);
     } catch (error) {
       message.error("Fetch Candidate failed: " + error.message);
+    } finally {
+      setLoading(false); // Stop loading after data is fetched
     }
   };
 
@@ -88,6 +91,10 @@ const GuestJobDetailsComponent = () => {
     fetchCandidate();
     setIsReapplyModalVisible(false);
   };
+
+  if (loading) {
+    return <Spin size="large" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} />;
+  }
 
   return (
     <Space className="Container" direction="vertical">

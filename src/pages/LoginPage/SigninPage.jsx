@@ -7,6 +7,8 @@ import './SigninPage.css';
 import { login } from '../../service/authService';
 import {jwtDecode} from 'jwt-decode';
 import { message, Spin } from 'antd';
+import * as User from "../../service/authService"
+
 
 const SigninPage = () => {
   const navigate = useNavigate();
@@ -39,11 +41,24 @@ const SigninPage = () => {
       localStorage.setItem("role", userRole);
       localStorage.setItem("token", result.result);
       localStorage.setItem("userId", userId);
+      const profile = await fetchUserProfile(userId);
+
+      localStorage.setItem("userProfile", JSON.stringify(profile));
       navigate(`/${userRole}`, { replace: true });
     } catch (error) {
       message.error("Login failed, please check your account", 3);
     } finally {
       setIsLoading(false); 
+    }
+  };
+
+  const fetchUserProfile = async (id) => {
+    try {
+      const res = await User.fetchUserProfile(id);
+      return res.events;
+    } catch (error) {
+      message.error('Fetch User failed');
+      return null;  
     }
   };
 

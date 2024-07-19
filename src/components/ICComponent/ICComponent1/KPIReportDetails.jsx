@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Col, Card, Table, Space, Dropdown, Menu, Button, message, Collapse, Input, Form } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { Layout, Row, Col, Card, Table, Space, Dropdown, Menu, Button, message, Collapse, Input, Form, Spin } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
 import * as KPI from '../../../service/KPIService';
 import * as Training from '../../../service/TrainingPrograms';
-import * as User from '../../../service/User'
+import * as User from '../../../service/User';
 
 const { Header, Content } = Layout;
 
@@ -12,17 +12,20 @@ const KPIReportDetails = () => {
   const { state } = useLocation();
   const Details = state?.record;
   const [training, setTraining] = useState([]);
-  
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [form] = Form.useForm();
-
   const userRole = localStorage.getItem('role');
 
   const fetchAllTraining = async () => {
+    setLoading(true);
     try {
       const res = await Training.fetchTraining();
       setTraining(res.events);
     } catch (error) {
       message.error('Error fetching Training: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,30 +33,16 @@ const KPIReportDetails = () => {
     fetchAllTraining();
   }, []);
 
-  // const handleUpdateTask = (updatedTask) => {
-  //   setTraining((prev) =>
-  //     prev.map((item) =>
-  //       item.id === updatedTask.programId
-  //         ? {
-  //             ...item,
-  //             kpIs: item.kpIs.map((kpi) =>
-  //               kpi.id === updatedTask.userResultDetails[0].kpiId
-  //                 ? { ...kpi, value: updatedTask.userResultDetails[0].value }
-  //                 : kpi
-  //             ),
-  //           }
-  //         : item
-  //     )
-  //   );
-  // };
-
   const handleDeleteKPIS = async (id) => {
+    setLoading(true);
     try {
       await KPI.deleteKPI(id);
       message.success('Delete complete');
       setTraining((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
       message.error('Error deleting KPI: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,23 +100,8 @@ const KPIReportDetails = () => {
     },
   ];
 
-  // if (userRole === 'internshipcoordinators' || userRole === 'mentor') {
-  //   kpiColumns.push({
-  //     title: 'Actions',
-  //     key: 'actions',
-  //     render: (text, record) => (
-  //       <Space size="middle">
-  //         <Dropdown overlay={kpiMenu(record)}>
-  //           <Button>
-  //             More <DownOutlined />
-  //           </Button>
-  //         </Dropdown>
-  //       </Space>
-  //     ),
-  //   });
-  // }
-
   const handlePostTask = async (training) => {
+    setLoading(true);
     try {
       const values = await form.validateFields();
       const updatedKpis = training.kpIs.map((kpi) => ({
@@ -142,11 +116,13 @@ const KPIReportDetails = () => {
       };
 
       await User.PostReportStudent(newReport);
-
+      navigate('/mentor/UserListReport');
       message.success('KPI updated successfully!');
       fetchAllTraining();
     } catch (error) {
       message.error('Error updating KPI: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -156,34 +132,36 @@ const KPIReportDetails = () => {
         Student report name: <strong>{Details.userName}</strong>
       </Header>
       <Content style={{ padding: '20px' }}>
-        <Row gutter={[16, 16]}>
-          {training.map((training) => (
-            <Col key={training.id} span={12}>
-              <Collapse>
-                <Collapse.Panel
-                  header={`Training program: ${training.name} | Duration: ${training.duration} months`}
-                  key={training.id}
-                >
-                  <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
-                    <Form form={form} layout="vertical" initialValues={{ kpis: training.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
-                      <Table
-                        bordered
-                        pagination={false}
-                        columns={kpiColumns}
-                        dataSource={training.kpIs}
-                        rowKey="id"
-                        style={{ minWidth: '600px' }}
-                      />
-                      <Button type="primary" onClick={() => handlePostTask(training)}>
-                        Post Task
-                      </Button>
-                    </Form>
-                  </Card>
-                </Collapse.Panel>
-              </Collapse>
-            </Col>
-          ))}
-        </Row>
+        <Spin spinning={loading}>
+          <Row gutter={[16, 16]}>
+            {training.map((training) => (
+              <Col key={training.id} span={12}>
+                <Collapse>
+                  <Collapse.Panel
+                    header={`Training program: ${training.name} | Duration: ${training.duration} months`}
+                    key={training.id}
+                  >
+                    <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                      <Form form={form} layout="vertical" initialValues={{ kpis: training.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
+                        <Table
+                          bordered
+                          pagination={false}
+                          columns={kpiColumns}
+                          dataSource={training.kpIs}
+                          rowKey="id"
+                          style={{ minWidth: '600px' }}
+                        />
+                        <Button type="primary" onClick={() => handlePostTask(training)}>
+                          Post Task
+                        </Button>
+                      </Form>
+                    </Card>
+                  </Collapse.Panel>
+                </Collapse>
+              </Col>
+            ))}
+          </Row>
+        </Spin>
       </Content>
     </Layout>
   );

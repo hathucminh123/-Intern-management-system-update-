@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Typography, Row, Col, Image, Card, Collapse, Button } from 'antd';
+import { Space, Typography, Row, Col, Image, Card, Collapse, Button, Spin } from 'antd';
 import { Container } from 'reactstrap';
 import { ClockCircleOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -73,9 +73,9 @@ const JobDescriptionComponent = ({ data }) => {
   );
 };
 
-
 const GuessDetailsComponent = ({ id }) => {
   const [campaigns, setCampaigns] = useState([]);
+  const [loading, setLoading] = useState(true);  // Loading state
   const navigate = useNavigate();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -89,6 +89,8 @@ const GuessDetailsComponent = ({ id }) => {
         setCampaigns(res.events);
       } catch (error) {
         console.error("Error fetching campaigns:", error);
+      } finally {
+        setLoading(false);  // Stop loading after data is fetched
       }
     };
     fetchCampaignsData();
@@ -109,6 +111,10 @@ const GuessDetailsComponent = ({ id }) => {
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
+
+  if (loading) {
+    return <Spin size="large" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} />;
+  }
 
   if (!internship) {
     return <div>Chiến dịch tuyển thực tập sinh không tồn tại</div>;
@@ -225,21 +231,6 @@ const GuessDetailsComponent = ({ id }) => {
               </Col>
             ))}
           </Row>
-
-          {/* <Row gutter={[24, 24]} className="mt-10">
-            {[
-              { value: '6000+', description: 'CV đã gửi về từ năm 2016' },
-              { value: '40+', description: 'Thực tập sinh trở thành thành viên chính thức' },
-              { value: '10+', description: 'Product đã được xây dựng qua các mùa' },
-            ].map((item, index) => (
-              <Col span={8} key={index}>
-                <Card className="flex flex-col items-start rounded-lg p-6 shadow-lg">
-                  <Title level={2} className="text-tertiary-5">{item.value}</Title>
-                  <Paragraph className="mt-4">{item.description}</Paragraph>
-                </Card>
-              </Col>
-            ))}
-          </Row> */}
         </div>
       </div>
 
@@ -261,67 +252,10 @@ const GuessDetailsComponent = ({ id }) => {
               </Title>
               <p><strong>Duration:</strong> {list.duration} months</p>
               <p><strong>Start Date:</strong> {moment(list.startDate).format('DD-MM-YYYY')}</p>
-              {/* <Text
-                style={{ width: "fit-content", cursor: 'pointer', color: hovered === list.id ? 'blue' : 'black' }}
-              
-                onMouseEnter={() => setHovered(list.id)}
-                onMouseLeave={() => setHovered(null)}
-              >
-                View Details {'-->'}
-              </Text> */}
             </Card>
           </Col>
         ))}
       </Row>
-
-      {/* <div className="flex justify-center w-full mt-20">
-        <div className="w-full max-w-6xl">
-          <Title level={2} className="text-center font-bold">
-            Khám phá những <strong style={{ color: 'rgb(0, 164, 153)' }}>Chương trình thực tập khác</strong>
-          </Title>
-          {campaigns.map((internship) => (
-            <Card
-              key={internship.id}
-              hoverable
-              className="shadow-lg"
-              style={{ width: '100%', maxWidth: '900px', margin: '0 auto', marginBottom: '20px' }}
-              onClick={() => navigate(`/guest/detail/${internship.id}`)}
-            >
-              <Space direction="horizontal" size={24}>
-                <div>
-                  <Title level={3}>{internship.name}</Title>
-                  <div className="mt-4">
-                    <Text strong>Vị trí có thể ứng tuyển trong chiến dịch:</Text>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '24px' }}>
-                      {internship.jobs.map((position, index) => (
-                        <Button key={index} className="rounded-full me-2 mb-6" style={{ whiteSpace: 'normal' }}>
-                          Lập trình viên {position.name}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex mt-4">
-                    <ClockCircleOutlined />
-                    <div className="ml-3">Kỳ thực tập:</div>
-                    <div className="ml-3 font-bold">{internship.duration} months</div>
-                  </div>
-                  <div className="flex mt-4">
-                    <GrSchedule />
-                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-                    <div className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</div>
-                  </div>
-                  <div className="flex mt-4">
-                    <GrSchedule />
-                    <div className="ml-3">Ngày kết thúc dự kiến:</div>
-                    <div className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</div>
-                  </div>
-                </div>
-                <Image preview={false} src={internship.imagePath} height={200} width={200} style={{ objectFit: 'cover', borderRadius: '8px' }} />
-              </Space>
-            </Card>
-          ))}
-        </div>
-      </div> */}
 
       <FormCVModal visible={isModalVisible} onClose={handleCloseModal} title={internship.name} intern={internship} job={selectedJob} campaigns={selectedCampaign} />
     </Space>

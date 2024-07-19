@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message, Input } from 'antd';
+import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message, Input, Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import * as User from '../../../service/authService';
@@ -12,13 +12,17 @@ const ListUser = () => {
   const navigate = useNavigate();
   const userRole = localStorage.getItem('role');
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const res = await User.fetchUser();
       setUsers(res.events);
     } catch (error) {
       message.error('Fetch User Error: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,8 +30,8 @@ const ListUser = () => {
     setSearchQuery(value);
   };
 
-  const filteredUser = users.filter((train) =>
-    train.userName.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUser = users.filter((user) =>
+    user.userName.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   useEffect(() => {
@@ -39,12 +43,15 @@ const ListUser = () => {
   };
 
   const handleDeleteUser = async (id) => {
+    setLoading(true);
     try {
       await User.deleteUser(id);
       message.success('User deleted successfully');
       setUsers(users.filter(user => user.id !== id));
     } catch (error) {
       message.error('Delete User Error: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,7 +132,6 @@ const ListUser = () => {
         {/* <Button type="primary" onClick={() => navigate(`/${userRole}/CreateUser`)}>Create User</Button> */}
       </Header>
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5' }}>
-
         <div>
           <Space direction="vertical" className="flex flex-row items-center mb-5">
             <Search
@@ -136,7 +142,13 @@ const ListUser = () => {
               className="w-full"
             />
           </Space>
-          <Table dataSource={filteredUser} columns={columns} pagination={{ pageSize: 10 }} rowKey="id" />
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '50px 0' }}>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <Table dataSource={filteredUser} columns={columns} pagination={{ pageSize: 10 }} rowKey="id" />
+          )}
         </div>
       </Content>
     </Layout>

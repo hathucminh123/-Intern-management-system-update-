@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Layout, Typography, message } from 'antd';
+import { Tabs, Layout, Typography, message, Spin } from 'antd';
 import TaskCompleted from './TaskCompleted';
 import Boards from './TaskBoard/Board';
 import * as Assessment from "../../service/Assessment";
@@ -9,23 +9,23 @@ const { Title } = Typography;
 
 const TaskPerformance = () => {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchAssessment = async () => {
+    setLoading(true);
     try {
       const res = await Assessment.GetAssessment();
       setTasks(res.events);
     } catch (error) {
       message.error("Fetch Assessment failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchAssessment();
   }, []);
-
-  // const handleAddTask = (newTask) => {
-  //   setTasks((prevTasks) => [...prevTasks, { ...newTask, key: prevTasks.length + 1, completed: false, feedback: null, grade: null }]);
-  // };
 
   const handleAddTask = (newTask) => {
     setTasks((prev) => [...prev, newTask]);
@@ -34,7 +34,6 @@ const TaskPerformance = () => {
   const handleUpdateTask = (updatedTask) => {
     setTasks((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
   };
-
 
   const handleCompleteTask = (completedTask) => {
     handleUpdateTask(completedTask);
@@ -61,7 +60,9 @@ const TaskPerformance = () => {
         <Title level={3} style={{ margin: 0 }}>Task</Title>
       </Header>
       <Content style={{ padding: '24px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
-        <Tabs defaultActiveKey="1" items={items} />
+        <Spin spinning={loading}>
+          <Tabs defaultActiveKey="1" items={items} />
+        </Spin>
       </Content>
     </Layout>
   );

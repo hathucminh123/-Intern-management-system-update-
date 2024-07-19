@@ -8,10 +8,8 @@ import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import image from "../../../assets/minhwap.jpg";
-import { login,registerUser } from '../../../service/authService';
+import { registerUser } from '../../../service/authService';
 import { message, Spin } from 'antd';
-import {jwtDecode} from 'jwt-decode';
 import Slider from "react-slick";
 import { useNavigate } from 'react-router-dom';
 
@@ -19,10 +17,9 @@ const { Title, Text } = Typography;
 
 const StyledInput = styled(InputFormComponent)`
   width: 100%;
-  padding-left: 40px; 
-  
+  padding-left: 40px;
   &::placeholder {
-    margin-left: 10px; 
+    margin-left: 10px;
   }
 `;
 
@@ -30,7 +27,6 @@ const ForgotPasswordText = styled(Text)`
   color: #00b14f;
   cursor: pointer;
   margin-left: auto;
-
   &:hover {
     text-decoration: underline;
   }
@@ -39,7 +35,6 @@ const ForgotPasswordText = styled(Text)`
 const RegisterText = styled.strong`
   color: #00b14f;
   cursor: pointer;
-
   &:hover {
     text-decoration: underline;
   }
@@ -51,8 +46,8 @@ const GuessSignup = () => {
   const [password, setPassword] = useState("");
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate=useNavigate()
-  const [isLoading, setIsLoading] = useState(false); 
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const settings = {
     dots: true,
     fade: true,
@@ -62,12 +57,12 @@ const GuessSignup = () => {
     slidesToScroll: 1,
     waitForAnimate: false,
     autoplay: true,
-    autoplaySpeed: 3000, 
+    autoplaySpeed: 3000,
   };
 
   const handleOnChangeUserName = (value) => {
     setUserName(value);
-  }
+  };
 
   const handleOnChangeEmail = (value) => {
     setEmail(value);
@@ -79,31 +74,28 @@ const GuessSignup = () => {
 
   const handleOnChangeConfirmPassword = (value) => {
     setConfirmPassword(value);
-  }
+  };
 
   const handleSignIn = async () => {
+    if (!userName || !email || !password || !confirmPassword) {
+      message.error("Please fill in all fields", 3);
+      return;
+    }
+
     if (password !== confirmPassword) {
       message.error("Passwords do not match", 3);
       return;
     }
 
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
-      const result = await registerUser({  userName: userName,email:email ,password: password ,confirmPassword:confirmPassword});
-      message.success("register successfully", 3);
-      // const userInfo = jwtDecode(result.result);
-      // const userRole = userInfo.Role.toLowerCase();
-      // const userId = userInfo.UserId.toLowerCase();
-    
-      // sessionStorage.setItem("Auth", 'true')
-      // sessionStorage.setItem("role", userRole)
-      // sessionStorage.setItem("token", result.result)
-      // sessionStorage.setItem("userId", userId)
+      await registerUser({ userName, email, password, confirmPassword });
+      message.success("Register successfully", 3);
       navigate(`/login`, { replace: true });
     } catch (error) {
-      message.error("register failed, please check your account feild", 3);
+      message.error("Register failed, please check your account fields", 3);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -112,16 +104,17 @@ const GuessSignup = () => {
       handleSignIn();
     }
   };
-  const handleNavigate =()=>{
-    navigate("/login")
-  }
+
+  const handleNavigate = () => {
+    navigate("/login");
+  };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: '#f0f2f5', padding: '20px' }}
       onKeyDown={handleKeyDown}
-      tabIndex="0" 
+      tabIndex="0"
     >
-      <div style={{ width: '100%', maxWidth: '800px', padding: '40px', borderRadius: '8px', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1' }}>
+      <div style={{ width: '100%', maxWidth: '900px', padding: '40px', borderRadius: '8px', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1' }}>
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
           <Title style={{ color: '#00b14f' }}>Chào mừng bạn đến với hệ thống chúng tôi</Title>
           <Text style={{ fontSize: '16px', color: '#595959', textAlign: 'center' }}>
@@ -250,4 +243,3 @@ const GuessSignup = () => {
 };
 
 export default GuessSignup;
-

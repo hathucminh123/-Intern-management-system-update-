@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Card, Row, Col, Typography, Layout, Space, Tag, Table, Button,
   Dropdown, Menu, Form, Modal, Input, Upload, Popover, Checkbox, Avatar,
-  DatePicker, Divider, message
+  DatePicker, Divider, message, Spin
 } from "antd";
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ import { storage } from '../../firebase/config';
 import ReactQuill from 'react-quill';
 import moment from 'moment';
 import * as Assessment from '../../service/Assessment'
-
+import useFetchData from './useFetchData ';
 
 const { Title, Text, Paragraph } = Typography;
 const { Header, Content } = Layout;
@@ -23,34 +23,19 @@ const TaskDetails = ({ fetchAssessment }) => {
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
   const [check, setCheck] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const { state } = useLocation();
   const navigate = useNavigate();
   const taskDetail = state?.task;
-  const fetch = state?.fetch
+  const fetch = state?.fetch;
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
   const [cvFile, setCvFile] = useState(null);
   const [submissions, setSubmissions] = useState(taskDetail?.assessmentSubmitions || []);
 
   const userRole = localStorage.getItem('role');
-
-  // useEffect(() => {
-
-  //     fetchAssessmentSubmissions(taskDetail.id);
-
-  // }, []);
-
-  // const fetchAssessmentSubmissions = async (taskId) => {
-  //   try {
-  //     const res = await Assessment.GetAssessmentSubmissions(taskId);
-  //     setSubmissions(res.events);
-  //   } catch (error) {
-  //     message.error('Failed to fetch assessment submissions');
-  //   }
-  // };
-
-
+  
 
   const handleDescription = (value) => {
     setDescription(value);
@@ -76,6 +61,7 @@ const TaskDetails = ({ fetchAssessment }) => {
   };
 
   const handleFormSubmit = async (values) => {
+    setLoading(true);
     try {
       if (!cvFile) {
         message.error('Please upload your file');
@@ -103,25 +89,28 @@ const TaskDetails = ({ fetchAssessment }) => {
       form.resetFields();
       setCvFile(null);
       setIsModalVisible(false);
-      // fetchAssessmentSubmissions(taskDetail.id);
-      navigate('/intern/taskboard')
+      navigate('/intern/taskboard');
     } catch (error) {
       message.error('Error submitting form. Please try again.');
       console.error('Error submitting form:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteTask = async (id) => {
+    setLoading(true);
     try {
       await Assessment.InternDeleteAssessment(id);
       setSubmissions(submissions.filter(submission => submission.id !== id));
       message.success('Task deleted successfully');
-      // fetchAssessmentSubmissions(taskDetail.id);
     } catch (error) {
       message.error({
         content: 'Failed to delete task: ' + error.message,
         duration: 3,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -223,138 +212,140 @@ const TaskDetails = ({ fetchAssessment }) => {
         Task Details
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
-        <div className="container mx-auto">
-          <Space direction='vertical' style={{ width: '100%' }}>
-            <Card
-              style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }}
-              hoverable
-              className="shadow-lg"
-            >
-              <Row justify="space-between" align="top">
-                <Col span={14}>
-                  <Space direction="vertical" size="large">
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Task name:
-                      </Title>
-                      <p><strong>{taskDetail.name}</strong></p>
-                    </div>
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Description:
-                      </Title>
-                      <Paragraph ellipsis={{ rows: 3, expandable: true }}>
-                        <div dangerouslySetInnerHTML={{ __html: taskDetail.description }} />
-                      </Paragraph>
-                    </div>
-                    <Card
-                      hoverable
-                      className="shadow-lg"
-                      style={{ borderRadius: '8px', height: '230px', width: '500px' }}
-                    >
-                      <div style={{ padding: '20px' }}>
+        <Spin spinning={loading}>
+          <div className="container mx-auto">
+            <Space direction='vertical' style={{ width: '100%' }}>
+              <Card
+                style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }}
+                hoverable
+                className="shadow-lg"
+              >
+                <Row justify="space-between" align="top">
+                  <Col span={14}>
+                    <Space direction="vertical" size="large">
+                      <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          Owner
+                          Task name:
                         </Title>
-                        <Divider />
-                        <Title level={5} style={{ margin: 0 }}>
-                          userName:
-                        </Title>
-                        <Text>{taskDetail.owner.userName}</Text>
-                        <Title level={5} style={{ margin: 0 }}>
-                          Email:
-                        </Title>
-                        <Text>{taskDetail.owner.email}</Text>
+                        <p><strong>{taskDetail.name}</strong></p>
                       </div>
-                    </Card>
-                  </Space>
-                </Col>
-                <Col span={8}>
-                  <Space direction="vertical" size="large">
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Start Date
-                      </Title>
-                      <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                      <div>
+                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          Description:
+                        </Title>
+                        <Paragraph ellipsis={{ rows: 3, expandable: true }}>
+                          <div dangerouslySetInnerHTML={{ __html: taskDetail.description }} />
+                        </Paragraph>
+                      </div>
+                      <Card
+                        hoverable
+                        className="shadow-lg"
+                        style={{ borderRadius: '8px', height: '230px', width: '500px' }}
+                      >
+                        <div style={{ padding: '20px' }}>
+                          <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            Owner
+                          </Title>
+                          <Divider />
+                          <Title level={5} style={{ margin: 0 }}>
+                            userName:
+                          </Title>
+                          <Text>{taskDetail.owner.userName}</Text>
+                          <Title level={5} style={{ margin: 0 }}>
+                            Email:
+                          </Title>
+                          <Text>{taskDetail.owner.email}</Text>
+                        </div>
+                      </Card>
+                    </Space>
+                  </Col>
+                  <Col span={8}>
+                    <Space direction="vertical" size="large">
+                      <div>
+                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          Start Date
+                        </Title>
+                        <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                      </div>
+                      <div>
+                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          End Date
+                        </Title>
+                        <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                      </div>
+                      <div>
+                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          Status
+                        </Title>
+                        <p><strong>{ColorStatus}</strong></p>
+                      </div>
+                      <div>
+                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          Mentor
+                        </Title>
+                        <p><strong>Thúc Minh</strong></p>
+                      </div>
+                    </Space>
+                  </Col>
+                </Row>
+              </Card>
+
+              <Row gutter={16} justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
+                <Col span={24}>
+                  <Card hoverable className="shadow-lg">
+                    <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+                      <Row justify="space-between" align="middle">
+                        <Col>
+                          <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            Task submits list
+                          </Title>
+                        </Col>
+                        <Col>
+                          <Space direction='horizontal'>
+                            {userRole === 'intern' && (
+                              <ButtonComponent
+                                styleButton={{ background: "#06701c", border: "none" }}
+                                styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                                size="middle"
+                                textbutton="Post Task"
+                                onClick={handlePostTask}
+                              />
+                            )}
+                            {userRole === "mentor" && (
+                              <Popover
+                                content={content}
+                                trigger="click"
+                                open={isOpenPopup}
+                                onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
+                                getPopupContainer={() => popoverRef.current}
+                              >
+                                <div
+                                  ref={popoverRef}
+                                  onClick={() => setIsOpenPopup(!isOpenPopup)}
+                                  style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
+                                >
+                                  <ButtonComponent
+                                    styleButton={{ background: "#06701c", border: "none" }}
+                                    styleTextButton={{ color: "#fff", fontWeight: "bold" }}
+                                    size="middle"
+                                    textbutton="Review"
+                                  />
+                                </div>
+                              </Popover>
+                            )}
+                          </Space>
+                        </Col>
+                      </Row>
+                    </Header>
+                    <div style={{ padding: '20px' }}>
+                      <Table dataSource={submissions} columns={columns} pagination={false} />
                     </div>
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        End Date
-                      </Title>
-                      <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
-                    </div>
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Status
-                      </Title>
-                      <p><strong>{ColorStatus}</strong></p>
-                    </div>
-                    <div>
-                      <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Mentor
-                      </Title>
-                      <p><strong>Thúc Minh</strong></p>
-                    </div>
-                  </Space>
+                  </Card>
                 </Col>
               </Row>
-            </Card>
-
-            <Row gutter={16} justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
-              <Col span={24}>
-                <Card hoverable className="shadow-lg">
-                  <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-                    <Row justify="space-between" align="middle">
-                      <Col>
-                        <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          Task submits list
-                        </Title>
-                      </Col>
-                      <Col>
-                        <Space direction='horizontal'>
-                          {userRole === 'intern' && (
-                            <ButtonComponent
-                              styleButton={{ background: "#06701c", border: "none" }}
-                              styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                              size="middle"
-                              textbutton="Post Task"
-                              onClick={handlePostTask}
-                            />
-                          )}
-                          {userRole === "mentor" && (
-                            <Popover
-                              content={content}
-                              trigger="click"
-                              open={isOpenPopup}
-                              onOpenChange={(newOpen) => setIsOpenPopup(newOpen)}
-                              getPopupContainer={() => popoverRef.current}
-                            >
-                              <div
-                                ref={popoverRef}
-                                onClick={() => setIsOpenPopup(!isOpenPopup)}
-                                style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
-                              >
-                                <ButtonComponent
-                                  styleButton={{ background: "#06701c", border: "none" }}
-                                  styleTextButton={{ color: "#fff", fontWeight: "bold" }}
-                                  size="middle"
-                                  textbutton="Review"
-                                />
-                              </div>
-                            </Popover>
-                          )}
-                        </Space>
-                      </Col>
-                    </Row>
-                  </Header>
-                  <div style={{ padding: '20px' }}>
-                    <Table dataSource={submissions} columns={columns} pagination={false} />
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </Space>
-        </div>
+            </Space>
+          </div>
+        </Spin>
 
         <Modal
           title="Submit Task"

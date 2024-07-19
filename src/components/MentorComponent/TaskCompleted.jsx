@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message
+  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message, Spin
 } from 'antd';
 import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
@@ -22,6 +22,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
   const [user, setUser] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [assignedToFilter, setAssignedToFilter] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { RangePicker } = DatePicker;
   const userRole = localStorage.getItem('role');
@@ -53,6 +54,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
     setSelectedTask(task);
     setOpenDetailModal(true);
   };
+
   const handleDetails = (task) => {
     fetchAssessment(); // Call fetchAssessment before navigating
     navigate(`/${userRole}/taskDetail/${task.id}`, { state: { task } });
@@ -114,12 +116,9 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
 
   const menu = (record) => (
     <Menu>
-
-
       <Menu.Item key="1">
         <Button onClick={() => handleDetails(record)}>View</Button>
       </Menu.Item>
-
 
       {userRole === "mentor" && (
         <Menu.Item key="2">
@@ -276,7 +275,9 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment }) => {
           <Button style={{ marginRight: '10px' }} type="primary" onClick={() => setOpenAddModal(true)}>Create Task</Button>
         )}
       </div>
-      <Table className="shadow-lg" dataSource={filteredTasks} columns={columns} />
+      <Spin spinning={loading}>
+        <Table className="shadow-lg" dataSource={filteredTasks} columns={columns} />
+      </Spin>
     </>
   );
 };

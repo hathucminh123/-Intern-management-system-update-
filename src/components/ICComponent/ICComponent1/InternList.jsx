@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Input } from 'antd';
+import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Input, Spin } from 'antd';
 import * as User from "../../../service/authService";
 import { DownOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,18 +23,20 @@ const InternList = () => {
   const campaignDetail = state?.campaignDetail;
   const [users, setUsers] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState({});
-
-
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
+    setIsLoading(true);
     try {
       const res = await User.fetchUser();
       const filteredUsers = res.events.filter(user => user.role === 0);
       setUsers(filteredUsers);
     } catch (error) {
       message.error('Error fetching users: ' + error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -47,6 +49,7 @@ const InternList = () => {
   };
 
   const handleAddUser = async () => {
+    setIsLoading(true);
     try {
       const selectedUserIds = Object.keys(checkedKeys).filter(key => checkedKeys[key]).map(key => parseInt(key, 10));
       for (const userId of selectedUserIds) {
@@ -61,9 +64,10 @@ const InternList = () => {
       navigate('/internshipcoordinators/class');
     } catch (error) {
       message.error('Add user failed: ' + error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-  console.log('user', checkedKeys)
 
   const handleOpenDetailModal = (item) => {
     navigate(`/${localStorage.getItem('role')}/UserDetailsRole/${item.id}`, { state: { item } });
@@ -135,17 +139,25 @@ const InternList = () => {
           onSearch={handleSearch}
           style={{ marginBottom: '20px' }}
         />
-        <Table
-          dataSource={filteredUsers}
-          columns={columns}
-          rowKey="id"
-          style={{ marginTop: "20px" }}
-        />
-        <div style={{ marginTop: "20px", textAlign: "right" }}>
-          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleAddUser}>
-            Assign to job
-          </Button>
-        </div>
+        {isLoading ? (
+          <div style={{ textAlign: 'center', padding: '50px 0' }}>
+            <Spin size="large" />
+          </div>
+        ) : (
+          <>
+            <Table
+              dataSource={filteredUsers}
+              columns={columns}
+              rowKey="id"
+              style={{ marginTop: "20px" }}
+            />
+            <div style={{ marginTop: "20px", textAlign: "right" }}>
+              <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleAddUser}>
+                Assign to job
+              </Button>
+            </div>
+          </>
+        )}
       </Content>
     </Layout>
   );
