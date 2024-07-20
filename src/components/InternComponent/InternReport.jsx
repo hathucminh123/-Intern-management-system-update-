@@ -38,7 +38,7 @@ const InternReport = () => {
   const userId=localStorage.getItem('userId')
   const fetchAllTraining = async () => {
     try {
-      const res = await Training.fetchTraining();
+      const res = await Training.fetchTrainingUser();
       setTraining(res.events);
     } catch (error) {
       message.error('Error fetching Training: ' + error.message);

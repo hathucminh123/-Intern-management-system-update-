@@ -178,11 +178,11 @@ const HRCampaignsDetailsss = () => {
             </div>
             <div className="flex mt-3">
               <div>Location: </div>
-              <div className="ml-3 text-red-500">Thành Phố Hồ Chí Minh</div>
+              <div className="ml-3 text-red-500">{jobDetail.location}</div>
             </div>
             <div className="flex mt-3">
               <div>totalMember: </div>
-              <div className="ml-3 text-red-500">10</div>
+              <div className="ml-3 text-red-500">{jobDetail.totalMember}</div>
             </div>
             <div className="flex mt-3">
               <div>This job's mentor: </div>

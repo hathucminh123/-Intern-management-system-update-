@@ -125,7 +125,7 @@ const GuestJobDetailsComponent = () => {
                 <div className="detail-item">
                   <CiLocationOn />
                   <div className="detail-text">
-                    Vị trí: <span className="bold">Thành phố Hồ Chí Minh</span>
+                    Vị trí: <span className="bold">{jobs?.location}</span>
                   </div>
                 </div>
               </Col>
@@ -133,7 +133,7 @@ const GuestJobDetailsComponent = () => {
                 <div className="detail-item">
                   <MdGroups />
                   <div className="detail-text">
-                    Tổng số thành viên: <span className="bold">10 members</span>
+                    Tổng số thành viên: <span className="bold">{jobs?.totalMember}</span>
                   </div>
                 </div>
               </Col>

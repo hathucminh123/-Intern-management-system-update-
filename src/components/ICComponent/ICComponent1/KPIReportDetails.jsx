@@ -16,11 +16,12 @@ const KPIReportDetails = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const userRole = localStorage.getItem('role');
+  console.log('user',Details)
 
   const fetchAllTraining = async () => {
     setLoading(true);
     try {
-      const res = await Training.fetchTraining();
+      const res = await Training.fetchTrainingUser();
       setTraining(res.events);
     } catch (error) {
       message.error('Error fetching Training: ' + error.message);
@@ -152,7 +153,7 @@ const KPIReportDetails = () => {
                           style={{ minWidth: '600px' }}
                         />
                         <Button type="primary" onClick={() => handlePostTask(training)}>
-                          Post Task
+                          Grading
                         </Button>
                       </Form>
                     </Card>

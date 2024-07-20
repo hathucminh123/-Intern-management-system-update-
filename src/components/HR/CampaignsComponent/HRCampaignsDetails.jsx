@@ -120,11 +120,11 @@ const HRCampaignsDetails = () => {
             </div>
             <div className="flex mt-3">
               <div>Location:</div>
-              <div className="ml-3 text-red-500">Ho Chi Minh City</div>
+              <div className="ml-3 text-red-500">{jobDetail.location}</div>
             </div>
             <div className="flex mt-3">
               <div>Total Members:</div>
-              <div className="ml-3 text-red-500">10</div>
+              <div className="ml-3 text-red-500">{jobDetail.totalMember}</div>
             </div>
           </div>
         </div>

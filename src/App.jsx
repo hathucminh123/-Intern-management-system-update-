@@ -74,6 +74,8 @@ import GuessSignin from "./components/GuessComponent/GuessSignin/GuessSignin";
 import GuessSignup from "./components/GuessComponent/GuessSignup/GuessSignup";
 import JobApply from "./components/GuessComponent/JobApply/JobApply";
 import GuessProfile from "./components/GuessComponent/GuessProfile/GuessProfile";
+import MentorViewProgram from "./components/MentorComponent/MentorViewProgram";
+import InternViewTraining from "./components/InternComponent/InternViewTraining";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -119,7 +121,7 @@ function App() {
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
 
 
-              <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
+              <Route path="ViewTrainingProgram" element={<MentorViewProgram />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="markReport/:id" element={< KPIReportDetails />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
@@ -199,7 +201,7 @@ function App() {
               <Route path="schedule" element={<Schedule />} />
               <Route path="taskboard" element={<TaskPerformance />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
-              <Route path="Trainingprogram" element={<ViewCampaigns />} />
+              <Route path="Trainingprogram" element={<InternViewTraining />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="ListTraining/:id" element={<ListTraining />} />
               <Route path="chat" element={<Chat />} />

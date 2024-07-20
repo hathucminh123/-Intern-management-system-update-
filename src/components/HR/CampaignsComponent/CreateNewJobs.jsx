@@ -110,6 +110,13 @@ const CreateNewJobs = () => {
               </Col>
             </Row>
             <Form.Item
+                  name="location"
+                  label="Location"
+                  rules={[{ required: true, message: "Please enter Location" }]}
+                >
+                  <Input placeholder="Enter the Location" />
+                </Form.Item>
+            <Form.Item
               label="Scope of Work"
               rules={[{ required: true, message: "Please enter the description of the work" }]}
             >

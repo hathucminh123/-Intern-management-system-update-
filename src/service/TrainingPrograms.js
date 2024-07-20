@@ -9,16 +9,16 @@ export const   createNewTraining= async (eventData)=> {
     });
 
     if (response.status !== 200 && response.status !== 201) {
-      const error = new Error('An error occurred while creating the job');
+      const error = new Error('An error occurred while creating the Training program');
       error.code = response.status;
       error.info = await response.data;
-      console.error('Server response:', response.data); // Log the server response
+      console.error('Server response:', response.data); 
       throw error;
     }
 
     return response.data;
   } catch (error) {
-    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    console.error('Error Training Program:', error.response ? error.response.data : error.message);
     throw new Error(`Error: ${error.message}`);
   }
 }
@@ -53,7 +53,7 @@ export const   AddResourceNewTraining= async (eventData)=> {
     });
 
     if (response.status !== 200 && response.status !== 201) {
-      const error = new Error('An error occurred while deleteting Resource');
+      const error = new Error('An error occurred while add Resource');
       error.code = response.status;
       error.info = await response.data;
       console.error('Server response:', response.data); 
@@ -62,7 +62,7 @@ export const   AddResourceNewTraining= async (eventData)=> {
 
     return response.data;
   } catch (error) {
-    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    console.error('Error add Resource:', error.response ? error.response.data : error.message);
     throw new Error(`Error: ${error.message}`);
   }
 }
@@ -123,7 +123,7 @@ export const fetchTraining= async() => {
 
     // Check if the response status is not OK (200)
     if (response.status !== 200) {
-      const error = new Error('An error occurred while fetching the jobs');
+      const error = new Error('An error occurred while fetching the Training Program');
       error.code = response.status;
       error.info = response.data;
       throw error;
@@ -136,10 +136,37 @@ export const fetchTraining= async() => {
    
     };
   } catch (error) {
-    console.error("Fetching jobs failed", error);
+    console.error("Fetching  Training Program failed", error);
     throw error;
   }
 };
+
+export const fetchTrainingUser= async() => {
+  try {
+    const response = await httpClient.get({
+      url: `${apiLinks.TrainingProgram.getbyUser}`,
+    });
+
+    // Check if the response status is not OK (200)
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the  Training Program');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    // Assuming the response is already JSON parsed
+    const job = response.data;
+    return {
+      events: job.result, 
+   
+    };
+  } catch (error) {
+    console.error("Fetching  Training Program failed", error);
+    throw error;
+  }
+};
+
 
 export const   AddKPISNewTraining= async (eventData)=> {
   try {
@@ -149,7 +176,7 @@ export const   AddKPISNewTraining= async (eventData)=> {
     });
 
     if (response.status !== 200 && response.status !== 201) {
-      const error = new Error('An error occurred while deleteting Resource');
+      const error = new Error('An error occurred while add KPI');
       error.code = response.status;
       error.info = await response.data;
       console.error('Server response:', response.data); 
@@ -158,7 +185,7 @@ export const   AddKPISNewTraining= async (eventData)=> {
 
     return response.data;
   } catch (error) {
-    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    console.error('Error adding  kpis:', error.response ? error.response.data : error.message);
     throw new Error(`Error: ${error.message}`);
   }
 }
@@ -172,7 +199,7 @@ export const   DeleteKPIsNewTraining= async (eventData)=> {
     });
 
     if (response.status !== 200 && response.status !== 201) {
-      const error = new Error('An error occurred while deleteting Resource');
+      const error = new Error('An error occurred while deleteting KPI');
       error.code = response.status;
       error.info = await response.data;
       console.error('Server response:', response.data); 
@@ -181,7 +208,7 @@ export const   DeleteKPIsNewTraining= async (eventData)=> {
 
     return response.data;
   } catch (error) {
-    console.error('Error creating job:', error.response ? error.response.data : error.message);
+    console.error('Error delete kpi:', error.response ? error.response.data : error.message);
     throw new Error(`Error: ${error.message}`);
   }
 }
