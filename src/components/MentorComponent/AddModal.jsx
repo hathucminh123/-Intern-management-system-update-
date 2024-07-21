@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Modal, Input, DatePicker, Select, Row, Col, message } from 'antd';
+import { Form, Modal, Input, Select, Row, Col, message } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import * as Assessment from "../../service/Assessment";
@@ -15,7 +15,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const fetchUsers = async () => {
     try {
       const res = await User.fetchUser();
-      const filter =res.events.filter((role)=>role.role ===0)
+      const filter = res.events.filter((role) => role.role === 0);
       setUser(filter);
     } catch (error) {
       message.error("Failed to fetch users");
@@ -28,7 +28,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
 
   const fetchTrainingPrograms = async () => {
     try {
-      const res = await Training.fetchTraining();
+      const res = await Training.fetchTrainingUser(localStorage.getItem("userId").toLowerCase());
       setTrainingPrograms(res.events);
     } catch (error) {
       message.error("Failed to fetch training programs");
@@ -95,34 +95,6 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
                     {u.userName}
                   </Select.Option>
                 ))}
-              </Select>
-            </Form.Item>
-
-            {/* <Form.Item
-              label="Start Date"
-              name="startDate"
-              rules={[{ required: true, message: 'Please select the start date!' }]}
-            >
-              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-            </Form.Item>
-
-            <Form.Item
-              label="End Date"
-              name="endDate"
-              rules={[{ required: true, message: 'Please select the end date!' }]}
-            >
-              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-            </Form.Item> */}
-
-            <Form.Item
-              label="Status"
-              name="status"
-              rules={[{ required: true, message: 'Please select the status!' }]}
-            >
-              <Select placeholder="Select status" allowClear>
-                <Select.Option value="TODOS">TODOS</Select.Option>
-                <Select.Option value="ON-PROGRESS">ON-PROGRESS</Select.Option>
-                <Select.Option value="DONE">DONE</Select.Option>
               </Select>
             </Form.Item>
           </Col>

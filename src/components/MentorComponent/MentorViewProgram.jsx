@@ -18,6 +18,8 @@ const MentorViewProgram = () => {
   const [hovered, setHovered] = useState(null);
   const [pageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
+  const userID =localStorage.getItem('userId')
+  console.log('wtf',userID)
 
   const columns = [
     {
@@ -54,7 +56,7 @@ const MentorViewProgram = () => {
   const fetchCampaigns = async () => {
     setLoading(true);
     try {
-      const res = await Training.fetchTrainingUser();
+      const res = await Training.fetchTrainingUser(userID);
       setCampaigns(res.events);
     } catch (error) {
       message.error("Error fetching campaigns: " + error.message);

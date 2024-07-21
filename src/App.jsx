@@ -89,6 +89,10 @@ function App() {
           <Route path="/login" element={<GuessSignin />} />
           <Route path="/sign-up" element={<GuessSignup />} />
 
+         
+
+          <Route element={<ProtectedRoute />}>
+
           <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
           
@@ -100,8 +104,6 @@ function App() {
               <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
 
             </Route>
-
-          <Route element={<ProtectedRoute />}>
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
               <Route index element={<Navigate to="task" replace />} />

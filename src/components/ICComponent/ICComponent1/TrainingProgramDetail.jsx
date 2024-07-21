@@ -318,17 +318,27 @@ const TrainingProgramDetail = () => {
         return userName;
       },
     },
-    {
+    // {
+    //   title: 'Start Date',
+    //   dataIndex: 'startDate',
+    //   key: 'startDate',
+    //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    // },
+        {
       title: 'Start Date',
-      dataIndex: 'startDate',
-      key: 'startDate',
-      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+     
+      render: () =>   moment(CampaignDetail.startDate).format('YYYY-MM-DD') 
     },
-    {
+    // {
+    //   title: 'End Date',
+    //   dataIndex: 'endDate',
+    //   key: 'endDate',
+    //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    // },
+      {
       title: 'End Date',
-      dataIndex: 'endDate',
-      key: 'endDate',
-      render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
+    
+      render: () =>   moment(CampaignDetail.endDate).format('YYYY-MM-DD') 
     },
     {
       title: 'Status',

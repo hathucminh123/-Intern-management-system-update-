@@ -141,10 +141,11 @@ export const fetchTraining= async() => {
   }
 };
 
-export const fetchTrainingUser= async() => {
+export const fetchTrainingUser= async (id) => { 
   try {
     const response = await httpClient.get({
-      url: `${apiLinks.TrainingProgram.getbyUser}`,
+      url: `${apiLinks.TrainingProgram.getbyUser}?userId=${id}`,
+      params:{id},
     });
 
     // Check if the response status is not OK (200)

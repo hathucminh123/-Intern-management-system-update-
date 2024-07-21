@@ -21,7 +21,7 @@ const KPIReportDetails = () => {
   const fetchAllTraining = async () => {
     setLoading(true);
     try {
-      const res = await Training.fetchTrainingUser();
+      const res = await Training.fetchTrainingUser(Details.id);
       setTraining(res.events);
     } catch (error) {
       message.error('Error fetching Training: ' + error.message);

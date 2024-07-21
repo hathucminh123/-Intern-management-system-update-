@@ -89,7 +89,7 @@ const GuessSignup = () => {
 
     setIsLoading(true);
     try {
-      await registerUser({ userName, email, password, confirmPassword });
+      await registerUser({ userName, email, password, confirmPassword,role:5 });
       message.success("Register successfully", 3);
       navigate(`/login`, { replace: true });
     } catch (error) {

@@ -39,6 +39,7 @@ const InternViewTraining = () => {
   ];
 
   const userRole = localStorage.getItem('role')
+  
   const onSearch = (value) => {
     setSearchQuery(value);
   };
@@ -54,7 +55,7 @@ const InternViewTraining = () => {
   const fetchCampaigns = async () => {
     setLoading(true);
     try {
-      const res = await Training.fetchTrainingUser();
+      const res = await Training.fetchTrainingUser(localStorage.getItem('userId').toLowerCase());
       setCampaigns(res.events);
     } catch (error) {
       message.error("Error fetching campaigns: " + error.message);

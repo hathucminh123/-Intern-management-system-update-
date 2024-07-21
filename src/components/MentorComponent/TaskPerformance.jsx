@@ -18,7 +18,7 @@ const TaskPerformance = () => {
   const fetchTraining = async () => {
     try {
       setLoading(true);
-      const res = await Training.fetchTrainingUser();
+      const res = await Training.fetchTrainingUser(localStorage.getItem('userId').toLowerCase());
       setTraining(res.events);
     } catch (error) {
       message.error('Failed to fetch training programs');
