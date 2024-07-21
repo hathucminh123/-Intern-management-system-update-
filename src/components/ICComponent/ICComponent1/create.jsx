@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, Layout, Spin } from "antd";
+import { Form, Input, Button, Select, Typography, message, Layout, Spin, DatePicker } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
 import * as Training from '../../../service/TrainingPrograms';
 import * as Jobss from '../../../service/JobsService';
 import { useNavigate } from "react-router-dom";
+import moment from 'moment';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -18,6 +19,8 @@ const Create = () => {
   const [outputObject, setOutputObject] = useState("");
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [startDate, setStartDate] = useState(moment());
+  const [endDate, setEndDate] = useState(moment().add(14, 'days'));
 
   useEffect(() => {
     const fetchAllJobs = async () => {
@@ -32,6 +35,13 @@ const Create = () => {
     fetchAllJobs();
   }, []);
 
+  useEffect(() => {
+    if (startDate) {
+      setEndDate(startDate.clone().add(14, 'days'));
+      form.setFieldsValue({ endDate: startDate.clone().add(14, 'days') });
+    }
+  }, [startDate, form]);
+
   const onFinish = async (values) => {
     setLoading(true);
     const NewTraining = {
@@ -39,6 +49,8 @@ const Create = () => {
       ...values,
       courseObject: courseObject,
       outputObject: outputObject,
+      startDate: startDate ? startDate.toISOString() : null,
+      endDate: endDate ? endDate.toISOString() : null,
     };
 
     try {
@@ -65,6 +77,10 @@ const Create = () => {
     setOutputObject(value);
   };
 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+  };
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -77,6 +93,10 @@ const Create = () => {
               form={form}
               layout="vertical"
               onFinish={onFinish}
+              initialValues={{
+                startDate: startDate,
+                endDate: endDate,
+              }}
               style={{ maxWidth: 600, margin: "0 auto" }}
             >
               <Form.Item
@@ -113,6 +133,32 @@ const Create = () => {
                 rules={[{ required: true, message: "Please enter the duration in months" }]}
               >
                 <Input placeholder="Enter the duration, e.g., 10 months" />
+              </Form.Item>
+
+              <Form.Item
+                name="startDate"
+                label="Start Date"
+                rules={[{ required: true, message: "Please select the start date" }]}
+              >
+                <DatePicker
+                 
+                  value={startDate}
+                  onChange={handleStartDateChange}
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="endDate"
+                label="End Date"
+                rules={[{ required: true, message: "Please select the end date" }]}
+              >
+                <DatePicker
+              
+                  value={endDate}
+                
+                  style={{ width: "100%" }}
+                />
               </Form.Item>
 
               <Form.Item

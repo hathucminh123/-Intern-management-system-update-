@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Layout, Typography, message, Spin } from 'antd';
 import TaskCompleted from './TaskCompleted';
-import Boards from './TaskBoard/Board';
 import * as Assessment from "../../service/Assessment";
+import * as Training from "../../service/TrainingPrograms";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -10,22 +10,45 @@ const { Title } = Typography;
 const TaskPerformance = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [training, setTraining] = useState([]);
+  const [selectedTrainingId, setSelectedTrainingId] = useState(null);
 
-  const fetchAssessment = async () => {
+  console.log(selectedTrainingId)
+
+  const fetchTraining = async () => {
+    try {
+      setLoading(true);
+      const res = await Training.fetchTrainingUser();
+      setTraining(res.events);
+    } catch (error) {
+      message.error('Failed to fetch training programs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchAssessment = async (trainingId) => {
+    if (!trainingId) return;
     setLoading(true);
     try {
-      const res = await Assessment.GetAssessment();
+      const res = await Assessment.GetAssessmentbyTraining(trainingId);
       setTasks(res.events);
     } catch (error) {
-      message.error("Fetch Assessment failed");
+      message.error("Failed to fetch assessments");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAssessment();
+    fetchTraining();
   }, []);
+
+  useEffect(() => {
+    if (selectedTrainingId) {
+      fetchAssessment(selectedTrainingId);
+    }
+  }, [selectedTrainingId]);
 
   const handleAddTask = (newTask) => {
     setTasks((prev) => [...prev, newTask]);
@@ -44,14 +67,17 @@ const TaskPerformance = () => {
       key: '1',
       label: 'Task List',
       children: (
-        <TaskCompleted tasks={tasks} onAddTask={handleAddTask} onUpdateTask={handleUpdateTask} fetchAssessment={fetchAssessment} />
+        <TaskCompleted
+          tasks={tasks}
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
+          fetchAssessment={() => fetchAssessment(selectedTrainingId)}
+          training={training}
+          setSelectedTrainingId={setSelectedTrainingId}
+          selectedTrainingId={selectedTrainingId}
+        />
       ),
     },
-    // {
-    //   key: '2',
-    //   label: 'Task Board',
-    //   children: <Boards />,
-    // },
   ];
 
   return (

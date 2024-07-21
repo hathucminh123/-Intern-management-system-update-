@@ -15,7 +15,8 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const fetchUsers = async () => {
     try {
       const res = await User.fetchUser();
-      setUser(res.events);
+      const filter =res.events.filter((role)=>role.role ===0)
+      setUser(filter);
     } catch (error) {
       message.error("Failed to fetch users");
     }
@@ -72,8 +73,8 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       destroyOnClose
       width={1200}
     >
-      <Form form={form} name="createTaskForm" initialValues={{ remember: true }}>
-        <Row justify="space-between" align="middle">
+      <Form form={form} name="createTaskForm" layout="vertical">
+        <Row gutter={16}>
           <Col span={12}>
             <Form.Item
               label="Task Name"
@@ -97,7 +98,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               </Select>
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               label="Start Date"
               name="startDate"
               rules={[{ required: true, message: 'Please select the start date!' }]}
@@ -111,7 +112,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               rules={[{ required: true, message: 'Please select the end date!' }]}
             >
               <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               label="Status"

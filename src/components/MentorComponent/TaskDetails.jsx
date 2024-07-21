@@ -14,7 +14,7 @@ import ReactQuill from 'react-quill';
 import moment from 'moment';
 import * as Assessment from '../../service/Assessment'
 import useFetchData from './useFetchData ';
-
+import * as User from "../../service/authService"
 const { Title, Text, Paragraph } = Typography;
 const { Header, Content } = Layout;
 
@@ -28,13 +28,39 @@ const TaskDetails = ({ fetchAssessment }) => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const taskDetail = state?.task;
+  const trainingDetail =state?.training;
+  const trainingDetailId=state?.selectedTrainingId
+  console.log(trainingDetail)
+  console.log(trainingDetailId)
   const fetch = state?.fetch;
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
   const [cvFile, setCvFile] = useState(null);
   const [submissions, setSubmissions] = useState(taskDetail?.assessmentSubmitions || []);
+  const [user,setUser]=useState([])
 
   const userRole = localStorage.getItem('role');
+
+  const filter =trainingDetail.filter((fil)=> fil.id === trainingDetailId)
+console.log(filter.endDate)
+
+
+  const fetchUser =async()=>{
+    try{
+      setLoading(true)
+      const res =await User.fetchUser()
+      const filteredUsers = res.events.filter(user => user.role === 1);
+      setUser(filteredUsers);
+    }catch(error){
+      message.error('fetch User failed')
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  useEffect(()=>{
+    fetchUser();
+  },[])
   
 
   const handleDescription = (value) => {
@@ -265,13 +291,19 @@ const TaskDetails = ({ fetchAssessment }) => {
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Start Date
                         </Title>
-                        <p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                        {filter.map((train)=>(
+                           <p><strong>{moment(train.startDate).format("DD-MM-YYYY ")}</strong></p>
+                        ))}
+                    
                       </div>
                       <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           End Date
                         </Title>
-                        <p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+                        {filter.map((train)=>(
+                           <p><strong>{moment(train.endDate).format("DD-MM-YYYY  ")}</strong></p>
+                        ))}
+                    
                       </div>
                       <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -283,7 +315,10 @@ const TaskDetails = ({ fetchAssessment }) => {
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Mentor
                         </Title>
-                        <p><strong>Thúc Minh</strong></p>
+                        {user.map((mentor)=>(
+                            <p><strong>{mentor.userName}</strong></p>
+                        ))}
+                    
                       </div>
                     </Space>
                   </Col>
