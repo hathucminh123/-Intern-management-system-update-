@@ -52,7 +52,7 @@ const GuestJobDetailsComponent = () => {
     }
   }, [campaign?.id, jobs?.id]);
 
-  const filteredCandidates = userProfile ? apply.filter(jobname => jobname.job.name === jobs.name) : [];
+  const filteredCandidates = userProfile ? apply.filter(jobname => jobname.job.id === jobs.id) : [];
 
   console.log('haha',filteredCandidates)
 
