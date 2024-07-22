@@ -73,7 +73,7 @@ const JobsIC = () => {
       message.success("Job deleted successfully");
       fetchAllJobs();
     } catch (error) {
-      message.error("Error deleting job: " + error.message);
+      message.error("Error deleting job: " );
       console.error("Error deleting job:", error);
     } finally {
       setLoading(false);

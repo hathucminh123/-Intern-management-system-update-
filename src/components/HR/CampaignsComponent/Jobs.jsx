@@ -79,7 +79,7 @@ const Jobs = () => {
       message.success("Job deleted successfully");
       fetchAllJobs();
     } catch (error) {
-      message.error("Error deleting job: " + error.message);
+      message.error("Intern still in jobs: " + error.message);
       console.error("Error deleting job:", error);
     } finally {
       setDeleteLoading(false);

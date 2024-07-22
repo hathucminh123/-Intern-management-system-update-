@@ -1,9 +1,32 @@
 import httpClient from "../httpClient/httpClient";
+import guesthttpClient from "../httpClient/guesthttpClient";
 import { apiLinks } from "./authService";
 
 export const editNewUser = async (userData) => {
     try {
       const response = await httpClient.put({
+        url: `${apiLinks.User.put}`,
+        data: userData,
+      });
+  
+      if (![200, 201].includes(response.status)) {
+        const error = new Error('An error occurred while editing the user');
+        error.code = response.status;
+        error.info = await response.data;
+        console.error('Server response:', response.data);
+        throw error;
+      }
+  
+      return response.data;
+    } catch (error) {
+      console.error('Error editing User:', error.response ? error.response.data : error.message);
+      throw new Error(`Error: ${error.message}`);
+    }
+  };
+
+  export const editNewUserGuest = async (userData) => {
+    try {
+      const response = await guesthttpClient.put({
         url: `${apiLinks.User.put}`,
         data: userData,
       });

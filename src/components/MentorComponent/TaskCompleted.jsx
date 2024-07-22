@@ -157,16 +157,16 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         key: 'owner',
         render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
       },
-      {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        render: (text, record) => (
-          <Tag color={record.status === "DONE" ? 'green' : record.status === "ON-PROGRESS" ? 'geekblue' : 'blue'}>
-            {record.status.toUpperCase()}
-          </Tag>
-        ),
-      },
+      // {
+      //   title: 'Status',
+      //   dataIndex: 'status',
+      //   key: 'status',
+      //   render: (text, record) => (
+      //     <Tag color={record.status === "DONE" ? 'green' : record.status === "ON-PROGRESS" ? 'geekblue' : 'blue'}>
+      //       {record.status.toUpperCase()}
+      //     </Tag>
+      //   ),
+      // },
       {
         title: 'Actions',
         key: 'actions',

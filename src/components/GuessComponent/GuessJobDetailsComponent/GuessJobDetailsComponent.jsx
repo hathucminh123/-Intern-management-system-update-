@@ -11,7 +11,7 @@ import { MdOutlineMonetizationOn, MdGroups, MdGroup } from "react-icons/md";
 import moment from 'moment';
 import FormCVModal from '../FormCVComponent/FormCVModal';
 import FormCVReapplyModal from '../FormCVComponent/FormCVReapplyModal';
-import * as Candidates from "../../../service/Candidate";
+import * as Candidates from "../../../service/GuestCandidate";
 import ReviewCVModal from '../FormCVComponent/ReviewCVModal';
 
 const GuestJobDetailsComponent = () => {
@@ -25,22 +25,24 @@ const GuestJobDetailsComponent = () => {
   const [selectJobs, setSelectJobs] = useState(null);
   const [selectCampaigns, setSelectCampaigns] = useState(null);
   const [apply, setApply] = useState([]);
+  
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
+  console.log('cccc',apply)
 
   useEffect(() => {
     const profile = JSON.parse(sessionStorage.getItem('userProfile'));
-    setUserProfile(profile);
+    setUserProfile(profile?.events);
   }, []);
 
   const fetchCandidate = async () => {
     try {
-      const res = await Candidates.fetchCandidate(campaign.id, jobs.id);
+      const res = await Candidates.fetchCandidateApplication();
       setApply(res.events);
     } catch (error) {
       message.error("Fetch Candidate failed: " + error.message);
     } finally {
-      setLoading(false); // Stop loading after data is fetched
+      setLoading(false); 
     }
   };
 
@@ -50,7 +52,9 @@ const GuestJobDetailsComponent = () => {
     }
   }, [campaign?.id, jobs?.id]);
 
-  const filteredCandidates = userProfile ? apply.filter(candidate => candidate.email === userProfile.email) : [];
+  const filteredCandidates = userProfile ? apply.filter(jobname => jobname.job.name === jobs.name) : [];
+
+  console.log('haha',filteredCandidates)
 
   const showModal = (job, campaigns) => {
     setSelectJobs(job);
@@ -139,37 +143,39 @@ const GuestJobDetailsComponent = () => {
               </Col>
             </Row>
             {userProfile ? (
-              filteredCandidates.length >= 2 ? (
+              filteredCandidates.length >= 1 ? (
                 <Button
-                  style={{
-                    marginTop: '20px',
-                    backgroundColor: '#1890ff',
-                    color: 'white',
-                  }}
+                style={{
+                  marginTop: '20px',
+                  backgroundColor: 'gray',
+                  color: 'white',
+                }}
                   type="primary"
                   className="rounded-full customButton"
                   onClick={() => showViewCVModal(jobs, campaign)}
+                  disabled
                 >
-                  Xem những hồ sơ bạn đã ứng tuyển
+                  Bạn đã hết lượt ứng tuyển
                 </Button>
-              ) : filteredCandidates.length > 0 ? (
-                <Button
-                  style={{
-                    marginTop: '20px',
-                    backgroundColor: '#4CAF50',
-                    color: 'white',
-                    position: 'relative',
-                  }}
-                  type="primary"
-                  className="rounded-full customButton"
-                  onClick={() => showReapplyModal(jobs, campaign)}
-                >
-                  <>
-                    <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
-                    ỨNG tuyển lại
-                  </>
-                </Button>
-              ) : (
+              // ) : filteredCandidates.length > 0 ? (
+              //   <Button
+              //     style={{
+              //       marginTop: '20px',
+              //       backgroundColor: '#4CAF50',
+              //       color: 'white',
+              //       position: 'relative',
+              //     }}
+              //     type="primary"
+              //     className="rounded-full customButton"
+              //     onClick={() => showReapplyModal(jobs, campaign)}
+              //   >
+              //     <>
+              //       <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
+              //       ỨNG tuyển lại
+              //     </>
+              //   </Button>
+              // ) 
+                ): (
                 <Button
                   style={{
                     marginTop: '20px',

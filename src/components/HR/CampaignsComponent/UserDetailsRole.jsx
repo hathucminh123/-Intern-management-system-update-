@@ -9,7 +9,8 @@ const userRoles = {
   3: 'HR Manager',
   2: 'Internship Coordinators',
   1: 'Mentor',
-  4:'Admin'
+  4:'Admin',
+  5:'Guest'
 };
 
 const UserDetailsRole = () => {

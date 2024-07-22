@@ -69,7 +69,7 @@ const HRCampaignsDetailss = () => {
       message.success("Jobs program deleted successfully");
       navigate('/hrmanager/campaigns');
     } catch (error) {
-      message.error("Error deleting training program: " + error.message);
+      message.error("intern still in jobs: " );
     } finally {
       setIsLoading(false);
     }

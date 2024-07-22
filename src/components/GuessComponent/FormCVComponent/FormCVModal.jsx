@@ -4,10 +4,12 @@ import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { createNewCandidate } from '../../../service/Candidate';
+// import { createNewCandidate } from '../../../service/Candidate';
+import { createNewCandidate } from '../../../service/GuestCandidate';
 import { v4 as uuidv4 } from 'uuid';
 import * as UserProfile from "../../../service/authService";
 import './formcss.css';
+import { values } from 'lodash';
 
 const { Title, Text } = Typography;
 
@@ -53,7 +55,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
         ...values,
         firstName: values.fullName.split(' ')[0],
         lastName: values.fullName.split(' ').slice(1).join(' '),
-        id: uuidv4(),
+        
         cvPath: fileUrl,
       };
 
@@ -96,7 +98,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
           message="Lưu ý"
           description={(
             <>
-              Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn chỉ có thể ứng tuyển 2 lần trong 1 vị trí của chiến dịch.
+            một vị trí trong 1 chiến dịch chỉ được ứng tuyển 1 lần
             </>
           )}
           type="warning"
@@ -106,7 +108,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
           form={form}
           layout="vertical"
           onFinish={handleSubmit}
-          initialValues={{ name: job?.name || '', list: intern?.name }}
+          initialValues={{ name: job?.name || '', list: intern?.name,  email:userProfile?.email }}
         >
           <div className="modal-content">
             <Form.Item
@@ -148,8 +150,9 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
                 { type: 'email', message: 'Please enter a valid email!' },
               ]}
               initialValue={userProfile.email}
+              
             >
-              <Input placeholder="Email liên hệ" />
+              <Input placeholder="Email liên hệ" disabled />
             </Form.Item>
             <Form.Item
               name="phoneNumber"

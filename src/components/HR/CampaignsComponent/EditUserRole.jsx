@@ -8,10 +8,11 @@ const { Title } = Typography;
 const { Header, Content } = Layout;
 
 const userRoles = {
-  intern: "Intern",
+  intern: 0,
   hrmanager: 3,
   internshipcoordinators: 2,
   mentor: 1,
+  guest:5
 };
 
 const userRoless = {
@@ -19,13 +20,15 @@ const userRoless = {
   3: 'HR Manager',
   2: 'Internship Coordinators',
   1: 'Mentor',
-  4:'Admin'
+  4:'Admin',
+  5:'Guest'
 };
 const roleOptions = [
   { label: 'Intern', value: userRoles.intern },
   { label: 'HR Manager', value: userRoles.hrmanager },
   { label: 'Internship Coordinators', value: userRoles.internshipcoordinators },
   { label: 'Mentor', value: userRoles.mentor },
+  {label: 'Guest',value:userRoles.guest}
 ];
 
 const EditUserRole = () => {
@@ -120,8 +123,9 @@ const EditUserRole = () => {
                   name="email"
                   label="Email"
                   rules={[{ required: true, message: 'Please enter the User Email' }]}
+                  
                 >
-                  <Input placeholder="Enter user Email" />
+                  <Input placeholder="Enter user Email" type="email" />
                 </Form.Item>
               </Col>
             </Row>

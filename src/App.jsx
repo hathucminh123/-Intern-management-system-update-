@@ -76,6 +76,8 @@ import JobApply from "./components/GuessComponent/JobApply/JobApply";
 import GuessProfile from "./components/GuessComponent/GuessProfile/GuessProfile";
 import MentorViewProgram from "./components/MentorComponent/MentorViewProgram";
 import InternViewTraining from "./components/InternComponent/InternViewTraining";
+import ProtectedRouteGuest from "./components/ProtectedRoute/ProtectedRouteGuest";
+import ListGuest from "./components/HR/CampaignsComponent/ListGuest";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -89,10 +91,9 @@ function App() {
           <Route path="/login" element={<GuessSignin />} />
           <Route path="/sign-up" element={<GuessSignup />} />
 
-         
-
-          <Route element={<ProtectedRoute />}>
-
+        
+          
+          <Route element={<ProtectedRouteGuest />}>
           <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
           
@@ -104,6 +105,17 @@ function App() {
               <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
 
             </Route>
+       
+          
+          
+          </Route>
+
+         
+
+          <Route element={<ProtectedRoute />}>
+        
+
+       
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
               <Route index element={<Navigate to="task" replace />} />
@@ -153,6 +165,7 @@ function App() {
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="NewUser" element={<NewUser />} />
               <Route path="UserList" element={<ListUser />} />
+              <Route path="UserGuestList" element={<ListGuest />} />
               <Route path="UserDetails/:id" element={<UserDetails />} />
               <Route path="EditUserIntern/:id" element={<EditIntern />} />
               <Route path="EditUserRole/:id" element={<EditUserRole />} />

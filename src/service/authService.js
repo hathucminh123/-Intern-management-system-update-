@@ -1,3 +1,4 @@
+import guesthttpClient from "../httpClient/guesthttpClient";
 import httpClient from "../httpClient/httpClient";
 
 const baseURL = "https://intern-management-35fd3e77666d.herokuapp.com/api";
@@ -29,6 +30,7 @@ export const apiLinks = {
   Candidates: {
     get: `${baseURL}/Candidate`,
     post: `${baseURL}/Candidate`,
+    getApply : `${baseURL}/Candidate/UserAplication`
   },
   Email: {
     post: `${baseURL}/Mail`,
@@ -165,4 +167,52 @@ export const fetchUserProfile = async (id) => {
   }
 };
 
+export const fetchUserProfileGuest = async (id) => {
+  try {
+    const response = await guesthttpClient.get({
+      url: apiLinks.User.getUserProfile,
+      params: { id },
+    });
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the users profile');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    const user = response.data;
+    return {
+      events: user.result,
+    };
+  } catch (error) {
+    console.error("Fetching users failed", error);
+    throw error;
+  }
+};
+
+export const loginGuest = async (user) => {
+  try {
+    const response = await guesthttpClient.post({
+      url: apiLinks.auth.login,
+      data: user,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Login request failed", error.message);
+    throw error;
+  }
+};
+
+export const registerGuest = async (user) => {
+  try {
+    const response = await guesthttpClient.post({
+      url: apiLinks.auth.register,
+      data: user,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Registration request failed", error.message);
+    throw error;
+  }
+};
 

@@ -62,8 +62,18 @@ const SigninPage = () => {
     }
   };
 
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSignIn();
+    }
+  };
+
+  
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #ffffff 0%, #ffffff 50%, #ADD8E6 50%, #ADD8E6 100%)', height: '100vh' }}>
+    <div 
+    onKeyDown={handleKeyDown}
+    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #ffffff 0%, #ffffff 50%, #ADD8E6 50%, #ADD8E6 100%)', height: '100vh' }}>
       <div style={{ width: '90vh', height: '500px', borderRadius: '6px', background: '#fff', display: 'flex' }}>
         <div className='WrapperContainerLeft'>
        
