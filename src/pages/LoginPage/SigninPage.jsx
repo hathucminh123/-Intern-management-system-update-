@@ -5,13 +5,17 @@ import ButtonComponent from '../../components/ButtonComponent/ButtonComponent';
 import InputFormComponent from '../../components/InputFormComponent/InputFormComponent';
 import './SigninPage.css';
 import { login } from '../../service/authService';
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
+import { message, Spin } from 'antd';
+import * as User from "../../service/authService"
+
 
 const SigninPage = () => {
   const navigate = useNavigate();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleNavigateSignUp = () => {
     navigate('/sign-up');
@@ -26,33 +30,54 @@ const SigninPage = () => {
   };
 
   const handleSignIn = async () => {
-    const result = await login({ userName: email, password: password });
-    console.log(result);
-    if (result.isSuccess) {
+    setIsLoading(true); 
+    try {
+      const result = await login({ userName: email, password: password });
+      message.success("Login successfully", 3);
       const userInfo = jwtDecode(result.result);
       const userRole = userInfo.Role.toLowerCase();
-      console.log('userRole', userRole);
-      console.log('userInfo', userInfo);
+      const userId = userInfo.UserId.toLowerCase();
       localStorage.setItem("Auth", 'true');
       localStorage.setItem("role", userRole);
       localStorage.setItem("token", result.result);
-      
+      localStorage.setItem("userId", userId);
+      const profile = await fetchUserProfile(userId);
 
+      localStorage.setItem("userProfile", JSON.stringify(profile));
       navigate(`/${userRole}`, { replace: true });
-      
-    
-   
-        // window.location.reload();
-  
+    } catch (error) {
+      message.error("Login failed, please check your account", 3);
+    } finally {
+      setIsLoading(false); 
     }
   };
 
+  const fetchUserProfile = async (id) => {
+    try {
+      const res = await User.fetchUserProfile(id);
+      return res.events;
+    } catch (error) {
+      message.error('Fetch User failed');
+      return null;  
+    }
+  };
+
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSignIn();
+    }
+  };
+
+  
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #ffffff 0%, #ffffff 50%, #ADD8E6 50%, #ADD8E6 100%)', height: '100vh' }}>
+    <div 
+    onKeyDown={handleKeyDown}
+    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(to bottom right, #ffffff 0%, #ffffff 50%, #ADD8E6 50%, #ADD8E6 100%)', height: '100vh' }}>
       <div style={{ width: '90vh', height: '500px', borderRadius: '6px', background: '#fff', display: 'flex' }}>
         <div className='WrapperContainerLeft'>
-          <h1>Xin chào</h1>
-          <p>Đăng nhập hoặc tạo tài khoản mới</p>
+       
+          <p>Đăng nhập vào hệ thống </p>
           <InputFormComponent style={{ marginBottom: '10px' }} placeholder="abc@gmail.com" value={email} onChange={handleOnchangeEmail} />
           <div style={{ position: 'relative' }}>
             <span
@@ -86,14 +111,30 @@ const SigninPage = () => {
             textbutton={'Đăng nhập'}
             styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
           />
-          <p><span className='WrapperTextLight'>Quên mật khẩu?</span></p>
-          <p>Chưa có tài khoản? <span className='WrapperTextLight' onClick={handleNavigateSignUp}> Tạo tài khoản</span></p>
+          {/* <p><span className='WrapperTextLight'>Quên mật khẩu?</span></p>
+          <p>Chưa có tài khoản? <span className='WrapperTextLight' onClick={handleNavigateSignUp}> Tạo tài khoản</span></p> */}
         </div>
         <div className='WrapperContainerRight'>
           <h1 style={{ fontSize: '3em', color: '#333', textAlign: 'center', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '2px', marginBottom: '20px', textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Intern</h1>
           <h4>Chào mừng đến với Intern management system</h4>
         </div>
       </div>
+      {isLoading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <Spin size="large" />
+        </div>
+      )}
     </div>
   );
 };
