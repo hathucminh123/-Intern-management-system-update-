@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Row, Col, Card, Table, Space, Dropdown, Menu, Button, message, Collapse, Input, Form, Spin } from 'antd';
+import { Layout, Row, Col, Card, Table, Space, Button, message, Input, Form, Spin, Typography } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { DownOutlined } from '@ant-design/icons';
 import * as KPI from '../../../service/KPIService';
 import * as Training from '../../../service/TrainingPrograms';
 import * as User from '../../../service/User';
+import moment from 'moment';
 
 const { Header, Content } = Layout;
+const { Text, Title } = Typography;
 
 const KPIReportDetails = () => {
   const { state } = useLocation();
   const Details = state?.record;
   const [training, setTraining] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
+
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const userRole = localStorage.getItem('role');
-  console.log('user',Details)
+
+  useEffect(() => {
+    fetchAllTraining();
+  }, []);
 
   const fetchAllTraining = async () => {
     setLoading(true);
@@ -30,10 +36,6 @@ const KPIReportDetails = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAllTraining();
-  }, []);
-
   const handleDeleteKPIS = async (id) => {
     setLoading(true);
     try {
@@ -46,60 +48,6 @@ const KPIReportDetails = () => {
       setLoading(false);
     }
   };
-
-  const kpiMenu = (record) => (
-    <Menu>
-      <Menu.Item key="1">
-        <Button onClick={() => handleOpenDetailKPIModal(record)}>View/Edit</Button>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <Button onClick={() => handleDeleteKPIS(record.id)}>Delete</Button>
-      </Menu.Item>
-    </Menu>
-  );
-
-  const kpiColumns = [
-    {
-      title: 'Grade Category',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Grade Item',
-      dataIndex: 'type',
-      key: 'type',
-      render: (text, record) => (
-        <>
-          <div>{record.type}</div>
-          <div><strong>Total</strong></div>
-        </>
-      ),
-    },
-    {
-      title: 'Weight',
-      dataIndex: 'weight',
-      key: 'weight',
-      render: (text, record) => (
-        <>
-          <div>{record.weight}%</div>
-          <div><strong>{parseFloat(record.weight)}%</strong></div>
-        </>
-      ),
-    },
-    {
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text, record) => (
-        <Form.Item
-          name={['kpis', record.id, 'value']}
-          rules={[{ required: true, message: 'Please enter the value' }]}
-        >
-          <Input defaultValue={record.value} />
-        </Form.Item>
-      ),
-    },
-  ];
 
   const handlePostTask = async (training) => {
     setLoading(true);
@@ -127,6 +75,57 @@ const KPIReportDetails = () => {
     }
   };
 
+  const handleSelected = (programId) => {
+    setSelectedProgram((prev) => (prev?.id === programId ? null : training.find((prog) => prog.id === programId)));
+  };
+
+  const kpiColumns = [
+    {
+      title: 'Grade Category',
+      dataIndex: 'name',
+      key: 'name',
+      className: 'custom-header',
+    },
+    {
+      title: 'Grade Item',
+      className: 'custom-header',
+      dataIndex: 'type',
+      key: 'type',
+      render: (text, record) => (
+        <>
+          <div>{record.type}</div>
+          <div><strong>Total</strong></div>
+        </>
+      ),
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'weight',
+      className: 'custom-header',
+      key: 'weight',
+      render: (text, record) => (
+        <>
+          <div>{record.weight}%</div>
+          <div><strong>{parseFloat(record.weight)}%</strong></div>
+        </>
+      ),
+    },
+    {
+      title: 'Value',
+      dataIndex: 'value',
+      className: 'custom-header',
+      key: 'value',
+      render: (text, record) => (
+        <Form.Item
+          name={['kpis', record.id, 'value']}
+          rules={[{ required: true, message: 'Please enter the value' }]}
+        >
+          <Input defaultValue={record.value} />
+        </Form.Item>
+      ),
+    },
+  ];
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -134,34 +133,51 @@ const KPIReportDetails = () => {
       </Header>
       <Content style={{ padding: '20px' }}>
         <Spin spinning={loading}>
-          <Row gutter={[16, 16]}>
-            {training.map((training) => (
-              <Col key={training.id} span={12}>
-                <Collapse>
-                  <Collapse.Panel
-                    header={`Training program: ${training.name} | Duration: ${training.duration} months`}
-                    key={training.id}
-                  >
-                    <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
-                      <Form form={form} layout="vertical" initialValues={{ kpis: training.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
-                        <Table
-                          bordered
-                          pagination={false}
-                          columns={kpiColumns}
-                          dataSource={training.kpIs}
-                          rowKey="id"
-                          style={{ minWidth: '600px' }}
-                        />
-                        <Button type="primary" onClick={() => handlePostTask(training)}>
-                          Grading
-                        </Button>
-                      </Form>
-                    </Card>
-                  </Collapse.Panel>
-                </Collapse>
-              </Col>
-            ))}
-          </Row>
+          <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'start', height: '100vh', background: '#f0f2f5', padding: '20px' }}>
+            <div style={{ width: '100%', maxWidth: '500px', padding: '40px', borderRadius: '8px', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column' }}>
+              <Title level={2}>Select a Training Program ...</Title>
+              <div style={{ width: '100%', backgroundColor: '#6B90DA', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '20px' }}>
+                Training program
+              </div>
+              {training.map((train) => (
+                <Row key={train.id}>
+                  <Col span={24}>
+                    <span
+                      style={{
+                        color: selectedProgram?.id === train.id ? 'orange' : '#0D6EFD',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => handleSelected(train.id)}
+                    >
+                      Training Program: {train.name}
+                    </span>
+                    <strong style={{ marginLeft: '10px' }}>from {moment(train.startDate).format('YYYY/MM/DD')}</strong>
+                    <strong style={{ marginLeft: '3px' }}>- {moment(train.endDate).format('YYYY/MM/DD')}</strong>
+                  </Col>
+                </Row>
+              ))}
+            </div>
+            {selectedProgram && (
+              <div style={{ width: '100%', marginLeft: '10px' }}>
+                <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                  <Form form={form} layout="vertical" initialValues={{ kpis: selectedProgram.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
+                    <Table
+                      bordered
+                      pagination={false}
+                      columns={kpiColumns}
+                      dataSource={selectedProgram.kpIs}
+                      rowKey="id"
+                      style={{ minWidth: '600px' }}
+                    />
+                    <Button type="primary" onClick={() => handlePostTask(selectedProgram)}>
+                      Grading
+                    </Button>
+                  </Form>
+                </Card>
+              </div>
+            )}
+          </div>
         </Spin>
       </Content>
     </Layout>

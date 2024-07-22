@@ -305,12 +305,12 @@ console.log(filter.endDate)
                         ))}
                     
                       </div>
-                      <div>
+                      {/* <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Status
                         </Title>
                         <p><strong>{ColorStatus}</strong></p>
-                      </div>
+                      </div> */}
                       <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Mentor
