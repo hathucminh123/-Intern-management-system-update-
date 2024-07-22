@@ -88,7 +88,7 @@ const InternReport = () => {
               [programId]: formattedData,
             }));
           } else {
-            message.error('Unexpected response format');
+            // message.error('Unexpected response format');
           }
         }
       } catch (error) {
