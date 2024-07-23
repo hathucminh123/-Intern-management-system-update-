@@ -107,6 +107,7 @@ function App() {
             <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
               <Route index element={<Navigate to="home" replace />} />
               <Route path="home" element={<HRPage />} />
+              <Route path="chat" element={<Chat />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
