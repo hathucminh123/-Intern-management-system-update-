@@ -324,10 +324,12 @@ const TrainingProgramDetail = () => {
     //   key: 'startDate',
     //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     // },
-        {
+    {
       title: 'Start Date',
-     
-      render: () =>   moment(CampaignDetail.startDate).format('YYYY-MM-DD') 
+      dataIndex:'startDate',
+      key:'startDate',
+    
+      render: (startDate) =>   moment(startDate).format('YYYY-MM-DD HH:mm') 
     },
     // {
     //   title: 'End Date',
@@ -337,33 +339,44 @@ const TrainingProgramDetail = () => {
     // },
       {
       title: 'End Date',
+      dataIndex:'endDate',
+      key:'endDate',
     
-      render: () =>   moment(CampaignDetail.endDate).format('YYYY-MM-DD') 
+      render: (endDate) =>   moment(endDate).format('YYYY-MM-DD HH:mm') 
     },
+
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (text, record) => (
-        <span>
-          {record.status.toUpperCase() === "DONE" && (
-            <Tag color='green'>
-              {record.status.toUpperCase()}
-            </Tag>
-          )}
-          {record.status.toUpperCase() === "ON-PROGRESS" && (
-            <Tag color='geekblue'>
-              {record.status.toUpperCase()}
-            </Tag>
-          )}
-          {record.status.toUpperCase() === "TODOS" && (
-            <Tag color='blue'>
-              {record.status.toUpperCase()}
-            </Tag>
-          )}
-        </span>
-      ),
+      title: 'Deadline',
+      dataIndex: 'deadline',
+      key: 'deadline',
+      render: (text,record) => 
+                     moment(record.deadline).format('YYYY-MM-DD HH:mm') 
+      
     },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (text, record) => (
+    //     <span>
+    //       {record.status.toUpperCase() === "DONE" && (
+    //         <Tag color='green'>
+    //           {record.status.toUpperCase()}
+    //         </Tag>
+    //       )}
+    //       {record.status.toUpperCase() === "ON-PROGRESS" && (
+    //         <Tag color='geekblue'>
+    //           {record.status.toUpperCase()}
+    //         </Tag>
+    //       )}
+    //       {record.status.toUpperCase() === "TODOS" && (
+    //         <Tag color='blue'>
+    //           {record.status.toUpperCase()}
+    //         </Tag>
+    //       )}
+    //     </span>
+    //   ),
+    // },
   ];
 
   const handleBeforeUpload = (file) => {

@@ -60,7 +60,8 @@ export const apiLinks = {
     getIntern:`${baseURL}/AssessmentSubmition`,
     put: `${baseURL}/Assessment`,
     delete: `${baseURL}/Assessment`,
-    getByTraining :`${baseURL}/Assessment`
+    getByTraining :`${baseURL}/Assessment`,
+    updateStatus:`${baseURL}/Assessment/Status`
   },
   KPI: {
     get: `${baseURL}/KPI`,

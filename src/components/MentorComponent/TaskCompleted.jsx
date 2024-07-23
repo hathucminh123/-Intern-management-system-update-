@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
-  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message, Spin,
+  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Dropdown, Menu, message, Spin,
   Row, Col
 } from 'antd';
 import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
+import UpdateModal from './UpdateModal';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import * as Assessment from "../../service/Assessment";
 import * as User from "../../service/authService";
 
-const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, training, selectedTrainingId,setSelectedTrainingId }) => {
+const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, training, selectedTrainingId, setSelectedTrainingId }) => {
   const { Title, Text } = Typography;
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -20,6 +21,8 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
   const [searchText, setSearchText] = useState('');
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [taskToReview, setTaskToReview] = useState(null);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [taskToUpdate, setTaskToUpdate] = useState(null);
   const [user, setUser] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [assignedToFilter, setAssignedToFilter] = useState('');
@@ -27,7 +30,6 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
   const navigate = useNavigate();
   const { RangePicker } = DatePicker;
   const userRole = localStorage.getItem('role');
-  console.log('asu',training)
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -90,6 +92,23 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
     setSelectedTrainingId(programId);
   };
 
+  const handleUpdateTask = (task) => {
+    setTaskToUpdate(task);
+    setOpenUpdateModal(true);
+  };
+
+  const handleUpdateTaskSubmit = async (values) => {
+    try {
+      const updatedTask = { ...taskToUpdate, ...values, id: taskToUpdate.id };
+      await Assessment.EditAssessmentStatus(updatedTask);
+      onUpdateTask(updatedTask);
+      setOpenUpdateModal(false);
+      fetchAssessment();
+    } catch (error) {
+      message.error("Failed to update task");
+    }
+  };
+
   const filteredTasks = useMemo(() => tasks.filter(task => {
     const taskNameMatch = task.name ? task.name.toLowerCase().includes(searchText.toLowerCase()) : false;
     const startDateMatch = dateRange[0] ? moment(task.startDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
@@ -101,10 +120,6 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
 
   const content = useMemo(() => (
     <Space direction="vertical">
-      {/* <div>
-        <Text strong>Date Range:</Text>
-        <RangePicker onChange={handleDateRangeChange} style={{ width: '100%' }} />
-      </div> */}
       <div>
         <Text strong>Assigned To:</Text>
         <Select
@@ -119,7 +134,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         </Select>
       </div>
     </Space>
-  ), [handleDateRangeChange, handleAssignedToChange, user]);
+  ), [handleAssignedToChange, user]);
 
   const menu = useCallback((record) => (
     <Menu>
@@ -128,9 +143,9 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
       </Menu.Item>
       {userRole === "mentor" && (
         <>
-          <Menu.Item key="2">
+          {/* <Menu.Item key="2">
             <Button type="link" onClick={() => handleOpenDetailModal(record)}>Edit</Button>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="3">
             <Button type="link" onClick={() => handleDeleteTask(record.id)}>Delete</Button>
           </Menu.Item>
@@ -157,16 +172,24 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         key: 'owner',
         render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
       },
-      // {
-      //   title: 'Status',
-      //   dataIndex: 'status',
-      //   key: 'status',
-      //   render: (text, record) => (
-      //     <Tag color={record.status === "DONE" ? 'green' : record.status === "ON-PROGRESS" ? 'geekblue' : 'blue'}>
-      //       {record.status.toUpperCase()}
-      //     </Tag>
-      //   ),
-      // },
+      {
+        title: 'In-Progress date ',
+        dataIndex: 'startDate',
+        key: 'startDate',
+        render: (text, record) => moment(record.startDate).format("YYYY-MM-DD HH:mm")
+      },
+      {
+        title: 'Completed date ',
+        dataIndex: 'endDate',
+        key: 'endDate',
+        render: (text, record) => moment(record.endDate).format("YYYY-MM-DD HH:mm")
+      },
+      {
+        title: 'Deadline ',
+        dataIndex: 'deadline',
+        key: 'deadline',
+        render: (text, record) => moment(record.deadline).format("YYYY-MM-DD HH:mm")
+      },
       {
         title: 'Actions',
         key: 'actions',
@@ -178,33 +201,14 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
           </Dropdown>
         ),
       },
-    ];
-
-    if (tasks.some(task => task.feedback)) {
-      baseColumns.splice(baseColumns.findIndex(column => column.key === 'endDate') + 1, 0, {
-        title: 'Feedback',
-        dataIndex: 'feedback',
-        key: 'feedback',
-      });
-    }
-
-    if (tasks.some(task => task.files)) {
-      const feedbackColumnIndex = baseColumns.findIndex(column => column.key === 'feedback');
-      baseColumns.splice(feedbackColumnIndex + 1, 0, {
-        title: 'Files',
-        dataIndex: 'files',
-        key: 'files',
-        render: (files) => (
-          <Space>
-            {files.map(file => (
-              <Tag color="blue" key={file.name}>
-                {file.name}
-              </Tag>
-            ))}
-          </Space>
+      {
+        title: 'Update',
+        key: 'update',
+        render: (text, record) => (
+          <Button type="link" onClick={() => handleUpdateTask(record)}>Update</Button>
         ),
-      });
-    }
+      },
+    ];
 
     return baseColumns;
   }, [menu, tasks]);
@@ -241,6 +245,12 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
           onReviewTask={handleReviewTask}
         />
       )}
+      <UpdateModal
+        isVisible={openUpdateModal}
+        onClose={() => setOpenUpdateModal(false)}
+        task={taskToUpdate}
+        onSubmit={handleUpdateTaskSubmit}
+      />
       <Select
         placeholder="Select a training program"
         allowClear

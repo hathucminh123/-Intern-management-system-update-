@@ -13,8 +13,7 @@ const TaskPerformance = () => {
   const [training, setTraining] = useState([]);
   const [selectedTrainingId, setSelectedTrainingId] = useState(null);
 
-  console.log(selectedTrainingId)
-
+  // Fetch training programs with proper error handling
   const fetchTraining = async () => {
     try {
       setLoading(true);
@@ -27,6 +26,7 @@ const TaskPerformance = () => {
     }
   };
 
+  // Fetch assessments based on selected training ID
   const fetchAssessment = async (trainingId) => {
     if (!trainingId) return;
     setLoading(true);
@@ -56,10 +56,6 @@ const TaskPerformance = () => {
 
   const handleUpdateTask = (updatedTask) => {
     setTasks((prev) => prev.map(item => item.id === updatedTask.id ? updatedTask : item));
-  };
-
-  const handleCompleteTask = (completedTask) => {
-    handleUpdateTask(completedTask);
   };
 
   const items = [

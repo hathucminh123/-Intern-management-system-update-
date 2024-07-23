@@ -287,7 +287,7 @@ console.log(filter.endDate)
                   </Col>
                   <Col span={8}>
                     <Space direction="vertical" size="large">
-                      <div>
+                      {/* <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Start Date
                         </Title>
@@ -304,7 +304,32 @@ console.log(filter.endDate)
                            <p><strong>{moment(train.endDate).format("DD-MM-YYYY  ")}</strong></p>
                         ))}
                     
-                      </div>
+                      </div> */}
+                   <div>
+ <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+Progress-Day
+</Title>
+
+<p><strong>{moment(taskDetail.startDate).format("DD-MM-YYYY HH:mm ")}</strong></p>
+
+
+ </div>
+ <div>
+ <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+ Completed-Day
+</Title>
+
+<p><strong>{moment(taskDetail.endDate).format("DD-MM-YYYY HH:mm")}</strong></p>
+
+ </div>
+ <div>
+<Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+ DeadLine
+</Title>
+
+<p><strong>{moment(taskDetail.deadline).format("DD-MM-YYYY  ")}</strong></p>
+
+</div>
                       {/* <div>
                         <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           Status
