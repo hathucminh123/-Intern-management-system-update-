@@ -5,6 +5,7 @@ import * as KPI from '../../../service/KPIService';
 import * as Training from '../../../service/TrainingPrograms';
 import * as User from '../../../service/User';
 import moment from 'moment';
+import "../../InternComponent/table.css";
 
 const { Header, Content } = Layout;
 const { Text, Title } = Typography;
@@ -81,13 +82,13 @@ const KPIReportDetails = () => {
 
   const kpiColumns = [
     {
-      title: 'Grade Category',
+      title: <span style={{ color: 'black' }}>Grade Category</span>,
       dataIndex: 'name',
       key: 'name',
       className: 'custom-header',
     },
     {
-      title: 'Grade Item',
+      title: <span style={{ color: 'black' }}>Grade Item</span>,
       className: 'custom-header',
       dataIndex: 'type',
       key: 'type',
@@ -99,7 +100,7 @@ const KPIReportDetails = () => {
       ),
     },
     {
-      title: 'Weight',
+      title: <span style={{ color: 'black' }}>Weight</span>,
       dataIndex: 'weight',
       className: 'custom-header',
       key: 'weight',
@@ -111,10 +112,10 @@ const KPIReportDetails = () => {
       ),
     },
     {
-      title: 'Value',
+      title: <span style={{ color: 'black' }}>Value</span>,
       dataIndex: 'value',
-      className: 'custom-header',
       key: 'value',
+      className: 'custom-header',
       render: (text, record) => (
         <Form.Item
           name={['kpis', record.id, 'value']}
@@ -137,7 +138,7 @@ const KPIReportDetails = () => {
             <div style={{ width: '100%', maxWidth: '500px', padding: '40px', borderRadius: '8px', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column' }}>
               <Title level={2}>Select a Training Program ...</Title>
               <div style={{ width: '100%', backgroundColor: '#6B90DA', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '20px' }}>
-                Training program
+                Training program 
               </div>
               {training.map((train) => (
                 <Row key={train.id}>
@@ -168,6 +169,7 @@ const KPIReportDetails = () => {
                       columns={kpiColumns}
                       dataSource={selectedProgram.kpIs}
                       rowKey="id"
+                      className="custom-table"
                       style={{ minWidth: '600px' }}
                     />
                     <Button type="primary" onClick={() => handlePostTask(selectedProgram)}>

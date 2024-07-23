@@ -78,6 +78,7 @@ import MentorViewProgram from "./components/MentorComponent/MentorViewProgram";
 import InternViewTraining from "./components/InternComponent/InternViewTraining";
 import ProtectedRouteGuest from "./components/ProtectedRoute/ProtectedRouteGuest";
 import ListGuest from "./components/HR/CampaignsComponent/ListGuest";
+import AllUserProfile from "./components/AllComponent/AllUserProfile";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -103,6 +104,7 @@ function App() {
 
               <Route path="Detail/:id" element={<GuessDetailPage />} />
               <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
+           
 
             </Route>
        
@@ -140,6 +142,7 @@ function App() {
               <Route path="markReport/:id" element={< KPIReportDetails />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
               <Route path="kpiReport/:id" element={<UserReportView />} />
+              <Route path="profile" element={<AllUserProfile />} />
 
 
 
@@ -171,6 +174,7 @@ function App() {
               <Route path="EditUserIntern/:id" element={<EditIntern />} />
               <Route path="EditUserRole/:id" element={<EditUserRole />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
+              <Route path="profile" element={<AllUserProfile />} />
 
 
 
@@ -206,7 +210,7 @@ function App() {
               <Route path="InternList" element={<InternList />} />
               <Route path="markReport/:id" element={<UserReportView />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
-
+              <Route path="profile" element={<AllUserProfile />} />
 
 
             </Route>
@@ -224,6 +228,7 @@ function App() {
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="internReport" element={< InternReport />} />
               <Route path="markReport" element={< InternReport />} />
+              <Route path="profile" element={<AllUserProfile />} />
             </Route>
 
 

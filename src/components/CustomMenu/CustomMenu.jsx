@@ -52,6 +52,8 @@ const CustomMenu = ({ userRole }) => {
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
   const [userProfile,setUserProfile]=useState({})
+
+  
   console.log('wtf',userProfile)
 
   const handleMenuClick = ({ key }) => {
@@ -164,14 +166,17 @@ const CustomMenu = ({ userRole }) => {
       { key: "/intern/markReport", icon: <FaSquarePollVertical />, label: "Intern Mark Report" },
     ],
   };
-  const userRolle = localStorage.getItem('role');
+  const userRolle = localStorage.getItem('role').toLowerCase();
   const userItems = items[userRole] || [];
 
   const handleClickNavigate = (type) => {
     if (type === "logout") {
       localStorage.clear();
       navigate("/sign-in");
+    }else if ( type ==="profile"){
+      navigate(`/${userRolle}/profile`);
     }
+
   };
 
   const content = (

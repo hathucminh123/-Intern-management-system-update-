@@ -143,9 +143,6 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
       </Menu.Item>
       {userRole === "mentor" && (
         <>
-          {/* <Menu.Item key="2">
-            <Button type="link" onClick={() => handleOpenDetailModal(record)}>Edit</Button>
-          </Menu.Item> */}
           <Menu.Item key="3">
             <Button type="link" onClick={() => handleDeleteTask(record.id)}>Delete</Button>
           </Menu.Item>
@@ -157,7 +154,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         </Menu.Item>
       )}
     </Menu>
-  ), [handleDetails, handleOpenDetailModal, handleDeleteTask, userRole, handleOpenReviewModal]);
+  ), [handleDetails, handleDeleteTask, userRole, handleOpenReviewModal]);
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -173,19 +170,19 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
       },
       {
-        title: 'In-Progress date ',
+        title: 'In-Progress date',
         dataIndex: 'startDate',
         key: 'startDate',
         render: (text, record) => moment(record.startDate).format("YYYY-MM-DD HH:mm")
       },
       {
-        title: 'Completed date ',
+        title: 'Completed date',
         dataIndex: 'endDate',
         key: 'endDate',
         render: (text, record) => moment(record.endDate).format("YYYY-MM-DD HH:mm")
       },
       {
-        title: 'Deadline ',
+        title: 'Deadline',
         dataIndex: 'deadline',
         key: 'deadline',
         render: (text, record) => moment(record.deadline).format("YYYY-MM-DD HH:mm")
@@ -201,17 +198,20 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
           </Dropdown>
         ),
       },
-      {
+    ];
+
+    if (userRole === "intern") {
+      baseColumns.push({
         title: 'Update',
         key: 'update',
         render: (text, record) => (
           <Button type="link" onClick={() => handleUpdateTask(record)}>Update</Button>
         ),
-      },
-    ];
+      });
+    }
 
     return baseColumns;
-  }, [menu, tasks]);
+  }, [menu, userRole]);
 
   return (
     <div style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 0 15px rgba(0,0,0,0.1)' }}>

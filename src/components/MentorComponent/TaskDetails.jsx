@@ -371,7 +371,7 @@ Progress-Day
                                 onClick={handlePostTask}
                               />
                             )}
-                            {userRole === "mentor" && (
+                            {/* {userRole === "mentor" && (
                               <Popover
                                 content={content}
                                 trigger="click"
@@ -392,7 +392,7 @@ Progress-Day
                                   />
                                 </div>
                               </Popover>
-                            )}
+                            )} */}
                           </Space>
                         </Col>
                       </Row>
