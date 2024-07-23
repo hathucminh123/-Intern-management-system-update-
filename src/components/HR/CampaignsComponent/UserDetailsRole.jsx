@@ -4,12 +4,23 @@ import { useLocation } from 'react-router-dom';
 import './userDetails.css';
 import image from '../../../assets/minhwap.jpg';
 
+const userRoles = {
+  0: 'Intern',
+  3: 'HR Manager',
+  2: 'Internship Coordinators',
+  1: 'Mentor',
+  4:'Admin',
+  5:'Guest'
+};
+
 const UserDetailsRole = () => {
   const { Title, Paragraph, Text } = Typography;
   const { TabPane } = Tabs;
   const { Header, Content } = Layout;
   const { state } = useLocation();
-  const User = state?.item;
+  const user = state?.item;
+
+  const role = userRoles[user?.role] || 'Unknown Role';
 
   return (
     <Layout>
@@ -29,14 +40,13 @@ const UserDetailsRole = () => {
             </Col>
             <Col span={16}>
               <div className="user-info">
-                {/* <Title level={2}>{User?.name}</Title> */}
                 <div className="info-item">
                   <Text strong>User Name:</Text>
-                  <Paragraph className="info-value">{User?.name}</Paragraph>
+                  <Paragraph className="info-value">{user?.userName}</Paragraph>
                 </div>
                 <div className="info-item">
                   <Text strong>Role:</Text>
-                  <Paragraph className="info-value">{User?.role}</Paragraph>
+                  <Paragraph className="info-value">{role}</Paragraph>
                 </div>
                 <Divider />
                 <Tabs defaultActiveKey="1">
@@ -44,26 +54,27 @@ const UserDetailsRole = () => {
                     <div className="tab-content">
                       <div className="info-item">
                         <Text strong>First Name:</Text>
-                        <Paragraph className="info-value">Minh</Paragraph>
+                        <Paragraph className="info-value">{user?.firstName}</Paragraph>
                       </div>
                       <div className="info-item">
                         <Text strong>Last Name:</Text>
-                        <Paragraph className="info-value">Hà</Paragraph>
+                        <Paragraph className="info-value">{user?.lastName}</Paragraph>
                       </div>
                       <div className="info-item">
                         <Text strong>Email:</Text>
-                        <Paragraph className="info-value">{User?.email}</Paragraph>
+                        <Paragraph className="info-value">{user?.email}</Paragraph>
                       </div>
                       <div className="info-item">
-                        <Text strong>Role:</Text>
-                        <Paragraph className="info-value">{User?.role}</Paragraph>
+                        <Text strong>Phone Number:</Text>
+                        <Paragraph className="info-value">{user?.phoneNumber}</Paragraph>
                       </div>
                     </div>
                   </TabPane>
-                  {/* <TabPane tab="More" key="2">
+                  {/* Uncomment and add more tabs as needed
+                  <TabPane tab="More" key="2">
                     <div className="tab-content">
-                    <div className="info-item">
-                        <Text strong>Internship status:</Text>
+                      <div className="info-item">
+                        <Text strong>Internship Status:</Text>
                         <Paragraph className="info-value">On training</Paragraph>
                       </div>
                       <div className="info-item">
@@ -72,7 +83,7 @@ const UserDetailsRole = () => {
                       </div>
                       <Divider>Skills</Divider>
                       <div className="info-item">
-                        <Text strong>Javascript</Text>
+                        <Text strong>JavaScript</Text>
                       </div>
                       <div className="info-item">
                         <Text strong>HTML/CSS</Text>
@@ -83,7 +94,8 @@ const UserDetailsRole = () => {
                         <Paragraph className="info-value">FPT University education</Paragraph>
                       </div>
                     </div>
-                  </TabPane> */}
+                  </TabPane> 
+                  */}
                 </Tabs>
               </div>
             </Col>

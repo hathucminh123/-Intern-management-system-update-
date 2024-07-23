@@ -25,6 +25,7 @@ import {
   Space,
   Typography,
   Popover,
+  message,
 } from "antd";
 import { MdClass } from "react-icons/md";
 import { useNavigate, useLocation, Outlet } from "react-router-dom";
@@ -36,6 +37,7 @@ import Logo from "../Logo/Logo";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { FaUsers, FaChevronRight } from "react-icons/fa";
 import { FaSquarePollVertical } from "react-icons/fa6";
+import * as UserProfile from "../../service/authService"
 
 
 const { Header, Sider, Content } = Layout;
@@ -49,6 +51,8 @@ const CustomMenu = ({ userRole }) => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
+  const [userProfile,setUserProfile]=useState({})
+  console.log('wtf',userProfile)
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -69,26 +73,52 @@ const CustomMenu = ({ userRole }) => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
+ const fetchUserProfile =async()=>{
+  try{
+     const res=await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+     setUserProfile(res.events)
+  }catch(error){
+    message.error('fectch User Profile failed')
+  }
+
+ }
+
+
+ useEffect(()=>{
+    fetchUserProfile()
+
+
+ },[])
+
   const items = {
     mentor: [
       { key: "/mentor/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
       // { key: "/mentor/taskboard", icon: <AppstoreOutlined />, label: "Task Board" },
       { key: "/mentor/task", icon: <AppstoreOutlined />, label: "Task" },
-      { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
-      { key: "/mentor/class", icon: <FaUsers />, label: "student list" },
+      // { key: "/mentor/chat", icon: <WechatWorkOutlined />, label: "Chat" },
+      // { key: "/mentor/class", icon: <FaUsers />, label: "student list" },
       { key: "/mentor/ViewTrainingProgram", icon: <ProjectOutlined />, label: "Training Program" },
-      {
-        key: "/mentor/Report", icon: <FaSquarePollVertical />, label: "Manage Report",
+      // {
+      //   key: "/mentor/Report", icon: <FaSquarePollVertical />, label: "Manage Report List",
 
-        children: [
-          // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
-          { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
+      //   children: [
+      //     // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
+      //     { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
 
-        ]
+      //   ]
+      // },
+          {
+        key: "/mentor/UserListReport", icon: <FaSquarePollVertical />, label: "Manage Report List",
+
+        // children: [
+        //   // { key: "/mentor/NewReport", icon: <FaChevronRight />, label: "Make Report" },
+        //   { key: "/mentor/UserListReport", icon: <FaChevronRight />, label: "List Report User" },
+
+        // ]
       },
     ],
     hrmanager: [
-      { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
+      // { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
       { key: "/hrmanager/chat", icon: <WechatWorkOutlined />, label: "Chat" },
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
@@ -100,6 +130,7 @@ const CustomMenu = ({ userRole }) => {
         children: [
           { key: "/hrmanager/NewUser", icon: <FaChevronRight />, label: "New" },
           { key: "/hrmanager/UserList", icon: <FaChevronRight />, label: "List User" },
+          { key: "/hrmanager/UserGuestList", icon: <FaChevronRight />, label: "List Guest User" },
 
         ]
       },
@@ -116,18 +147,19 @@ const CustomMenu = ({ userRole }) => {
           { key: "/internshipcoordinators/ViewTrainingProgram", icon: <ProjectOutlined />, label: "View" },
         ],
       },
-      { key: "/internshipcoordinators/class", icon: < MdClass />, label: "Class jobs" },
-      { key: "/internshipcoordinators/TrainingJobs", icon: < MdClass />, label: "Jobs training" },
-      { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource" },
+      { key: "/internshipcoordinators/class", icon: < MdClass />, label: " Jobs details" },
+      { key: "/internshipcoordinators/TrainingJobs", icon: < MdClass />, label: "Assign training program" },
+      { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource list" },
       { key: "/internshipcoordinators/KPIList", icon: <GrResources />, label: "KPIList" },
       { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
+      { key: "/internshipcoordinators/InternList", icon: <LiaChalkboardTeacherSolid />, label: "InternList" },
     ],
     intern: [
       // { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },
       { key: "/intern/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
       { key: "/intern/Trainingprogram", icon: <ProjectOutlined />, label: "Training Program" },
       { key: "/intern/taskboard", icon: <AppstoreOutlined />, label: "Task" },
-      { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },
+      // { key: "/intern/chat", icon: <WechatWorkOutlined />, label: "Chat" },
       // { key: "/intern/internReport", icon: <FaSquarePollVertical />, label: "Intern Report" },
       { key: "/intern/markReport", icon: <FaSquarePollVertical />, label: "Intern Mark Report" },
     ],
@@ -212,15 +244,15 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>internshipcoordinators</Typography.Text>
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
               {userRolle == "hrmanager" && (
@@ -240,15 +272,15 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>hrmanager </Typography.Text>
+                      <Typography.Text>{userProfile.userName} </Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
               {userRolle == "mentor" && (
@@ -268,15 +300,15 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>mentor</Typography.Text>
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
               {userRolle == "intern" && (
@@ -296,15 +328,15 @@ const CustomMenu = ({ userRole }) => {
                       style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
                     >
                       <Avatar size="default" icon={<UserOutlined />} />
-                      <Typography.Text>intern</Typography.Text>
+                      <Typography.Text>{userProfile.userName}</Typography.Text>
                     </div>
                   </Popover>
-                  <Badge count={comments.length} dot>
+                  {/* <Badge count={comments.length} dot>
                     <MailOutlined style={{ fontSize: 24 }} onClick={() => setCommentsOpen(true)} />
                   </Badge>
                   <Badge count={comments.length}>
                     <BellFilled style={{ fontSize: 24 }} onClick={() => setNotificationOpen(true)} />
-                  </Badge>
+                  </Badge> */}
                 </Space>
               )}
 

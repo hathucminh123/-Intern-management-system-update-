@@ -63,7 +63,21 @@ import StudentListClass from "./components/MentorComponent/StudentListClass";
 import InternReport from "./components/InternComponent/InternReport";
 import KpiTracking from "./components/InternComponent/KPITracking_temp";
 import KPIReportDetails from "./components/ICComponent/ICComponent1/KPIReportDetails";
-
+import UserDetailss from "./components/MentorComponent/UserDetails";
+import GuessJobDetailsComponent from "./components/GuessComponent/GuessJobDetailsComponent/GuessJobDetailsComponent";
+import JobsTrainingDetails from "./components/ICComponent/ICComponent1/JobsTrainingDetails";
+import JobsIC from "./components/ICComponent/ICComponent1/JobsIC";
+import UserReportView from "./components/MentorComponent/markReportDetails";
+import HRCampaignsDetailsss from "./components/ICComponent/ICComponent1/HRCampaignsDetailsss";
+import InternList from "./components/ICComponent/ICComponent1/InternList";
+import GuessSignin from "./components/GuessComponent/GuessSignin/GuessSignin";
+import GuessSignup from "./components/GuessComponent/GuessSignup/GuessSignup";
+import JobApply from "./components/GuessComponent/JobApply/JobApply";
+import GuessProfile from "./components/GuessComponent/GuessProfile/GuessProfile";
+import MentorViewProgram from "./components/MentorComponent/MentorViewProgram";
+import InternViewTraining from "./components/InternComponent/InternViewTraining";
+import ProtectedRouteGuest from "./components/ProtectedRoute/ProtectedRouteGuest";
+import ListGuest from "./components/HR/CampaignsComponent/ListGuest";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -74,8 +88,34 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/sign-in" replace />} />
           <Route path="/sign-in" element={<SigninPage />} />
+          <Route path="/login" element={<GuessSignin />} />
+          <Route path="/sign-up" element={<GuessSignup />} />
+
+        
+          
+          <Route element={<ProtectedRouteGuest />}>
+          <Route path="/guest" element={<GuestPage />}>
+              <Route index element={<Navigate to="info" replace />} />
+          
+              <Route path="info" element={<GuestInfo />} />
+              <Route path="JobApply" element={<JobApply />} />
+              <Route path="Profile" element={<GuessProfile />} />
+
+              <Route path="Detail/:id" element={<GuessDetailPage />} />
+              <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
+
+            </Route>
+       
+          
+          
+          </Route>
+
+         
 
           <Route element={<ProtectedRoute />}>
+        
+
+       
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
               <Route index element={<Navigate to="task" replace />} />
@@ -95,9 +135,11 @@ function App() {
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
 
 
-              <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
+              <Route path="ViewTrainingProgram" element={<MentorViewProgram />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
               <Route path="markReport/:id" element={< KPIReportDetails />} />
+              <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
+              <Route path="kpiReport/:id" element={<UserReportView />} />
 
 
 
@@ -105,8 +147,8 @@ function App() {
 
             {/* HR Manager Routes */}
             <Route path="/hrmanager" element={<CustomMenu userRole="hrmanager" />}>
-              <Route index element={<Navigate to="home" replace />} />
-              <Route path="home" element={<HRPage />} />
+              <Route index element={<Navigate to="schedule" replace />} />
+              {/* <Route path="home" element={<HRPage />} /> */}
               <Route path="chat" element={<Chat />} />
               <Route path="schedule" element={<Schedule />} />
               <Route path="campaigns" element={<HRCampaings />} />
@@ -124,6 +166,7 @@ function App() {
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="NewUser" element={<NewUser />} />
               <Route path="UserList" element={<ListUser />} />
+              <Route path="UserGuestList" element={<ListGuest />} />
               <Route path="UserDetails/:id" element={<UserDetails />} />
               <Route path="EditUserIntern/:id" element={<EditIntern />} />
               <Route path="EditUserRole/:id" element={<EditUserRole />} />
@@ -145,21 +188,24 @@ function App() {
               <Route path="TrainingProgramsofjob/:id" element={<TrainingProgramDetailOJobs />} />
               <Route path="ViewTrainingProgram" element={<ViewCampaigns />} />
               <Route path="class" element={<HRCampaings />} />
-              <Route path="TrainingJobs" element={<Jobs />} />
+              <Route path="TrainingJobs" element={<JobsIC />} />
               <Route path="campaigns/:id" element={<HRCampaignsDetailss />} />
               <Route path="students/:className" element={<StudentList />} />
               <Route path="ListTraining/:id" element={<ListTraining />} />
               <Route path="ResourceList/:id" element={<ResourceList />} />
               <Route path="ResourceList" element={<ResourceListt />} />
               <Route path="Details/:id" element={<EditTraining />} />
-              <Route path="Detail/:id" element={<HRCampaignsDetails />} />
+              <Route path="Detail/:id" element={<HRCampaignsDetailsss />} />
+              <Route path="Detailll/:id" element={<JobsTrainingDetails />} />
               <Route path="KPIList" element={<KPIList />} />
               <Route path="TrainingListt/:id" element={<Traininglistt />} />
               <Route path="KPISListt/:id" element={<KPIListt />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="MentorList" element={<MentorList />} />
-              <Route path="markReport/:id" element={< KPIReportDetails />} />
+              <Route path="InternList" element={<InternList />} />
+              <Route path="markReport/:id" element={<UserReportView />} />
+              <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
 
 
 
@@ -171,24 +217,20 @@ function App() {
               <Route path="schedule" element={<Schedule />} />
               <Route path="taskboard" element={<TaskPerformance />} />
               <Route path="TrainingPrograms/:id" element={<TrainingProgramDetail />} />
-              <Route path="Trainingprogram" element={<ViewCampaigns />} />
+              <Route path="Trainingprogram" element={<InternViewTraining />} />
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="ListTraining/:id" element={<ListTraining />} />
               <Route path="chat" element={<Chat />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="internReport" element={< InternReport />} />
-              <Route path="markReport" element={< KpiTracking />} />
+              <Route path="markReport" element={< InternReport />} />
             </Route>
 
 
 
 
             {/* Guest Routes */}
-            <Route path="/guest" element={<GuestPage />}>
-              <Route index element={<Navigate to="info" replace />} />
-              <Route path="info" element={<GuestInfo />} />
-              <Route path="Detail/:id" element={<GuessDetailPage />} />
-            </Route>
+      
           </Route>
         </Routes>
       </Router>

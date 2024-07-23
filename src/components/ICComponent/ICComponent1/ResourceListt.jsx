@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu } from 'antd';
+import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu,Input } from 'antd';
 import * as Resource from "../../../service/Resource";
 import DetailModal from './DetailModal';
 import { DownOutlined } from '@ant-design/icons';
@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const { Text, Title } = Typography;
 const { Header, Content } = Layout;
-
+const { Search } = Input;
 const ResourceListt = () => {
   const { state } = useLocation();
   const TrainingProgram = state?.item;
@@ -18,7 +18,17 @@ const ResourceListt = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  const onSearch = (value) => {
+    setSearchQuery(value);
+  };
+
+  const filteredResource = resource.filter((train) =>
+    train.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
   const fetchAllResource = async () => {
     try {
@@ -62,13 +72,13 @@ const ResourceListt = () => {
     }
   };
 
-  const handleDeleteResource = async (id) => {
+  const handleDeleteResource = async (record) => {
     try {
-      await Resource.deleteResource(id);
+      await Resource.deleteResource(record.id);
       message.success("Delete complete");
-      setResource((prev) => prev.filter(item => item.id !== id));
+      setResource((prev) => prev.filter(item => item.id !== record.id));
     } catch (error) {
-      message.error("Error deleting resource: " + error.message);
+      message.error(`Resource name ${record.name} is still in a  training program!`);
     }
   };
 
@@ -78,7 +88,7 @@ const ResourceListt = () => {
         <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
       </Menu.Item>
       <Menu.Item key="2">
-        <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
+        <Button onClick={() => handleDeleteResource(record)}>Delete</Button>
       </Menu.Item>
     </Menu>
   );
@@ -126,12 +136,21 @@ const ResourceListt = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header style={{ backgroundColor: "#001529", color: "white", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
-        <Title level={4} style={{ lineHeight: '64px', color: 'white', margin: 0 }}>Resource List</Title>
+      <Header style={{ backgroundColor: "#fff", color: "white", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
+        <Title level={4} style={{ lineHeight: '64px', color: 'black', margin: 0 }}>Resource List</Title>
       </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
+      <Search
+            size="large"
+            placeholder="Search Resources"
+            onSearch={onSearch}
+            enterButton
+            className="w-full mb-5"
+            style={{ maxWidth: '500px', margin: '0 auto' }}
+          />
+
         <Table
-          dataSource={resource}
+          dataSource={filteredResource}
           columns={columns}
           rowKey="id"
           style={{ marginTop: "20px" }}

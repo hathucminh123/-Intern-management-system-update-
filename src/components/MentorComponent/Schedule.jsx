@@ -28,6 +28,9 @@ const Schedule = () => {
   const [eventToEdit, setEventToEdit] = useState(null);
   const navigate = useNavigate();
 
+  const userProfile = parseInt(localStorage.getItem('userId'), 10); // Chuyển đổi thành số
+  console.log('userProfile', userProfile);
+
   const fetchSchedule = async () => {
     try {
       const res = await Meeting.fetchSchedule();
@@ -45,6 +48,13 @@ const Schedule = () => {
   useEffect(() => {
     fetchSchedule();
   }, []);
+
+  // Lọc các sự kiện chỉ khi userMeetings không rỗng
+  const filteredEvents = events.filter(event => 
+    event.userMeetings.length === 0 || event.userMeetings.some(userMeeting => userMeeting.id === userProfile)
+  );
+  
+  console.log('filteredEvents', filteredEvents);
 
   const handleSelectSlot = (slotInfo) => {
     setShowModal(true);
@@ -72,10 +82,10 @@ const Schedule = () => {
         <div className="container mx-auto">
           <Calendar
             localizer={localizer}
-            events={events}
+            events={filteredEvents}
             startAccessor="startTime"
             endAccessor="endTime"
-            style={{ height: 500, backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}
+            style={{ height: 750, backgroundColor: 'white', borderRadius: '8px', padding: '20px' }}
             selectable
             onSelectSlot={handleSelectSlot}
             onSelectEvent={handleSelectEvent}
@@ -94,7 +104,7 @@ const Schedule = () => {
             setEventToEdit={setEventToEdit}
           />
           <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
-            {events.map((item) => (
+            {filteredEvents.map((item) => (
               <Col xs={24} sm={12} md={8} key={item.id}>
                 <Card
                   hoverable

@@ -20,7 +20,8 @@ const KPIList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false); 
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const fetchAllKPI = async () => {
@@ -57,9 +58,9 @@ const KPIList = () => {
 
   const menu = (record) => (
     <Menu>
-      <Menu.Item key="1">
+      {/* <Menu.Item key="1">
         <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item key="2">
         <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
       </Menu.Item>
@@ -85,17 +86,6 @@ const KPIList = () => {
     },
     {
       title: 'Grade Item',
-      dataIndex: 'description',
-      key: 'description',
-      render: (text, record) => (
-        <>
-          <div>{record.descition}</div>
-          <div><strong>Total</strong></div>
-        </>
-      ),
-    },
-    {
-      title: 'Weight',
       dataIndex: 'type',
       key: 'type',
       render: (text, record) => (
@@ -105,12 +95,12 @@ const KPIList = () => {
       ),
     },
     {
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
+      title: 'Weight',
+      dataIndex: 'weight',
+      key: 'weight',
       render: (text, record) => (
         <>
-          <div>{record.value}</div>
+          <div>{record.weight}% </div>
         </>
       ),
     },
@@ -129,17 +119,30 @@ const KPIList = () => {
     },
   ];
 
+  const handleSearch = (value) => {
+    setSearchQuery(value);
+  };
+
+  const filteredResources = resource.filter((item) =>
+    item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        <Title level={3}>Resource List</Title>
+      <Header style={{ backgroundColor: "#fff", color: "white", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
+        <Title level={4} style={{ lineHeight: '64px', color: 'black', margin: 0 }}>KPIS List</Title>
       </Header>
       <Content style={{ padding: '20px' }}>
-        <Search placeholder="Search KPI" enterButton style={{ marginBottom: '20px' }} />
+        <Search 
+          placeholder="Search KPI" 
+          enterButton 
+          style={{ marginBottom: '20px', maxWidth: '500px' }} 
+          onSearch={handleSearch}
+        />
         <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button>
         <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
-          {resource.map((item) => (
-            <Col key={item.id} span={12}>
+          {filteredResources.map((item) => (
+            <Col key={item.id} span={24}>
               <Collapse>
                 <Panel header={`${item.name}`} key={item.id}>
                   <Card>
