@@ -160,24 +160,30 @@ const KPIReportDetails = () => {
               ))}
             </div>
             {selectedProgram && (
-              <div style={{ width: '100%', marginLeft: '10px' }}>
-                <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
-                  <Form form={form} layout="vertical" initialValues={{ kpis: selectedProgram.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
-                    <Table
-                      bordered
-                      pagination={false}
-                      columns={kpiColumns}
-                      dataSource={selectedProgram.kpIs}
-                      rowKey="id"
-                      className="custom-table"
-                      style={{ minWidth: '600px' }}
-                    />
-                    <Button type="primary" onClick={() => handlePostTask(selectedProgram)}>
-                      Grading
-                    </Button>
-                  </Form>
-                </Card>
-              </div>
+              selectedProgram.kpIs.length > 0 ? (
+                <div style={{ width: '100%', marginLeft: '10px' }}>
+                  <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                    <Form form={form} layout="vertical" initialValues={{ kpis: selectedProgram.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
+                      <Table
+                        bordered
+                        pagination={false}
+                        columns={kpiColumns}
+                        dataSource={selectedProgram.kpIs}
+                        rowKey="id"
+                        className="custom-table"
+                        style={{ minWidth: '600px' }}
+                      />
+                      <Button type="primary" onClick={() => handlePostTask(selectedProgram)}>
+                        Grading
+                      </Button>
+                    </Form>
+                  </Card>
+                </div>
+              ) : !loading && (
+                <div style={{ marginTop: '100px', textAlign: 'center',marginLeft:'200px' }}>
+                  <p>No Grade Category or KPIs added to the training yet.</p>
+                </div>
+              )
             )}
           </div>
         </Spin>

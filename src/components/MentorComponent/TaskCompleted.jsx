@@ -173,13 +173,33 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         title: 'In-Progress date',
         dataIndex: 'startDate',
         key: 'startDate',
-        render: (text, record) => moment(record.startDate).format("YYYY-MM-DD HH:mm")
+        render: (text, record) => {
+          let date = record.startDate;
+          
+          if (date === "0001-01-01T00:00:00") {
+            date = null;
+          } else {
+            date = moment(record.startDate).format("YYYY-MM-DD HH:mm");
+          }
+      
+          return <span>{date}</span>;
+        }
       },
       {
         title: 'Completed date',
         dataIndex: 'endDate',
         key: 'endDate',
-        render: (text, record) => moment(record.endDate).format("YYYY-MM-DD HH:mm")
+        render: (text, record) => {
+          let date = record.endDate;
+          console.log('ko bik',date)
+          if (date === "0001-01-01T00:00:00") {
+            date = null;
+          } else {
+            date = moment(record.endDate).format("YYYY-MM-DD HH:mm");
+          }
+      
+          return <span>{date}</span>;
+        }
       },
       {
         title: 'Deadline',
@@ -202,7 +222,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
 
     if (userRole === "intern") {
       baseColumns.push({
-        title: 'Update',
+        title: 'Update Progress',
         key: 'update',
         render: (text, record) => (
           <Button type="link" onClick={() => handleUpdateTask(record)}>Update</Button>
