@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message, Typography, Layout, Button, Modal, Form, Input} from 'antd';
+import { Table, message, Typography, Layout, Button, Modal, Form } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { fetchCandidate } from '../../../service/Candidate';
 import { sendEmail } from '../../../service/EmailService';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+
 const { Header, Content, Footer } = Layout;
 
 const ViewGuestInfoCv = () => {
@@ -10,6 +13,7 @@ const ViewGuestInfoCv = () => {
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
+  const [emailContent, setEmailContent] = useState('');
   const [form] = Form.useForm();
   const { state } = useLocation();
   const jobID = state?.jobID;
@@ -48,10 +52,10 @@ const ViewGuestInfoCv = () => {
     form.resetFields();
   };
 
-  const handleSendEmail = async (values) => {
+  const handleSendEmail = async () => {
     const emailData = {
       recievedUser: selectedUser,
-      content: values.content,
+      content: emailContent,
     };
     await sendEmail(emailData)
 
@@ -100,11 +104,11 @@ const ViewGuestInfoCv = () => {
 
   return (
     <Layout>
-       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
         Danh sách ứng tuyển
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
-      <div className="container mx-auto" style={{padding:"24px"}}>
+        <div className="container mx-auto" style={{ padding: "24px" }}>
           <Typography.Title>Vị trí ứng tuyển {Jobss} vào chương trình {CampaignDetails.name}</Typography.Title>
           <Table
             columns={columns}
@@ -120,13 +124,21 @@ const ViewGuestInfoCv = () => {
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
+        style={{ top: 100 }}
+        width={800} 
+        bodyStyle={{ maxHeight: '70vh', overflowY: 'auto' }} 
       >
         <Form form={form} onFinish={handleSendEmail}>
           <Form.Item
             name="content"
             rules={[{ required: true, message: 'Please enter the email content!' }]}
           >
-            <Input.TextArea placeholder="Nội dung email" rows={4} />
+            <ReactQuill 
+              value={emailContent} 
+              onChange={setEmailContent} 
+              theme="snow" 
+              style={{ height: '300px' }}
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">

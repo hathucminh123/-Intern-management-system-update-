@@ -131,7 +131,7 @@ const Traininglistt = () => {
                 <Checkbox onChange={(e) => onchangeCheck(e, campaign)}>Select</Checkbox>
                 <Card
                   hoverable
-                  className="shadow-lg"
+                  className="job-card shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
                 >
                   <Collapse>

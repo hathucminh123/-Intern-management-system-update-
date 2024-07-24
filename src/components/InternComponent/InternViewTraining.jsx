@@ -132,7 +132,7 @@ const InternViewTraining = () => {
                 <Col key={campaign.id} span={24}>
                   <Card
                     hoverable
-                    className="shadow-lg"
+                    className="job-card shadow-lg"
                     style={{ borderRadius: '8px', backgroundColor: 'white' }}
                     actions={userRole === "internshipcoordinators" && ([
                       <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,

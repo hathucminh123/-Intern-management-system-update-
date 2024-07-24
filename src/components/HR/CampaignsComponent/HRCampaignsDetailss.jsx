@@ -172,7 +172,7 @@ const HRCampaignsDetailss = () => {
                       <Col key={item.id} xs={24} sm={12} md={8}>
                         <Card
                           hoverable
-                          className="shadow-lg"
+                          className="job-card shadow-lg"
                           style={{ borderRadius: '8px', backgroundColor: 'white' }}
                           actions={[
                             <Popconfirm
@@ -231,7 +231,7 @@ const HRCampaignsDetailss = () => {
                         <Card
                           onClick={(e) => handleSelect(item.id, e)}
                           hoverable
-                          className="shadow-lg"
+                             className="job-card shadow-lg"
                           style={{ borderRadius: '8px', backgroundColor: 'white' }}
                         >
                           <Image
@@ -274,7 +274,7 @@ const HRCampaignsDetailss = () => {
                       <Col key={item.id} xs={24} sm={12} md={8}>
                         <Card
                           hoverable
-                          className="shadow-lg"
+                             className="job-card shadow-lg"
                           style={{ borderRadius: '8px', backgroundColor: 'white' }}
                           actions={[
                             <Popconfirm

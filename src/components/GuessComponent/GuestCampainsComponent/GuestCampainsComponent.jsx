@@ -66,7 +66,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
         <Col span={24}>
           {filteredCampaigns.map((internship) => (
             <Card
-              className="shadow-lg"
+              className="job-card shadow-lg"
               key={internship.id}
               hoverable
               style={{

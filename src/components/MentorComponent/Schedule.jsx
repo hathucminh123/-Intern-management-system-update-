@@ -108,7 +108,7 @@ const Schedule = () => {
               <Col xs={24} sm={12} md={8} key={item.id}>
                 <Card
                   hoverable
-                  className="shadow-lg"
+                  className="job-card shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
                 >
                   <Title level={5}>Name: {item.title}</Title>

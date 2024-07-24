@@ -237,13 +237,13 @@ const GuessDetailsComponent = ({ id }) => {
       <JobDescriptionComponent data={internship} />
 
       <Title level={2} className="text-center font-bold mb-16">
-        Những vị trí ứng tuyển <strong style={{ color: 'rgb(0, 164, 153)' }}>lập trình viên</strong>
+        Những vị trí ứng tuyển 
       </Title>
 
       <Row gutter={[16, 16]}>
         {internship.jobs.map((list, index) => (
           <Col key={list.id} xs={24} sm={12} md={8}>
-            <Card hoverable className="shadow-lg"
+            <Card hoverable   className="job-card shadow-lg"
               onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list, internship); }}
             >
               <Image className="rounded-lg mb-3" preview={false} width="100%" height={200} src={list.imagePath} alt={list.name} />
