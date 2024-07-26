@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { UploadOutlined } from "@ant-design/icons";
+import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -97,10 +97,22 @@ const CreateCampaignsHrComponent = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Create new Campaign
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
+          </Col>
+        </Row>
       </Header>
       <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div className="container flex flex-col">
+        <Title className="text-center mb-2" level={2}>
+            Create New Campaign
+          </Title>
           <div className="mt-5">
             <Form
               form={form}
