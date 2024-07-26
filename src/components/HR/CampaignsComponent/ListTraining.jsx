@@ -4,6 +4,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
 import * as AddTraining from "../../../service/JobsService";
 import "tailwindcss/tailwind.css";
+import { LeftOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -105,7 +106,20 @@ const ListTraining = () => {
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>Training List</Header>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>List Training</Title> */}
+          </Col>
+        </Row>
+      
+      
+      </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Title className="text-center mb-5" level={2}>

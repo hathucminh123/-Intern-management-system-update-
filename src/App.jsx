@@ -79,6 +79,8 @@ import InternViewTraining from "./components/InternComponent/InternViewTraining"
 import ProtectedRouteGuest from "./components/ProtectedRoute/ProtectedRouteGuest";
 import ListGuest from "./components/HR/CampaignsComponent/ListGuest";
 import AllUserProfile from "./components/AllComponent/AllUserProfile";
+import MList from "./components/ICComponent/ICComponent1/MList";
+import IList from "./components/ICComponent/ICComponent1/IList";
 function App() {
   const userRole = localStorage.getItem("role");
 
@@ -207,7 +209,9 @@ function App() {
               <Route path="taskDetail/:id" element={<TaskDetails />} />
               <Route path="scheduleDetail/:id" element={<ScheduleDetails />} />
               <Route path="MentorList" element={<MentorList />} />
+              <Route path="MentorsList" element={<MList />} />
               <Route path="InternList" element={<InternList />} />
+              <Route path="InternsList" element={<IList />} />
               <Route path="markReport/:id" element={<UserReportView />} />
               <Route path="UserDetailsRole/:id" element={<UserDetailsRole />} />
               <Route path="profile" element={<AllUserProfile />} />

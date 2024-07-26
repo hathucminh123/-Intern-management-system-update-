@@ -153,8 +153,8 @@ const CustomMenu = ({ userRole }) => {
       { key: "/internshipcoordinators/TrainingJobs", icon: < MdClass />, label: "Assign training program" },
       { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource list" },
       { key: "/internshipcoordinators/KPIList", icon: <GrResources />, label: "KPIList" },
-      { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
-      { key: "/internshipcoordinators/InternList", icon: <LiaChalkboardTeacherSolid />, label: "InternList" },
+      { key: "/internshipcoordinators/MentorsList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
+      { key: "/internshipcoordinators/InternsList", icon: <LiaChalkboardTeacherSolid />, label: "InternList" },
     ],
     intern: [
       // { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },

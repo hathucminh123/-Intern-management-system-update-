@@ -5,6 +5,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import * as Campaign from "../../../service/Campaign";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import { LeftOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -90,7 +91,10 @@ const HRCampaignsDetailss = () => {
 
   return (
     <div className="flex justify-center items-center py-12 bg-gray-100">
-      <div className="w-full bg-white p-8 shadow-lg rounded-lg">
+      <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg">
+      <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
         <div className="flex flex-col md:flex-row mb-8">
           <Image
             width={250}

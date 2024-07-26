@@ -98,7 +98,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
           message="Lưu ý"
           description={(
             <>
-            một vị trí trong 1 chiến dịch chỉ được ứng tuyển 1 lần
+            Một vị trí trong 1 chiến dịch chỉ được ứng tuyển 1 lần
             </>
           )}
           type="warning"

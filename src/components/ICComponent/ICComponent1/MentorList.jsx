@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Input, Spin } from 'antd';
+import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Input, Spin, Row, Col } from 'antd';
 import * as User from "../../../service/authService";
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, LeftOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as Userr from "../../../service/User";
 
@@ -130,7 +130,17 @@ const MentorList = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ backgroundColor: '#fff', padding: '0 20px', borderBottom: '1px solid #f0f0f0' }}>
-        <Title level={3} style={{ margin: 0 }}>Mentor List</Title>
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          <Title className='mt-3' level={3} style={{ margin: 0 }}>Mentor List</Title>
+          </Col>
+        </Row>
+
       </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
         <Search

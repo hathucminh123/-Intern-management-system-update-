@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Table, message, Typography, Layout, Button, Modal, Form } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchCandidate } from '../../../service/Candidate';
 import { sendEmail } from '../../../service/EmailService';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import 'react-quill/dist/quill.snow.css';
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
 
@@ -16,6 +17,7 @@ const ViewGuestInfoCv = () => {
   const [emailContent, setEmailContent] = useState('');
   const [form] = Form.useForm();
   const { state } = useLocation();
+  const navigate =useNavigate();
   const jobID = state?.jobID;
   const CampaignDetails = state?.CampaignDetail;
   const CampaignID = state?.CampaignID;
@@ -106,9 +108,13 @@ const ViewGuestInfoCv = () => {
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
         Danh sách ứng tuyển
+       
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto" style={{ padding: "24px" }}>
+        <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
           <Typography.Title>Vị trí ứng tuyển {Jobss} vào chương trình {CampaignDetails.name}</Typography.Title>
           <Table
             columns={columns}

@@ -7,7 +7,7 @@ import {
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
-import { DownOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { DownOutlined, LeftOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/config';
 import ReactQuill from 'react-quill';
@@ -180,9 +180,13 @@ console.log(filter.endDate)
 
   const menu = (record) => (
     <Menu>
-      <Menu.Item key="2">
-        <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
-      </Menu.Item>
+      {userRole ==='intern' &&(
+          <Menu.Item key="2">
+           <Button onClick={() => handleDeleteTask(record.id)}>Delete</Button>
+         </Menu.Item>
+
+      )}
+   
     </Menu>
   );
 
@@ -235,7 +239,16 @@ console.log(filter.endDate)
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Task Details
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title>
+          </Col>
+        </Row>
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <Spin spinning={loading}>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Spin } from 'antd';
+import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu, Spin, Row, Col } from 'antd';
 import * as KPI from "../../../service/KPIService";
 import DetailModal from './DetailModal';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, LeftOutlined } from '@ant-design/icons';
 import * as Training from "../../../service/TrainingPrograms";
 import { useLocation, useNavigate } from 'react-router-dom';
 import DetailKPIModal from './DetailKPIModal';
@@ -150,7 +150,21 @@ const KPIListt = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ backgroundColor: 'white', borderBottom: '1px solid #f0f0f0', padding: '0 20px' }}>
-        <Title level={3}>Add KPI to {TrainingProgram.name}</Title>
+       <Row>
+       <Col span={10}>
+       <Button className="mt-3 mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+       
+       </Col>
+       <Col>
+       <Title className='mt-3' level={3}> Add KPI to {TrainingProgram.name} </Title>
+       </Col>
+       
+       
+       </Row>
+    
+     
       </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
         {loading ? (

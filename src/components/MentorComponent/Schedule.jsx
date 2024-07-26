@@ -28,7 +28,7 @@ const Schedule = () => {
   const [eventToEdit, setEventToEdit] = useState(null);
   const navigate = useNavigate();
 
-  const userProfile = parseInt(localStorage.getItem('userId'), 10); // Chuyển đổi thành số
+  const userProfile = parseInt(localStorage.getItem('userId'), 10); 
   console.log('userProfile', userProfile);
 
   const fetchSchedule = async () => {

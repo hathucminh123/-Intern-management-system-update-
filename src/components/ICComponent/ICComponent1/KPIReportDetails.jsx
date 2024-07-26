@@ -6,6 +6,7 @@ import * as Training from '../../../service/TrainingPrograms';
 import * as User from '../../../service/User';
 import moment from 'moment';
 import "../../InternComponent/table.css";
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Header, Content } = Layout;
 const { Text, Title } = Typography;
@@ -130,7 +131,17 @@ const KPIReportDetails = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Student report name: <strong>{Details.userName}</strong>
+      <Row>
+          <Col span={8}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          <Title className='mt-3' level={3} style={{ margin: 0 }}>     Student report name: <strong>{Details.userName}</strong></Title>
+          </Col>
+        </Row>
+   
       </Header>
       <Content style={{ padding: '20px' }}>
         <Spin spinning={loading}>

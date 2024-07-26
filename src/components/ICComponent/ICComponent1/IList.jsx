@@ -17,7 +17,7 @@ const userRoles = {
   4: 'Admin'
 };
 
-const InternList = () => {
+const IList = () => {
   const { state } = useLocation();
   const jobDetail = state?.jobDetail;
   const campaignDetail = state?.campaignDetail;
@@ -90,17 +90,17 @@ const InternList = () => {
   );
 
   const columns = [
-    {
-      title: "",
-      dataIndex: "checkbox",
-      key: "checkbox",
-      render: (_, record) => (
-        <Checkbox
-          checked={!!checkedKeys[record.id]}
-          onChange={(e) => handleCheckboxChange(record, e.target.checked)}
-        />
-      ),
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "checkbox",
+    //   key: "checkbox",
+    //   render: (_, record) => (
+    //     <Checkbox
+    //       checked={!!checkedKeys[record.id]}
+    //       onChange={(e) => handleCheckboxChange(record, e.target.checked)}
+    //     />
+    //   ),
+    // },
     { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
     { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
@@ -132,9 +132,9 @@ const InternList = () => {
       <Header style={{ backgroundColor: '#fff', padding: '0 20px', borderBottom: '1px solid #f0f0f0' }}>
         <Row>
           <Col span={10}>
-          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          {/* <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
           <LeftOutlined /> Back
-        </Button>
+        </Button> */}
           </Col>
           <Col>
           <Title className='mt-3' level={3} style={{ margin: 0 }}>Intern List</Title>
@@ -161,11 +161,11 @@ const InternList = () => {
               rowKey="id"
               style={{ marginTop: "20px" }}
             />
-            <div style={{ marginTop: "20px", textAlign: "right" }}>
+            {/* <div style={{ marginTop: "20px", textAlign: "right" }}>
               <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleAddUser}>
                 Assign to job
               </Button>
-            </div>
+            </div> */}
           </>
         )}
       </Content>
@@ -173,4 +173,4 @@ const InternList = () => {
   );
 }
 
-export default InternList;
+export default IList;
