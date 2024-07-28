@@ -132,6 +132,59 @@ export const  DeleteAssessment =async (id) =>{
    }
   }
 
+
+  export const  EditAssessmentStatus =async (data) =>{
+    try {
+       const response = await httpClient.put({
+          url: `${apiLinks.Assessment.updateStatus}`,
+          data:data,
+   
+   
+       });
+   
+       if (response.status !== 200 && response.status !== 201) {
+           const error = new Error('An error occurred while Edit the Task');
+           error.code = response.status;
+           error.info = await response.data;
+           console.error('Server response:', response.data);
+           throw error;
+         }
+   
+       
+         return response.data;
+    }
+    catch (error) {
+       console.error('Error creating job:', error.response ? error.response.data : error.message);
+       throw new Error(`Error: ${error.message}`);
+     }
+    }
+    export const  GradingAssessmentStatus =async (data) =>{
+      try {
+         const response = await httpClient.put({
+            url: `${apiLinks.Assessment.grading}`,
+            data:data,
+     
+     
+         });
+     
+         if (response.status !== 200 && response.status !== 201) {
+             const error = new Error('An error occurred while Grading the Task');
+             error.code = response.status;
+             error.info = await response.data;
+             console.error('Server response:', response.data);
+             throw error;
+           }
+     
+         
+           return response.data;
+      }
+      catch (error) {
+         console.error('Error grading job:', error.response ? error.response.data : error.message);
+         throw new Error(`Error: ${error.message}`);
+       }
+      }
+  
+
 export const GetAssessment =async()=>{
   try{
     const response =await httpClient.get({

@@ -5,6 +5,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 import * as Campaign from "../../../service/Campaign";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import { LeftOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph, Text } = Typography;
 const { TabPane } = Tabs;
@@ -90,7 +91,10 @@ const HRCampaignsDetailss = () => {
 
   return (
     <div className="flex justify-center items-center py-12 bg-gray-100">
-      <div className="w-full bg-white p-8 shadow-lg rounded-lg">
+      <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg">
+      <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
         <div className="flex flex-col md:flex-row mb-8">
           <Image
             width={250}
@@ -116,6 +120,12 @@ const HRCampaignsDetailss = () => {
               <div>End Date:</div>
               <div className="ml-3 text-red-500">
                 {moment(CampaignDetail.estimateEndDate).format('DD-MM-YYYY')}
+              </div>
+            </div>
+            <div className="flex items-center mt-3">
+              <div>Dealine Apply:</div>
+              <div className="ml-3 text-red-500">
+                {moment(CampaignDetail.submissionDeadline).format('DD-MM-YYYY')}
               </div>
             </div>
             <div className="flex flex-wrap mt-3">
@@ -172,7 +182,7 @@ const HRCampaignsDetailss = () => {
                       <Col key={item.id} xs={24} sm={12} md={8}>
                         <Card
                           hoverable
-                          className="shadow-lg"
+                          className="job-card shadow-lg"
                           style={{ borderRadius: '8px', backgroundColor: 'white' }}
                           actions={[
                             <Popconfirm
@@ -231,7 +241,7 @@ const HRCampaignsDetailss = () => {
                         <Card
                           onClick={(e) => handleSelect(item.id, e)}
                           hoverable
-                          className="shadow-lg"
+                             className="job-card shadow-lg"
                           style={{ borderRadius: '8px', backgroundColor: 'white' }}
                         >
                           <Image
@@ -274,7 +284,7 @@ const HRCampaignsDetailss = () => {
                       <Col key={item.id} xs={24} sm={12} md={8}>
                         <Card
                           hoverable
-                          className="shadow-lg"
+                             className="job-card shadow-lg"
                           style={{ borderRadius: '8px', backgroundColor: 'white' }}
                           actions={[
                             <Popconfirm

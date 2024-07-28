@@ -1,8 +1,9 @@
-import { Typography, Tabs, Layout, Image, Row, Col, Divider } from 'antd';
+import { Typography, Tabs, Layout, Image, Row, Col, Divider, Button } from 'antd';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './userDetails.css';
-import image from '../../../assets/minhwap.jpg';
+import { LeftOutlined } from '@ant-design/icons';
+// import image from '../../../assets/minhwap.jpg';
 
 const userRoles = {
   0: 'Intern',
@@ -19,26 +20,41 @@ const UserDetailsRole = () => {
   const { Header, Content } = Layout;
   const { state } = useLocation();
   const user = state?.item;
+  const navigate =useNavigate()
 
   const role = userRoles[user?.role] || 'Unknown Role';
 
   return (
     <Layout>
       <Header className="header">
+        <Row>
+          <Col span={11}>
+          <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          
         <Title level={3}>User Details</Title>
+          </Col>
+        </Row>
+     
       </Header>
       <Content className="content">
         <div className="details-container">
+        {/* <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button> */}
           <Row gutter={20}>
-            <Col span={8}>
+            {/* <Col span={8}>
               <Image
                 width={250}
                 preview={false}
                 src={image}
                 className="profile-image"
               />
-            </Col>
-            <Col span={16}>
+            </Col> */}
+            <Col span={20}>
               <div className="user-info">
                 <div className="info-item">
                   <Text strong>User Name:</Text>

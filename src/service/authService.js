@@ -30,7 +30,8 @@ export const apiLinks = {
   Candidates: {
     get: `${baseURL}/Candidate`,
     post: `${baseURL}/Candidate`,
-    getApply : `${baseURL}/Candidate/UserAplication`
+    getApply : `${baseURL}/Candidate/UserAplication`,
+    putStatus:`${baseURL}/Candidate/Status`,
   },
   Email: {
     post: `${baseURL}/Mail`,
@@ -60,7 +61,9 @@ export const apiLinks = {
     getIntern:`${baseURL}/AssessmentSubmition`,
     put: `${baseURL}/Assessment`,
     delete: `${baseURL}/Assessment`,
-    getByTraining :`${baseURL}/Assessment`
+    getByTraining :`${baseURL}/Assessment`,
+    updateStatus:`${baseURL}/Assessment/Status`,
+    grading :`${baseURL}/Assessment/Grade`,
   },
   KPI: {
     get: `${baseURL}/KPI`,

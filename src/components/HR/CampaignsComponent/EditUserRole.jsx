@@ -3,6 +3,7 @@ import { Typography, Form, Input, Layout, Row, Col, Select, message, Button } fr
 import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import * as User from "../../../service/User";
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -65,7 +66,18 @@ const EditUserRole = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', borderBottom: '1px solid #f0f0f0' }}>
-        <Title level={3} style={{ margin: 0 }}>Edit User Role</Title>
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
+          <Title level={3} style={{ margin: 0 ,marginTop:'10px'}}>Edit {userAccount.userName}</Title>
+          </Col>
+        </Row>
+        {/* <Title level={3} style={{ margin: 0 }}>Edit {userAccount.userName}</Title> */}
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>

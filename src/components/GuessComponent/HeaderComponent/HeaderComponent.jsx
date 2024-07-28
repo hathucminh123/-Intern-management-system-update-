@@ -6,6 +6,7 @@ import image1 from '../../../assets/download.png';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
 import { useNavigate } from 'react-router-dom';
 import * as UserService from '../../../service/authService';
+import { MdExitToApp } from "react-icons/md";
 
 const { Text, Title } = Typography;
 const { Header, Content } = Layout;
@@ -21,9 +22,9 @@ const HeaderComponent = () => {
     const fetchUserProfile = async () => {
       setLoading(true);
       try {
-        const profile = JSON.parse(sessionStorage.getItem('userProfile')) || {};
-        const fetchedProfile = await UserService.fetchUserProfileGuest(profile.events.id);
-        sessionStorage.setItem('userProfile', JSON.stringify(fetchedProfile));
+        const profile = JSON.parse(localStorage.getItem('userProfile')) || {};
+        const fetchedProfile = await UserService.fetchUserProfile(profile.events.id);
+        localStorage.setItem('userProfile', JSON.stringify(fetchedProfile));
         setUserProfile(fetchedProfile);
       } catch (error) {
         message.error('Không thể tải thông tin người dùng');
@@ -39,7 +40,7 @@ const HeaderComponent = () => {
     if (type === "Profile") {
       navigate("/guest/profile");
     } else if (type === "logout") {
-      sessionStorage.clear();
+      localStorage.clear();
       navigate("/login");
     } else if (type === "Apply") {
       navigate("/guest/JobApply");
@@ -104,8 +105,8 @@ const HeaderComponent = () => {
           </Button>
         </Space>
         <Button style={buttonStyle} onClick={() => handleNavigate("logout")}>
-          <CarryOutOutlined style={iconStyle} />
-          <span style={{ color: 'red' }}>Đăng xuất</span>
+          <MdExitToApp  style={iconStyle} />
+          <span style={{ color: 'red',marginLeft:'10px' }}> Đăng xuất</span>
         </Button>
       </Content>
     </div>
@@ -118,7 +119,8 @@ const HeaderComponent = () => {
       <div className="flex w-full max-w-[1200px] items-center justify-between">
         <div className="hidden md:flex">
           <a href="/guest">
-            <img alt="Intern management" className="h-10 w-auto" src={image1} />
+            {/* <img alt="Intern management" className="h-10 w-auto" src={image1} /> */}
+         <span><strong> Trang chủ </strong> </span> 
           </a>
         </div>
         <div className="hidden md:flex space-x-4 ml-auto">

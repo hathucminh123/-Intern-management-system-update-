@@ -155,6 +155,14 @@ const GuessDetailsComponent = ({ id }) => {
             </div>
           </Col>
           <Col span={8}>
+            <div className="detail-item" style={{ display: 'flex', alignItems: 'center' }}>
+              <GrSchedule style={{ marginRight: '8px', fontSize: '16px' }} />
+              <Text style={{ fontSize: '16px' }}>
+                Hạn ứng tuyển: <span className="bold">{moment(internship.submissionDeadline).format("DD-MM-YYYY")}</span>
+              </Text>
+            </div>
+          </Col>
+          <Col span={8}>
             <div className="detail-item">
               <CiLocationOn />
               <div className="detail-text">
@@ -237,13 +245,13 @@ const GuessDetailsComponent = ({ id }) => {
       <JobDescriptionComponent data={internship} />
 
       <Title level={2} className="text-center font-bold mb-16">
-        Những vị trí ứng tuyển <strong style={{ color: 'rgb(0, 164, 153)' }}>lập trình viên</strong>
+        Những vị trí ứng tuyển 
       </Title>
 
       <Row gutter={[16, 16]}>
         {internship.jobs.map((list, index) => (
           <Col key={list.id} xs={24} sm={12} md={8}>
-            <Card hoverable className="shadow-lg"
+            <Card hoverable   className="job-card shadow-lg"
               onClick={(e) => { e.stopPropagation(); handleNavigateJobs(list, internship); }}
             >
               <Image className="rounded-lg mb-3" preview={false} width="100%" height={200} src={list.imagePath} alt={list.name} />

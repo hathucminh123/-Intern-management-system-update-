@@ -114,7 +114,7 @@ const HRCampaigns = () => {
                   <Col key={campaign.id} xs={24} sm={12} md={8}>
                     <Card
                       hoverable
-                      className="shadow-lg"
+                         className="job-card shadow-lg"
                       style={{ borderRadius: '8px', backgroundColor: 'white' }}
                       actions={userRole === "hrmanager" && ([
                         <Button key="edit" onClick={() => handleEdit(campaign)}>Edit</Button>,
@@ -149,6 +149,8 @@ const HRCampaigns = () => {
                       <p><strong>Duration:</strong> {campaign.duration} months</p>
                       <p><strong>Start Date:</strong> {moment(campaign.estimateStartDate).format('DD-MM-YYYY')}</p>
                       <p><strong>End Date:</strong> {moment(campaign.estimateEndDate).format('DD-MM-YYYY')}</p>
+                      <p><strong>Dealine Apply:</strong> {moment(campaign.submissionDeadline).format('DD-MM-YYYY')}</p>
+
                       <Button
                         style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
                         onClick={(e) => { e.stopPropagation(); handleDetails(campaign); }}

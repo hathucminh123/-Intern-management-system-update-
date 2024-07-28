@@ -14,5 +14,15 @@ html{
 }
 
 .ant-message {
-  top: 80px !important; /* Adjust the value as needed */
+  top: 80px !important;
+}
+
+.job-card {
+  border-radius: 8px;
+  background-color: white;
+  transition: transform 0.3s;
+}
+
+.job-card:hover {
+  transform: translateY(-5px);
 }

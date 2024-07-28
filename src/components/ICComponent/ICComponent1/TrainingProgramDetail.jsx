@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu, Row, Col, Spin } from "antd";
-import { UploadOutlined, DownOutlined } from '@ant-design/icons';
+import { UploadOutlined, DownOutlined, LeftOutlined } from '@ant-design/icons';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, firestore } from '../../../firebase/config';
@@ -324,46 +324,87 @@ const TrainingProgramDetail = () => {
     //   key: 'startDate',
     //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     // },
-        {
-      title: 'Start Date',
-     
-      render: () =>   moment(CampaignDetail.startDate).format('YYYY-MM-DD') 
-    },
+    // {
+    //   title: 'Start Date',
+    //   dataIndex:'startDate',
+    //   key:'startDate',
+    
+    //   render: (startDate) =>   moment(startDate).format('YYYY-MM-DD HH:mm') 
+    // },
     // {
     //   title: 'End Date',
     //   dataIndex: 'endDate',
     //   key: 'endDate',
     //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     // },
-      {
-      title: 'End Date',
+    //   {
+    //   title: 'End Date',
+    //   dataIndex:'endDate',
+    //   key:'endDate',
     
-      render: () =>   moment(CampaignDetail.endDate).format('YYYY-MM-DD') 
+    //   render: (endDate) =>   moment(endDate).format('YYYY-MM-DD HH:mm') 
+    // },
+    {
+      title: 'In-Progress date',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      render: (text, record) => {
+        let date = record.startDate;
+        if (date === "0001-01-01T00:00:00") {
+          date = null;
+        } else {
+          date = moment(record.startDate).format("YYYY-MM-DD HH:mm");
+        }
+        return <span>{date}</span>;
+      }
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (text, record) => (
-        <span>
-          {record.status.toUpperCase() === "DONE" && (
-            <Tag color='green'>
-              {record.status.toUpperCase()}
-            </Tag>
-          )}
-          {record.status.toUpperCase() === "ON-PROGRESS" && (
-            <Tag color='geekblue'>
-              {record.status.toUpperCase()}
-            </Tag>
-          )}
-          {record.status.toUpperCase() === "TODOS" && (
-            <Tag color='blue'>
-              {record.status.toUpperCase()}
-            </Tag>
-          )}
-        </span>
-      ),
+      title: 'Completed date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (text, record) => {
+        let date = record.endDate;
+        if (date === "0001-01-01T00:00:00") {
+          date = null;
+        } else {
+          date = moment(record.endDate).format("YYYY-MM-DD HH:mm");
+        }
+        return <span>{date}</span>;
+      }
     },
+
+    {
+      title: 'Deadline',
+      dataIndex: 'deadline',
+      key: 'deadline',
+      render: (text,record) => 
+                     moment(record.deadline).format('YYYY-MM-DD HH:mm') 
+      
+    },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (text, record) => (
+    //     <span>
+    //       {record.status.toUpperCase() === "DONE" && (
+    //         <Tag color='green'>
+    //           {record.status.toUpperCase()}
+    //         </Tag>
+    //       )}
+    //       {record.status.toUpperCase() === "ON-PROGRESS" && (
+    //         <Tag color='geekblue'>
+    //           {record.status.toUpperCase()}
+    //         </Tag>
+    //       )}
+    //       {record.status.toUpperCase() === "TODOS" && (
+    //         <Tag color='blue'>
+    //           {record.status.toUpperCase()}
+    //         </Tag>
+    //       )}
+    //     </span>
+    //   ),
+    // },
   ];
 
   const handleBeforeUpload = (file) => {
@@ -373,7 +414,25 @@ const TrainingProgramDetail = () => {
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>Training program details</Header>
+      <Header 
+       
+      style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+        
+        <Row>
+          <Col span={10}>
+
+          <Button className="mt-3 mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+            <Text> Training program details</Text>
+          
+          </Col>
+        </Row>
+
+        
+       </Header>
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
         <div className="container mx-auto bg-white p-8 shadow-lg rounded-lg">
           {loading ? (
@@ -484,7 +543,7 @@ const TrainingProgramDetail = () => {
                   </Layout>
                 )}
               </TabPane>
-              <TabPane tab="Task" key="4">
+              {/* <TabPane tab="Task" key="4">
                 {(userRole === "internshipcoordinators" || userRole === "intern" || userRole === "mentor") && (
                   <Layout>
                     <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -504,7 +563,7 @@ const TrainingProgramDetail = () => {
                     </Content>
                   </Layout>
                 )}
-              </TabPane>
+              </TabPane> */}
             </Tabs>
           )}
         </div>

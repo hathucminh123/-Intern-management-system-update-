@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 const { Text, Title } = Typography;
 const { Content } = Layout;
 
-
 const UserInfoCard = ({ application }) => {
   return (
     <Card
@@ -16,7 +15,7 @@ const UserInfoCard = ({ application }) => {
       style={{ borderColor: '#00b14f', marginTop: '15px' }}
     >
       <Space direction='vertical'>
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]} style={{ borderBottom: '1px solid #f0f0f0', paddingBottom: '10px' }}>
           <Col span={12}>
             <Text>Họ và Tên: <strong>{`${application.firstName} ${application.lastName}`}</strong></Text>
           </Col>
@@ -27,7 +26,12 @@ const UserInfoCard = ({ application }) => {
             <Text>Số điện thoại: <strong>{`${application.phoneNumber}`}</strong></Text>
           </Col>
           <Col span={12}>
-            <Text>education: <strong>{`${application.education}`}</strong></Text>
+            <Text>Education: <strong>{`${application.education}`}</strong></Text>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <Text>Trạng thái: <strong>{`${application.candidateStatus}`}</strong></Text>
           </Col>
         </Row>
       </Space>
@@ -38,7 +42,7 @@ const UserInfoCard = ({ application }) => {
 const JobApply = () => {
   const [apply, setApply] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate =useNavigate();
+  const navigate = useNavigate();
 
   const fetchApply = async () => {
     try {
@@ -56,7 +60,7 @@ const JobApply = () => {
     fetchApply();
   }, []);
 
-  const userProfile = JSON.parse(sessionStorage.getItem('userProfile'));
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', background: '#f0f2f5', padding: '20px', gap: '40px' }}>
@@ -80,7 +84,7 @@ const JobApply = () => {
                   <Col span={16}>
                     <Space direction='vertical' size='middle' style={{ width: '100%', paddingBottom: '10px' }}>
                       <Title level={4} style={{ color: '#1890ff' }}>Bạn đã ứng tuyển vào vị trí: {application.job.name} trong {application.campaign.name}</Title>
-                      <UserInfoCard key={application.id} application={application}/>
+                      <UserInfoCard key={application.id} application={application} />
                     </Space>
                   </Col>
                 </Row>
@@ -93,13 +97,13 @@ const JobApply = () => {
         <Content>
           <Row gutter={10} align='middle'>
             <Col span={8}>
-              <Image preview={false} src={image1} width='100%' style={{ borderRadius: '50%' }} />
+              {/* <Image preview={false} src={image1} width='100%' style={{ borderRadius: '50%' }} /> */}
             </Col>
             <Col span={16}>
               <Space direction='vertical'>
                 <Text style={{ color: '#8c8c8c' }}>Chào mừng bạn trở lại</Text>
                 <Title level={3} style={{ color: '#1890ff' }}>{userProfile?.events.userName}</Title>
-                <Button type='primary' onClick={()=>navigate('/guest/profile')}>Xem thông tin tài khoản</Button>
+                <Button type='primary' onClick={() => navigate('/guest/profile')}>Xem thông tin tài khoản</Button>
               </Space>
             </Col>
           </Row>

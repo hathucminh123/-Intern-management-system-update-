@@ -58,9 +58,9 @@ const KPIList = () => {
 
   const menu = (record) => (
     <Menu>
-      {/* <Menu.Item key="1">
+      <Menu.Item key="1">
         <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
-      </Menu.Item> */}
+      </Menu.Item>
       <Menu.Item key="2">
         <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
       </Menu.Item>
@@ -100,7 +100,7 @@ const KPIList = () => {
       key: 'weight',
       render: (text, record) => (
         <>
-          <div>{record.weight}% </div>
+          <div>{record.weight}%</div>
         </>
       ),
     },
@@ -129,18 +129,24 @@ const KPIList = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header style={{ backgroundColor: "#fff", color: "white", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
-        <Title level={4} style={{ lineHeight: '64px', color: 'black', margin: 0 }}>KPIS List</Title>
+      <Header style={{ backgroundColor: "#fff", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
+        <Title level={3} style={{ lineHeight: '64px', color: 'black', margin: 0 }}>KPIS List</Title>
       </Header>
-      <Content style={{ padding: '20px' }}>
-        <Search 
-          placeholder="Search KPI" 
-          enterButton 
-          style={{ marginBottom: '20px', maxWidth: '500px' }} 
-          onSearch={handleSearch}
-        />
-        <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button>
-        <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
+      <Content style={{ padding: '20px', backgroundColor: '#f0f2f5' }}>
+        <Row justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
+          <Col>
+            <Search 
+              placeholder="Search KPI" 
+              enterButton 
+              onSearch={handleSearch}
+              style={{ width: '300px' }}
+            />
+          </Col>
+          <Col>
+            <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button>
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
           {filteredResources.map((item) => (
             <Col key={item.id} span={24}>
               <Collapse>

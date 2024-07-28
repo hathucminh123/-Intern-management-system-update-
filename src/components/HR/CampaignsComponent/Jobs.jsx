@@ -4,6 +4,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import * as Jobss from "../../../service/JobsService";
 import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import './Jobs.css'
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -167,7 +168,9 @@ const Jobs = () => {
                   <Col key={item.id} xs={24} sm={12} md={8}>
                     <Card
                       hoverable
-                      className="shadow-lg"
+                   
+                     
+                      className="job-card shadow-lg"
                       style={{ borderRadius: '8px', backgroundColor: 'white' }}
                       onClick={(e) => handleSelect(item.id, e)}
                       actions={userRole === "hrmanager" ? [

@@ -3,7 +3,7 @@ import { Typography, Button, Image, Tag, Tabs, Layout, Table, Space, Dropdown, R
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, LeftOutlined } from "@ant-design/icons";
 import * as Jobss from "../../../service/JobsService";
 import * as User from "../../../service/User"
 
@@ -157,6 +157,9 @@ const HRCampaignsDetailsss = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full bg-white p-8 shadow-lg rounded-lg">
+      <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
         <div className="flex mb-8">
           <Image
             width={250}

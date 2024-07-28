@@ -31,7 +31,7 @@ const GuestJobDetailsComponent = () => {
   console.log('cccc',apply)
 
   useEffect(() => {
-    const profile = JSON.parse(sessionStorage.getItem('userProfile'));
+    const profile = JSON.parse(localStorage.getItem('userProfile'));
     setUserProfile(profile?.events);
   }, []);
 

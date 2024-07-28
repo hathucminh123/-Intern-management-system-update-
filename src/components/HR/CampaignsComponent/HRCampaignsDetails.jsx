@@ -3,10 +3,9 @@ import { Typography, Button, Image, Tag, Tabs, Layout, Table, Menu, Space, Dropd
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import { DownOutlined } from "@ant-design/icons";
-import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import { DownOutlined, LeftOutlined } from "@ant-design/icons";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
@@ -18,8 +17,6 @@ const HRCampaignsDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const userRole = localStorage.getItem('role');
   const navigate = useNavigate();
-
-  console.log('Job Detail:', jobDetail);
 
   if (!jobDetail) {
     return <div>Job detail not found</div>;
@@ -88,17 +85,12 @@ const HRCampaignsDetails = () => {
     },
   ];
 
-  const columnsReport = [
-    { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
-    { title: "Logical Thinking", dataIndex: "logicalThinking", key: "logicalThinking", responsive: ['md'] },
-    { title: "Attitude", dataIndex: "attitude", key: "attitude", responsive: ['md'] },
-    { title: "Skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
-    { title: "Total", dataIndex: "total", key: "total", responsive: ['md'] },
-  ];
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-5xl bg-white p-8 shadow-lg rounded-lg">
+      <div className="w-full max-w-8xl bg-white p-8 shadow-lg rounded-lg">
+        <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
         <div className="flex mb-8">
           <Image
             width={250}
@@ -108,22 +100,22 @@ const HRCampaignsDetails = () => {
           />
           <div className="ml-8">
             <Title level={2}>{jobDetail.name}</Title>
-            <div className="flex mt-3">
-              <div>Duration:</div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Duration:</div>
               <Tag className="ml-3" color="#87d068">
                 {jobDetail.duration} months
               </Tag>
             </div>
-            <div className="flex mt-3">
-              <div>Start date:</div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Start date:</div>
               <div className="ml-3 text-red-500">{moment(jobDetail.startDate).format('DD-MM-YYYY')}</div>
             </div>
-            <div className="flex mt-3">
-              <div>Location:</div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Location:</div>
               <div className="ml-3 text-red-500">{jobDetail.location}</div>
             </div>
-            <div className="flex mt-3">
-              <div>Total Members:</div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Total Members:</div>
               <div className="ml-3 text-red-500">{jobDetail.totalMember}</div>
             </div>
           </div>
@@ -186,14 +178,6 @@ const HRCampaignsDetails = () => {
             </Paragraph>
           </>
         )}
-
-        {/* <Title level={3} className="mt-8">Apply</Title>
-        <Paragraph>
-          Interested candidates, please send your CV with the email subject: <Text strong>[Fresher React Developer - Full Name]</Text> to the email address <Text strong>FA.HCM@fpt.com</Text>
-        </Paragraph>
-        <Paragraph>Email: <a href="mailto:FA.HCM@fpt.com">FA.HCM@fpt.com</a></Paragraph>
-        <Paragraph>Fanpage: <a href="https://www.facebook.com/fsoft.academy" target="_blank" rel="noopener noreferrer">FPT Software Academy</a></Paragraph>
-        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph> */}
       </div>
     </div>
   );

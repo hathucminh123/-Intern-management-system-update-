@@ -52,6 +52,8 @@ const CustomMenu = ({ userRole }) => {
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
   const [userProfile,setUserProfile]=useState({})
+
+  
   console.log('wtf',userProfile)
 
   const handleMenuClick = ({ key }) => {
@@ -119,6 +121,7 @@ const CustomMenu = ({ userRole }) => {
     ],
     hrmanager: [
       // { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
+      { key: "/hrmanager/chat", icon: <WechatWorkOutlined />, label: "Chat" },
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
       { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Meeting" },
@@ -129,7 +132,7 @@ const CustomMenu = ({ userRole }) => {
         children: [
           { key: "/hrmanager/NewUser", icon: <FaChevronRight />, label: "New" },
           { key: "/hrmanager/UserList", icon: <FaChevronRight />, label: "List User" },
-          { key: "/hrmanager/UserGuestList", icon: <FaChevronRight />, label: "List Guest User" },
+          // { key: "/hrmanager/UserGuestList", icon: <FaChevronRight />, label: "List Guest User" },
 
         ]
       },
@@ -150,8 +153,8 @@ const CustomMenu = ({ userRole }) => {
       { key: "/internshipcoordinators/TrainingJobs", icon: < MdClass />, label: "Assign training program" },
       { key: "/internshipcoordinators/ResourceList", icon: <GrResources />, label: "Resource list" },
       { key: "/internshipcoordinators/KPIList", icon: <GrResources />, label: "KPIList" },
-      { key: "/internshipcoordinators/MentorList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
-      { key: "/internshipcoordinators/InternList", icon: <LiaChalkboardTeacherSolid />, label: "InternList" },
+      { key: "/internshipcoordinators/MentorsList", icon: <LiaChalkboardTeacherSolid />, label: "MentorList" },
+      { key: "/internshipcoordinators/InternsList", icon: <LiaChalkboardTeacherSolid />, label: "InternList" },
     ],
     intern: [
       // { key: "/intern/home", icon: <HomeOutlined />, label: "Home" },
@@ -163,14 +166,17 @@ const CustomMenu = ({ userRole }) => {
       { key: "/intern/markReport", icon: <FaSquarePollVertical />, label: "Intern Mark Report" },
     ],
   };
-  const userRolle = localStorage.getItem('role');
+  const userRolle = localStorage.getItem('role').toLowerCase();
   const userItems = items[userRole] || [];
 
   const handleClickNavigate = (type) => {
     if (type === "logout") {
       localStorage.clear();
       navigate("/sign-in");
+    }else if ( type ==="profile"){
+      navigate(`/${userRolle}/profile`);
     }
+
   };
 
   const content = (

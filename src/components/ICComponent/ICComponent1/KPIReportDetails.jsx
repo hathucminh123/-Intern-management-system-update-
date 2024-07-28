@@ -5,6 +5,8 @@ import * as KPI from '../../../service/KPIService';
 import * as Training from '../../../service/TrainingPrograms';
 import * as User from '../../../service/User';
 import moment from 'moment';
+import "../../InternComponent/table.css";
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Header, Content } = Layout;
 const { Text, Title } = Typography;
@@ -81,13 +83,13 @@ const KPIReportDetails = () => {
 
   const kpiColumns = [
     {
-      title: 'Grade Category',
+      title: <span style={{ color: 'black' }}>Grade Category</span>,
       dataIndex: 'name',
       key: 'name',
       className: 'custom-header',
     },
     {
-      title: 'Grade Item',
+      title: <span style={{ color: 'black' }}>Grade Item</span>,
       className: 'custom-header',
       dataIndex: 'type',
       key: 'type',
@@ -99,7 +101,7 @@ const KPIReportDetails = () => {
       ),
     },
     {
-      title: 'Weight',
+      title: <span style={{ color: 'black' }}>Weight</span>,
       dataIndex: 'weight',
       className: 'custom-header',
       key: 'weight',
@@ -111,17 +113,27 @@ const KPIReportDetails = () => {
       ),
     },
     {
-      title: 'Value',
+      title: <span style={{ color: 'black' }}>Value</span>,
       dataIndex: 'value',
-      className: 'custom-header',
       key: 'value',
+      className: 'custom-header',
       render: (text, record) => (
         <Form.Item
           name={['kpis', record.id, 'value']}
-          rules={[{ required: true, message: 'Please enter the value' }]}
+          rules={[
+            { required: true, message: 'Please enter the value' },
+            {
+              validator: (_, value) => {
+                if (value < 0 || value > 10) {
+                  return Promise.reject(new Error('Value must be between 0 and 10'));
+                }
+                return Promise.resolve();
+              }
+            }]
+          }
         >
-          <Input defaultValue={record.value} />
-        </Form.Item>
+          <Input type="number" min={0} max={10} defaultValue={record.value} />
+        </Form.Item >
       ),
     },
   ];
@@ -129,7 +141,17 @@ const KPIReportDetails = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Student report name: <strong>{Details.userName}</strong>
+        <Row>
+          <Col span={8}>
+            <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+              <LeftOutlined /> Back
+            </Button>
+          </Col>
+          <Col>
+            <Title className='mt-3' level={3} style={{ margin: 0 }}>     Student report name: <strong>{Details.userName}</strong></Title>
+          </Col>
+        </Row>
+
       </Header>
       <Content style={{ padding: '20px' }}>
         <Spin spinning={loading}>
@@ -159,23 +181,30 @@ const KPIReportDetails = () => {
               ))}
             </div>
             {selectedProgram && (
-              <div style={{ width: '100%', marginLeft: '10px' }}>
-                <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
-                  <Form form={form} layout="vertical" initialValues={{ kpis: selectedProgram.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
-                    <Table
-                      bordered
-                      pagination={false}
-                      columns={kpiColumns}
-                      dataSource={selectedProgram.kpIs}
-                      rowKey="id"
-                      style={{ minWidth: '600px' }}
-                    />
-                    <Button type="primary" onClick={() => handlePostTask(selectedProgram)}>
-                      Grading
-                    </Button>
-                  </Form>
-                </Card>
-              </div>
+              selectedProgram.kpIs.length > 0 ? (
+                <div style={{ width: '100%', marginLeft: '10px' }}>
+                  <Card style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                    <Form form={form} layout="vertical" initialValues={{ kpis: selectedProgram.kpIs.reduce((acc, kpi) => ({ ...acc, [kpi.id]: { value: kpi.value } }), {}) }}>
+                      <Table
+                        bordered
+                        pagination={false}
+                        columns={kpiColumns}
+                        dataSource={selectedProgram.kpIs}
+                        rowKey="id"
+                        className="custom-table"
+                        style={{ minWidth: '600px' }}
+                      />
+                      <Button type="primary" onClick={() => handlePostTask(selectedProgram)}>
+                        Grading
+                      </Button>
+                    </Form>
+                  </Card>
+                </div>
+              ) : !loading && (
+                <div style={{ marginTop: '100px', textAlign: 'center', marginLeft: '200px' }}>
+                  <p>No Grade Category or KPIs added to the training yet.</p>
+                </div>
+              )
             )}
           </div>
         </Spin>

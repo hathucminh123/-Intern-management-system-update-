@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
-  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Tag, Dropdown, Menu, message, Spin,
-  Row, Col
+  Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Dropdown, Menu, message, Spin,
+  Row, Col, Modal, Form
 } from 'antd';
 import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
 import DetailModal from './DetailModal';
 import ReviewModal from './ReviewModal';
+import UpdateModal from './UpdateModal';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import * as Assessment from "../../service/Assessment";
 import * as User from "../../service/authService";
 
-const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, training, selectedTrainingId,setSelectedTrainingId }) => {
+const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, training, selectedTrainingId, setSelectedTrainingId }) => {
   const { Title, Text } = Typography;
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -20,14 +21,18 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
   const [searchText, setSearchText] = useState('');
   const [openReviewModal, setOpenReviewModal] = useState(false);
   const [taskToReview, setTaskToReview] = useState(null);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [taskToUpdate, setTaskToUpdate] = useState(null);
+  const [grading, setGrading] = useState(null);
   const [user, setUser] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [assignedToFilter, setAssignedToFilter] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isGradingModalVisible, setIsGradingModalVisible] = useState(false);
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
   const userRole = localStorage.getItem('role');
-  console.log('asu',training)
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -90,6 +95,44 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
     setSelectedTrainingId(programId);
   };
 
+  const handleUpdateTask = (task) => {
+    setTaskToUpdate(task);
+    setOpenUpdateModal(true);
+  };
+
+  const handleGrading = (id) => {
+    setGrading(id);
+    setIsGradingModalVisible(true);
+  };
+
+  const handleUpdateGrading = async (values) => {
+    const StatusData = {
+      id: grading,
+      point: parseInt(values.point)
+    };
+    try {
+      await Assessment.GradingAssessmentStatus(StatusData);
+      message.success('Task graded successfully');
+      setIsGradingModalVisible(false);
+      form.resetFields();
+      fetchAssessment();
+    } catch (error) {
+      message.error('Point must be between 0 and 10.');
+    }
+  };
+
+  const handleUpdateTaskSubmit = async (values) => {
+    try {
+      const updatedTask = { ...taskToUpdate, ...values, id: taskToUpdate.id };
+      await Assessment.EditAssessmentStatus(updatedTask);
+      onUpdateTask(updatedTask);
+      setOpenUpdateModal(false);
+      fetchAssessment();
+    } catch (error) {
+      message.error("Failed to update task");
+    }
+  };
+
   const filteredTasks = useMemo(() => tasks.filter(task => {
     const taskNameMatch = task.name ? task.name.toLowerCase().includes(searchText.toLowerCase()) : false;
     const startDateMatch = dateRange[0] ? moment(task.startDate).isBetween(dateRange[0], dateRange[1], 'days', '[]') : true;
@@ -101,10 +144,6 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
 
   const content = useMemo(() => (
     <Space direction="vertical">
-      {/* <div>
-        <Text strong>Date Range:</Text>
-        <RangePicker onChange={handleDateRangeChange} style={{ width: '100%' }} />
-      </div> */}
       <div>
         <Text strong>Assigned To:</Text>
         <Select
@@ -119,7 +158,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         </Select>
       </div>
     </Space>
-  ), [handleDateRangeChange, handleAssignedToChange, user]);
+  ), [handleAssignedToChange, user]);
 
   const menu = useCallback((record) => (
     <Menu>
@@ -128,12 +167,16 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
       </Menu.Item>
       {userRole === "mentor" && (
         <>
-          <Menu.Item key="2">
-            <Button type="link" onClick={() => handleOpenDetailModal(record)}>Edit</Button>
-          </Menu.Item>
           <Menu.Item key="3">
             <Button type="link" onClick={() => handleDeleteTask(record.id)}>Delete</Button>
           </Menu.Item>
+             {record.assessmentStatus ==='Completed' && (
+ <Menu.Item key="2">
+ <Button type="link" onClick={() => handleGrading(record.id)}>Grading</Button>
+</Menu.Item>
+             )} 
+              
+         
         </>
       )}
       {record.completed && (
@@ -142,7 +185,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         </Menu.Item>
       )}
     </Menu>
-  ), [handleDetails, handleOpenDetailModal, handleDeleteTask, userRole, handleOpenReviewModal]);
+  ), [handleDetails, handleDeleteTask, userRole, handleOpenReviewModal]);
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -157,16 +200,64 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         key: 'owner',
         render: (owner) => owner ? <span>{owner.userName}</span> : 'N/A',
       },
-      // {
-      //   title: 'Status',
-      //   dataIndex: 'status',
-      //   key: 'status',
-      //   render: (text, record) => (
-      //     <Tag color={record.status === "DONE" ? 'green' : record.status === "ON-PROGRESS" ? 'geekblue' : 'blue'}>
-      //       {record.status.toUpperCase()}
-      //     </Tag>
-      //   ),
-      // },
+      {
+        title: 'In-Progress date',
+        dataIndex: 'startDate',
+        key: 'startDate',
+        render: (text, record) => {
+          let date = record.startDate;
+          if (date === "0001-01-01T00:00:00") {
+            date = null;
+          } else {
+            date = moment(record.startDate).format("YYYY-MM-DD HH:mm");
+          }
+          return <span>{date}</span>;
+        }
+      },
+      {
+        title: 'Completed date',
+        dataIndex: 'endDate',
+        key: 'endDate',
+        render: (text, record) => {
+          let date = record.endDate;
+          if (date === "0001-01-01T00:00:00") {
+            date = null;
+          } else {
+            date = moment(record.endDate).format("YYYY-MM-DD HH:mm");
+          }
+          return <span>{date}</span>;
+        }
+      },
+      {
+        title: 'Deadline',
+        dataIndex: 'deadline',
+        key: 'deadline',
+        render: (text, record) => moment(record.deadline).format("YYYY-MM-DD HH:mm")
+      },
+      {
+        title: 'Status',
+        dataIndex: 'assessmentStatus',
+        key: 'assessmentStatus',
+        render: (text, record) => (<Text>{record.assessmentStatus}</Text>)
+      },
+      {
+        title: 'Grade',
+        dataIndex: 'point',
+        key: 'point',
+        render: (text, record) => {
+          var point = record.point;
+          if(point === 0){
+                  point=null
+
+          }else{
+            (<Text>{record.point}</Text>)}
+
+            return (<Text >{point}</Text>)
+          }
+       
+
+        
+      },
       {
         title: 'Actions',
         key: 'actions',
@@ -180,34 +271,18 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
       },
     ];
 
-    if (tasks.some(task => task.feedback)) {
-      baseColumns.splice(baseColumns.findIndex(column => column.key === 'endDate') + 1, 0, {
-        title: 'Feedback',
-        dataIndex: 'feedback',
-        key: 'feedback',
-      });
-    }
-
-    if (tasks.some(task => task.files)) {
-      const feedbackColumnIndex = baseColumns.findIndex(column => column.key === 'feedback');
-      baseColumns.splice(feedbackColumnIndex + 1, 0, {
-        title: 'Files',
-        dataIndex: 'files',
-        key: 'files',
-        render: (files) => (
-          <Space>
-            {files.map(file => (
-              <Tag color="blue" key={file.name}>
-                {file.name}
-              </Tag>
-            ))}
-          </Space>
+    if (userRole === "intern") {
+      baseColumns.push({
+        title: 'Update Progress Status',
+        key: 'update',
+        render: (text, record) => (
+          <Button type="link" onClick={() => handleUpdateTask(record)}>Update</Button>
         ),
       });
     }
 
     return baseColumns;
-  }, [menu, tasks]);
+  }, [menu, userRole]);
 
   return (
     <div style={{ padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 0 15px rgba(0,0,0,0.1)' }}>
@@ -241,6 +316,35 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
           onReviewTask={handleReviewTask}
         />
       )}
+      <UpdateModal
+        isVisible={openUpdateModal}
+        onClose={() => setOpenUpdateModal(false)}
+        task={taskToUpdate}
+        onSubmit={handleUpdateTaskSubmit}
+      />
+      <Modal
+        title="Grading Task"
+        visible={isGradingModalVisible}
+        onCancel={() => setIsGradingModalVisible(false)}
+        footer={null}
+        style={{ top: 100 }}
+        width={600}
+        bodyStyle={{ maxHeight: '70vh', overflowY: 'auto' }}
+      >
+        <Form form={form} onFinish={handleUpdateGrading}>
+          <Form.Item
+            name="point"
+            rules={[{ required: true, message: 'Please enter the grade!' }]}
+          >
+            <Input type="number" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <Select
         placeholder="Select a training program"
         allowClear

@@ -7,18 +7,18 @@ import * as Profile from '../../../service/authService';
 const GuessProfile = () => {
   const { Title, Text } = Typography;
   const [form] = Form.useForm();
-  const [userProfile, setUserProfile] = useState(JSON.parse(sessionStorage.getItem('userProfile')) || {});
+  const [userProfile, setUserProfile] = useState(JSON.parse(localStorage.getItem('userProfile')) || {});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setUserProfile(JSON.parse(sessionStorage.getItem('userProfile')) || {});
+    setUserProfile(JSON.parse(localStorage.getItem('userProfile')) || {});
   }, []);
 
   const fetchUserProfile = async () => {
     setLoading(true);
     try {
-      const profile = await Profile.fetchUserProfileGuest(userProfile.events.id); // Assuming you have a function to fetch the user profile
-      sessionStorage.setItem('userProfile', JSON.stringify(profile));
+      const profile = await Profile.fetchUserProfile(userProfile.events.id); 
+      localStorage.setItem('userProfile', JSON.stringify(profile));
       setUserProfile(profile);
       message.success('Thông tin cá nhân đã được cập nhật thành công');
     } catch (error) {
@@ -36,7 +36,7 @@ const GuessProfile = () => {
         id: userProfile.events.id,
       };
 
-      await UserService.editNewUserGuest(updateUser);
+      await UserService.editNewUser(updateUser);
       await fetchUserProfile();
       location.reload();
     } catch (error) {

@@ -1,0 +1,135 @@
+.header {
+    background-color: white;
+    color: black;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+    font-size: 24px;
+    padding: 16px;
+    font-weight: bold;
+  }
+  
+  .content {
+    background-color: #f0f2f5;
+    padding: 20px;
+    min-height: 80vh;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 32px;
+    font-weight: bold;
+  }
+  
+  .search-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64vh;
+  }
+  
+  .job-cards {
+    margin-bottom: 24px;
+  }
+  
+  .job-card {
+    border-radius: 8px;
+    background-color: white;
+    transition: transform 0.3s;
+  }
+  
+  .job-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .job-image {
+    border-radius: 8px;
+    margin-bottom: 16px;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .job-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .job-duration,
+  .job-start-date {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .view-details-btn {
+    width: fit-content;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .view-details-btn:hover {
+    color: blue;
+  }
+  
+  .training-programs-section {
+    margin-top: 24px;
+  }
+  
+  .training-program-card {
+    border-radius: 8px;
+    background-color: white;
+    width: 100%;
+    margin-top: 16px;
+  }
+  
+  .training-program-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .training-program-duration {
+    font-size: 14px;
+  }
+  
+  .view-training-details-btn {
+    width: fit-content;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .view-training-details-btn:hover {
+    color: blue;
+  }
+  
+  .delete-training-btn {
+    width: fit-content;
+    color: red;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+  

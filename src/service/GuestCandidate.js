@@ -13,7 +13,7 @@ export const createNewCandidate=async(eventData)=> {
       const error = new Error('An error occurred while apply candidates');
       error.code = response.status;
       error.info = await response.data;
-      console.error('Server response:', response.data); // Log the server response
+      console.error('Server response:', response.data); 
       throw error;
     }
 
@@ -54,7 +54,7 @@ export const fetchCandidate= async( campaignId,jobId) => {
 
 export const fetchCandidateApplication= async() => {
   try {
-    const response = await guesthttpClient.get({
+    const response = await httpClient.get({
       url: `${apiLinks.Candidates.getApply}`, 
 
     });

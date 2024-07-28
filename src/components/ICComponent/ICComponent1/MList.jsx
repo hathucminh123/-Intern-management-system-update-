@@ -17,26 +17,26 @@ const userRoles = {
   4: 'Admin'
 };
 
-const InternList = () => {
+const MList = () => {
   const { state } = useLocation();
   const jobDetail = state?.jobDetail;
   const campaignDetail = state?.campaignDetail;
   const [users, setUsers] = useState([]);
   const [checkedKeys, setCheckedKeys] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const fetchUsers = async () => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       const res = await User.fetchUser();
-      const filteredUsers = res.events.filter(user => user.role === 0);
+      const filteredUsers = res.events.filter(user => user.role === 1);
       setUsers(filteredUsers);
     } catch (error) {
       message.error('Error fetching users: ' + error.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -49,7 +49,7 @@ const InternList = () => {
   };
 
   const handleAddUser = async () => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       const selectedUserIds = Object.keys(checkedKeys).filter(key => checkedKeys[key]).map(key => parseInt(key, 10));
       for (const userId of selectedUserIds) {
@@ -65,7 +65,7 @@ const InternList = () => {
     } catch (error) {
       message.error('Add user failed: ' + error.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -90,17 +90,17 @@ const InternList = () => {
   );
 
   const columns = [
-    {
-      title: "",
-      dataIndex: "checkbox",
-      key: "checkbox",
-      render: (_, record) => (
-        <Checkbox
-          checked={!!checkedKeys[record.id]}
-          onChange={(e) => handleCheckboxChange(record, e.target.checked)}
-        />
-      ),
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "checkbox",
+    //   key: "checkbox",
+    //   render: (_, record) => (
+    //     <Checkbox
+    //       checked={!!checkedKeys[record.id]}
+    //       onChange={(e) => handleCheckboxChange(record, e.target.checked)}
+    //     />
+    //   ),
+    // },
     { title: "Name", dataIndex: "userName", key: "userName", responsive: ['md'] },
     { title: "Email", dataIndex: "email", key: "email", responsive: ['md'] },
     { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber", responsive: ['md'] },
@@ -130,17 +130,17 @@ const InternList = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header style={{ backgroundColor: '#fff', padding: '0 20px', borderBottom: '1px solid #f0f0f0' }}>
-        <Row>
+      <Row>
           <Col span={10}>
-          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          {/* <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
           <LeftOutlined /> Back
-        </Button>
+        </Button> */}
           </Col>
           <Col>
-          <Title className='mt-3' level={3} style={{ margin: 0 }}>Intern List</Title>
+          <Title className='mt-3' level={3} style={{ margin: 0 }}>Mentor List</Title>
           </Col>
         </Row>
-    
+
       </Header>
       <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
         <Search
@@ -149,28 +149,22 @@ const InternList = () => {
           onSearch={handleSearch}
           style={{ marginBottom: '20px' }}
         />
-        {isLoading ? (
-          <div style={{ textAlign: 'center', padding: '50px 0' }}>
-            <Spin size="large" />
-          </div>
-        ) : (
-          <>
-            <Table
-              dataSource={filteredUsers}
-              columns={columns}
-              rowKey="id"
-              style={{ marginTop: "20px" }}
-            />
-            <div style={{ marginTop: "20px", textAlign: "right" }}>
-              <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleAddUser}>
-                Assign to job
-              </Button>
-            </div>
-          </>
-        )}
+        <Spin spinning={loading}>
+          <Table
+            dataSource={filteredUsers}
+            columns={columns}
+            rowKey="id"
+            style={{ marginTop: "20px" }}
+          />
+        </Spin>
+        {/* <div style={{ marginTop: "20px", textAlign: "right" }}>
+          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0 || loading} onClick={handleAddUser}>
+            Assign to manage jobs
+          </Button>
+        </div> */}
       </Content>
     </Layout>
   );
 }
 
-export default InternList;
+export default MList;

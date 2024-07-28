@@ -141,7 +141,7 @@ const ListJobs = () => {
                   <Col key={item.id} xs={24} sm={12} md={8}>
                     <Card
                       hoverable
-                      className="shadow-lg"
+                      className="job-card shadow-lg"
                       style={{ borderRadius: '8px', backgroundColor: 'white' }}
                       actions={[
                         <Button key="edit" onClick={() => handleEdit(item)}>Edit</Button>,

@@ -168,7 +168,7 @@ const JobsIC = () => {
                   <Col key={item.id} xs={24} sm={12} md={8}>
                     <Card
                       hoverable
-                      className="shadow-lg"
+                         className="job-card shadow-lg"
                       style={{ borderRadius: '8px', backgroundColor: 'white' }}
                       onClick={(e) => handleSelect(item.id, e)}
                       actions={userRole === "hrmanager" ? [
@@ -222,7 +222,7 @@ const JobsIC = () => {
                             <Space direction="vertical" style={{ width: '100%' }} key={trainingProgram.id}>
                               <Card
                                 hoverable
-                                className="shadow-lg"
+                                   className="job-card shadow-lg"
                                 style={{ borderRadius: '8px', backgroundColor: 'white', width: '100%' }}
                                 actions={[
                                   <Button

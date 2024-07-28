@@ -141,7 +141,7 @@ const InternReport = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: '#fff', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        <Title level={3} style={{ color: 'black' }}>User Report for: <strong>{userProfile?.userName}</strong></Title>
+        <Title level={3} style={{ color: 'black' }}>Intern Report for: <strong>{userProfile?.userName}</strong></Title>
       </Header>
       <Content style={{ padding: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'start', height: '100vh', background: '#f0f2f5', padding: '20px' }}>

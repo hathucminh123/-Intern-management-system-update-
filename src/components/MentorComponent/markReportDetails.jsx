@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Row, Col, Table, message, Typography, Space } from 'antd';
-import { useLocation } from 'react-router-dom';
+import { Layout, Row, Col, Table, message, Typography, Space, Button } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as User from '../../service/User';
 import * as Training from '../../service/TrainingPrograms';
 import * as UserProfile from '../../service/authService';
 import styled from 'styled-components';
 import moment from 'moment';
 import  "../../components/InternComponent/table.css";
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -38,6 +39,7 @@ const UserReportView = () => {
   const [userProfile, setUserProfile] = useState({});
   const [hoveredProgram, setHoveredProgram] = useState(null);
   const [activeProgram, setActiveProgram] = useState(null);
+  const navigate =useNavigate()
 
   console.log('asd',user.id)
 
@@ -140,7 +142,17 @@ const UserReportView = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: '#fff', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        <Title level={3} style={{ color: 'black' }}>User Report for : <strong>{user?.userName}</strong></Title>
+      <Row>
+          <Col span={8}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          <Title className='mt-3' level={3} style={{ margin: 0 }}>     Intern report name: <strong>{user?.userName}</strong></Title>
+          </Col>
+        </Row>
+        {/* <Title level={3} style={{ color: 'black' }}>User Report for : <strong>{user?.userName}</strong></Title> */}
       </Header>
       <Content style={{ padding: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'start', height: '100vh', background: '#f0f2f5', padding: '20px' }}>
