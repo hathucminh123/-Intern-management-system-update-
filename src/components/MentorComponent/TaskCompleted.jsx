@@ -117,7 +117,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
       form.resetFields();
       fetchAssessment();
     } catch (error) {
-      message.error('Failed to grade task');
+      message.error('Point must be between 0 and 10.');
     }
   };
 
@@ -170,9 +170,13 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
           <Menu.Item key="3">
             <Button type="link" onClick={() => handleDeleteTask(record.id)}>Delete</Button>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Button type="link" onClick={() => handleGrading(record.id)}>Grading</Button>
-          </Menu.Item>
+             {record.assessmentStatus ==='Completed' && (
+ <Menu.Item key="2">
+ <Button type="link" onClick={() => handleGrading(record.id)}>Grading</Button>
+</Menu.Item>
+             )} 
+              
+         
         </>
       )}
       {record.completed && (

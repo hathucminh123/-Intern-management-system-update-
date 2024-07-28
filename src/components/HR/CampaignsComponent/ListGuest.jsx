@@ -124,7 +124,7 @@ const ListGuest = () => {
         className="flex justify-between items-center"
         style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0', padding: '0 20px' }}
       >
-        <Title level={3} style={{ margin: 0 }}>User List</Title>
+        <Title level={3} style={{ margin: 0 }}>Guest List</Title>
         {/* Uncomment and modify the following line if needed */}
         {/* <Button type="primary" onClick={() => navigate(`/${userRole}/CreateUser`)}>Create User</Button> */}
       </Header>

@@ -97,7 +97,7 @@ const JobApply = () => {
         <Content>
           <Row gutter={10} align='middle'>
             <Col span={8}>
-              <Image preview={false} src={image1} width='100%' style={{ borderRadius: '50%' }} />
+              {/* <Image preview={false} src={image1} width='100%' style={{ borderRadius: '50%' }} /> */}
             </Col>
             <Col span={16}>
               <Space direction='vertical'>

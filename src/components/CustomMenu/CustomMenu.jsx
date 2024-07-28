@@ -132,7 +132,7 @@ const CustomMenu = ({ userRole }) => {
         children: [
           { key: "/hrmanager/NewUser", icon: <FaChevronRight />, label: "New" },
           { key: "/hrmanager/UserList", icon: <FaChevronRight />, label: "List User" },
-          { key: "/hrmanager/UserGuestList", icon: <FaChevronRight />, label: "List Guest User" },
+          // { key: "/hrmanager/UserGuestList", icon: <FaChevronRight />, label: "List Guest User" },
 
         ]
       },

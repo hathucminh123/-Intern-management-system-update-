@@ -19,7 +19,7 @@ const AddScheduleModal = ({ visible, onClose, selectedDate, setSelectedDate, fet
         endTime: moment(eventToEdit.endTime),
         location: eventToEdit.location,
         minutes: eventToEdit.minutes,
-        status: eventToEdit.status,
+        // status: eventToEdit.status,
         priority: eventToEdit.priority,
       });
     } else {
@@ -38,7 +38,10 @@ const AddScheduleModal = ({ visible, onClose, selectedDate, setSelectedDate, fet
       const { title, startTime, endTime, location, minutes, status, priority } = values;
       const description = form.getFieldValue('description');
 
-      if (!title || !description || !startTime || !endTime || !location || !minutes || !status || !priority) {
+      // if (!title || !description || !startTime || !endTime || !location || !minutes || !status || !priority) {
+      //   message.error('Please fill in all fields');
+      //   return;
+      if (!title || !description || !startTime || !endTime || !location || !minutes || !priority) {
         message.error('Please fill in all fields');
         return;
       }
@@ -165,13 +168,22 @@ const AddScheduleModal = ({ visible, onClose, selectedDate, setSelectedDate, fet
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label='Status' name='status' rules={[{ required: true, message: 'Please enter the event status' }]}>
+          {eventToEdit? (<Form.Item label='Status' name='status'>
               <Select placeholder='Enter event status' >
                 <Select.Option value='Pending'>Pending</Select.Option>
                 <Select.Option value='In Progress'>In Progress</Select.Option>
                 <Select.Option value='Completed'>Completed</Select.Option>
               </Select>
-            </Form.Item>
+            </Form.Item>):(
+              <><Form.Item label='Status' name='status'>
+              <Select placeholder='Enter event status' >
+                <Select.Option value='Pending' >Pending</Select.Option>
+                {/* <Select.Option value='In Progress'>In Progress</Select.Option>
+                <Select.Option value='Completed'>Completed</Select.Option> */}
+              </Select>
+            </Form.Item> </>
+            )}
+        
           </Col>
           <Col span={12}>
             <Form.Item label='Priority' name='priority' rules={[{ required: true, message: 'Please enter the event priority' }]}>

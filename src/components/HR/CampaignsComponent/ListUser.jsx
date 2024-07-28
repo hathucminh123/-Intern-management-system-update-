@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message, Input, Spin } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Dropdown, Table, Layout, Typography, Menu, Button, Space, message, Input, Spin, Select, Popover } from 'antd';
+import { DownOutlined, FilterOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import * as User from '../../../service/authService';
 
+const { Text: AntdText } = Typography;
 const { Search } = Input;
+const { Option } = Select;
+
 const ListUser = () => {
   const { Header, Content } = Layout;
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRole, setSelectedRole] = useState(null);
   const { Title } = Typography;
   const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
   const userRole = localStorage.getItem('role');
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -26,13 +31,25 @@ const ListUser = () => {
     }
   };
 
+  const handleVisibleChange = (newVisible) => {
+    setVisible(newVisible);
+  };
+
   const onSearch = (value) => {
     setSearchQuery(value);
   };
 
-  const filteredUser = users.filter((user) =>
-    user.userName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const onRoleChange = (value) => {
+    setSelectedRole(value);
+  };
+
+  const systemUser = users.filter(user => user.role !== 5);
+
+  const filteredUser = systemUser.filter((systemUser) => {
+    const matchesSearchQuery = systemUser.userName.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = selectedRole === null || selectedRole === undefined || systemUser.role === selectedRole;
+    return matchesSearchQuery && matchesRole;
+  });
 
   useEffect(() => {
     fetchUsers();
@@ -62,6 +79,23 @@ const ListUser = () => {
       navigate(`/${userRole}/EditUserRole/${item.id}`, { state: { item } });
     }
   };
+
+  const content = useMemo(() => (
+    <Space direction="vertical">
+      <AntdText strong>Filter by role:</AntdText>
+      <Select
+        placeholder="Choose user"
+        allowClear
+        onChange={onRoleChange}
+        style={{ width: 300 }}
+      >
+        <Option value={0}>Intern</Option>
+        <Option value={1}>Mentor</Option>
+        <Option value={2}>Internship Coordinators</Option>
+        <Option value={3}>HR Manager</Option>
+      </Select>
+    </Space>
+  ), [onRoleChange]);
 
   const menu = (record) => (
     <Menu>
@@ -141,6 +175,14 @@ const ListUser = () => {
               enterButton
               className="w-full"
             />
+            <Popover
+              content={content}
+              trigger="click"
+              visible={visible}
+              onVisibleChange={handleVisibleChange}
+            >
+              <Button icon={<FilterOutlined />} />
+            </Popover>
           </Space>
           {loading ? (
             <div style={{ textAlign: 'center', padding: '50px 0' }}>

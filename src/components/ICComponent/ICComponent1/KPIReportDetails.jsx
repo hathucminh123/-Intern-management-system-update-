@@ -120,10 +120,20 @@ const KPIReportDetails = () => {
       render: (text, record) => (
         <Form.Item
           name={['kpis', record.id, 'value']}
-          rules={[{ required: true, message: 'Please enter the value' }]}
+          rules={[
+            { required: true, message: 'Please enter the value' },
+            {
+              validator: (_, value) => {
+                if (value < 0 || value > 10) {
+                  return Promise.reject(new Error('Value must be between 0 and 10'));
+                }
+                return Promise.resolve();
+              }
+            }]
+          }
         >
-          <Input defaultValue={record.value} />
-        </Form.Item>
+          <Input type="number" min={0} max={10} defaultValue={record.value} />
+        </Form.Item >
       ),
     },
   ];
@@ -131,17 +141,17 @@ const KPIReportDetails = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-      <Row>
+        <Row>
           <Col span={8}>
-          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
-          <LeftOutlined /> Back
-        </Button>
+            <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+              <LeftOutlined /> Back
+            </Button>
           </Col>
           <Col>
-          <Title className='mt-3' level={3} style={{ margin: 0 }}>     Student report name: <strong>{Details.userName}</strong></Title>
+            <Title className='mt-3' level={3} style={{ margin: 0 }}>     Student report name: <strong>{Details.userName}</strong></Title>
           </Col>
         </Row>
-   
+
       </Header>
       <Content style={{ padding: '20px' }}>
         <Spin spinning={loading}>
@@ -149,7 +159,7 @@ const KPIReportDetails = () => {
             <div style={{ width: '100%', maxWidth: '500px', padding: '40px', borderRadius: '8px', background: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column' }}>
               <Title level={2}>Select a Training Program ...</Title>
               <div style={{ width: '100%', backgroundColor: '#6B90DA', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '20px' }}>
-                Training program 
+                Training program
               </div>
               {training.map((train) => (
                 <Row key={train.id}>
@@ -191,7 +201,7 @@ const KPIReportDetails = () => {
                   </Card>
                 </div>
               ) : !loading && (
-                <div style={{ marginTop: '100px', textAlign: 'center',marginLeft:'200px' }}>
+                <div style={{ marginTop: '100px', textAlign: 'center', marginLeft: '200px' }}>
                   <p>No Grade Category or KPIs added to the training yet.</p>
                 </div>
               )

@@ -543,7 +543,7 @@ const TrainingProgramDetail = () => {
                   </Layout>
                 )}
               </TabPane>
-              <TabPane tab="Task" key="4">
+              {/* <TabPane tab="Task" key="4">
                 {(userRole === "internshipcoordinators" || userRole === "intern" || userRole === "mentor") && (
                   <Layout>
                     <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -563,7 +563,7 @@ const TrainingProgramDetail = () => {
                     </Content>
                   </Layout>
                 )}
-              </TabPane>
+              </TabPane> */}
             </Tabs>
           )}
         </div>

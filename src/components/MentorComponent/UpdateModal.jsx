@@ -41,6 +41,7 @@ const UpdateModal = ({ isVisible, onClose, task, onSubmit }) => {
  >
  <Select>
  <Select.Option value={0}>Pending</Select.Option>
+ <Select.Option value={1}>In Process</Select.Option>
  <Select.Option value={2}>Completed</Select.Option>
  </Select>
  </Form.Item>
