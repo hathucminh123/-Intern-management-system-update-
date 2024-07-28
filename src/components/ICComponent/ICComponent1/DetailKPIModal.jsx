@@ -5,16 +5,16 @@ import * as KPI from '../../../service/KPIService';
 const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
+  const userRole = localStorage.getItem('role')?.toLocaleLowerCase()
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
       setLoading(true);
 
-      
+
       const updatedTask = { ...task, ...values };
-      await KPI.editKPI( updatedTask);
-      
+      await KPI.editKPI(updatedTask);
+
       message.success('KPI updated successfully!');
       onUpdateTask(updatedTask);
       onClose();
@@ -28,6 +28,7 @@ const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask }) => {
   const handleCancel = () => {
     onClose();
   };
+
 
   return (
     <Modal
@@ -52,24 +53,39 @@ const DetailKPIModal = ({ isVisible, onClose, task, onUpdateTask }) => {
         >
           <Input />
         </Form.Item>
-        <Form.Item
+        {userRole === "mentor" && (<Form.Item
           name="value"
           label="Value"
           rules={[{ required: true, message: 'Please enter the value' }]}
         >
           <Input />
-        </Form.Item>
+        </Form.Item>)}
+
+        {/* <Form.Item
+          name="value"
+          label="Value"
+          rules={[{ required: true, message: 'Please enter the value' }]}
+        >
+          <Input />
+        </Form.Item> */}
         <Form.Item
-          name="descition"
-          label="Description"
+          name="type"
+          label="Grade Item"
           rules={[{ required: true, message: 'Please enter the description' }]}
         >
           <Input />
         </Form.Item>
+        {/* <Form.Item
+          name="descition"
+          label="Grade Item"
+          rules={[{ required: true, message: 'Please enter the description' }]}
+        >
+          <Input />
+        </Form.Item> */}
         <Form.Item
-          name="type"
-          label="Type"
-          rules={[{ required: true, message: 'Please enter the type' }]}
+          name="weight"
+          label="Weight"
+          rules={[{ required: true, message: 'Please enter the weight(%)' }]}
         >
           <Input />
         </Form.Item>

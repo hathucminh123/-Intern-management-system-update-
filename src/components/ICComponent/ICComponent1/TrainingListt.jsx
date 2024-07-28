@@ -4,6 +4,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
 import * as AddTraining from "../../../service/TrainingPrograms"
+import { LeftOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -20,8 +21,8 @@ const Traininglistt = () => {
   const [pageSize] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectTraining, setSelectTraining] = useState(null);
+  const [selectTrainingName, setSelectTrainingName] = useState(null);
   const KPIS = state?.item;
-  console.log('concac',selectTraining)
 
   const columns = [
     {
@@ -71,27 +72,29 @@ const Traininglistt = () => {
     console.log(`checked = ${e.target.checked}`);
     if (e.target.checked) {
       setSelectTraining(campaign.id);
+      setSelectTrainingName(campaign.name);
     } else {
       setSelectTraining(null);
+      setSelectTrainingName(null);
     }
   }
-const userRole =localStorage.getItem('role')
+  const userRole = localStorage.getItem('role')
   const handleAddTraining = async () => {
-   try{
-    const newTraining = {
-    kpiId:KPIS.id,
-    trainingProgramId:selectTraining
-    };
+    try {
+      const newTraining = {
+        kpiId: KPIS.id,
+        trainingProgramId: selectTraining
+      };
 
-    await AddTraining.AddKPISNewTraining(newTraining);
-    message.success("Training program added successfully");
-    navigate(`/${userRole}/class`)
+      await AddTraining.AddKPISNewTraining(newTraining);
+      message.success("Training program added successfully");
+      navigate(`/${userRole}/KPIList`)
 
 
-   }catch (error) {
-      message.error(" training program exist in this "+Trainingprogram.name +" Job" );
+    } catch (error) {
+      message.error("KPI is already exist in " + selectTrainingName);
       console.error("Error deleting training program:", error);
-  }
+    }
   }
   const handleJobs = (item) => {
     const userRole = localStorage.getItem('role').toLowerCase();
@@ -102,7 +105,21 @@ const userRole =localStorage.getItem('role')
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>Training List</Header>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+        
+        
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>List Training</Title> */}
+          </Col>
+        </Row>
+        
+        </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Title className="text-center mb-5" level={2}>
@@ -129,7 +146,7 @@ const userRole =localStorage.getItem('role')
                 <Checkbox onChange={(e) => onchangeCheck(e, campaign)}>Select</Checkbox>
                 <Card
                   hoverable
-                  className="shadow-lg"
+                  className="job-card shadow-lg"
                   style={{ borderRadius: '8px', backgroundColor: 'white' }}
                 >
                   <Collapse>

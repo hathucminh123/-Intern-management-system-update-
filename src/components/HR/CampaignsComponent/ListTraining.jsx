@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table, Button, Checkbox } from "antd";
+import { Card, Row, Col, Typography, message, Layout, Input, Collapse, Table, Button, Checkbox, Spin } from "antd";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import * as Training from "../../../service/TrainingPrograms";
+import * as AddTraining from "../../../service/JobsService";
 import "tailwindcss/tailwind.css";
-import * as AddTraining from "../../../service/JobsService"
+import { LeftOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -17,11 +18,11 @@ const ListTraining = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(null);
-  const [pageSize] = useState(3);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(3); // Define pageSize here
   const [selectTraining, setSelectTraining] = useState(null);
   const Trainingprogram = state?.item;
-  console.log('concac',selectTraining)
 
   const columns = [
     {
@@ -42,57 +43,56 @@ const ListTraining = () => {
     },
   ];
 
-  const onSearch = (value) => {
-    setSearchQuery(value);
-  };
+  const onSearch = (value) => setSearchQuery(value);
 
   const filteredCampaigns = campaigns.filter((train) =>
     train.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const onchange = (page) => {
-    setCurrentPage(page);
-  };
-
   useEffect(() => {
     const fetchCampaigns = async () => {
+      setLoading(true);
       try {
         const res = await Training.fetchTraining();
         setCampaigns(res.events);
       } catch (error) {
         message.error("Error fetching campaigns: " + error.message);
         console.error("Error fetching campaigns:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCampaigns();
   }, []);
 
   const onchangeCheck = (e, campaign) => {
-    console.log(`checked = ${e.target.checked}`);
     if (e.target.checked) {
       setSelectTraining(campaign.id);
     } else {
       setSelectTraining(null);
     }
-  }
-const userRole =localStorage.getItem('role')
+  };
+
+  const userRole = localStorage.getItem('role');
+
   const handleAddTraining = async () => {
-   try{
-    const newTraining = {
-    jobId:Trainingprogram.id,
-    trainingProgramId:selectTraining
-    };
+    setLoading(true);
+    try {
+      const newTraining = {
+        jobId: Trainingprogram.id,
+        trainingProgramId: selectTraining,
+      };
+      await AddTraining.createTrainingNewJobs(newTraining);
+      message.success("Training program added successfully");
+      navigate(`/${userRole}/TrainingJobs`);
+    } catch (error) {
+      message.error(`Training program already exists in ${Trainingprogram.name} Job`);
+      console.error("Error adding training program:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    await AddTraining.createTrainingNewJobs(newTraining);
-    message.success("Training program added successfully");
-    navigate(`/${userRole}/class`)
-
-
-   }catch (error) {
-      message.error(" training program exist in this "+Trainingprogram.name +" Job" );
-      console.error("Error deleting training program:", error);
-  }
-  }
   const handleJobs = (item) => {
     const userRole = localStorage.getItem('role').toLowerCase();
     navigate(`/${userRole}/TrainingPrograms/${item.id}`, {
@@ -100,9 +100,26 @@ const userRole =localStorage.getItem('role')
     });
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>Training List</Header>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>List Training</Title> */}
+          </Col>
+        </Row>
+      
+      
+      </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Title className="text-center mb-5" level={2}>
@@ -110,7 +127,7 @@ const userRole =localStorage.getItem('role')
           </Title>
 
           <div className="flex justify-between items-center mb-5" style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <Button type="primary" size="large" onClick={handleAddTraining}>
+            <Button type="primary" size="large" onClick={handleAddTraining} disabled={!selectTraining}>
               Add Training Program
             </Button>
             <Search
@@ -123,50 +140,56 @@ const userRole =localStorage.getItem('role')
             />
           </div>
 
-          <Row gutter={[16, 16]}>
-            {filteredCampaigns.map((campaign) => (
-              <Col key={campaign.id} xs={24} sm={12} md={8}>
-                <Checkbox onChange={(e) => onchangeCheck(e, campaign)}>Select</Checkbox>
-                <Card
-                  hoverable
-                  className="shadow-lg"
-                  style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                >
-                  <Collapse>
-                    <Panel
-                      header={
-                        <div className="flex flex-col">
-                          <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            Internship Program: {campaign.name}
-                          </Title>
-                          <Text>
-                            <strong>Duration:</strong> {campaign.duration} months
-                          </Text>
-                          <Text
-                            style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
-                            onClick={() => handleJobs(campaign)}
-                            onMouseEnter={() => setHovered(campaign.id)}
-                            onMouseLeave={() => setHovered(null)}
-                          >
-                            View Details {'-->'}
-                          </Text>
-                        </div>
-                      }
-                      key={campaign.id}
-                      style={{ borderRadius: '8px', backgroundColor: 'white' }}
-                    >
-                      <Title level={5}>Resources</Title>
-                      <Table
-                        dataSource={campaign.resources}
-                        columns={columns}
-                        pagination={{ pageSize, current: currentPage, onChange: onchange }}
-                      />
-                    </Panel>
-                  </Collapse>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '50px 0' }}>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <Row gutter={[16, 16]}>
+              {filteredCampaigns.map((campaign) => (
+                <Col key={campaign.id} xs={24} sm={12} md={8}>
+                  <Checkbox onChange={(e) => onchangeCheck(e, campaign)} checked={selectTraining === campaign.id}>Select</Checkbox>
+                  <Card
+                    hoverable
+                      className="job-card shadow-lg"
+                    style={{ borderRadius: '8px', backgroundColor: 'white', marginTop: '10px' }}
+                  >
+                    <Collapse>
+                      <Panel
+                        header={
+                          <div className="flex flex-col">
+                            <Title level={5} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              Internship Program: {campaign.name}
+                            </Title>
+                            <Text>
+                              <strong>Duration:</strong> {campaign.duration} months
+                            </Text>
+                            <Text
+                              style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
+                              onClick={() => handleJobs(campaign)}
+                              onMouseEnter={() => setHovered(campaign.id)}
+                              onMouseLeave={() => setHovered(null)}
+                            >
+                              View Details {'-->'}
+                            </Text>
+                          </div>
+                        }
+                        key={campaign.id}
+                        style={{ borderRadius: '8px', backgroundColor: 'white' }}
+                      >
+                        <Title level={5}>Resources</Title>
+                        <Table
+                          dataSource={campaign.resources}
+                          columns={columns}
+                          pagination={{ pageSize: pageSize, current: currentPage, onChange: handlePageChange }}
+                        />
+                      </Panel>
+                    </Collapse>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
         </div>
       </Content>
     </Layout>

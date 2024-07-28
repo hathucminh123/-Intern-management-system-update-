@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Typography, Layout, Checkbox, Button, message, Space, Dropdown, Menu } from 'antd';
+import { Table, Typography, Layout, Button, message, Space, Dropdown, Menu, Collapse, Card, Row, Col, Input } from 'antd';
 import * as KPI from "../../../service/KPIService";
-import DetailModal from './DetailModal';
 import { DownOutlined } from '@ant-design/icons';
 import * as Training from "../../../service/TrainingPrograms";
 import { useLocation, useNavigate } from 'react-router-dom';
 import DetailKPIModal from './DetailKPIModal';
-import CreateKPIModal from './CreateKPIModal'; // Import the CreateKPIModal
+import CreateKPIModal from './CreateKPIModal';
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 const { Header, Content } = Layout;
+const { Search } = Input;
+const { Panel } = Collapse;
 
 const KPIList = () => {
   const { state } = useLocation();
   const TrainingProgram = state?.item;
   const [resource, setResource] = useState([]);
-  const [checkedKeys, setCheckedKeys] = useState({});
   const [pageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedResource, setSelectedResource] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false); // State to control CreateKPIModal visibility
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const fetchAllKPI = async () => {
@@ -33,36 +34,12 @@ const KPIList = () => {
   };
 
   useEffect(() => {
-   fetchAllKPI();
+    fetchAllKPI();
   }, []);
-
-  const handleCheckboxChange = (record, checked) => {
-    setCheckedKeys((prev) => ({ ...prev, [record.id]: checked }));
-  };
 
   const handleOpenDetailModal = (task) => {
     setSelectedResource(task);
     setOpenDetailModal(true);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const selectedResourceIds = Object.keys(checkedKeys).filter(key => checkedKeys[key]).map(key => parseInt(key, 10));
-      
-      for (const resourceId of selectedResourceIds) {
-        const dataResource = {
-          trainingProgramId: TrainingProgram.id,
-          resourceId: resourceId,
-        };
-        
-        await Training.AddResourceNewTraining(dataResource);
-      }
-
-      message.success("Resources added to training program successfully!");
-      navigate('/internshipcoordinators/ViewTrainingProgram')
-    } catch (error) {
-      message.error("Resource already exists in training: " );
-    }
   };
 
   const handleDeleteResource = async (id) => {
@@ -75,10 +52,9 @@ const KPIList = () => {
     }
   };
 
-const  handleAddTrainingProgram =(item)=>{
-  navigate(`/internshipcoordinators/TrainingListt/${item.id}`,{state:{item}})
-  
-}
+  const handleAddTrainingProgram = (item) => {
+    navigate(`/internshipcoordinators/TrainingListt/${item.id}`, { state: { item } });
+  }
 
   const menu = (record) => (
     <Menu>
@@ -103,30 +79,34 @@ const  handleAddTrainingProgram =(item)=>{
   };
 
   const columns = [
-    // {
-    //   title: "",
-    //   dataIndex: "checkbox",
-    //   key: "checkbox",
-    //   render: (_, record) => (
-    //     <Checkbox
-    //       checked={!!checkedKeys[record.id]}
-    //       onChange={(e) => handleCheckboxChange(record, e.target.checked)}
-    //     />
-    //   ),
-    // },
-    { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
-    { title: "Value", dataIndex: "value", key: "value", responsive: ['md'] },
-    { title: "Description", dataIndex: "descition", key: "description", responsive: ['md'] },
-    { 
-      title: "Type", 
-      dataIndex: "type", 
-      key: "type", 
-      responsive: ['md'],
+    {
+      title: 'Grade Category',
+      dataIndex: 'name',
+      key: 'name',
     },
-    { 
-      title: "Actions", 
-      key: "actions", 
-      responsive: ['md'], 
+    {
+      title: 'Grade Item',
+      dataIndex: 'type',
+      key: 'type',
+      render: (text, record) => (
+        <>
+          <div>{record.type}</div>
+        </>
+      ),
+    },
+    {
+      title: 'Weight',
+      dataIndex: 'weight',
+      key: 'weight',
+      render: (text, record) => (
+        <>
+          <div>{record.weight}%</div>
+        </>
+      ),
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
       render: (text, record) => (
         <Space size="middle">
           <Dropdown overlay={menu(record)}>
@@ -139,25 +119,52 @@ const  handleAddTrainingProgram =(item)=>{
     },
   ];
 
+  const handleSearch = (value) => {
+    setSearchQuery(value);
+  };
+
+  const filteredResources = resource.filter((item) =>
+    item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <div className="mt-8 flex justify-between items-center">
-        <Title level={3}>Resource List</Title>
-        <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button> {/* Button to open CreateKPIModal */}
-      </div>
-      <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-        <Table
-          dataSource={resource}
-          columns={columns}
-          rowKey="id"
-          style={{ marginTop: "20px" }}
-          pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-        />
-        {/* <div style={{ marginTop: "20px" }}>
-          <Button type="primary" disabled={Object.keys(checkedKeys).length === 0} onClick={handleSubmit}>
-            Add to Training Program
-          </Button>
-        </div> */}
+      <Header style={{ backgroundColor: "#fff", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
+        <Title level={3} style={{ lineHeight: '64px', color: 'black', margin: 0 }}>KPIS List</Title>
+      </Header>
+      <Content style={{ padding: '20px', backgroundColor: '#f0f2f5' }}>
+        <Row justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
+          <Col>
+            <Search 
+              placeholder="Search KPI" 
+              enterButton 
+              onSearch={handleSearch}
+              style={{ width: '300px' }}
+            />
+          </Col>
+          <Col>
+            <Button type="primary" onClick={() => setOpenCreateModal(true)}>Create KPI</Button>
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          {filteredResources.map((item) => (
+            <Col key={item.id} span={24}>
+              <Collapse>
+                <Panel header={`${item.name}`} key={item.id}>
+                  <Card>
+                    <Table
+                      bordered
+                      columns={columns}
+                      dataSource={[item]}
+                      pagination={false}
+                      rowKey="id"
+                    />
+                  </Card>
+                </Panel>
+              </Collapse>
+            </Col>
+          ))}
+        </Row>
       </Content>
       {selectedResource && (
         <DetailKPIModal

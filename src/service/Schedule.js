@@ -91,6 +91,31 @@ export const fetchSchedule = async () => {
   }
 };
 
+export const fetchScheduleid = async (id) => {
+  try {
+    const response = await httpClient.get({
+      url: `${apiLinks.Meetings.getUserId}`,
+      params:{id},
+  
+    });
+
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the schedule');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    const job = response.data;
+    return {
+      events: job.result,
+    };
+  } catch (error) {
+    console.error("Fetching schedule failed", error);
+    throw error;
+  }
+};
+
 export const createUserNewSchedule = async (meetingId,userId) => {
   try {
     const response = await httpClient.post({

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, DatePicker, Typography, message, Layout, Row, Col, Upload } from "antd";
+import { Form, Input, Button, DatePicker, Typography, message, Layout, Row, Col, Upload, Spin } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -7,7 +7,7 @@ import { createNewJobs } from '../../../service/JobsService';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from "react-router-dom";
-import { UploadOutlined } from "@ant-design/icons";
+import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -18,6 +18,7 @@ const CreateNewJobs = () => {
   const [description, setDescription] = useState("");
   const [benefits, setBenefits] = useState("");
   const [cvFile, setCvFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRequirement = (value) => {
@@ -39,7 +40,7 @@ const CreateNewJobs = () => {
         return;
       }
 
-      
+      setLoading(true);
       const fileRef = ref(storage, cvFile.name);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
@@ -62,6 +63,8 @@ const CreateNewJobs = () => {
       navigate('/hrmanager/Jobs');
     } catch (error) {
       message.error(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +76,16 @@ const CreateNewJobs = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Create New Job
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
+          </Col>
+        </Row>
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
@@ -106,6 +118,13 @@ const CreateNewJobs = () => {
                 </Form.Item>
               </Col>
             </Row>
+            <Form.Item
+                  name="location"
+                  label="Location"
+                  rules={[{ required: true, message: "Please enter Location" }]}
+                >
+                  <Input placeholder="Enter the Location" />
+                </Form.Item>
             <Form.Item
               label="Scope of Work"
               rules={[{ required: true, message: "Please enter the description of the work" }]}
@@ -143,7 +162,7 @@ const CreateNewJobs = () => {
                   label="Duration (in months)"
                   rules={[{ required: true, message: "Please enter the job duration" }]}
                 >
-                  <Input placeholder="Enter the duration of the job" type="number" />
+                  <Input placeholder="Enter the duration of the job in months" type="number" />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -180,8 +199,8 @@ const CreateNewJobs = () => {
               </Upload.Dragger>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
+              <Button type="primary" htmlType="submit" disabled={loading}>
+                {loading ? <Spin /> : 'Create new job'}
               </Button>
             </Form.Item>
           </Form>

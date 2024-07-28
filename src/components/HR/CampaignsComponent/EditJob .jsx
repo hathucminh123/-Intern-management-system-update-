@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, DatePicker, Typography, message, Layout,Upload } from "antd";
+import { Form, Input, Button, DatePicker, Typography, message, Layout, Upload, Row, Col } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import moment from "moment";
@@ -7,8 +7,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { editNewJobs } from "../../../service/JobsService";
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { UploadOutlined } from "@ant-design/icons";
-const { Title,Text } = Typography;
+import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
+const { Title, Text } = Typography;
 const { Header, Content } = Layout;
 
 const EditJob = () => {
@@ -57,16 +57,16 @@ const EditJob = () => {
       const fileRef = ref(storage, cvFile.name);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
-    const updatedJob = {
-      id:id,
-      ...values,
-      scopeOfWork: description,
-      requirements: requirement,
-      benefits,
-      imagePath: fileUrl,
-    };
+      const updatedJob = {
+        id: id,
+        ...values,
+        scopeOfWork: description,
+        requirements: requirement,
+        benefits,
+        imagePath: fileUrl,
+      };
 
-   
+
       await editNewJobs(updatedJob);
       message.success("Job updated successfully!");
       navigate("/hrmanager/jobs");
@@ -79,12 +79,21 @@ const EditJob = () => {
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Edit Job
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
+          </Col>
+        </Row>
       </Header>
       <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
         <div className="container mx-auto">
           <Title className="text-center mb-5" level={2}>
-            Edit Job
+            Edit Developer {jobDetail.name} 
           </Title>
           <Form
             form={form}
@@ -162,7 +171,7 @@ const EditJob = () => {
                 { required: true, message: "Please enter the job duration" },
               ]}
             >
-              <Input placeholder="Enter the duration of the job" type="number" />
+              <Input placeholder="Enter the duration of the job in months" type="number" />
             </Form.Item>
             <Form.Item
               name="totalMember"
@@ -198,7 +207,7 @@ const EditJob = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Save
+                Update
               </Button>
             </Form.Item>
           </Form>

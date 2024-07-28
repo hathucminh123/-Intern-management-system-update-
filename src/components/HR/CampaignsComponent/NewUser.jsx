@@ -1,121 +1,91 @@
 import React, { useState } from 'react';
-import { Typography, Form, Input, Layout, Row, Col, Select, message, Upload, Button } from 'antd';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../../firebase/config';
+import { Typography, Form, Input, Layout, Row, Col, Select, message, Button, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { UploadOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
+import * as User from "../../../service/authService";
+
+const { Title } = Typography;
+const { Header, Content } = Layout;
+
+const userRoles = {
+  Intern: 0,
+  hrmanager: 3,
+  internshipcoordinators: 2,
+  mentor: 1,
+  admin: 4
+};
+
+const roleOptions = [
+  { label: 'Intern', value: userRoles.Intern },
+  { label: 'HR Manager', value: userRoles.hrmanager },
+  { label: 'Internship Coordinators', value: userRoles.internshipcoordinators },
+  { label: 'Mentor', value: userRoles.mentor },
+  { label: 'Admin', value: userRoles.admin },
+];
 
 const NewUser = () => {
-  const { Text, Title } = Typography;
-  const { Header, Content } = Layout;
   const [form] = Form.useForm();
-  const [cvFile, setCvFile] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = async () => {
-    const values = form.getFieldsValue();
+  const onFinish = async (values) => {
+    setLoading(true);
     try {
-      if (!cvFile) {
-        message.error('Please upload an image!');
-        return;
-      }
-
-      const fileRef = ref(storage, cvFile.name);
-      await uploadBytes(fileRef, cvFile);
-      const fileUrl = await getDownloadURL(fileRef);
-
       const newUser = {
         ...values,
         id: uuidv4(),
-        imagePath: fileUrl,
       };
-
-      // Code to handle the newUser object, such as sending it to the backend
-
+      await User.registerUser(newUser);
       message.success('User created successfully');
-      navigate('/some-path'); // Navigate to some path after successful creation
+      navigate('/hrmanager/UserList');
     } catch (error) {
       message.error('Create user failed');
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const handleBeforeUpload = (file) => {
-    setCvFile(file);
-    return false;
   };
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
+      <Header style={{ backgroundColor: 'white', borderBottom: '1px solid #f0f0f0' }}>
         <Title level={3} style={{ margin: 0 }}>Create New User</Title>
       </Header>
-      <Content style={{ backgroundColor: '#f0f2f5', padding: '20px', minHeight: '80vh' }}>
-        <div className="container mx-auto">
+      <Content style={{ backgroundColor: '#f0f2f5', padding: '40px 20px', minHeight: '80vh' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
           <Form
             form={form}
             onFinish={onFinish}
-            style={{ maxWidth: 10000, margin: '0 auto' }}
             layout="vertical"
           >
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
-                  name="firstName"
-                  label="First Name"
-                  rules={[{ required: true, message: 'Please enter the user first name' }]}
-               
+                  name="userName"
+                  label="User Name"
+                  rules={[{ required: true, message: 'Please enter the user name' }]}
                 >
-                  <Input />
+                  <Input placeholder="Enter user name" />
+                </Form.Item>
+                <Form.Item
+                  name="fistName"
+                  label="First Name"
+                  rules={[{ required: true, message: 'Please enter the first name' }]}
+                >
+                  <Input placeholder="Enter first name" />
                 </Form.Item>
                 <Form.Item
                   name="lastName"
                   label="Last Name"
-                  rules={[{ required: true, message: 'Please enter the user last name' }]}
+                  rules={[{ required: true, message: 'Please enter the last name' }]}
                 >
-                  <Input />
+                  <Input placeholder="Enter last name" />
                 </Form.Item>
                 <Form.Item
-                  name="userName"
-                  label="User Name"
-                  rules={[{ required: true, message: 'Please enter the user user name' }]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  name="userRole"
+                  name="role"
                   label="User Role"
-                  rules={[{ required: true, message: 'Please enter the user role' }]}
+                  rules={[{ required: true, message: 'Please select the user role' }]}
                 >
-                  <Select placeholder="Select User Role" allowClear>
-                    <Select.Option value="hrmanager">HR Manager</Select.Option>
-                    <Select.Option value="internshipcoordinators">Internship Coordinators</Select.Option>
-                    <Select.Option value="mentor">Mentor</Select.Option>
-                    <Select.Option value="intern">Intern</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item
-                  name="imagePath"
-                  label={
-                    <div>
-                      <Text strong>Upload Image</Text>
-                      <div>You can only upload one image</div>
-                    </div>
-                  }
-                  rules={[{ required: true, message: 'Please upload an image!' }]}
-                >
-                  <Upload.Dragger
-                    name="imagePath"
-                    multiple={false}
-                    accept=".jpg,.jpeg,.png"
-                    beforeUpload={handleBeforeUpload}
-                  >
-                    <p className="ant-upload-drag-icon">
-                      <UploadOutlined />
-                    </p>
-                    <p className="ant-upload-text">Drag and drop an image here or click to upload</p>
-                    <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
-                  </Upload.Dragger>
+                  <Select placeholder="Select User Role" options={roleOptions} allowClear />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -123,25 +93,25 @@ const NewUser = () => {
                   name="email"
                   label="Email"
                   rules={[
-                    { required: true, message: 'Please enter the user email' },
+                    { required: true, message: 'Please enter the email' },
                     { type: 'email', message: 'Please enter a valid email' }
                   ]}
                 >
-                  <Input />
+                  <Input placeholder="Enter email" />
                 </Form.Item>
                 <Form.Item
                   name="password"
                   label="Password"
-                  rules={[{ required: true, message: 'Please enter the user password' }]}
+                  rules={[{ required: true, message: 'Please enter the password' }]}
                 >
-                  <Input.Password />
+                  <Input.Password placeholder="Enter password" />
                 </Form.Item>
                 <Form.Item
                   name="confirmPassword"
                   label="Confirm Password"
                   dependencies={['password']}
                   rules={[
-                    { required: true, message: 'Please confirm the user password' },
+                    { required: true, message: 'Please confirm the password' },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (!value || getFieldValue('password') === value) {
@@ -152,13 +122,13 @@ const NewUser = () => {
                     }),
                   ]}
                 >
-                  <Input.Password />
+                  <Input.Password placeholder="Confirm password" />
                 </Form.Item>
               </Col>
             </Row>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Create User
+              <Button type="primary" htmlType="submit" block disabled={loading}>
+                {loading ? <Spin /> : "Create User"}
               </Button>
             </Form.Item>
           </Form>

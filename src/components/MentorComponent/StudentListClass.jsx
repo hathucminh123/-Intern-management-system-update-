@@ -1,17 +1,37 @@
 import React, { useState } from 'react'
-import { Layout ,Table} from 'antd'
+import { Layout ,Table,Menu,Dropdown,Space,Button} from 'antd'
+import { DownOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const StudentListClass = () => {
     const { Header,Content}=Layout
     const [pageSize] = useState(6);
     const [currentPage, setCurrentPage] = useState(1);
-   
+    const navigate =useNavigate();
+   const userRole =localStorage.getItem('role');
 const data = [
-    { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt',class:'reactjs ' },
-    { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt',class:'reactjs ' },
-    { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt ',class:'reactjs ' },
-    { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt',class:'reactjs ' }
+    { id: 1, name: "Thúc Minh", email: 'minhhtse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt',class:'reactjs ',role:'intern' },
+    { id: 2, name: "Hoàng Hiệp", email: 'hiepse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt',class:'reactjs ',role:'intern' },
+    { id: 3, name: "Minh Trí", email: 'trise150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt ',class:'reactjs ',role:'intern' },
+    { id: 4, name: "Tâm", email: 'tamse150913@fpt.edu.vn', phoneNumber: '123456789', education: 'fpt',class:'reactjs ',role:'intern' }
   ];
+  const handleOpenDetailModal =(item)=>{
+    navigate(`/${userRole}/UserDetailsRole/${item.id}`, { state: { item } });
+   }
+
+  const menu = (record) => (
+    <Menu>
+      <Menu.Item key="1">
+        <Button onClick={() => handleOpenDetailModal(record)}>View</Button>
+      </Menu.Item>
+      {/* <Menu.Item key="2">
+        <Button onClick={() => handleOpenDetailModal(record)}>View/Edit</Button>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <Button onClick={() => handleDeleteResource(record.id)}>Delete</Button>
+      </Menu.Item> */}
+    </Menu>
+  );
 
   const columns = [
     // {
@@ -36,20 +56,20 @@ const data = [
     //   key: "type", 
     //   responsive: ['md'],
     // },
-    // { 
-    //   title: "Actions", 
-    //   key: "actions", 
-    //   responsive: ['md'], 
-    //   render: (text, record) => (
-    //     <Space size="middle">
-    //       <Dropdown overlay={menu(record)}>
-    //         <Button>
-    //           More <DownOutlined />
-    //         </Button>
-    //       </Dropdown>
-    //     </Space>
-    //   ),
-    // },
+    { 
+      title: "Actions", 
+      key: "actions", 
+      responsive: ['md'], 
+      render: (text, record) => (
+        <Space size="middle">
+          <Dropdown overlay={menu(record)}>
+            <Button>
+              More <DownOutlined />
+            </Button>
+          </Dropdown>
+        </Space>
+      ),
+    },
   ];
   return (
     <Layout>

@@ -1,3 +1,4 @@
+import guesthttpClient from "../httpClient/guesthttpClient";
 import httpClient from "../httpClient/httpClient";
 
 const baseURL = "https://intern-management-35fd3e77666d.herokuapp.com/api";
@@ -5,7 +6,11 @@ const baseURL = "https://intern-management-35fd3e77666d.herokuapp.com/api";
 export const apiLinks = {
   auth: {
     login: `${baseURL}/Auth/login`,
+    register:`${baseURL}/Auth/register`,
   },
+
+
+
   Jobs: {
     get: `${baseURL}/Job`,
     post: `${baseURL}/Job`,
@@ -25,6 +30,8 @@ export const apiLinks = {
   Candidates: {
     get: `${baseURL}/Candidate`,
     post: `${baseURL}/Candidate`,
+    getApply : `${baseURL}/Candidate/UserAplication`,
+    putStatus:`${baseURL}/Candidate/Status`,
   },
   Email: {
     post: `${baseURL}/Mail`,
@@ -36,6 +43,7 @@ export const apiLinks = {
     delete: `${baseURL}/TrainingProgram`,
     deleteResource: `${baseURL}/TrainingProgram/Resource`,
     postResource: `${baseURL}/TrainingProgram/Resource`,
+    getbyUser:`${baseURL}/TrainingProgram/UserTrainingProgram`,
     deleteKPI: `${baseURL}/TrainingProgram/KPI`,
     postKPI: `${baseURL}/TrainingProgram/KPI`,
   },
@@ -48,8 +56,14 @@ export const apiLinks = {
   Assessment: {
     get: `${baseURL}/Assessment`,
     post: `${baseURL}/Assessment`,
+    InternPost: `${baseURL}/AssessmentSubmition`,
+    InternDelete:`${baseURL}/AssessmentSubmition`,
+    getIntern:`${baseURL}/AssessmentSubmition`,
     put: `${baseURL}/Assessment`,
     delete: `${baseURL}/Assessment`,
+    getByTraining :`${baseURL}/Assessment`,
+    updateStatus:`${baseURL}/Assessment/Status`,
+    grading :`${baseURL}/Assessment/Grade`,
   },
   KPI: {
     get: `${baseURL}/KPI`,
@@ -59,6 +73,14 @@ export const apiLinks = {
   },
   User:{
     get: `${baseURL}/User`,
+    put:`${baseURL}/User`,
+    getUserCampainJob:`${baseURL}/User/CampaginJob`,
+    postUserCampainJob:`${baseURL}/User/CampaginJob`,
+    postUserResult:`${baseURL}/User/UserResult`,
+    getUserResult:`${baseURL}/User/UserResult`,
+    getUserProfile:`${baseURL}/User/getProfile`,
+
+
   },
    Meetings:{
     get: `${baseURL}/Meetings`,
@@ -81,7 +103,22 @@ export const login = async (user) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Login request failed", error);
+    console.error("Login request failed", error.errorMessage);
+    throw error;
+  }
+};
+
+
+
+export const registerUser = async (user) => {
+  try {
+    const response = await httpClient.post({
+      url: apiLinks.auth.register,
+      data: user,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Login request failed", error.errorMessage);
     throw error;
   }
 };
@@ -108,3 +145,77 @@ export const fetchUser = async (params) => {
     throw error;
   }
 };
+
+
+export const fetchUserProfile = async (id) => {
+  try {
+    const response = await httpClient.get({
+      url: apiLinks.User.getUserProfile,
+      params: { id },
+    });
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the users profile');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    const user = response.data;
+    return {
+      events: user.result,
+    };
+  } catch (error) {
+    console.error("Fetching users failed", error);
+    throw error;
+  }
+};
+
+export const fetchUserProfileGuest = async (id) => {
+  try {
+    const response = await guesthttpClient.get({
+      url: apiLinks.User.getUserProfile,
+      params: { id },
+    });
+    if (response.status !== 200) {
+      const error = new Error('An error occurred while fetching the users profile');
+      error.code = response.status;
+      error.info = response.data;
+      throw error;
+    }
+
+    const user = response.data;
+    return {
+      events: user.result,
+    };
+  } catch (error) {
+    console.error("Fetching users failed", error);
+    throw error;
+  }
+};
+
+export const loginGuest = async (user) => {
+  try {
+    const response = await guesthttpClient.post({
+      url: apiLinks.auth.login,
+      data: user,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Login request failed", error.message);
+    throw error;
+  }
+};
+
+export const registerGuest = async (user) => {
+  try {
+    const response = await guesthttpClient.post({
+      url: apiLinks.auth.register,
+      data: user,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Registration request failed", error.message);
+    throw error;
+  }
+};
+
