@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col, Upload } from "antd";
+import { Form, Input, Button, DatePicker, Layout, Row, Col, Upload, Typography, message, Select } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { v4 as uuidv4 } from 'uuid';
 import * as Campaign from '../../../service/Campaign';
 import * as Jobss from '../../../service/JobsService';
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,7 +10,6 @@ import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
 const { Title, Text } = Typography;
-
 const { Option } = Select;
 const { Header, Content } = Layout;
 
@@ -25,7 +23,7 @@ const EditCampaign = () => {
   const [jobs, setJobs] = useState([]);
   const [cvFile, setCvFile] = useState(null);
   const navigate = useNavigate();
-  console.log("asdasd", CampaignDetail)
+
   useEffect(() => {
     const fetchAllJobs = async () => {
       try {
@@ -39,9 +37,6 @@ const EditCampaign = () => {
     fetchAllJobs();
   }, []);
 
-
-
-
   useEffect(() => {
     if (CampaignDetail) {
       setRequirement(CampaignDetail.requirements || "");
@@ -50,12 +45,13 @@ const EditCampaign = () => {
       form.setFieldsValue({
         ...CampaignDetail,
         estimateStartDate: moment(CampaignDetail.estimateStartDate),
+        estimateEndDate: moment(CampaignDetail.estimateEndDate),
+        submissionDeadline: moment(CampaignDetail.submissionDeadline),
       });
     }
   }, [CampaignDetail, form]);
 
   const onFinish = async (values) => {
-
     try {
       if (!cvFile) {
         message.error('Please upload an image!');
@@ -67,16 +63,16 @@ const EditCampaign = () => {
 
       const NewCampaigns = {
         id: CampaignDetail.id,
-        ...values,
+        name: values.name,
         scopeOfWork: description,
         requirements: requirement,
         benefits: benefits,
         duration: parseInt(values.duration),
-        imagePath: fileUrl
-
-        //   estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+        imagePath: fileUrl,
+        estimateStartDate: values.estimateStartDate ? values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]") : null,
+        estimateEndDate: values.estimateEndDate ? values.estimateEndDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]") : null,
+        submissionDeadline: values.submissionDeadline ? values.submissionDeadline.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]") : null,
       };
-
 
       const response = await Campaign.EditNewCampaign(NewCampaigns);
       message.success("Campaign edit successfully!");
@@ -108,25 +104,26 @@ const EditCampaign = () => {
     setCvFile(file);
     return false;
   };
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-      <Row>
+        <Row>
           <Col span={10}>
-          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
-          <LeftOutlined /> Back
-        </Button>
+            <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+              <LeftOutlined /> Back
+            </Button>
           </Col>
           <Col>
-          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
+            {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
           </Col>
         </Row>
         {CampaignDetail?.id ? "Edit Campaign" : "Create New Campaign"}
       </Header>
       <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div className="container flex flex-col">
-        <Title className="text-center mb-2" level={2}>
-            Edit  {CampaignDetail.name} 
+          <Title className="text-center mb-2" level={2}>
+            Edit {CampaignDetail.name}
           </Title>
           <div className="mt-5">
             <Form
@@ -134,7 +131,6 @@ const EditCampaign = () => {
               layout="vertical"
               onFinish={onFinish}
               style={{ maxWidth: 800, margin: "0 auto" }}
-
             >
               <Row gutter={16}>
                 <Col span={12}>
@@ -146,15 +142,6 @@ const EditCampaign = () => {
                     <Input placeholder="Enter the campaign name" />
                   </Form.Item>
                 </Col>
-                {/* <Col span={12}>
-                  <Form.Item
-                    name="estimateStartDate"
-                    label="Start Date"
-                    rules={[{ required: true, message: "Please enter the start date" }]}
-                  >
-                    <DatePicker style={{ width: '100%' }} />
-                  </Form.Item>
-                </Col> */}
                 <Col span={12}>
                   <Form.Item
                     name="duration"
@@ -165,36 +152,35 @@ const EditCampaign = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              {/* <Row gutter={16}>
-                <Col span={12}>
+              <Row gutter={16}>
+                <Col span={8}>
                   <Form.Item
-                    name="duration"
-                    label="Internship Duration"
-                    rules={[{ required: true, message: "Please enter the duration in weeks" }]}
+                    name="estimateStartDate"
+                    label="Start Date"
+                    rules={[{ required: true, message: "Please enter the start date" }]}
                   >
-                    <Input placeholder="Enter the duration, e.g., 10 weeks" />
+                    <DatePicker style={{ width: '100%' }} />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
                   <Form.Item
-                    name="jobIds"
-                    label="Positions"
-                    rules={[{ required: true, message: "Please select the positions" }]}
+                    name="estimateEndDate"
+                    label="End Date"
+                    rules={[{ required: true, message: "Please enter the end date" }]}
                   >
-                    <Select
-                      mode="multiple"
-                      placeholder="Select positions"
-                      style={{ width: "100%" }}
-                    >
-                      {CampaignDetail.jobs.map(program => (
-                        <Option key={program.id} value={program.id}>
-                          {program.name}
-                        </Option>
-                      ))}
-                    </Select>
+                    <DatePicker style={{ width: '100%' }} />
                   </Form.Item>
                 </Col>
-              </Row> */}
+                <Col span={8}>
+                  <Form.Item
+                    name="submissionDeadline"
+                    label="Submission Deadline"
+                    rules={[{ required: true, message: "Please enter the submission deadline" }]}
+                  >
+                    <DatePicker style={{ width: '100%' }} />
+                  </Form.Item>
+                </Col>
+              </Row>
               <Form.Item
                 name="scopeOfWork"
                 label="Scope of Work"

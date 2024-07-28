@@ -121,7 +121,7 @@ const CustomMenu = ({ userRole }) => {
     ],
     hrmanager: [
       // { key: "/hrmanager/home", icon: <HomeOutlined />, label: "Home" },
-      { key: "/hrmanager/chat", icon: <WechatWorkOutlined />, label: "Chat" },
+      // { key: "/hrmanager/chat", icon: <WechatWorkOutlined />, label: "Chat" },
       { key: "/hrmanager/jobs", icon: <MdEngineering />, label: "Jobs" },
       { key: "/hrmanager/campaigns", icon: <MdOutlineCampaign />, label: "Campaigns" },
       { key: "/hrmanager/schedule", icon: <AreaChartOutlined />, label: "Meeting" },

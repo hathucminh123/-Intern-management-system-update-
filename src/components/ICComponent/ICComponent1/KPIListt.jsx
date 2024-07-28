@@ -149,15 +149,15 @@ const KPIListt = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header style={{ backgroundColor: 'white', borderBottom: '1px solid #f0f0f0', padding: '0 20px' }}>
+      <Header style={{ backgroundColor: 'white', borderBottom: '1px solid #f0f0f0', padding: '0 20px',height:'10vh' }}>
        <Row>
-       <Col span={10}>
+       <Col span={5}>
        <Button className="mt-3 mb-4 flex items-center" onClick={() => navigate(-1)}>
           <LeftOutlined /> Back
         </Button>
        
        </Col>
-       <Col>
+       <Col span={19}>
        <Title className='mt-3' level={3}> Add KPI to {TrainingProgram.name} </Title>
        </Col>
        

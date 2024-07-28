@@ -349,7 +349,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         placeholder="Select a training program"
         allowClear
         onChange={handleSelected}
-        style={{ width: '800px', marginBottom: '20px' }}
+        style={{ width: '900px', marginBottom: '20px' }}
       >
         {training.map((train) => (
           <Select.Option key={train.id} value={train.id}>
