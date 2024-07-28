@@ -4,11 +4,11 @@ import InputFormComponent from '../../InputFormComponent/InputFormComponent';
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
 import styled from 'styled-components';
-import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
+import { EyeFilled, EyeInvisibleFilled, UserOutlined } from '@ant-design/icons';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { registerGuest,registerUser } from '../../../service/authService';
+import { registerGuest, registerUser } from '../../../service/authService';
 import { message, Spin } from 'antd';
 import Slider from "react-slick";
 import { useNavigate } from 'react-router-dom';
@@ -89,7 +89,7 @@ const GuessSignup = () => {
 
     setIsLoading(true);
     try {
-      await registerUser({ userName, email, password, confirmPassword,role:5 });
+      await registerUser({ userName, email, password, confirmPassword, role: 5 });
       message.success("Register successfully", 3);
       navigate(`/login`, { replace: true });
     } catch (error) {
@@ -121,12 +121,12 @@ const GuessSignup = () => {
             Hãy đăng nhập để tiếp tục khám phá các cơ hội việc làm và trải nghiệm các tính năng tuyệt vời của chúng tôi.
           </Text>
           <div style={{ width: '100%' }}>
-            <Text style={{ color: '#212f3f', fontWeight: '500', marginBottom: '1.5rem' }}>Họ và tên</Text>
+            <Text style={{ color: '#212f3f', fontWeight: '500', marginBottom: '1.5rem' }}>User Name</Text>
             <div style={{ position: 'relative', width: '100%' }}>
-              <MdOutlineMailOutline style={{ position: 'absolute', top: '50%', left: '10px', transform: 'translateY(-50%)', zIndex: 1, color: '#00b14f' }} />
+              <UserOutlined style={{ position: 'absolute', top: '50%', left: '10px', transform: 'translateY(-50%)', zIndex: 1, color: '#00b14f' }} />
               <StyledInput
                 value={userName}
-                placeholder="Họ và tên"
+                placeholder="User Name"
                 onChange={handleOnChangeUserName}
               />
             </div>

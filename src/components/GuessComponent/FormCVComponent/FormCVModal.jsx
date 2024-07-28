@@ -40,26 +40,26 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-  
+
       if (!cvFile) {
         message.error('Please upload your CV!');
         setLoading(false);
         return;
       }
-  
+
       const fileRef = ref(storage, `${uuidv4()}-${cvFile.name}`);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
-  
+
       const candidateData = {
         ...values,
         firstName: values.fullName.split(' ')[0],
         lastName: values.fullName.split(' ').slice(1).join(' '),
         cvPath: fileUrl,
       };
-  
+
       await createNewCandidate(candidateData);
-  
+
       message.success('Form submitted successfully!');
       onApplicationSuccess();
       form.resetFields();
@@ -97,7 +97,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
           message="Lưu ý"
           description={(
             <>
-            Một vị trí trong 1 chiến dịch chỉ được ứng tuyển 1 lần
+              Một vị trí trong 1 chiến dịch chỉ được ứng tuyển 1 lần
             </>
           )}
           type="warning"
@@ -107,7 +107,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
           form={form}
           layout="vertical"
           onFinish={handleSubmit}
-          initialValues={{ name: job?.name || '', list: intern?.name,  email:userProfile?.email }}
+          initialValues={{ name: job?.name || '', list: intern?.name, email: userProfile?.email }}
         >
           <div className="modal-content">
             <Form.Item
@@ -137,7 +137,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
               name="fullName"
               label="Họ và tên"
               rules={[{ required: true, message: 'Please enter your full name!' }]}
-              initialValue={userProfile.userName}
+              initialValue={userProfile.firstName + " " + userProfile.lastName}
             >
               <Input placeholder="Họ và tên" />
             </Form.Item>
@@ -149,7 +149,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
                 { type: 'email', message: 'Please enter a valid email!' },
               ]}
               initialValue={userProfile.email}
-              
+
             >
               <Input placeholder="Email liên hệ" disabled />
             </Form.Item>

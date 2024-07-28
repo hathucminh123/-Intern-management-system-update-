@@ -25,10 +25,10 @@ const GuestJobDetailsComponent = () => {
   const [selectJobs, setSelectJobs] = useState(null);
   const [selectCampaigns, setSelectCampaigns] = useState(null);
   const [apply, setApply] = useState([]);
-  
+
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
-  console.log('cccc',apply)
+  console.log('cccc', apply)
 
   useEffect(() => {
     const profile = JSON.parse(localStorage.getItem('userProfile'));
@@ -40,9 +40,8 @@ const GuestJobDetailsComponent = () => {
       const res = await Candidates.fetchCandidateApplication();
       setApply(res.events);
     } catch (error) {
-      message.error("Fetch Candidate failed: " + error.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -54,7 +53,7 @@ const GuestJobDetailsComponent = () => {
 
   const filteredCandidates = userProfile ? apply.filter(jobname => jobname.job.id === jobs.id) : [];
 
-  console.log('haha',filteredCandidates)
+  console.log('haha', filteredCandidates)
 
   const showModal = (job, campaigns) => {
     setSelectJobs(job);
@@ -145,11 +144,11 @@ const GuestJobDetailsComponent = () => {
             {userProfile ? (
               filteredCandidates.length >= 1 ? (
                 <Button
-                style={{
-                  marginTop: '20px',
-                  backgroundColor: 'gray',
-                  color: 'white',
-                }}
+                  style={{
+                    marginTop: '20px',
+                    backgroundColor: 'gray',
+                    color: 'white',
+                  }}
                   type="primary"
                   className="rounded-full customButton"
                   onClick={() => showViewCVModal(jobs, campaign)}
@@ -157,25 +156,25 @@ const GuestJobDetailsComponent = () => {
                 >
                   Bạn đã hết lượt ứng tuyển
                 </Button>
-              // ) : filteredCandidates.length > 0 ? (
-              //   <Button
-              //     style={{
-              //       marginTop: '20px',
-              //       backgroundColor: '#4CAF50',
-              //       color: 'white',
-              //       position: 'relative',
-              //     }}
-              //     type="primary"
-              //     className="rounded-full customButton"
-              //     onClick={() => showReapplyModal(jobs, campaign)}
-              //   >
-              //     <>
-              //       <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
-              //       ỨNG tuyển lại
-              //     </>
-              //   </Button>
-              // ) 
-                ): (
+                // ) : filteredCandidates.length > 0 ? (
+                //   <Button
+                //     style={{
+                //       marginTop: '20px',
+                //       backgroundColor: '#4CAF50',
+                //       color: 'white',
+                //       position: 'relative',
+                //     }}
+                //     type="primary"
+                //     className="rounded-full customButton"
+                //     onClick={() => showReapplyModal(jobs, campaign)}
+                //   >
+                //     <>
+                //       <IoMdRefresh style={{ marginRight: '8px', position: 'absolute', right: '55%', bottom: '10px' }} />
+                //       ỨNG tuyển lại
+                //     </>
+                //   </Button>
+                // ) 
+              ) : (
                 <Button
                   style={{
                     marginTop: '20px',
@@ -199,6 +198,7 @@ const GuestJobDetailsComponent = () => {
                 type="primary"
                 className="rounded-full customButton"
                 disabled
+              // onClick={() => message.error("Đăng nhập để ứng tuyển!")}
               >
                 Bạn cần đăng nhập để ứng tuyển
               </Button>

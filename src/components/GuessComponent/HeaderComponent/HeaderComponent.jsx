@@ -27,7 +27,6 @@ const HeaderComponent = () => {
         localStorage.setItem('userProfile', JSON.stringify(fetchedProfile));
         setUserProfile(fetchedProfile);
       } catch (error) {
-        message.error('Không thể tải thông tin người dùng');
       } finally {
         setLoading(false);
       }
@@ -105,8 +104,8 @@ const HeaderComponent = () => {
           </Button>
         </Space>
         <Button style={buttonStyle} onClick={() => handleNavigate("logout")}>
-          <MdExitToApp  style={iconStyle} />
-          <span style={{ color: 'red',marginLeft:'10px' }}> Đăng xuất</span>
+          <MdExitToApp style={iconStyle} />
+          <span style={{ color: 'red', marginLeft: '10px' }}> Đăng xuất</span>
         </Button>
       </Content>
     </div>
@@ -120,7 +119,7 @@ const HeaderComponent = () => {
         <div className="hidden md:flex">
           <a href="/guest">
             {/* <img alt="Intern management" className="h-10 w-auto" src={image1} /> */}
-         <span><strong> Trang chủ </strong> </span> 
+            <span><strong> Trang chủ </strong> </span>
           </a>
         </div>
         <div className="hidden md:flex space-x-4 ml-auto">

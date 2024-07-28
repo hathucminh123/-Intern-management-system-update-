@@ -94,7 +94,7 @@ function App() {
           <Route path="/login" element={<GuessSignin />} />
           <Route path="/sign-up" element={<GuessSignup />} />
 
-{/*         
+          {/*         
           
           <Route element={<ProtectedRouteGuest />}>
        
@@ -102,25 +102,25 @@ function App() {
           
           </Route> */}
 
-         
 
-          <Route element={<ProtectedRoute />}>
           <Route path="/guest" element={<GuestPage />}>
-              <Route index element={<Navigate to="info" replace />} />
-          
-              <Route path="info" element={<GuestInfo />} />
-              <Route path="JobApply" element={<JobApply />} />
-              <Route path="Profile" element={<GuessProfile />} />
+            <Route index element={<Navigate to="info" replace />} />
 
-              <Route path="Detail/:id" element={<GuessDetailPage />} />
-              <Route path="JobDetails/:id" element={<GuessJobDetailsComponent/>}/>
-           
+            <Route path="info" element={<GuestInfo />} />
+            <Route path="JobApply" element={<JobApply />} />
+            <Route path="Profile" element={<GuessProfile />} />
 
-            </Route>
-       
-        
+            <Route path="Detail/:id" element={<GuessDetailPage />} />
+            <Route path="JobDetails/:id" element={<GuessJobDetailsComponent />} />
 
-       
+
+          </Route>
+          <Route element={<ProtectedRoute />}>
+
+
+
+
+
             {/* Mentor Routes */}
             <Route path="/mentor" element={<CustomMenu userRole="mentor" />}>
               <Route index element={<Navigate to="task" replace />} />
@@ -240,7 +240,7 @@ function App() {
 
 
             {/* Guest Routes */}
-      
+
           </Route>
         </Routes>
       </Router>

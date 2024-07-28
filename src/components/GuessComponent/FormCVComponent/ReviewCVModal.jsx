@@ -14,9 +14,9 @@ const { Title, Text } = Typography;
 const UserInfoCard = ({ candidate }) => {
   return (
     <Card
-      title={<span>CV bạn ứng tuyển gần nhất: <a style={{color:'#00b14f'}} href={candidate.cvPath} target="_blank" rel="noopener noreferrer">View your CV</a></span>}
+      title={<span>CV bạn ứng tuyển gần nhất: <a style={{ color: '#00b14f' }} href={candidate.cvPath} target="_blank" rel="noopener noreferrer">View your CV</a></span>}
       key={candidate.id}
-      style={{borderColor:'#00b14f',marginTop:'15px'}}
+      style={{ borderColor: '#00b14f', marginTop: '15px' }}
     >
       <Space direction='vertical'>
         <Text>Họ và Tên: <strong>{`${candidate.firstName} ${candidate.lastName}`}</strong></Text>
@@ -32,7 +32,7 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile })
     <Form
       form={form}
       layout="vertical"
-      style={{marginTop:'15px'}}
+      style={{ marginTop: '15px' }}
       onFinish={handleSubmit}
       initialValues={{ name: '', list: '' }}
     >
@@ -64,7 +64,7 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile })
           name="fullName"
           label="Họ và tên"
           rules={[{ required: true, message: 'Please enter your full name!' }]}
-          initialValue={userProfile.userName}
+          initialValue={userProfile.firstName + " " + userProfile.lastName}
         >
           <Input placeholder="Họ và tên" />
         </Form.Item>
@@ -122,11 +122,11 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile })
           </Text>
         </div>
       </div>
-      <div  style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1'}}>
-    
-      <Button type="primary" htmlType="submit" style={{ marginTop: '20px'}}>
-        Ứng tuyển
-      </Button>
+      <div style={{ marginTop: '20px', alignItems: 'end', justifyContent: 'end', display: 'flex', flex: '1' }}>
+
+        <Button type="primary" htmlType="submit" style={{ marginTop: '20px' }}>
+          Ứng tuyển
+        </Button>
       </div>
     </Form>
   );
@@ -136,8 +136,8 @@ const ReviewCVModal = ({ visible, onClose, title, intern, job, onReapplySuccess,
   const [form] = Form.useForm();
   const [cvFile, setCvFile] = useState(null);
   const [userProfile, setUserProfile] = useState({});
-  console.log("wtf",job)
-  
+  console.log("wtf", job)
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -211,8 +211,8 @@ const ReviewCVModal = ({ visible, onClose, title, intern, job, onReapplySuccess,
           message="Lưu ý"
           description={(
             <>
-            Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn đã hết lượt ứng tuyển vào vị trí <span>{job?.name}</span> trong <span>{title}</span>.
-          </>
+              Việc ứng tuyển nhiều lần có thể làm giảm độ chuyên nghiệp của bạn trong mắt nhà tuyển dụng. Bạn đã hết lượt ứng tuyển vào vị trí <span>{job?.name}</span> trong <span>{title}</span>.
+            </>
           )}
           type="warning"
           showIcon

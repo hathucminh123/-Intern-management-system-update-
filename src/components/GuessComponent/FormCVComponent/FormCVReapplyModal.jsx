@@ -64,7 +64,7 @@ const UserUploadForm = ({ form, handleSubmit, handleBeforeUpload, userProfile, j
           name="fullName"
           label="Họ và tên"
           rules={[{ required: true, message: 'Please enter your full name!' }]}
-          initialValue={userProfile.userName}
+          initialValue={userProfile.firstName + " " + userProfile.lastName}
         >
           <Input placeholder="Họ và tên" />
         </Form.Item>
@@ -136,7 +136,7 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
   const [cvFile, setCvFile] = useState(null);
   const [userProfile, setUserProfile] = useState({});
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -225,7 +225,7 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
           <UserInfoCard key={candidate.id} candidate={candidate} />
         ))}
         <Title level={1}>Nộp CV mới:</Title>
-        <UserUploadForm 
+        <UserUploadForm
           form={form}
           handleSubmit={handleSubmit}
           handleBeforeUpload={handleBeforeUpload}

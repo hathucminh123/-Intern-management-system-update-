@@ -40,7 +40,7 @@ const InternReport = () => {
   const [activeProgram, setActiveProgram] = useState(null);
 
 
- 
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -137,7 +137,7 @@ const InternReport = () => {
     setSelectedProgram(selectedProgram === programId ? null : programId);
     setActiveProgram(programId);
   };
-
+  console.log("!23", training)
   return (
     <Layout>
       <Header style={{ backgroundColor: '#fff', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -151,9 +151,9 @@ const InternReport = () => {
               <div style={{ width: '100%', backgroundColor: '#6B90DA', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '20px' }}>
                 Training program
               </div>
-             
-                {training.map((train) => (
-                   <Row key={train.id}>
+
+              {training.map((train) => (
+                <Row key={train.id}>
                   <Col span={24}>
                     <span
                       style={{
@@ -172,13 +172,14 @@ const InternReport = () => {
                     >
                       Training Program: {train.name}
                     </span>
-                    <strong style={{ marginLeft: '10px' }}>from {moment(train.startDate).format('YYYY/MM/DD')}</strong>
-                    <strong style={{ marginLeft: '3px' }}>- {moment(train.endDate).format('YYYY/MM/DD')}</strong>
+                    <strong style={{ marginLeft: '10px' }}>from {moment(train.startDate).format('DD/MM/yyyy')}</strong>
+                    <strong style={{ marginLeft: '3px' }}>- {moment(train.endDate).format('DD/MM/yyyy')}</strong>
                   </Col>
-                  </Row>
-                ))}
-             
+                </Row>
+              ))}
+
             </Space>
+
             <div style={{ width: '100%', marginLeft: '10px' }}>
               {selectedProgram && (
                 reportData[selectedProgram] && reportData[selectedProgram].length > 0 ? (

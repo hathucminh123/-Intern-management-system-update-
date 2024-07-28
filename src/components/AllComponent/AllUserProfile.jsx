@@ -11,8 +11,8 @@ const userRoles = {
   3: 'HR Manager',
   2: 'Internship Coordinators',
   1: 'Mentor',
-  4:'Admin',
-  5:'Guest'
+  4: 'Admin',
+  5: 'Guest'
 };
 
 const AllUserProfile = () => {
@@ -20,12 +20,14 @@ const AllUserProfile = () => {
   const { TabPane } = Tabs;
   const { Header, Content } = Layout;
   const { state } = useLocation();
- 
 
 
 
- const user = JSON.parse(localStorage.getItem('userProfile'))
- console.log('wtf',user)
+
+  const data = JSON.parse(localStorage.getItem('userProfile'))
+  const user = data.events
+
+
 
   const role = userRoles[user?.role] || 'Unknown Role';
 
@@ -49,11 +51,11 @@ const AllUserProfile = () => {
               <div className="user-info">
                 <div className="info-item">
                   <Text strong>User Name:</Text>
-                  <Paragraph className="info-value">{user?.userName}</Paragraph>
+                  <Paragraph className="info-value">{user?.userName || "Missing"}</Paragraph>
                 </div>
                 <div className="info-item">
                   <Text strong>Role:</Text>
-                  <Paragraph className="info-value">{role}</Paragraph>
+                  <Paragraph className="info-value">{role || "Missing"}</Paragraph>
                 </div>
                 <Divider />
                 <Tabs defaultActiveKey="1">
@@ -61,19 +63,19 @@ const AllUserProfile = () => {
                     <div className="tab-content">
                       <div className="info-item">
                         <Text strong>First Name:</Text>
-                        <Paragraph className="info-value">{user?.firstName}</Paragraph>
+                        <Paragraph className="info-value">{user?.firstName || "Missing"}</Paragraph>
                       </div>
                       <div className="info-item">
                         <Text strong>Last Name:</Text>
-                        <Paragraph className="info-value">{user?.lastName}</Paragraph>
+                        <Paragraph className="info-value">{user?.lastName || "Missing"}</Paragraph>
                       </div>
                       <div className="info-item">
                         <Text strong>Email:</Text>
-                        <Paragraph className="info-value">{user?.email}</Paragraph>
+                        <Paragraph className="info-value">{user?.email || "Missing"}</Paragraph>
                       </div>
                       <div className="info-item">
                         <Text strong>Phone Number:</Text>
-                        <Paragraph className="info-value">{user?.phoneNumber}</Paragraph>
+                        <Paragraph className="info-value">{user?.phoneNumber || "Missing"}</Paragraph>
                       </div>
                     </div>
                   </TabPane>

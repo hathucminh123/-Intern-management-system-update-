@@ -51,10 +51,10 @@ const CustomMenu = ({ userRole }) => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const popoverRef = useRef(null);
-  const [userProfile,setUserProfile]=useState({})
+  const [userProfile, setUserProfile] = useState({})
 
-  
-  console.log('wtf',userProfile)
+
+  console.log('wtf', userProfile)
 
   const handleMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -75,22 +75,22 @@ const CustomMenu = ({ userRole }) => {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
- const fetchUserProfile =async()=>{
-  try{
-     const res=await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
-     setUserProfile(res.events)
-  }catch(error){
-    message.error('fectch User Profile failed')
+  const fetchUserProfile = async () => {
+    try {
+      const res = await UserProfile.fetchUserProfile(localStorage.getItem('userId').toLowerCase());
+      setUserProfile(res.events)
+    } catch (error) {
+      message.error('fectch User Profile failed')
+    }
+
   }
 
- }
 
-
- useEffect(()=>{
+  useEffect(() => {
     fetchUserProfile()
 
 
- },[])
+  }, [])
 
   const items = {
     mentor: [
@@ -109,7 +109,7 @@ const CustomMenu = ({ userRole }) => {
 
       //   ]
       // },
-          {
+      {
         key: "/mentor/UserListReport", icon: <FaSquarePollVertical />, label: "Manage Report List",
 
         // children: [
@@ -131,7 +131,7 @@ const CustomMenu = ({ userRole }) => {
         label: "User",
         children: [
           { key: "/hrmanager/NewUser", icon: <FaChevronRight />, label: "New" },
-          { key: "/hrmanager/UserList", icon: <FaChevronRight />, label: "List User" },
+          { key: "/hrmanager/UserList", icon: <FaChevronRight />, label: "List System User" },
           { key: "/hrmanager/UserGuestList", icon: <FaChevronRight />, label: "List Guest User" },
 
         ]
@@ -172,8 +172,8 @@ const CustomMenu = ({ userRole }) => {
   const handleClickNavigate = (type) => {
     if (type === "logout") {
       localStorage.clear();
-      navigate("/sign-in");
-    }else if ( type ==="profile"){
+      navigate("/login");
+    } else if (type === "profile") {
       navigate(`/${userRolle}/profile`);
     }
 
@@ -197,6 +197,7 @@ const CustomMenu = ({ userRole }) => {
         collapsible
         collapsed={collapsed}
         style={{ height: "100vh", position: "fixed", left: 0, backgroundColor: 'white' }}
+
       >
         <Logo />
         <Menu

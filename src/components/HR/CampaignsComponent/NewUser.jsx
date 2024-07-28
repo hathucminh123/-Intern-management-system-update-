@@ -20,7 +20,7 @@ const roleOptions = [
   { label: 'HR Manager', value: userRoles.hrmanager },
   { label: 'Internship Coordinators', value: userRoles.internshipcoordinators },
   { label: 'Mentor', value: userRoles.mentor },
-  { label: 'Admin', value: userRoles.admin },
+  // { label: 'Admin', value: userRoles.admin },
 ];
 
 const NewUser = () => {
