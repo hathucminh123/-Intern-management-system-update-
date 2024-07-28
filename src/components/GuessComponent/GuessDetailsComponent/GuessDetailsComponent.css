@@ -68,11 +68,11 @@
 .customButton {
   background: rgb(255 184 28);
   height: 40px;
-  width: 20rem;
+  width: 700px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  border-radius: 40px;
+  border-radius: 20px;
   color: white;
 }
 
@@ -159,4 +159,55 @@
   .mobile\:items-center {
     align-items: center;
   }
+}
+
+.collapse-wrapper .ant-collapse-header {
+  background-color: #f0f2f5;
+  border-radius: 8px;
+}
+
+.collapse-title {
+  font-weight: bold;
+}
+
+.recruitment {
+  padding: 20px;
+  border: 1px solid #f0f2f5;
+  border-radius: 8px;
+}
+
+.customButton {
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.detail-text {
+  margin-left: 8px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.rounded-32 {
+  border-radius: 32px;
+}
+
+.bg-neutral-1 {
+  background-color: #ffffff;
+}
+
+.shadow-level-1 {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

@@ -3,43 +3,12 @@ import { Card, Typography, Button, Space, Image, Row, Col } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import * as Campaign from "../../../service/Campaign";
-import CategoryListComponent from "../CategoryListComponent/CategoryListComponent";
 import moment from "moment";
 import { GrSchedule } from "react-icons/gr";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
-const internships = [
-  {
-    id: 1,
-    title: "Internship Team Summer 2024",
-    positions: [
-      "Frontend Developer",
-      "Backend Developer",
-      "Product Mindset",
-      "Software Development",
-      "Communication",
-    ],
-    duration: "10 weeks",
-    startDate: "03/06/2024",
-  },
-  {
-    id: 2,
-    title: "Internship Program Summer 2024",
-    positions: [
-      "Frontend Developer",
-      "Backend Developer",
-      "UX/UI Designer",
-      "Data Analyst",
-      "Marketing Intern",
-    ],
-    duration: "12 weeks",
-    startDate: "06/07/2024",
-    imgurl: 'https://geekadventure.vn/_next/image?url=https%3A%2F%2Fadmin.geekadventure.vn%2Fuploads%2F1710823201921_8ba476a272.jpeg&w=1920&q=90'
-  },
-];
-
-const GuestCampainsComponent = ({ searchQuery }) => {
+const GuestCampaignsComponent = ({ searchQuery }) => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState("");
@@ -65,16 +34,17 @@ const GuestCampainsComponent = ({ searchQuery }) => {
   });
 
   return (
-    <Space direction="vertical" style={{ width: '100%', padding: '20px', marginLeft: '50px' }}>
-      <div style={{ width: '100%', padding: '20px', marginLeft: '25%' }}>
+    <Space direction="vertical" style={{ width: '100%', padding: '20px' }}>
+      <div style={{ width: '100%', padding: '20px' }}>
         <Title level={2}>Những vị trí ứng tuyển:</Title>
         <div style={{ display: "flex", flexWrap: "wrap", marginBottom: "24px" }}>
           {filteredCampaigns.flatMap((campaign) =>
             campaign.jobs.map((position, index) => (
               <Button
                 key={index}
+                type={selectedPosition === position.name ? "primary" : "default"}
                 className="rounded-full me-2 mb-2"
-                style={{ whiteSpace: "normal" }}
+                style={{ whiteSpace: "normal", margin: '5px' }}
                 onClick={() => setSelectedPosition(position.name)}
               >
                 Lập trình viên {position.name}
@@ -82,8 +52,9 @@ const GuestCampainsComponent = ({ searchQuery }) => {
             ))
           )}
           <Button
+            type={selectedPosition === "" ? "primary" : "default"}
             className="rounded-full me-2 mb-2"
-            style={{ whiteSpace: "normal" }}
+            style={{ whiteSpace: "normal", margin: '5px' }}
             onClick={() => setSelectedPosition("")}
           >
             Show All
@@ -92,71 +63,78 @@ const GuestCampainsComponent = ({ searchQuery }) => {
       </div>
 
       <Row gutter={[16, 16]}>
-        <Col span={6}>
-          <CategoryListComponent />
-        </Col>
-        <Col span={18}>
+        <Col span={24}>
           {filteredCampaigns.map((internship) => (
             <Card
-              className="shadow-lg"
+              className="job-card shadow-lg"
               key={internship.id}
               hoverable
               style={{
-                borderWidth: 3,
-                marginBottom: 20,
+                borderWidth: 1,
+                borderColor: "#e0e0e0",
+                borderRadius: "8px",
+                marginBottom: "20px",
+                overflow: "hidden",
+                padding: '16px'
               }}
-            
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
-              <Row gutter={200}>
-                <Col >
+              <Row gutter={[16, 16]}>
+                <Col span={14}>
                   <Title level={3}>{internship.name}</Title>
                   <div className="mt-4">
-                    <div className="font-bold">Vị trí:</div>
+                    <Text strong>Vị trí có thể ứng tuyển trong chiến dịch:</Text>
                     <div className="ml-3" style={{ display: "flex", flexWrap: "wrap" }}>
                       {internship.jobs.map((position, index) => (
                         <Button
                           key={index}
                           className="rounded-full me-2 mb-2"
-                          style={{ whiteSpace: "normal" }}
+                          style={{ whiteSpace: "normal", margin: '5px' }}
                         >
                           Lập trình viên {position.name}
                         </Button>
                       ))}
                     </div>
                   </div>
-                  <div className="flex mt-4">
+                  <div className="flex mt-4" style={{ alignItems: 'center' }}>
                     <ClockCircleOutlined />
-                    <div className="ml-3">Thời gian thực tập:</div>
-                    <div className="ml-3 font-bold">{internship.duration} months</div>
+                    <Text className="ml-3">Thời gian thực tập:</Text>
+                    <Text className="ml-3 font-bold">{internship.duration} months</Text>
                   </div>
-                  <div className="flex mt-4">
-                    <GrSchedule />
-                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-                    <div className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</div>
+                  <div className="flex mt-4" style={{ alignItems: 'center', gap: '50px' }}>
+                    <div>
+                      <GrSchedule />
+                      <Text className="ml-3">Ngày bắt đầu :</Text>
+                      <Text className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</Text>
+                    </div>
+                    <div>
+                      <GrSchedule />
+                      <Text className="ml-3">Ngày kết thúc :</Text>
+                      <Text className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</Text>
+                    </div>
                   </div>
-                  <div className="flex mt-4">
+                  <div className="flex mt-4" style={{ alignItems: 'center' }}>
                     <GrSchedule />
-                    <div className="ml-3">Ngày bắt đầu dự kiến:</div>
-                    <div className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</div>
+                    <Text className="ml-3">Hạn ứng tuyển:</Text>
+                    <Text className="ml-3 font-bold">{moment(internship.submissionDeadline).format("DD-MM-YYYY")}</Text>
                   </div>
                 </Col>
-                <Col >
+                <Col span={10}>
                   {internship?.imagePath ? (
                     <Image
                       preview={false}
                       src={internship.imagePath}
-                      width={500}
+                      width="100%"
                       height={250}
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: 'cover', borderRadius: '8px' }}
                     />
                   ) : (
                     <Image
                       preview={false}
-                      src="https://via.placeholder.com/200x150"
-                      width={200}
-                      height={150}
-                      style={{ objectFit: 'cover' }}
+                      src="https://via.placeholder.com/500x250"
+                      width="100%"
+                      height={250}
+                      style={{ objectFit: 'cover', borderRadius: '8px' }}
                     />
                   )}
                 </Col>
@@ -169,4 +147,4 @@ const GuestCampainsComponent = ({ searchQuery }) => {
   );
 };
 
-export default GuestCampainsComponent;
+export default GuestCampaignsComponent;

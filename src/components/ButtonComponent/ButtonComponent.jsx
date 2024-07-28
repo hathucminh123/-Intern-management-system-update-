@@ -11,6 +11,7 @@ const ButtonComponent = ({ size, styleButton, styleTextButton, textbutton,onClic
       }}
       size={size}
       onClick={onClick}
+      
       {...rests}
     >
       <span style={styleTextButton}>{textbutton}</span>

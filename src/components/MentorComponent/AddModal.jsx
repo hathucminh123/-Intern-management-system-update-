@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Modal, Input, DatePicker, Select, Row, Col, message } from 'antd';
+import { Form, Modal, Input, Select, Row, Col, DatePicker, message } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import * as Assessment from "../../service/Assessment";
@@ -8,33 +8,34 @@ import * as User from "../../service/authService";
 
 const AddModal = ({ isVisible, onClose, onAddTask }) => {
   const [form] = Form.useForm();
-  const [user, setUser] = useState([]);
+  const [users, setUsers] = useState([]);
   const [description, setDescription] = useState('');
   const [trainingPrograms, setTrainingPrograms] = useState([]);
 
-  const fetchUsers = async () => {
-    try {
-      const res = await User.fetchUser();
-      setUser(res.events);
-    } catch (error) {
-      message.error("Failed to fetch users");
-    }
-  };
-
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await User.fetchUser();
+        const filteredUsers = res.events.filter((user) => user.role === 0);
+        setUsers(filteredUsers);
+      } catch (error) {
+        message.error("Failed to fetch users");
+      }
+    };
+
     fetchUsers();
   }, []);
 
-  const fetchTrainingPrograms = async () => {
-    try {
-      const res = await Training.fetchTraining();
-      setTrainingPrograms(res.events);
-    } catch (error) {
-      message.error("Failed to fetch training programs");
-    }
-  };
-
   useEffect(() => {
+    const fetchTrainingPrograms = async () => {
+      try {
+        const res = await Training.fetchTrainingUser(localStorage.getItem("userId").toLowerCase());
+        setTrainingPrograms(res.events);
+      } catch (error) {
+        message.error("Failed to fetch training programs");
+      }
+    };
+
     fetchTrainingPrograms();
   }, []);
 
@@ -48,18 +49,21 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       const newTask = {
         ...values,
         description: description,
+        deadline: values.deadline.toISOString(),
       };
       await Assessment.AddAssessment(newTask);
       onAddTask(newTask);
       form.resetFields();
+      setDescription('');
       onClose();
     } catch (error) {
-      console.log('Validation Failed:', error);
+      message.error("Failed to add task");
     }
   };
 
   const handleCancel = () => {
     form.resetFields();
+    setDescription('');
     onClose();
   };
 
@@ -72,8 +76,8 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
       destroyOnClose
       width={1200}
     >
-      <Form form={form} name="createTaskForm" initialValues={{ remember: true }}>
-        <Row justify="space-between" align="middle">
+      <Form form={form} name="createTaskForm" layout="vertical">
+        <Row gutter={16}>
           <Col span={12}>
             <Form.Item
               label="Task Name"
@@ -89,7 +93,7 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
               rules={[{ required: true, message: 'Please select the person to assign the task to!' }]}
             >
               <Select placeholder="Select user" allowClear>
-                {user.map((u) => (
+                {users.map((u) => (
                   <Select.Option key={u.id} value={u.id}>
                     {u.userName}
                   </Select.Option>
@@ -98,31 +102,15 @@ const AddModal = ({ isVisible, onClose, onAddTask }) => {
             </Form.Item>
 
             <Form.Item
-              label="Start Date"
-              name="startDate"
-              rules={[{ required: true, message: 'Please select the start date!' }]}
+              label="Deadline"
+              name="deadline"
+              rules={[{ required: true, message: 'Please select the deadline!' }]}
             >
-              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-            </Form.Item>
-
-            <Form.Item
-              label="End Date"
-              name="endDate"
-              rules={[{ required: true, message: 'Please select the end date!' }]}
-            >
-              <DatePicker showTime format="YYYY-MM-DD HH:mm" />
-            </Form.Item>
-
-            <Form.Item
-              label="Status"
-              name="status"
-              rules={[{ required: true, message: 'Please select the status!' }]}
-            >
-              <Select placeholder="Select status" allowClear>
-                <Select.Option value="TODOS">TODOS</Select.Option>
-                <Select.Option value="ON-PROGRESS">ON-PROGRESS</Select.Option>
-                <Select.Option value="DONE">DONE</Select.Option>
-              </Select>
+              <DatePicker
+                showTime
+                format="YYYY-MM-DD HH:mm"
+                style={{ width: '100%' }}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>

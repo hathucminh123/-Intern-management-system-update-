@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Button, Tag, Tabs, Form, Input, Table, message, Upload, Layout, Space, Dropdown, Menu, Popconfirm, Card, Row, Col } from "antd";
-import { UploadOutlined, DownOutlined } from '@ant-design/icons';
+import { UploadOutlined, DownOutlined, LeftOutlined } from '@ant-design/icons';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import * as Resource from "../../../service/Resource";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -158,7 +158,20 @@ const TrainingProgramDetailOJobs = () => {
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}> Training program details</Header>
+      <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}> 
+        
+        
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          <Title className='mt-3' level={3} style={{ margin: 0 }}>Training program Details</Title>
+          </Col>
+        </Row>
+        </Header>
       <Content style={{ padding: '20px', backgroundColor: '#f0f2f5', minHeight: '80vh' }}>
         <div className="container mx-auto bg-white p-8 shadow-lg rounded-lg">
           <Tabs defaultActiveKey="1" className="w-full">

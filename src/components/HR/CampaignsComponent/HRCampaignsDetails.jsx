@@ -3,10 +3,9 @@ import { Typography, Button, Image, Tag, Tabs, Layout, Table, Menu, Space, Dropd
 import "tailwindcss/tailwind.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import { DownOutlined } from "@ant-design/icons";
-import ButtonComponent from "../../ButtonComponent/ButtonComponent";
+import { DownOutlined, LeftOutlined } from "@ant-design/icons";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
@@ -17,9 +16,7 @@ const HRCampaignsDetails = () => {
   const [pageSize] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const userRole = localStorage.getItem('role');
-  const navigate= useNavigate();
-
-  console.log('Job Detail:', jobDetail);
+  const navigate = useNavigate();
 
   if (!jobDetail) {
     return <div>Job detail not found</div>;
@@ -33,12 +30,11 @@ const HRCampaignsDetails = () => {
   ];
 
   const dataReport = [
-    { id: 1, name: "Thúc Minh", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' },
-    { id: 2, name: "Hoàng Hiệp", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
-    { id: 3, name: "Minh Trí", Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B'},
-    { id: 4, name: "Tâm",  Logicalthinking: 'A', attitude: 'B',skill:'c', total: 'B' }
+    { id: 1, name: "Thúc Minh", logicalThinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
+    { id: 2, name: "Hoàng Hiệp", logicalThinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
+    { id: 3, name: "Minh Trí", logicalThinking: 'A', attitude: 'B', skill: 'C', total: 'B' },
+    { id: 4, name: "Tâm", logicalThinking: 'A', attitude: 'B', skill: 'C', total: 'B' }
   ];
-
 
   const handleOpenDetailModal = (record) => {
     // Handle open detail modal logic
@@ -48,10 +44,13 @@ const HRCampaignsDetails = () => {
     // Handle delete resource logic
   };
 
+  const handleAddMentorJobCampaign = () => {
+    navigate('/internshipcoordinators/MentorList');
+  };
 
-  const handleAddMentorJobCampaign =()=>{
-    navigate('/internshipcoordinators/MentorList')
-  }
+  const handleNavigateReport = (record) => {
+    navigate(`/internshipcoordinators/markReport/${record.id}`, { state: { record } });
+  };
 
   const menu = (record) => (
     <Menu>
@@ -80,24 +79,18 @@ const HRCampaignsDetails = () => {
               More <DownOutlined />
             </Button>
           </Dropdown>
+          <Button onClick={() => { handleNavigateReport(record) }}>View Report</Button>
         </Space>
       ),
     },
   ];
 
-  const columnsReport = [
-    { title: "Name", dataIndex: "name", key: "name", responsive: ['md'] },
-    { title: "Logical thinking", dataIndex: "Logicalthinking", key: "Logicalthinking", responsive: ['md'] },
-    { title: "Attitude", dataIndex: "attitude", key: "attitude", responsive: ['md'] },
-    { title: "skill", dataIndex: "skill", key: "skill", responsive: ['md'] },
-    { title: "Total", dataIndex: "total", key: "total", responsive: ['md'] },
-   
-  ];
-
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-    <div className=" w-full bg-white p-8 shadow-lg rounded-lg">
+      <div className="w-full max-w-8xl bg-white p-8 shadow-lg rounded-lg">
+        <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
         <div className="flex mb-8">
           <Image
             width={250}
@@ -107,15 +100,23 @@ const HRCampaignsDetails = () => {
           />
           <div className="ml-8">
             <Title level={2}>{jobDetail.name}</Title>
-            <div className="flex mt-3">
-              <div>Thời gian :</div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Duration:</div>
               <Tag className="ml-3" color="#87d068">
                 {jobDetail.duration} months
               </Tag>
             </div>
-            <div className="flex mt-3">
-              <div>Ngày Bắt đầu: </div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Start date:</div>
               <div className="ml-3 text-red-500">{moment(jobDetail.startDate).format('DD-MM-YYYY')}</div>
+            </div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Location:</div>
+              <div className="ml-3 text-red-500">{jobDetail.location}</div>
+            </div>
+            <div className="flex items-center mt-3">
+              <div className="font-medium">Total Members:</div>
+              <div className="ml-3 text-red-500">{jobDetail.totalMember}</div>
             </div>
           </div>
         </div>
@@ -123,33 +124,27 @@ const HRCampaignsDetails = () => {
 
         {userRole === "internshipcoordinators" && (
           <Tabs defaultActiveKey="1">
-            <TabPane tab="Jobs Details" key="1">
-              <Title className="mt-8" level={3}>MÔ TẢ CÔNG VIỆC</Title>
+            <TabPane tab="Job Details" key="1">
+              <Title className="mt-8" level={3}>Scope of Work</Title>
               <Paragraph>
-                <ul className="list-disc list-inside">
-                  <div dangerouslySetInnerHTML={{ __html: jobDetail.scopeOfWork }} />
-                </ul>
+                <div dangerouslySetInnerHTML={{ __html: jobDetail.scopeOfWork }} />
               </Paragraph>
-              <Title level={3}>YÊU CẦU CÔNG VIỆC</Title>
+              <Title level={3}>Job Requirements</Title>
               <Paragraph>
-                <ul className="list-disc list-inside">
-                  <div dangerouslySetInnerHTML={{ __html: jobDetail.requirements }} />
-                </ul>
+                <div dangerouslySetInnerHTML={{ __html: jobDetail.requirements }} />
               </Paragraph>
-              <Title level={3}>QUYỀN LỢI</Title>
+              <Title level={3}>Benefits</Title>
               <Paragraph>
-                <ul className="list-disc list-inside">
-                  <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
-                </ul>
+                <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
               </Paragraph>
             </TabPane>
-            <TabPane tab="Student List in jobs" key="2">
+            <TabPane tab="Student List" key="2">
               <Layout>
                 <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
                   <div className="mt-8 flex justify-between items-center">
                     <Title level={3}>Student List</Title>
                     <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
-                      Assign mentor to Manage this class
+                      Assign Mentor to Manage this Class
                     </Button>
                   </div>
                 </Header>
@@ -164,60 +159,25 @@ const HRCampaignsDetails = () => {
                 </Content>
               </Layout>
             </TabPane>
-            <TabPane tab="Student List Report in jobs" key="3">
-              <Layout>
-                <Header style={{ backgroundColor: "white", color: "black", padding: "0 16px", borderBottom: "1px solid #f0f0f0" }}>
-                  <div className="mt-8 flex justify-between items-center">
-                    <Title level={3}>Student Report List</Title>
-                    {/* <Button type="primary" onClick={() => { handleAddMentorJobCampaign(jobDetail) }}>
-                      Assign mentor to Manage this class
-                    </Button> */}
-                  </div>
-                </Header>
-                <Content style={{ padding: "20px", backgroundColor: "#f0f2f5" }}>
-                  <Table
-                    columns={columnsReport}
-                    dataSource={dataReport}
-                    rowKey="id"
-                    style={{ marginTop: "20px" }}
-                    pagination={{ pageSize: pageSize, current: currentPage, onChange: (page) => setCurrentPage(page) }}
-                  />
-                </Content>
-              </Layout>
-            </TabPane>
           </Tabs>
         )}
 
         {userRole === "hrmanager" && (
           <>
-            <Title className="mt-8" level={3}>MÔ TẢ CÔNG VIỆC</Title>
+            <Title className="mt-8" level={3}>Scope of Work</Title>
             <Paragraph>
-              <ul className="list-disc list-inside">
-                <div dangerouslySetInnerHTML={{ __html: jobDetail.scopeOfWork }} />
-              </ul>
+              <div dangerouslySetInnerHTML={{ __html: jobDetail.scopeOfWork }} />
             </Paragraph>
-            <Title level={3}>YÊU CẦU CÔNG VIỆC</Title>
+            <Title level={3}>Job Requirements</Title>
             <Paragraph>
-              <ul className="list-disc list-inside">
-                <div dangerouslySetInnerHTML={{ __html: jobDetail.requirements }} />
-              </ul>
+              <div dangerouslySetInnerHTML={{ __html: jobDetail.requirements }} />
             </Paragraph>
-            <Title level={3}>QUYỀN LỢI</Title>
+            <Title level={3}>Benefits</Title>
             <Paragraph>
-              <ul className="list-disc list-inside">
-                <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
-              </ul>
+              <div dangerouslySetInnerHTML={{ __html: jobDetail.benefits }} />
             </Paragraph>
           </>
         )}
-
-        <Title level={3} className="mt-8">ỨNG TUYỂN</Title>
-        <Paragraph>
-          Ứng viên quan tâm vui lòng gửi CV với tiêu đề mail: <Text strong>[Fresher React Developer - Họ tên]</Text> đến địa chỉ email <Text strong>FA.HCM@fpt.com</Text>
-        </Paragraph>
-        <Paragraph>Email: <a href="mailto:FA.HCM@fpt.com">FA.HCM@fpt.com</a></Paragraph>
-        <Paragraph>Fanpage: <a href="https://www.facebook.com/fsoft.academy" target="_blank" rel="noopener noreferrer">FPT Software Academy</a></Paragraph>
-        <Paragraph>Website: <a href="https://fsoft-academy.edu.vn/" target="_blank" rel="noopener noreferrer">https://fsoft-academy.edu.vn/</a></Paragraph>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, DatePicker, Select, Card, Row, Col, List, message, Space } from 'antd';
-import { SaveOutlined, CloseOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { SaveOutlined, CloseOutlined, PlusOutlined, DeleteOutlined, LeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -21,6 +21,7 @@ const ScheduleDetails = () => {
   const [users, setUsers] = useState([]);
   const [actionItems, setActionItems] = useState([]);
   const [description, setDescription] = useState('');
+  const navigate = useNavigate()
 
   if (!schedule) {
     return <div>Job detail not found</div>;
@@ -85,7 +86,11 @@ const ScheduleDetails = () => {
   const userRole =localStorage.getItem('role')
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-lg rounded-lg">
+    <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-lg">
+      
+      <Button className="mb-4 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
       <h1 className="text-2xl font-bold text-center mb-8">Detailed Schedule Meeting</h1>
       <Form layout="vertical" form={form} onFinish={onFinish}>
         <Card title="Meeting Details" className="mb-4">

@@ -2,7 +2,7 @@ import { Typography, Tabs, Layout, Image, Row, Col, Divider } from 'antd';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './userDetails.css';
-import image from '../../../assets/minhwap.jpg';
+// import image from '../../../assets/minhwap.jpg';
 
 const UserDetails = () => {
   const { Title, Paragraph, Text } = Typography;
@@ -19,15 +19,15 @@ const UserDetails = () => {
       <Content className="content">
         <div className="details-container">
           <Row gutter={20}>
-            <Col span={8}>
+            {/* <Col span={8}>
               <Image
                 width={250}
                 preview={false}
                 src={image}
                 className="profile-image"
               />
-            </Col>
-            <Col span={16}>
+            </Col> */}
+            <Col span={20}>
               <div className="user-info">
                 {/* <Title level={2}>{User?.name}</Title> */}
                 <div className="info-item">

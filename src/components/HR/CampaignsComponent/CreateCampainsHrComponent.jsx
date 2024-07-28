@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col ,Upload} from "antd";
+import { Form, Input, Button, Select, Typography, message, DatePicker, Layout, Row, Col, Upload, Spin } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { UploadOutlined } from "@ant-design/icons";
+import { LeftOutlined, UploadOutlined } from "@ant-design/icons";
 
-const { Title,Text } = Typography;
+const { Title, Text } = Typography;
 const { Option } = Select;
 const { Header, Content } = Layout;
 
@@ -22,6 +22,7 @@ const CreateCampaignsHrComponent = () => {
   const [benefits, setBenefits] = useState("");
   const [jobs, setJobs] = useState([]);
   const [cvFile, setCvFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,27 +39,29 @@ const CreateCampaignsHrComponent = () => {
   }, []);
 
   const onFinish = async (values) => {
+    setLoading(true);
     try {
       if (!cvFile) {
         message.error('Please upload an image!');
+        setLoading(false);
         return;
       }
       const fileRef = ref(storage, cvFile.name);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
-    
-    const NewCampaigns = {
-      id: uuidv4(),
-      ...values,
-      scopeOfWork: description,
-      requirements: requirement,
-      benefits: benefits,
-      duration: parseInt(values.duration),
-      estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
-      imagePath: fileUrl,
-    };
 
- 
+      const NewCampaigns = {
+        id: uuidv4(),
+        ...values,
+        scopeOfWork: description,
+        requirements: requirement,
+        benefits: benefits,
+        duration: parseInt(values.duration),
+        estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+        submissionDeadline:values.submissionDeadline.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+        imagePath: fileUrl,
+      };
+
       const response = await Campaign.createNewCampaign(NewCampaigns);
       message.success("Campaign created successfully!");
       form.resetFields();
@@ -67,9 +70,11 @@ const CreateCampaignsHrComponent = () => {
       setRequirement("");
       setBenefits("");
       console.log("Form values:", response);
-  }catch (error) {
+    } catch (error) {
       message.error(`Error: ${error.message}`);
       console.error("Error creating campaign:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,17 +89,31 @@ const CreateCampaignsHrComponent = () => {
   const handleBenefits = (value) => {
     setBenefits(value);
   };
+
   const handleBeforeUpload = (file) => {
     setCvFile(file);
     return false;
   };
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
-        Create new Campaign
+      <Row>
+          <Col span={10}>
+          <Button className="mb-4 mt-3 flex items-center" onClick={() => navigate(-1)}>
+          <LeftOutlined /> Back
+        </Button>
+          </Col>
+          <Col>
+          {/* <Title className='mt-3' level={3} style={{ margin: 0 }}>Task Details</Title> */}
+          </Col>
+        </Row>
       </Header>
       <Content style={{ padding: '24px', minHeight: '80vh' }}>
         <div className="container flex flex-col">
+        <Title className="text-center mb-2" level={2}>
+            Create New Campaign
+          </Title>
           <div className="mt-5">
             <Form
               form={form}
@@ -103,7 +122,7 @@ const CreateCampaignsHrComponent = () => {
               style={{ maxWidth: 800, margin: "0 auto" }}
             >
               <Row gutter={16}>
-                <Col span={12}>
+                <Col span={24}>
                   <Form.Item
                     name="name"
                     label="Campaign Name"
@@ -112,10 +131,23 @@ const CreateCampaignsHrComponent = () => {
                     <Input placeholder="Enter the campaign name" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+              
+              </Row>
+              <Row gutter={16}>
+              <Col span={12}>
                   <Form.Item
                     name="estimateStartDate"
                     label="Start Date"
+                    rules={[{ required: true, message: "Please enter the start date" }]}
+                  >
+                    <DatePicker style={{ width: '100%' }} />
+                  </Form.Item>
+               
+                </Col>
+                <Col span={12}>
+                <Form.Item
+                    name="submissionDeadline"
+                    label="End Date"
                     rules={[{ required: true, message: "Please enter the start date" }]}
                   >
                     <DatePicker style={{ width: '100%' }} />
@@ -127,9 +159,9 @@ const CreateCampaignsHrComponent = () => {
                   <Form.Item
                     name="duration"
                     label="Internship Duration"
-                    rules={[{ required: true, message: "Please enter the duration in weeks" }]}
+                    rules={[{ required: true, message: "Please enter the duration in months" }]}
                   >
-                    <Input placeholder="Enter the duration, e.g., 10 weeks" />
+                    <Input placeholder="Enter the duration, e.g., 10 months" />
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -185,41 +217,32 @@ const CreateCampaignsHrComponent = () => {
                   placeholder="Enter the benefits"
                 />
               </Form.Item>
-              {/* <Form.Item
+              <Form.Item
                 name="imagePath"
-                label="Campaign Image Path"
-                rules={[{ required: true, message: "Please enter the campaign image path" }]}
+                label={
+                  <div>
+                    <Text strong>Campaign Image</Text>
+                    <div>You can only upload one file</div>
+                  </div>
+                }
+                rules={[{ required: true, message: 'Please upload an image!' }]}
               >
-                <Input placeholder="Enter the image path" />
-              </Form.Item> */}
-
-
-<Form.Item
-              name="imagePath"
-              label={
-                <div>
-                  <Text strong>Campaign Image</Text>
-                  <div>You can only upload one file</div>
-                </div>
-              }
-              rules={[{ required: true, message: 'Please upload an image!' }]}
-            >
-              <Upload.Dragger
-                name="imagePath"
-                multiple={false}
-                accept=".jpg,.jpeg,.png"
-                beforeUpload={handleBeforeUpload}
-              >
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined />
-                </p>
-                <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
-                <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
-              </Upload.Dragger>
-            </Form.Item>
+                <Upload.Dragger
+                  name="imagePath"
+                  multiple={false}
+                  accept=".jpg,.jpeg,.png"
+                  beforeUpload={handleBeforeUpload}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <UploadOutlined />
+                  </p>
+                  <p className="ant-upload-text">Drag and drop a file here or click to upload</p>
+                  <p className="ant-upload-hint">(JPG, JPEG, PNG)</p>
+                </Upload.Dragger>
+              </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
+                <Button type="primary" htmlType="submit" disabled={loading}>
+                  {loading ? <Spin /> : "Create new campaign"}
                 </Button>
               </Form.Item>
             </Form>
