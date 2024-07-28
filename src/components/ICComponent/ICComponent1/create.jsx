@@ -81,6 +81,10 @@ const Create = () => {
     setStartDate(date);
   };
 
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+  };
+
   return (
     <Layout>
       <Header style={{ backgroundColor: 'white', color: 'black', borderBottom: '1px solid #f0f0f0' }}>
@@ -141,7 +145,6 @@ const Create = () => {
                 rules={[{ required: true, message: "Please select the start date" }]}
               >
                 <DatePicker
-                 
                   value={startDate}
                   onChange={handleStartDateChange}
                   style={{ width: "100%" }}
@@ -151,12 +154,22 @@ const Create = () => {
               <Form.Item
                 name="endDate"
                 label="End Date"
-                rules={[{ required: true, message: "Please select the end date" }]}
+                dependencies={['startDate']}
+                rules={[
+                  { required: true, message: "Please select the end date" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('startDate').isBefore(value)) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('End date must be after start date'));
+                    },
+                  }),
+                ]}
               >
                 <DatePicker
-              
                   value={endDate}
-                
+                  onChange={handleEndDateChange}
                   style={{ width: "100%" }}
                 />
               </Form.Item>
