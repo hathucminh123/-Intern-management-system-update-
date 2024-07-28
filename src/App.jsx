@@ -94,9 +94,17 @@ function App() {
           <Route path="/login" element={<GuessSignin />} />
           <Route path="/sign-up" element={<GuessSignup />} />
 
-        
+{/*         
           
           <Route element={<ProtectedRouteGuest />}>
+       
+          
+          
+          </Route> */}
+
+         
+
+          <Route element={<ProtectedRoute />}>
           <Route path="/guest" element={<GuestPage />}>
               <Route index element={<Navigate to="info" replace />} />
           
@@ -110,13 +118,6 @@ function App() {
 
             </Route>
        
-          
-          
-          </Route>
-
-         
-
-          <Route element={<ProtectedRoute />}>
         
 
        

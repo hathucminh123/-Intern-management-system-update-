@@ -155,6 +155,14 @@ const GuessDetailsComponent = ({ id }) => {
             </div>
           </Col>
           <Col span={8}>
+            <div className="detail-item" style={{ display: 'flex', alignItems: 'center' }}>
+              <GrSchedule style={{ marginRight: '8px', fontSize: '16px' }} />
+              <Text style={{ fontSize: '16px' }}>
+                Hạn ứng tuyển: <span className="bold">{moment(internship.submissionDeadline).format("DD-MM-YYYY")}</span>
+              </Text>
+            </div>
+          </Col>
+          <Col span={8}>
             <div className="detail-item">
               <CiLocationOn />
               <div className="detail-text">

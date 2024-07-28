@@ -9,7 +9,7 @@ import Slider from "react-slick";
 import {jwtDecode }from 'jwt-decode';
 import InputFormComponent from '../../InputFormComponent/InputFormComponent';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
-import { loginGuest, fetchUserProfileGuest } from '../../../service/authService';
+import { loginGuest, fetchUserProfileGuest,fetchUserProfile,login } from '../../../service/authService';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -67,19 +67,19 @@ const GuestSignin = () => {
   const handleSignIn = async () => {
     setIsLoading(true);
     try {
-      const result = await loginGuest({ userName: email, password: password });
+      const result = await login({ userName: email, password: password });
       message.success("Login successfully", 3);
       const userInfo = jwtDecode(result.result);
       const userRole = userInfo.Role.toLowerCase();
       const userId = userInfo.UserId.toLowerCase();
 
-      sessionStorage.setItem("Auth", 'true');
-      sessionStorage.setItem("role", userRole);
-      sessionStorage.setItem("token", result.result);
-      sessionStorage.setItem("userId", userId);
-      const profile = await fetchUserProfileGuest(userId);
+      localStorage.setItem("Auth", 'true');
+      localStorage.setItem("role", userRole);
+      localStorage.setItem("token", result.result);
+      localStorage.setItem("userId", userId);
+      const profile = await fetchUserProfile(userId);
 
-      sessionStorage.setItem("userProfile", JSON.stringify(profile));
+      localStorage.setItem("userProfile", JSON.stringify(profile));
 
       navigate(`/${userRole}`, { replace: true });
     } catch (error) {

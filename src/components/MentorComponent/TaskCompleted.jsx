@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Button, Space, Table, Typography, Input, Popover, DatePicker, Select, Dropdown, Menu, message, Spin,
-  Row, Col
+  Row, Col, Modal, Form
 } from 'antd';
 import { FilterOutlined, DownOutlined } from '@ant-design/icons';
 import AddModal from './AddModal';
@@ -23,11 +23,14 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
   const [taskToReview, setTaskToReview] = useState(null);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
+  const [grading, setGrading] = useState(null);
   const [user, setUser] = useState([]);
   const [dateRange, setDateRange] = useState([]);
   const [assignedToFilter, setAssignedToFilter] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isGradingModalVisible, setIsGradingModalVisible] = useState(false);
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
   const userRole = localStorage.getItem('role');
 
@@ -97,6 +100,27 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
     setOpenUpdateModal(true);
   };
 
+  const handleGrading = (id) => {
+    setGrading(id);
+    setIsGradingModalVisible(true);
+  };
+
+  const handleUpdateGrading = async (values) => {
+    const StatusData = {
+      id: grading,
+      point: parseInt(values.point)
+    };
+    try {
+      await Assessment.GradingAssessmentStatus(StatusData);
+      message.success('Task graded successfully');
+      setIsGradingModalVisible(false);
+      form.resetFields();
+      fetchAssessment();
+    } catch (error) {
+      message.error('Failed to grade task');
+    }
+  };
+
   const handleUpdateTaskSubmit = async (values) => {
     try {
       const updatedTask = { ...taskToUpdate, ...values, id: taskToUpdate.id };
@@ -146,6 +170,9 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
           <Menu.Item key="3">
             <Button type="link" onClick={() => handleDeleteTask(record.id)}>Delete</Button>
           </Menu.Item>
+          <Menu.Item key="2">
+            <Button type="link" onClick={() => handleGrading(record.id)}>Grading</Button>
+          </Menu.Item>
         </>
       )}
       {record.completed && (
@@ -175,13 +202,11 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         key: 'startDate',
         render: (text, record) => {
           let date = record.startDate;
-          
           if (date === "0001-01-01T00:00:00") {
             date = null;
           } else {
             date = moment(record.startDate).format("YYYY-MM-DD HH:mm");
           }
-      
           return <span>{date}</span>;
         }
       },
@@ -191,13 +216,11 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         key: 'endDate',
         render: (text, record) => {
           let date = record.endDate;
-          console.log('ko bik',date)
           if (date === "0001-01-01T00:00:00") {
             date = null;
           } else {
             date = moment(record.endDate).format("YYYY-MM-DD HH:mm");
           }
-      
           return <span>{date}</span>;
         }
       },
@@ -206,6 +229,30 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         dataIndex: 'deadline',
         key: 'deadline',
         render: (text, record) => moment(record.deadline).format("YYYY-MM-DD HH:mm")
+      },
+      {
+        title: 'Status',
+        dataIndex: 'assessmentStatus',
+        key: 'assessmentStatus',
+        render: (text, record) => (<Text>{record.assessmentStatus}</Text>)
+      },
+      {
+        title: 'Grade',
+        dataIndex: 'point',
+        key: 'point',
+        render: (text, record) => {
+          var point = record.point;
+          if(point === 0){
+                  point=null
+
+          }else{
+            (<Text>{record.point}</Text>)}
+
+            return (<Text >{point}</Text>)
+          }
+       
+
+        
       },
       {
         title: 'Actions',
@@ -222,7 +269,7 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
 
     if (userRole === "intern") {
       baseColumns.push({
-        title: 'Update Progress',
+        title: 'Update Progress Status',
         key: 'update',
         render: (text, record) => (
           <Button type="link" onClick={() => handleUpdateTask(record)}>Update</Button>
@@ -271,6 +318,29 @@ const TaskCompleted = ({ tasks, onAddTask, onUpdateTask, fetchAssessment, traini
         task={taskToUpdate}
         onSubmit={handleUpdateTaskSubmit}
       />
+      <Modal
+        title="Grading Task"
+        visible={isGradingModalVisible}
+        onCancel={() => setIsGradingModalVisible(false)}
+        footer={null}
+        style={{ top: 100 }}
+        width={600}
+        bodyStyle={{ maxHeight: '70vh', overflowY: 'auto' }}
+      >
+        <Form form={form} onFinish={handleUpdateGrading}>
+          <Form.Item
+            name="point"
+            rules={[{ required: true, message: 'Please enter the grade!' }]}
+          >
+            <Input type="number" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <Select
         placeholder="Select a training program"
         allowClear

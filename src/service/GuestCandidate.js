@@ -54,7 +54,7 @@ export const fetchCandidate= async( campaignId,jobId) => {
 
 export const fetchCandidateApplication= async() => {
   try {
-    const response = await guesthttpClient.get({
+    const response = await httpClient.get({
       url: `${apiLinks.Candidates.getApply}`, 
 
     });

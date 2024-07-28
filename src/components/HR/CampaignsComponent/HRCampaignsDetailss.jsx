@@ -122,6 +122,12 @@ const HRCampaignsDetailss = () => {
                 {moment(CampaignDetail.estimateEndDate).format('DD-MM-YYYY')}
               </div>
             </div>
+            <div className="flex items-center mt-3">
+              <div>Dealine Apply:</div>
+              <div className="ml-3 text-red-500">
+                {moment(CampaignDetail.submissionDeadline).format('DD-MM-YYYY')}
+              </div>
+            </div>
             <div className="flex flex-wrap mt-3">
               <div>Vị trí ứng tuyển lập trình viên:</div>
               {CampaignDetail.jobs.map((job, index) => (

@@ -8,7 +8,7 @@ import { GrSchedule } from "react-icons/gr";
 
 const { Title, Text } = Typography;
 
-const GuestCampainsComponent = ({ searchQuery }) => {
+const GuestCampaignsComponent = ({ searchQuery }) => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState("");
@@ -44,7 +44,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                 key={index}
                 type={selectedPosition === position.name ? "primary" : "default"}
                 className="rounded-full me-2 mb-2"
-                style={{ whiteSpace: "normal" }}
+                style={{ whiteSpace: "normal", margin: '5px' }}
                 onClick={() => setSelectedPosition(position.name)}
               >
                 Lập trình viên {position.name}
@@ -54,7 +54,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
           <Button
             type={selectedPosition === "" ? "primary" : "default"}
             className="rounded-full me-2 mb-2"
-            style={{ whiteSpace: "normal" }}
+            style={{ whiteSpace: "normal", margin: '5px' }}
             onClick={() => setSelectedPosition("")}
           >
             Show All
@@ -75,6 +75,7 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                 borderRadius: "8px",
                 marginBottom: "20px",
                 overflow: "hidden",
+                padding: '16px'
               }}
               onClick={() => navigate(`/guest/detail/${internship.id}`)}
             >
@@ -88,27 +89,34 @@ const GuestCampainsComponent = ({ searchQuery }) => {
                         <Button
                           key={index}
                           className="rounded-full me-2 mb-2"
-                          style={{ whiteSpace: "normal" }}
+                          style={{ whiteSpace: "normal", margin: '5px' }}
                         >
                           Lập trình viên {position.name}
                         </Button>
                       ))}
                     </div>
                   </div>
-                  <div className="flex mt-4">
+                  <div className="flex mt-4" style={{ alignItems: 'center' }}>
                     <ClockCircleOutlined />
                     <Text className="ml-3">Thời gian thực tập:</Text>
                     <Text className="ml-3 font-bold">{internship.duration} months</Text>
                   </div>
-                  <div className="flex mt-4">
-                    <GrSchedule />
-                    <Text className="ml-3">Ngày bắt đầu :</Text>
-                    <Text className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</Text>
+                  <div className="flex mt-4" style={{ alignItems: 'center', gap: '50px' }}>
+                    <div>
+                      <GrSchedule />
+                      <Text className="ml-3">Ngày bắt đầu :</Text>
+                      <Text className="ml-3 font-bold">{moment(internship.estimateStartDate).format("DD-MM-YYYY")}</Text>
+                    </div>
+                    <div>
+                      <GrSchedule />
+                      <Text className="ml-3">Ngày kết thúc :</Text>
+                      <Text className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</Text>
+                    </div>
                   </div>
-                  <div className="flex mt-4">
+                  <div className="flex mt-4" style={{ alignItems: 'center' }}>
                     <GrSchedule />
-                    <Text className="ml-3">Ngày kết thúc :</Text>
-                    <Text className="ml-3 font-bold">{moment(internship.estimateEndDate).format("DD-MM-YYYY")}</Text>
+                    <Text className="ml-3">Hạn ứng tuyển:</Text>
+                    <Text className="ml-3 font-bold">{moment(internship.submissionDeadline).format("DD-MM-YYYY")}</Text>
                   </div>
                 </Col>
                 <Col span={10}>
@@ -139,4 +147,4 @@ const GuestCampainsComponent = ({ searchQuery }) => {
   );
 };
 
-export default GuestCampainsComponent;
+export default GuestCampaignsComponent;

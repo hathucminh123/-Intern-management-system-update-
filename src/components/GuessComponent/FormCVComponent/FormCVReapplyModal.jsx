@@ -145,7 +145,7 @@ const FormCVReapplyModal = ({ visible, onClose, title, intern, job, onReapplySuc
           const res = await UserProfile.fetchUserProfile(userId.toLowerCase());
           setUserProfile(res.events);
         } else {
-          message.error('User ID not found in session storage');
+          // message.error('User ID not found in session storage');
         }
       } catch (error) {
         message.error('Fetch User Profile failed: ' + error.message);

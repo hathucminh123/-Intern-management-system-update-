@@ -8,7 +8,7 @@ import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons';
 import ButtonComponent from '../../ButtonComponent/ButtonComponent';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { registerGuest } from '../../../service/authService';
+import { registerGuest,registerUser } from '../../../service/authService';
 import { message, Spin } from 'antd';
 import Slider from "react-slick";
 import { useNavigate } from 'react-router-dom';
@@ -89,7 +89,7 @@ const GuessSignup = () => {
 
     setIsLoading(true);
     try {
-      await registerGuest({ userName, email, password, confirmPassword,role:5 });
+      await registerUser({ userName, email, password, confirmPassword,role:5 });
       message.success("Register successfully", 3);
       navigate(`/login`, { replace: true });
     } catch (error) {

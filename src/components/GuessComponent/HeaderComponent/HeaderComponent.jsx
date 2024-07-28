@@ -22,9 +22,9 @@ const HeaderComponent = () => {
     const fetchUserProfile = async () => {
       setLoading(true);
       try {
-        const profile = JSON.parse(sessionStorage.getItem('userProfile')) || {};
-        const fetchedProfile = await UserService.fetchUserProfileGuest(profile.events.id);
-        sessionStorage.setItem('userProfile', JSON.stringify(fetchedProfile));
+        const profile = JSON.parse(localStorage.getItem('userProfile')) || {};
+        const fetchedProfile = await UserService.fetchUserProfile(profile.events.id);
+        localStorage.setItem('userProfile', JSON.stringify(fetchedProfile));
         setUserProfile(fetchedProfile);
       } catch (error) {
         message.error('Không thể tải thông tin người dùng');
@@ -40,7 +40,7 @@ const HeaderComponent = () => {
     if (type === "Profile") {
       navigate("/guest/profile");
     } else if (type === "logout") {
-      sessionStorage.clear();
+      localStorage.clear();
       navigate("/login");
     } else if (type === "Apply") {
       navigate("/guest/JobApply");

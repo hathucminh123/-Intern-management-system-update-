@@ -4,8 +4,8 @@ import { UploadOutlined } from '@ant-design/icons';
 import { CiLocationOn } from 'react-icons/ci';
 import { storage } from '../../../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// import { createNewCandidate } from '../../../service/Candidate';
-import { createNewCandidate } from '../../../service/GuestCandidate';
+import { createNewCandidate } from '../../../service/Candidate';
+// import { createNewCandidate } from '../../../service/GuestCandidate';
 import { v4 as uuidv4 } from 'uuid';
 import * as UserProfile from "../../../service/authService";
 import './formcss.css';
@@ -22,7 +22,7 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const userId = sessionStorage.getItem('userId');
+        const userId = localStorage.getItem('userId');
         if (userId) {
           const res = await UserProfile.fetchUserProfile(userId.toLowerCase());
           setUserProfile(res.events);
@@ -40,34 +40,33 @@ const FormCVModal = ({ visible, onClose, title, intern, job, onApplicationSucces
   const handleSubmit = async (values) => {
     try {
       setLoading(true);
-
+  
       if (!cvFile) {
         message.error('Please upload your CV!');
         setLoading(false);
         return;
       }
-
+  
       const fileRef = ref(storage, `${uuidv4()}-${cvFile.name}`);
       await uploadBytes(fileRef, cvFile);
       const fileUrl = await getDownloadURL(fileRef);
-
+  
       const candidateData = {
         ...values,
         firstName: values.fullName.split(' ')[0],
         lastName: values.fullName.split(' ').slice(1).join(' '),
-        
         cvPath: fileUrl,
       };
-
+  
       await createNewCandidate(candidateData);
-
+  
       message.success('Form submitted successfully!');
       onApplicationSuccess();
       form.resetFields();
       setCvFile(null);
       onClose();
     } catch (error) {
-      message.error('Error submitting form. Please try again.');
+      message.error(error.message);
       console.error('Error submitting form:', error);
     } finally {
       setLoading(false);

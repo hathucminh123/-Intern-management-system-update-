@@ -58,6 +58,7 @@ const CreateCampaignsHrComponent = () => {
         benefits: benefits,
         duration: parseInt(values.duration),
         estimateStartDate: values.estimateStartDate.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
+        submissionDeadline:values.submissionDeadline.format("YYYY-MM-DDTHH:mm:ss.SSS[Z]"),
         imagePath: fileUrl,
       };
 
@@ -121,7 +122,7 @@ const CreateCampaignsHrComponent = () => {
               style={{ maxWidth: 800, margin: "0 auto" }}
             >
               <Row gutter={16}>
-                <Col span={12}>
+                <Col span={24}>
                   <Form.Item
                     name="name"
                     label="Campaign Name"
@@ -130,10 +131,23 @@ const CreateCampaignsHrComponent = () => {
                     <Input placeholder="Enter the campaign name" />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+              
+              </Row>
+              <Row gutter={16}>
+              <Col span={12}>
                   <Form.Item
                     name="estimateStartDate"
                     label="Start Date"
+                    rules={[{ required: true, message: "Please enter the start date" }]}
+                  >
+                    <DatePicker style={{ width: '100%' }} />
+                  </Form.Item>
+               
+                </Col>
+                <Col span={12}>
+                <Form.Item
+                    name="submissionDeadline"
+                    label="End Date"
                     rules={[{ required: true, message: "Please enter the start date" }]}
                   >
                     <DatePicker style={{ width: '100%' }} />
