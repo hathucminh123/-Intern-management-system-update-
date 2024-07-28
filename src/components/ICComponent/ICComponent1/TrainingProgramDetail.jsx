@@ -324,25 +324,53 @@ const TrainingProgramDetail = () => {
     //   key: 'startDate',
     //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     // },
-    {
-      title: 'Start Date',
-      dataIndex:'startDate',
-      key:'startDate',
+    // {
+    //   title: 'Start Date',
+    //   dataIndex:'startDate',
+    //   key:'startDate',
     
-      render: (startDate) =>   moment(startDate).format('YYYY-MM-DD HH:mm') 
-    },
+    //   render: (startDate) =>   moment(startDate).format('YYYY-MM-DD HH:mm') 
+    // },
     // {
     //   title: 'End Date',
     //   dataIndex: 'endDate',
     //   key: 'endDate',
     //   render: (date) => date ? moment(date).format('YYYY-MM-DD') : '',
     // },
-      {
-      title: 'End Date',
-      dataIndex:'endDate',
-      key:'endDate',
+    //   {
+    //   title: 'End Date',
+    //   dataIndex:'endDate',
+    //   key:'endDate',
     
-      render: (endDate) =>   moment(endDate).format('YYYY-MM-DD HH:mm') 
+    //   render: (endDate) =>   moment(endDate).format('YYYY-MM-DD HH:mm') 
+    // },
+    {
+      title: 'In-Progress date',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      render: (text, record) => {
+        let date = record.startDate;
+        if (date === "0001-01-01T00:00:00") {
+          date = null;
+        } else {
+          date = moment(record.startDate).format("YYYY-MM-DD HH:mm");
+        }
+        return <span>{date}</span>;
+      }
+    },
+    {
+      title: 'Completed date',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      render: (text, record) => {
+        let date = record.endDate;
+        if (date === "0001-01-01T00:00:00") {
+          date = null;
+        } else {
+          date = moment(record.endDate).format("YYYY-MM-DD HH:mm");
+        }
+        return <span>{date}</span>;
+      }
     },
 
     {
