@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as Training from "../../service/TrainingPrograms";
 import "tailwindcss/tailwind.css";
 import ButtonComponent from "../ButtonComponent/ButtonComponent"
+import moment from "moment";
 
 const { Title, Text } = Typography;
 const { Header, Content } = Layout;
@@ -159,8 +160,13 @@ const MentorViewProgram = () => {
                             >
                               Internship Program: {campaign.name}
                             </Title>
-                            <Text>
-                              <strong>Duration:</strong> {campaign.duration} months
+                            <Text style={{ display:'flex',gap:'15px'}} >
+                              <span>Duration: <strong> {campaign.duration} months </strong></span>
+                              <span>Start Date: <strong> {moment(campaign.startDate).format('DD-MM-YYYY')} </strong></span>
+                              <span>End Date: <strong>  {moment(campaign.endDate).format('DD-MM-YYYY')} </strong> </span>
+                              
+                          
+                          
                             </Text>
                             <Button
                               style={{ width: "fit-content", cursor: 'pointer', color: hovered === campaign.id ? 'blue' : 'black' }}
